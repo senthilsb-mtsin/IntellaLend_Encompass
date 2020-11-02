@@ -1,0 +1,26 @@
+<div class="m-t-15" [cgBusy]="promise">
+    <div class="tab-base">
+        <ul class="nav nav-tabs" role="tablist">
+            <li [ngClass]="!isPurgeMonitorTab ? 'tab1 col-bdg active' : 'tab1 col-bdg'">
+                <a href="#purge" (click)="isPurgeMonitorTab = false" role="tab" data-toggle="tab">
+                    <span class="Lh30 fa fa-exchange"></span>
+                    <br> Purge
+                </a>
+            </li>
+            <li [ngClass]="isPurgeMonitorTab ? 'tab2 col-bdg active': 'tab2 col-bdg'">
+                <a href="#purge_monitor" (click)="isPurgeMonitorTab = true" role="tab" data-toggle="tab">
+                    <span class="Lh30 fa fa-desktop"></span>
+                    <br> Purge Monitor
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content p0">
+            <div role="tabpanel" *ngIf="!isPurgeMonitorTab" [ngClass]="!isPurgeMonitorTab ? 'tab-pane tab1 active' : 'tab-pane tab1'" id="purge">
+                <app-expiredloans></app-expiredloans>
+            </div>
+            <div role="tabpanel" *ngIf="isPurgeMonitorTab" [ngClass]="isPurgeMonitorTab ? 'tab-pane tab2 active' : 'tab-pane tab2'" id="purge_monitor">
+                <app-purge></app-purge>
+            </div>
+        </div>
+    </div>
+</div>

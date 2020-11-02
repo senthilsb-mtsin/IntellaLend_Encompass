@@ -1,0 +1,67 @@
+<div class="p20" [cgBusy]="promise">
+    <div class="row m-b-10">
+        <div class="col-md-12">
+            <div class="pull-right">
+                <button type="button" class="btn btn-primary btn-sm m-l-0 waves-effect waves-light m-r-10" (click)="AddStipulation();addStipulationModal.show();"><span class="fa fa-plus-circle"></span>&nbsp;&nbsp;Add</button>
+                <button type="button" [disabled]="rowSelected" class="btn btn-success btn-sm m-l-0 waves-effect waves-light " (click)="EditStipulation()"><span class="fa fa-pencil"></span>&nbsp;&nbsp;Edit</button>
+            </div>
+        </div>
+    </div>
+    <div class="table-panel">
+        <table datatable [dtOptions]="dtOptions" class="table table-bordered table-striped table-borderless table-responsive" style="width: 100%;">
+        </table>
+    </div>
+</div>
+
+
+<div bsModal #addStipulationModal="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document" [cgBusy]="promise">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{LoanStipulation.addOrEdit}} Stipulation</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <input type="hidden" [(ngModel)]="LoanStipulation.StipulationID">
+                <div class="form-group m-t-30">
+                    <select name="StipulationCategory" [(ngModel)]="LoanStipulation.StipulationCategoryID">
+                        <option value="">-- Select Category --</option>
+                        <option *ngFor="let sCategory of sCategoryNames" value="{{sCategory.id}}" required>
+                            {{sCategory.text}} </option>
+                    </select>
+                    <label class="control-label">Category</label>
+                    <i class="bar"></i>
+                </div>
+                <div class="form-group m-t-30">
+                    <input type="text" [(ngModel)]="LoanStipulation.StipulationDescription" name="StipulationDescription" required>
+                    <label class="control-label">Stipulation Description </label>
+                    <i class="bar"></i>
+                </div>
+                <div class="form-group m-t-30">
+                    <select name="StipulationStatus" [(ngModel)]="LoanStipulation.StipulationStatus" required="">
+                        <option value="">-- Select Status --</option>
+                        <option *ngFor="let status of sStatus" value="{{status.id}}">{{status.text}}</option>
+                    </select>
+                    <label class="control-label">Status</label>
+                    <i class="bar"></i>
+                </div>
+
+                <div class="col-sm-12" style="float:none">
+                    <div class="form-group">
+                        <textarea rows="3" [(ngModel)]="LoanStipulation.StipulationNotes" id="sNotes"></textarea>
+                        <label for="body" class="control-label">Notes</label>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button *ngIf="!LoanStipulation.isSaveOrUpdate" type="button" class="btn btn-info waves-effect waves-light" (click)="SaveStipulationDetails()">
+                    <i class="material-icons">save</i>&nbsp;&nbsp;Save</button>
+                <button *ngIf="LoanStipulation.isSaveOrUpdate" type="button" class="btn btn-info waves-effect waves-light" (click)="UpdateStipulationDetails()">
+                    <i class="material-icons">save</i>&nbsp;&nbsp;Update</button>
+                <button type="button" class="btn btn-secondary bg-white waves-effect waves-light" type="button" (click)="addStipulationModal.hide()">
+                    <i class="material-icons">cancel</i>&nbsp;&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

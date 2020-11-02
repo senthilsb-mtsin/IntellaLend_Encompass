@@ -1,0 +1,30 @@
+export class TemplateField {
+    date: any;
+    address: any;
+    lenderValue: any;
+    borrowerName: any;
+    loanNumber: any;
+    auditGroup: any;
+    attachedDocs: any;
+    faxNumber: any;
+    phNumber: any;
+    plainText: any;
+    docDateOne: any;
+    signatureOne: any;
+    contactNumber: any;
+    title: any;
+    verificationGift: any;
+    giftLetter: any;
+    HRPayRoll: any;
+    verifyEmpPayStub: any;
+    commentsone: any;
+    answerone: any;
+    commentstwo: any;
+    answertwo: any;
+    commentsthree: any;
+    answerthree: any;
+    commentsfour: any;
+    answerfour: any;
+    signatureTwo: any;
+    docDateTwo: any;
+}

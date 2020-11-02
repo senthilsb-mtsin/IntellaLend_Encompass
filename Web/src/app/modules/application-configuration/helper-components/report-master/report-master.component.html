@@ -1,0 +1,91 @@
+<div class="row" style="display: block;">
+    <div class="col-md-12">
+        <div class="table-panel box">
+            <div class="box-body">
+                <table datatable [dtOptions]="dtOptions" class="table table-bordered table-striped table-borderless table-responsive" style="width: 100%;"></table>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div bsModal #ReportMasterModal="bs-modal" [config]="{ backdrop: 'static', keyboard: false }" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md" style="width: 550px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <label style="
+              float: right;
+              font-weight: 500;
+              font-size: 12px;
+              color: red;
+              line-height: 25px;
+            ">Add Document Type</label>
+                </h3>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <select [(ngModel)]="docName">
+                            <option [ngValue]="0">-- Select Document --</option>
+                            <option
+                                *ngFor="let docs of docslist"
+                                [ngValue]="docs"
+                            >
+                                {{docs }}
+                            </option>
+                        </select>
+
+
+                        <label class="control-label" for="input">
+                            Document Type
+                        </label>
+                        <i class="bar"></i>
+                        <span [style.color]="errMsgStyle" *ngIf="isRuleErrMsgs">
+                            {{ ruleErrMsgs}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info waves-effect waves-light" (click)="SaveEditDocs()">
+                    <span class="material-icons">save</span>
+                    &nbsp;&nbsp;Save
+                </button>
+                <button type="button" class="btn btn-secondary waves-effect waves-light" data-dismiss="modal" (click)="modalHide()">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div bsModal #DeleteReportMasterModal="bs-modal" [config]="{ backdrop: 'static', keyboard: false }" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md" style="width: 510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <p>
+                    Do you want to delete the configuration ?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info waves-effect waves-light" (click)="DeleteReportMaster()">
+                    Yes
+                </button>
+                <button type="button" class="btn btn-secondary waves-effect waves-light" data-dismiss="modal" (click)="DeleteReportMasterModal.hide()">
+                    No
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

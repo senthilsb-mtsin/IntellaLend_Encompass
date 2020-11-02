@@ -1,0 +1,26 @@
+<div class="table-panel box  m-t-15">
+    <div class="box-title">
+        <div class="box-caption">
+            <span>Role Administration</span>
+        </div>
+        <div class="box-action">
+            <button id="lt_btnAddRole" class="btn btn-primary btn-sm waves-effect waves-light" type="button"
+                (click)="ShowRoleModal(0)"><i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Add Role </button>
+            <button id="lt_btnEditRole" class="btn btn-success btn-sm waves-effect waves-light" type="button"
+                (click)="ShowRoleModal(1)" [disabled]="rowSelected"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Edit
+                Role</button>
+            <button id="lt_btnViewrole" class="btn btn-warning btn-sm waves-effect waves-light" type="button"
+                (click)="ShowRoleModal(2)" [disabled]="rowSelected"><i class="fa fa-eye"></i>&nbsp;&nbsp;View
+                Role</button>
+        </div>
+    </div>
+    <div [class]="'box-body'">
+        <div class="row" [cgBusy]="promise">
+            <div class="col-md-12">
+                <table datatable [dtOptions]="dtRoles" class="table table-bordered table-striped table-hover"
+                    style="width: 100%;">
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,87 @@
+.loanNotFoundError {
+    color: #e21a1a;
+    padding: 10px 0;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .SO_width {
+        width: 8.9%;
+        transition: all 0.2s;
+    }
+    .DOC_width {
+        width: 91.1%;
+        transition: all 0.2s;
+    }
+    .FIELD_Width {
+        width: 11%;
+        float: right;
+        transition: all 0.2s;
+    }
+    .width95 {
+        width: 89%;
+        transition: all 0.2s;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+    .SO_width {
+        width: 7.2%;
+        transition: all 0.2s;
+    }
+    .DOC_width {
+        width: 92.8%;
+        transition: all 0.2s;
+    }
+    .FIELD_Width {
+        width: 8%;
+        float: right;
+        transition: all 0.2s;
+    }
+    .width95 {
+        width: 92%;
+        transition: all 0.2s;
+    }
+}
+
+@media (min-width: 1400px) and (max-width: 1679px) {
+    .SO_width {
+        width: 6.1%;
+        transition: all 0.2s;
+    }
+    .DOC_width {
+        width: 93.9%;
+        transition: all 0.2s;
+    }
+    .FIELD_Width {
+        width: 8%;
+        float: right;
+        transition: all 0.2s;
+    }
+    .width95 {
+        width: 92%;
+        transition: all 0.2s;
+    }
+}
+
+@media (min-width: 1680px) and (max-width: 1920px) {
+    .SO_width {
+        width: 5.1%;
+        transition: all 0.2s;
+    }
+    .DOC_width {
+        width: 94.9%;
+        transition: all 0.2s;
+    }
+    .FIELD_Width {
+        width: 6%;
+        float: right;
+        transition: all 0.2s;
+    }
+    .width95 {
+        width: 94%;
+        transition: all 0.2s;
+    }
+}

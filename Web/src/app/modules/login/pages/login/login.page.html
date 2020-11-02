@@ -1,0 +1,85 @@
+<body class="login-wrapper">
+    <div class="login-page">
+        <div class="login-container">
+            <img src="assets\images\logo.png" class="img-responsive" style="margin: 0 auto;" />
+            <div class="signani">
+                <div id="signin" [@LoginAnimation]="loginState">
+                    <p class="p-t-35 text-center">Sign into your account</p>
+                    <form [formGroup]="loginForm" (submit)="login(loginForm.value, loginForm.valid)" class="p-t-0 p-b-35">
+                        <div class="form-group">
+                            <input type="text" id="login" formControlName="userName" required="">
+                            <label class="control-label selected" for="input">Username</label><i class="bar"></i>
+                        </div>
+                        <div class="text-center required txt-red m-t-0 m-b-0">{{validationUserMsg}}</div>
+                        <div class="form-group m-t-35">
+                            <input type="password" id="password" formControlName="passWord" required="">
+                            <label class="control-label selected" for="input">Password</label><i class="bar"></i>
+                        </div>
+                        <div class="text-center required txt-red m0">{{validationMsg}}</div>
+                        <div  *ngIf="!AD_login" class="form-group m-t-10 m-b-0 clearfix">
+                            <a class="pull-right" tabindex="5" routerLink="forgetpassword">Forgot password?</a>
+                        </div>
+                        <button [disabled]="showLoading" class="btn btn-info btn-block login-btn waves-effect waves-light m-t-10">Sign In</button>
+                        <div *ngIf="showLoading" class="loader border_radius4"></div>
+                    </form>
+                </div>
+                <div id="choose-role" [@LoginAnimation]="roleState">
+                    <p class="p-t-50 m-b-0 text-center"></p>
+                    <div tabindex="-1" id="back_login" (click)="RoleStage()" class=" login-arrow waves-effect waves-light"><span class="material-icons">arrow_back</span></div>
+                    <div *ngIf="!isExipry">
+                        <div class="m-t-50">
+                            <div [hidden]="roleItems.length === 0" class="form-group m-t-50">
+                                <ng-select #roleSelect (selected)="EmptyValidationMsg($event)" class="ng-select-required" [items]="roleItems" [multiple]="false" placeholder="--Select--"></ng-select>
+                                <label tabindex="-1" class="control-label selected">Role</label><i class="bar"></i>
+                            </div>
+                            <div class="text-center txt-red">{{RolevalidationMsg}}</div>
+                        </div>
+                        <div class="m-t-30 text-right">
+                            <button tabindex="-1" type="button" (click)="setMenuRoute()" class="btn btn-info waves-effect waves-light"><i class="material-icons">check_circle</i>&nbsp;Submit</button>
+                        </div>
+                    </div>
+                    <div *ngIf="isExipry">
+                        <div class="m-t-15">
+                            <div class="col-md-12">
+                                <div class="">
+                                    <div class="form-group pwd_tooltip">
+                                        <ng-template #myTooltip class="" isFade="true" placement="bottom">
+                                            <span placement="bottom" class="txt-indigo pwd-heading">Password must include:</span>
+                                            <ul>
+                                                <li><span placement="bottom" [style.color]="isMinLengthValid">8-20 Characters</span></li>
+                                                <li><span placement="bottom" [style.color]="isUpperCaseCharacterExist">At least one capital letter</span></li>
+                                                <li><span placement="bottom" [style.color]="isNumberExist">At least one number</span></li>
+                                                <li><span placement="bottom" [style.color]="isValid">At least one special character</span></li>
+                                            </ul>
+                                        </ng-template>
+                                        <input tooltipPlacement="bottom" triggers="focus" [tooltip]="myTooltip" type="password" name="Answer" class="form-control mandatory" [(ngModel)]="newPwd" (ngModelChange)="CheckPasswordPolicy()" id="NewPassword" required="">
+                                        <label class="control-label" for="input">New Password</label><i class="bar"></i>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="">
+                                    <div class="form-group">
+                                        <input type="password" class="form-control mandatory" name="password" [(ngModel)]="confirmPwd" (ngModelChange)="CheckPasswordPolicy()" id="ConfirmPassword" required="">
+                                        <label class="control-label" for="input">Confirm Password</label><i class="bar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center txt-red">{{ExpriyValidationMsg}}</div>
+                        </div>
+                        <div class="m-t-30 text-right">
+                            <button class="btn btn-block btn-info waves-effect waves-light m0" (click)="submitForm()" id="submitForm" [disabled]="isDisabled" type="button"><i
+                                    class="material-icons">check_circle</i>&nbsp;&nbsp;Confirm</button>
+                        </div>
+                    </div>
+                </div>
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+        <div class="copy text-center">
+            <p class="m-b-0">MTS Software Solutions, Inc. All rights reserved</p>
+            <p class="m-b-0">Version {{AppVersion}}</p>
+        </div>
+    </div>
+</body>

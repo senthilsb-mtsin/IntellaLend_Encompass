@@ -1,0 +1,98 @@
+<div class="row">
+    <div class="col-md-12">
+        <ul id="progressbar">
+            <li id="litab2" [ngClass]="stepModel.stepOneClass">
+                <a id="tab1" title="" href="javascript:void(0);">Edit Document Type</a>
+            </li>
+            <li id="litab3" [ngClass]="stepModel.stepTwoClass">
+                <a id="tab2" title="" href="javascript:void(0);">Edit Document Fields</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-12">
+        <div class="horizontal">
+            <div class="slider">
+                <div class="slides" #slidesDiv>
+                    <div id="slide-1" [ngClass]="slideOneTranClass">
+                        <div class="box m-b-0">
+                            <div class="box-title">
+                                <div class="box-caption bcEllipsis">{{_editDocumentTypeData.Name}}
+                                    <img *ngIf="stepModel.stepID > AddDocTypeSteps.DocumentType" height="16" src="../../assets/images/right-arrow.png" width="16">
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div [ngSwitch]="stepModel.stepID">
+                                    <div *ngSwitchCase="AddDocTypeSteps.DocumentType">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="text-right pu_toggle">
+                                                    <label class="tgl" style="font-size:14px">                
+                                                    <input [(ngModel)]="_editDocumentTypeData.Active"  name="Active" type="checkbox"/>
+                                                    <span data-on="Active" data-off="Inactive"></span>
+                                                </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 m-t-20 m-r-5">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control mandatory" name="DocumentTypeName" [(ngModel)]="_editDocumentTypeData.Name" required="">
+                                                    <label class="control-label" for="input">Document Name</label><i class="bar"></i>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-md-4 m-t-20 m-r-5" style="display: none;">
+                                                <div class="form-group">
+                                                    <select id="select1" [(ngModel)]="_editDocumentTypeData.DocumentLevel">
+                                                        <option *ngFor="let item of Status" [value]="item.Value" >{{item.Label}}</option>      
+                                                    </select>
+                                                    <label class="control-label" for="input">Document Level</label><i class="bar"></i>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4 m-t-20 m-r-5">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control mandatory" name="DocumentDisplayName" [(ngModel)]="_editDocumentTypeData.DisplayName" required="">
+                                                    <label class="control-label" for="input">Document Display Name</label><i class="bar"></i>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 m-t-20 m-r-5">
+                                                <div class="form-group">
+                                                    <select id="select" [(ngModel)]="_editDocumentTypeData.ParkingSpotID">
+                                                        <option value="0">-- Select EFolder Name -- </option>
+                                                        <option *ngFor="let item of _parkingSpotItems" [value]="item.ID" >{{item.ParkingSpotName}}</option>      
+                                                    </select>
+                                                    <label class="control-label" for="input">EFolder Name</label><i class="bar"></i>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div *ngSwitchCase="AddDocTypeSteps.Documentfields">
+                                        <mts-editdocumentfield></mts-editdocumentfield>
+                                    </div>
+                                    <div *ngSwitchDefault>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box-footer p-t-5 p-b-5">
+                                <div class="row">
+                                    <div class="col-md-6 text-left">
+                                        <button type="button" (click)="GotoPrevious()" class="btn btn-secondary bg-white waves-effect waves-light"><i
+                                                class="material-icons">close</i>&nbsp;Cancel</button>
+                                    </div>
+                                    <div class="col-md-6 text-right">
+                                        <button *ngIf="isPrevious" type="button" id="dl_btnPrevious" (click)="SetPrevious()" class="btn  btn-info waves-effect waves-light"><i class="material-icons">arrow_back</i>&nbsp;&nbsp;Previous</button>
+                                        <button type="button" *ngIf="!isPrevious" (click)="GoToNextStep()" class="btn  btn-info waves-effect waves-light m-l-5">Save&nbsp;&&nbsp;Next&nbsp;&nbsp;<span
+                                                class="fa fa-arrow-right"></span></button>
+                                        <button type="button" *ngIf="isPrevious" (click)="GoToNextStep()" class="btn  btn-info waves-effect waves-light m-l-5"><i class="material-icons">done_all</i>&nbsp;Finish</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

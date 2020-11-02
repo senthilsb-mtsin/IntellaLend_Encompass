@@ -1,0 +1,290 @@
+.page-content-wrapper {
+    height: 100%;
+    min-height: 100%;
+}
+
+.navigation {
+    text-align: center;
+}
+
+.navigation>a {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: white;
+    text-decoration: none;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin: 0 0 0.5rem 0;
+    position: relative;
+}
+
+.horizontal .slider {
+    width: 100%;
+    /* text-align: center; */
+    overflow: hidden;
+}
+
+.horizontal .slides {
+    overflow: hidden;
+    /* transform: scale(0.97); */
+}
+
+.horizontal .slides>div {
+    position: absolute;
+    width: 100%;
+    left: 100%;
+    opacity: 0;
+    -webkit-transition: left 0.5s ease-in-out, opacity 0.5s ease;
+    transition: left 0.5s ease-in-out, opacity 0.5s ease;
+    height: calc(100vh - 160px);
+    transform: scale(0.97);
+}
+
+.horizontal .slides>div>.box .box-body {
+    /* height: 398px; */
+    height: calc(100vh - 275px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+
+/* Don't need button navigation */
+
+@supports (scroll-snap-type) {
+    .horizontal .slider>a {
+        display: none;
+    }
+}
+
+#progressbar {
+    overflow: hidden;
+    /*CSS counters to number the steps*/
+    counter-reset: step;
+    padding-left: 15px;
+    margin-bottom: 0;
+}
+
+#progressbar li a {
+    position: relative;
+    display: block;
+    bottom: 50px;
+    height: 50px;
+}
+
+#progressbar li {
+    list-style-type: none;
+    color: white;
+    font-size: 9px;
+    width: 16%;
+    float: left;
+    position: relative;
+    text-align: center;
+    font-family: FontAwesome;
+    top: 40px;
+    height: 60px;
+    padding: 0 5px;
+}
+
+#progressbar li:before {
+    content: '\f00d';
+    counter-increment: step;
+    width: 19px;
+    line-height: 19px;
+    display: block;
+    font-size: 10px;
+    color: #333;
+    background: #efefef;
+    border-radius: 50%;
+    margin: 0 auto 5px auto;
+}
+
+
+/*progressbar connectors*/
+
+#progressbar li:after {
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: #efefef;
+    position: absolute;
+    left: 50%;
+    top: 9px;
+    z-index: -1;
+    /*put it behind the numbers*/
+    transition: all ease 0.3s;
+}
+
+#progressbar li:last-child:after {
+    /*connector not needed before the first step*/
+    content: none;
+}
+
+
+/*marking active/completed steps green*/
+
+
+/*The number of the step and the connector before it = green*/
+
+#progressbar li.active:before {
+    background: #ff0707;
+    color: white;
+    content: '\f068';
+}
+
+#progressbar li.complete:before {
+    content: '\f00c';
+    color: white;
+    background: #27AE60;
+    transition: all ease 0.5s;
+}
+
+#progressbar li.complete:after {
+    background: #27AE60;
+    transition: all ease 0.3s;
+}
+
+.horizontal .slides {
+    height: calc(100vh - 160px);
+}
+
+@media (min-width: 1280px) and (max-width: 1366px) {}
+
+@media (min-width: 1367px) and (max-width: 1600px) {}
+
+@media (min-width: 1601px) and (max-width: 1920px) {}
+
+.transForm {
+    left: 0!important;
+    z-index: 1!important;
+    opacity: 1!important;
+}
+
+.row-centered {
+    text-align: center;
+    transition: width 0.3s ease, height 0.3s ease, margin 0.3s ease, padding 0.3s ease, opacity 0.3s ease;
+}
+
+.col-centered {
+    display: inline-block;
+    float: none;
+    vertical-align: middle;
+    /* reset the text-align */
+    text-align: left;
+    /* inline-block space fix */
+    margin-right: -4px;
+}
+
+@-webkit-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.fadeIn {
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+}
+
+.ui-group-buttons .or {
+    position: relative;
+    float: left;
+    width: .3em;
+    height: 1.3em;
+    z-index: 3;
+    font-size: 11px
+}
+
+.ui-group-buttons .or:before {
+    position: absolute;
+    top: 70%;
+    left: 30%;
+    content: 'or';
+    background-color: #fff;
+    margin-left: -.75em;
+    width: 1.6em;
+    height: 1.6em;
+    line-height: 1.55;
+    color: #555555;
+    font-style: normal;
+    font-weight: 400;
+    text-align: center;
+    border-radius: 500px;
+    -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box
+}
+
+.ui-group-buttons .or:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: ' ';
+    width: .3em;
+    height: 3em;
+    background-color: rgba(0, 0, 0, 0);
+    border-top: .6em solid #fff;
+    border-bottom: .6em solid #fff;
+}
+
+.ui-group-buttons .or.or-lg {
+    height: 1.3em;
+    font-size: 16px
+}
+
+.ui-group-buttons .or.or-lg:after {
+    height: 3.2em
+}
+
+.ui-group-buttons {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.ui-group-buttons:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden
+}
+
+.ui-group-buttons .btn {
+    float: left;
+    border-radius: 0
+}
+
+.ui-group-buttons .btn:first-child {
+    margin-left: 0;
+    border-top-left-radius: .25em;
+    border-bottom-left-radius: .25em;
+    padding: 15px 25px 15px 20px;
+}
+
+.ui-group-buttons .btn:last-child {
+    border-top-right-radius: .25em;
+    border-bottom-right-radius: .25em;
+    padding: 15px 20px 15px 25px
+}

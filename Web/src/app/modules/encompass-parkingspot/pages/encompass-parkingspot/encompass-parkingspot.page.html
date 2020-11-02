@@ -1,0 +1,33 @@
+<div class="m-t-15" [cgBusy]="promise">
+    <div [class]="'row m-t-15'">
+        <div class="col-md-12" style="display:block">
+            <div [class]="'box'">
+                <div class="box-title">
+                    <div class="box-caption">
+                        <span>Encompass Parking Spot</span>
+                    </div>
+                    <div class="box-action">
+                        <button id="lt_btnAddRole" class="btn btn-primary btn-sm waves-effect waves-light" type="button" (click)="ShowRoleModal(0)">
+              <i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Add Parking Spot
+            </button>
+                        <button id="lt_btnEditRole" class="btn btn-success btn-sm waves-effect waves-light" type="button" (click)="ShowRoleModal(1)" [disabled]="rowSelected">
+              <i class="fa fa-pencil"></i>&nbsp;&nbsp;Edit Parking Spot
+            </button>
+                        <button id="lt_btnViewrole" class="btn btn-warning btn-sm waves-effect waves-light" type="button" (click)="ShowRoleModal(2)" [disabled]="rowSelected">
+              <i class="fa fa-eye"></i>&nbsp;&nbsp;View Parking Spot
+            </button>
+                    </div>
+                </div>
+                <div [class]="'box-body'">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-panel">
+                                <table datatable [dtOptions]="dtparkingspot" class="table table-bordered table-striped table-hover" style="width: 100%;"></table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

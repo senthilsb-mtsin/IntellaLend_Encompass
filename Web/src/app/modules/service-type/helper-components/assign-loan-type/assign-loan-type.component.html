@@ -1,0 +1,58 @@
+<div class="row-centered">
+    <div id="review_detail" class="review_detail fadeIn">
+        <div class="col-md-5 col-centered">
+            <div class="form-group icon m0">
+                <input type="text" placeholder="All Loan Types" (ngModelChange)="UnassignedLoanFilterSearch($event)"
+                    required="" [(ngModel)]="allLoanSearchval">
+                <i class="bar"></i>
+                <span class="material-icons">search</span>
+            </div>
+            <div class="card-spc slimScrollCustom sto_list" id="document" malihu-scrollbar >
+                <div [dragula]='"dragloantype"' class="dragScroll" DivType="UnAssigned" [(dragulaModel)]='AllLoanTypes'>
+                    <div #allLoans title="{{ loanType.LoanTypeName }}" class="draganddrop" (click)="setLoanSelected(i)"
+                        [attr.data-loanid]="loanType.LoanTypeID" *ngFor="let loanType of AllLoanTypes; let i = index;">
+                        <span>{{ loanType.LoanTypeName }}</span>
+                        <i class="fa fa-plus-circle fa-lg pull-right text-col-green"
+                            (click)="AddLoanType(loanType.LoanTypeID)"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1 col-centered">
+            <div class="text-center movbtn">
+                <button class="btn btn-secondary waves-effect btn-rounded waves-light bg-white"
+                    (click)="MoveFromAllLoan()" id="addDocType" title="Add"><span
+                        class="material-icons">arrow_forward</span></button>
+            </div>
+            <div class="text-center p-t-15 movbtn">
+                <button class="btn btn-secondary waves-effect btn-rounded waves-light bg-white"
+                    (click)="MoveToAllLoan()" id="removeDocType" title="Remove"><span
+                        class="material-icons">arrow_back</span></button>
+            </div>
+            <div class="text-center p-t-15">
+                <button class="btn btn-secondary waves-effect btn-rounded waves-light bg-white"
+                    (click)="resetPageData()" id="reset" title="Reset"><span
+                        class="material-icons">settings_backup_restore</span></button>
+            </div>
+        </div>
+        <div class="col-md-5 col-centered">
+            <div class="form-group icon m0">
+                <input type="text" placeholder="Assigned Loan Types" required="" [(ngModel)]="assignedLoanSearchval">
+                <i class="bar"></i>
+                <span class="material-icons">search</span>
+            </div>
+            <div class="card-spc slimScrollCustom sto_list" malihu-scrollbar>
+                <div [dragula]='"dragloantype"' class="dragScroll" DivType="Assigned"
+                    [(dragulaModel)]='AssignedLoanTypes'>
+                    <div #assignedLoan title="{{loanType.LoanTypeName}}" class="draganddrop"
+                        (click)="setLoanAssignSelected(i)" [attr.data-loanid]="loanType.LoanTypeID"
+                        *ngFor='let loanType of AssignedLoanTypes|loantypesearch: assignedLoanSearchval; let i = index;'>
+                        <span>{{loanType.LoanTypeName}}</span>
+                        <i class="fa fa-minus-circle fa-lg pull-right text-col"
+                            (click)="RemoveLoanType(loanType.LoanTypeID)"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

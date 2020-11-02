@@ -1,0 +1,108 @@
+table thead tr th {
+    text-align: left;
+}
+
+table thead tr th {
+    text-align: left !important;
+}
+
+.folder {
+    background-image: url(../../../../../assets/images/folder.png);
+    height: 20px;
+    width: 20px;
+    position: absolute;
+}
+
+.file {
+    background-image: url(../../../../../assets/images/file.png);
+    height: 20px;
+    width: 20px;
+    position: absolute;
+}
+
+.form-group.icon span.material-icons {
+    position: absolute;
+    right: 0;
+    font-size: 21px;
+    top: 14px;
+    color: #70A2D3;
+    cursor: pointer;
+}
+
+.form-group.icon.ani input[type="text"],
+.form-group.icon.ani .bar {
+    width: 0px;
+}
+
+.form-group.icon input {
+    height: 24px;
+}
+
+.breadcrumb {
+    padding: 3px 15px 3px 0;
+    margin-bottom: 0px;
+    list-style: none;
+    background-color: transparent;
+    border-radius: 4px;
+}
+
+.breadcrumb li,
+.breadcrumb li a {
+    font-size: 13px;
+    color: #999;
+}
+
+.breadcrumb li.active:last-child a {
+    color: #555;
+}
+
+.breadcrumb>li+li:before {
+    padding: 0 5px;
+    color: #aaa;
+    content: "\f105";
+    font-family: 'FontAwesome'
+}
+
+.my-drop-zone {
+    border: dotted 3px lightgray;
+}
+
+.nv-file-over {
+    border: dotted 3px red;
+}
+
+
+/* Default class applied to drop zones on over */
+
+.another-file-over-class {
+    border: dotted 3px green;
+}
+
+.upload {
+    padding: 8px 0px;
+    background-color: #1e88e5;
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    border-radius: 4px;
+    width: 150px;
+    margin: 12px auto 2px auto;
+}
+
+.tab-base .nav-tabs li {
+    width: calc(100% / 3);
+}
+
+.tabCustWidth .nav-tabs li {
+    width: calc(100% / 2) !important;
+}
+
+.tab-base .tab-pane {
+    min-height: calc(100vh - 590px);
+    height: unset;
+}
+
+.singletab .nav-tabs li {
+    width: calc(100% / 1) !important;
+}

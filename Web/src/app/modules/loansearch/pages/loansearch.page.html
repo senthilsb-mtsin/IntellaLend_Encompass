@@ -1,0 +1,194 @@
+<div class="m-t-15" [cgBusy]="promise">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-title" style="cursor: pointer;" (click)="visibility = !visibility">
+                    <div class="box-caption">
+                        <span>Loan Search</span>
+                    </div>
+                    <div class="box-action" style="cursor: pointer;" (click)="visibility = !visibility">
+                        <span class="fa icon" (click)="visibility = !visibility" [ngClass]="{'fa-chevron-down': !visibility, 'fa-chevron-up': visibility}"></span>
+                    </div>
+                </div>
+                <div class="box-body" [hidden]="!visibility">
+                    <div class="card-spc">
+                        <div class="row">
+                            <div *ngIf="loanFilterResult.BorrowerLoanNumber" class="col-md-4">
+                                <div class="form-group">
+                                    <input type="text" id="ls_txtLoanNumber" [(ngModel)]="Request.LoanNumber" required="" tabindex="1">
+                                    <label class="control-label" for="input">Borrower Loan Number </label>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                            <div *ngIf="loanFilterResult.LoanType" class="col-md-4">
+                                <div class="form-group">
+                                    <select id="ls_drpLoanType" [(ngModel)]="Request.LoanType" tabindex="2">
+                                        <option *ngFor="let loanType of loanTypes | orderBy: {property: 'text', direction: 1}"
+                                        [value]="loanType.id">{{loanType.text}}</option>
+                                    </select>
+                                    <label class="control-label" for="input">Select Loan Type</label>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                            <div *ngIf="loanFilterResult.BorrowerName" class="col-md-4">
+                                <div class="form-group">
+                                    <input type="text" id="ls_txtBorrowerName" [(ngModel)]="Request.BorrowerName" required="" tabindex="4">
+                                    <label class="control-label" for="input">Borrower Name</label>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                            <div *ngIf="loanFilterResult.LoanAmount" class="col-md-4">
+                                <div class="row">
+                                    <div class="col-xs-12 p-r-0">
+                                        <div class="form-group">
+                                            <input currencyMask type="text" class="txt-left-imp" id="ls_txtLoanAmount" [(ngModel)]="Request.LoanAmount" required="" tabindex="5">
+                                            <label class="control-label" for="input">Loan Amount</label>
+                                            <i class="bar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="loanFilterResult.Customer" class="col-md-4">
+                                <div class="form-group">
+                                    <select id="ls_drpCustomer" [(ngModel)]="Request.Customer" tabindex="8">
+                                        <option value="0">--Select {{AuthorityLabelSingular}}--</option>
+                                        <option *ngFor="let cus of activeCustomerLists | orderBy: {property: 'text', direction: 1}"
+                                        [value]="cus.id">{{cus.text}}</option>
+                                    </select>
+                                    <label class="control-label" for="input">{{AuthorityLabelSingular}}</label>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                            <div *ngIf="loanFilterResult.ServiceType" class="col-md-4">
+                                <div class="form-group">
+                                    <select id="ls_drpReviewType" [(ngModel)]="Request.ReviewType" tabindex="7">
+                                        <option *ngFor="let reviewType of reviewTypes | orderBy: {property: 'ReviewTypeName', direction: 1}"
+                                        [value]="reviewType.ReviewTypeID">{{reviewType.ReviewTypeName}}</option>
+                                    </select>
+                                    <label class="control-label" for="input">Service Type</label>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                            <div *ngIf="loanFilterResult.AuditMonthYear" class="col-md-4">
+                                <div class="form-group">
+                                    <MonthYearPicker class="input_date" #missingAuditMonthYear [SelectedDate]="TempSelectedYearDate" (modelChange)="getMonthYear($event)"></MonthYearPicker>
+                                    <label class="control-label selected" for="input">Audit Month & Year</label>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                            <div *ngIf="loanFilterResult.PropertyAddress" class="col-md-4">
+                                <div class="form-group">
+                                    <input type="text" id="ls_txtPropertyAddress" [(ngModel)]="Request.PropertyAddress" required="" tabindex="7">
+                                    <label class="control-label" for="input">Property Address</label>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                            <div *ngIf="loanFilterResult.InvestorLoanNumber" class="col-md-4">
+                                <div class="form-group">
+                                    <input type="text" id="ls_txtInvestorLoanNumber" [(ngModel)]="Request.InvestorLoanNumber" required="" tabindex="8">
+                                    <label class="control-label" for="input">Investor Loan Number</label>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                            <div *ngIf="loanFilterResult.PostCloser" class="col-md-4">
+                                <div class="form-group">
+                                    <input type="text" id="ls_txtPostCloser" [(ngModel)]="Request.PostCloser" required="" tabindex="4">
+                                    <label class="control-label" for="input">Post-Closer</label>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                            <div *ngIf="loanFilterResult.LoanOfficer" class="col-md-4">
+                                <div class="form-group">
+                                    <input type="text" id="ls_txtLoanOfficer" [(ngModel)]="Request.LoanOfficer" required="" tabindex="4">
+                                    <label class="control-label" for="input">Loan Officer</label>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                            <div *ngIf="loanFilterResult.UnderWriter" class="col-md-4">
+                                <div class="form-group">
+                                    <input type="text" id="ls_txtUnderWriter" [(ngModel)]="Request.UnderWriter" required="" tabindex="4">
+                                    <label class="control-label" for="input">Underwriter</label>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                            <div *ngIf="loanFilterResult.AuditDueDate" class="col-md-4" style="padding-bottom: 3px">
+                                <div class="form-group">
+                                    <label class="control-label selected" for="input">Audit Due Date</label>
+                                    <my-date-picker name="mydate" [options]="myDatePickerOptions" [(ngModel)]="_AuditDueDate">
+                                    </my-date-picker>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                            <div *ngIf="loanFilterResult.LoanStatus" class="col-md-4">
+                                <div class="form-group">
+                                    <ng-select #workFlowStatusDropDown [(ngModel)]="loanSearchStatus" [items]="workFlowMaster" [multiple]="true" placeholder="--Select Status--">
+                                    </ng-select>
+                                    <label class="control-label selected" for="input">Loan Status</label>
+                                </div>
+                            </div>
+                            <div [style.display]="isReceivedDate" class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label selected" for="input">Received Date</label>
+                                    <ng-daterangepicker id="ls_dtReceivedDate" #receivedDate [(ngModel)]="value" [options]="options">
+                                    </ng-daterangepicker>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-right m-t-5">
+                                <button class="btn btn-info waves-effect m-r-5 waves-light" id="ls_btnSearch" (click)="SearchValidate(receivedDate.dateFrom, receivedDate.dateTo)" type="button" tabindex="9">
+                  <span class="material-icons">search</span>&nbsp;Search</button>
+                                <button class="btn btn-secondary waves-effect waves-light bg-white" id="ls_btnReset" (click)="reset()" type="button" tabindex="10">
+                  <span class="material-icons">settings_backup_restore</span>&nbsp;Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-panel box">
+                <div class="box-body">
+                    <div class="col-md-12 text-right p0">
+                        <button [disabled]="isDeleteLoan" style="position: absolute;bottom: 0px; right: 101px;" (click)="confirmDeleteModal.show()" class="btn btn-sm btn-danger m-b-10">
+              <i class="material-icons">delete_forever</i>&nbsp;Delete Loan</button>
+                        <button class="btn btn-sm bt-info  m-b-10" style="position: absolute;bottom: 0px;right: 210px;" id="bu_btnSelectAll" (click)="SelectAll()">
+              <i class="material-icons">select_all</i>&nbsp;&nbsp;{{selectAllBtn ? 'Select All' : 'Deselect'}}</button>
+                        <div id="downloadButton"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-right p0" id="downloadButton"></div>
+                        <div class="col-md-12">
+                            <table datatable [dtOptions]="dtOptions" class="table table-bordered table-striped table-borderless table-responsive" style="width: 100%;">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loan Delete -->
+<div bsModal #confirmDeleteModal="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm ?</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <p>Are you sure you want to Delete this Loan(s) ?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="ls_yes" class="btn btn-success waves-effect waves-light" (click)="DeleteLoans()">
+          <i class="material-icons">check_circle</i>&nbsp;Yes</button>
+                <button type="button" id="ls_yes" class="btn btn-danger waves-effect waves-light" (click)="confirmDeleteModal.hide()">
+          <i class="material-icons">cancel</i>&nbsp;No</button>
+            </div>
+        </div>
+    </div>
+</div>

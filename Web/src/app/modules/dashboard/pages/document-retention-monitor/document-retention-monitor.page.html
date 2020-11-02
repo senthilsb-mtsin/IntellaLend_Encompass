@@ -1,0 +1,54 @@
+<div class="box cust_box">
+    <div class="box-title p-b-5">
+        <div title="Document Retention Monitoring" class="box-caption w100 title_ellipsis">
+            <span class="caption-subject bold">Document Retention Monitoring</span>
+        </div>
+        <div class="box-action w100">
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="form-group m0">
+                        <select [(ngModel)]="DRReviewTypeID" name="DRReviewTypeID">
+                            <option [ngValue]="0"> -- Select ServiceType -- </option>
+                            <option *ngFor="let review of ReviewTypes" [ngValue]="review.ReviewTypeID">
+                                {{review.ReviewTypeName}}
+                            </option>
+                        </select>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-xs-5">
+                    <div class="form-group m0">
+                        <ng-daterangepicker #RetentionDateRange [(ngModel)]="RetentionDateRangeValues" [options]="daterangeoptions"></ng-daterangepicker>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-xs-1">
+                    <button class="btn btn-info waves-effect m-r-5 waves-light btn-sm" id="de_btnSearch" (click)="getMonthYear($event, 'DocumentRetentionMonitoring')" type="button">
+                        <span class="fa fa-search"></span>
+                    </button>
+
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="box-body  p-b-0">
+        <div class="card-spc" style="min-height:249px;">
+            <div *ngIf="documentRetentionData._showDocRetentionPDF" class="col-md-1 pull-right ">
+                <button title="Download As PDF" (click)="DownloadDocumentRetentionChart()" type="button" class="btn btn-info btn-xs loaninfo-back m-t-0 pull-right waves-effect waves-light m-t-0">
+                    <i class="material-icons">file_download</i>
+                </button>
+            </div>
+            <div class="col-md-11" id="DocumentRetentionMonitoring" style="height: 240px;">
+                <div [hidden]="!documentRetentionData._showDocRetentionPDF" (click)="onDocumentRetentionMonitoringPointClick($event)">
+                    <highcharts-chart (chartInstance)="saveInstance($event)" [Highcharts]="Highcharts" [runOutsideAngular]="true" [options]="_documentRetetntionMonitoringOptions" style="width: 100%; height: 240px; display: block;">
+                    </highcharts-chart>
+                </div>
+                <div [hidden]="documentRetentionData._showDocRetentionPDF" class="text-center m-t-50" style="font-size: 18px;">
+                    No Data Available
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,261 @@
+<!--component html goes here -->
+<div class="row">
+    <div class="col-md-6 col-md-offset-4">
+        <ul id="progressbar">
+            <li id="litab2" [ngClass]="stepModel.stepOneClass">
+                <a id="tab1" title="" href="javascript:void(0);">Selected Documents</a>
+            </li>
+            <li id="litab3" [ngClass]="stepModel.stepTwoClass">
+                <a id="tab2" title="" href="javascript:void(0);">Configuration</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-12">
+        <div class="horizontal">
+            <div class="slider">
+                <div class="slides" #slidesDiv>
+                    <div id="slide-1" [ngClass]="slideOneTranClass">
+                        <div class="box m-b-0">
+                            <div class="box-title ">
+                                <div class="box-caption">
+                                    <span>Loan Documents</span>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="row-centered">
+                                    <div [ngSwitch]="stepModel.stepID">
+                                        <div *ngSwitchCase="0">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group icon m0">
+                                                        <input type="text" placeholder="Selected Loans" required="">
+                                                        <i class="bar"></i>
+                                                        <span class="material-icons">search</span>
+                                                    </div>
+                                                    <div class="card-spc slimScrollCustom sto_list m-t-9px m-l-3 selDocListData text-left" malihu-scrollbar>
+                                                        <div>
+                                                            <div #allLoan title="{{item.LoanNumber}}" class="loandoclist" *ngFor='let item of loanExportData.LoanDetail; let i = index;' [attr.data-docid]="item.LoanTypeID">
+                                                                <span>{{item.LoanNumber}}</span>
+                                                                <span class="pull-right">
+                                                                    <i class="fa fa-check-circle fa-lg p-r-5" style="color:#1e88e5" aria-hidden="true" *ngIf="item.IsSelected"></i>
+                                                                    <i class="fa fa-times-circle fa-lg p-r-5" aria-hidden="true" *ngIf="!item.IsSelected"></i>
+                                                               </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group icon m0">
+                                                        <input type="text" id="_selectDocuments" name="_selectDocuments" placeholder="Selected Documents" [(ngModel)]="_selectDocuments">
+                                                        <i class="bar"></i>
+                                                        <span class="material-icons">search</span>
+                                                    </div>
+                                                    <div class="selDocList">
+                                                        <div class="card-spc slimScrollCustom selDocListData" malihu-scrollbar>
+                                                            <div class=" text-left" *ngIf="_showSelectall">
+                                                                <button class="btn btn-sm bt-info  m-b-10" id="bu_btnSelectAll" (click)="SelectAllDoc()">
+                                                                    <i class="material-icons">select_all</i>&nbsp;&nbsp;{{selectAllDocBtn ? 'Select All' : 'Deselect'}}</button>
+                                                            </div>
+                                                            <div>
+                                                                <div *ngIf="_btnSearchClick" class="text-center tableLoading">
+                                                                    <label>Loading
+                                                                        <span class="fa fa-spinner fa-pulse fa-fw"></span>
+                                                                    </label>
+                                                                </div>
+                                                                <div *ngFor="let loan of loanExportData.LoanDetail">
+                                                                    <div>
+                                                                        <div title="{{item.DocumentTypeName}}" class="loandoclist checkbox m-t-0" *ngFor='let item of loan.DocumentDetails | docmastersearch: _selectDocuments; let i = index;'>
+                                                                            <label>
+                                                                                <input type="checkbox" [(ngModel)]="item.IsChecked" (change)="DocumentSelect(loan.LoanID)"
+                                                                                    [value]="item.DocId" [attr.data-docid]="item.DocId" />
+                                                                                <i class="helper"></i>{{item.DocumentTypeName}}</label>
+                                                                        </div>
+                                                                        <div *ngIf="NoData" class="col-md-12 text-center m-t-50" style="font-size: 18px;">
+                                                                            No Data Available
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div *ngSwitchCase="1">
+                                            <div class="row">
+                                                <div class="col-md-8 col-md-offset-2 slimScrollCustom" malihu-scrollbar style="height: calc(100vh - 364px);overflow-y: auto;">
+                                                    <div class="form-group">
+                                                        <div class="card m5" style="box-shadow:0 1px 12px 3px rgba(0, 0, 0, .05)">
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-6" style="font-weight: 600;">
+                                                                        <span>Include Cover Letter</span>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div class="text-right pu_toggle">
+                                                                            <label class="tgl" style="font-size:14px">
+                                                                                <input [(ngModel)]="loanExportData.CoverLetter" name="coverLetter" (change)="ShowCoverLetter()" type="checkbox" />
+                                                                                <span data-on="Active" data-off="Inactive"></span>
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card m5" style="box-shadow:0 1px 12px 3px rgba(0, 0, 0, .05)">
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-6" style="font-weight: 600;">
+                                                                        <span>Include Table Of Content</span>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div class="text-right pu_toggle">
+                                                                            <label class="tgl" style="font-size:14px">
+                                                                                <input [(ngModel)]="loanExportData.TableOfContent" name="Toc"  type="checkbox" />
+                                                                                <span data-on="Active" data-off="Inactive"></span>
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card m5" style="box-shadow:0 1px 12px 3px rgba(0, 0, 0, .05)">
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-6" style="font-weight: 600;">
+                                                                        <span>Password Protected</span>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div class="text-right pu_toggle">
+                                                                            <label class="tgl" style="font-size:14px">
+                                                                                <input [(ngModel)]="loanExportData.PasswordProtected" name="pwdProtected" (change)="SetPasswordConfig(loanExportData.PasswordProtected)" type="checkbox" />
+                                                                                <span data-on="Active" data-off="Inactive"></span>
+                                                                            </label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box-footer p-t-5 p-b-5">
+                                <div class="row">
+                                    <div class="col-md-6 text-left">
+                                        <button type="button" (click)="backtoBatch()" class="btn btn-secondary bg-white waves-effect waves-light"><i class="material-icons">close</i>&nbsp;Cancel</button>
+                                    </div>
+                                    <div class="col-md-6 text-right">
+                                        <button type="button" *ngIf="stepModel.stepID == 0" [disabled]="_btnSearchClick" (click)="setNext(1)" class="btn  btn-info waves-effect waves-light m-l-5">Save&nbsp;&&nbsp;Next&nbsp;&nbsp;<span class="fa fa-arrow-right"></span></button>
+                                        <button type="button" *ngIf="stepModel.stepID > 0" (click)="setPrevious(0)" class="btn  btn-info waves-effect waves-light m-l-5"><span class="fa fa-arrow-left"></span> Previous</button>
+                                        <button type="button" *ngIf="stepModel.stepID == 1" (click)="setNext(2)" class="btn  btn-info waves-effect waves-light m-l-5"><i class="material-icons">done_all</i>&nbsp;&nbsp;Finish</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #coverLetterConfirmModal="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width: 1019px;;" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-left">
+                <h5 class="modal-title">Cover Letter</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <div role="tabpanel" class="tab-pane tab5" id="send_email">
+                    <div class="">
+                        <div #coverLetter class="coverletter">
+                            <div class="box-body">
+                                <div class="col-sm-12" style="float:none">
+                                    <div class="form-group">
+                                        <textarea required="required" tabindex="1" [(ngModel)]="To" id="to"></textarea>
+                                        <label for="to" class="control-label">To:</label>
+                                        <i class="bar"></i>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12" style="float:none">
+                                    <div class="form-group">
+                                        <textarea required="required" tabindex="2" [(ngModel)]="Subject" id="subject"></textarea>
+                                        <label for="subject" class="control-label">Subject:</label>
+                                        <i class="bar"></i>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12" style="float:none">
+                                    <div class="form-group">
+                                        <textarea rows="5" tabindex="3" required="required" [(ngModel)]="bodyContent" id="body"></textarea>
+                                        <label for="body" class="control-label">Body:</label>
+                                        <i class="bar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button (click)="SaveCoverLetterContent()" class="btn btn-info waves-effect waves-light m-l-5">
+                    <i class="material-icons">save</i> &nbsp;&nbsp;Save
+                </button>
+                <button type="button" class="btn btn-secondary bg-white waves-effect waves-light" type="button" (click)="CancelCoverLetter()">
+                    <i class="material-icons">cancel</i>&nbsp;&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #PasswordconfirmModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Password
+                    <span class="pull-right" (click)="CancelPassword()" style="cursor: pointer">
+                        <i class="material-icons"> close</i>
+                    </span>
+                </h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div class="">
+                        <div class="form-group pwd_tooltip">
+                            <ng-template #myTooltip class="" isFade="true" placement="left">
+                                <span placement="right" class="txt-indigo pwd-heading">Password must include:</span>
+                                <ul>
+                                    <li><span placement="right" [style.color]="isMinLengthValid">8-20 Characters</span></li>
+                                    <li><span placement="right" [style.color]="isUpperCaseCharacterExist">At least one capital letter</span></li>
+                                    <li><span placement="right" [style.color]="isNumberExist">At least one number</span></li>
+                                    <li><span placement="right" [style.color]="isValid">At least one special character</span></li>
+                                </ul>
+                            </ng-template>
+                            <input placement="right" [tooltip]="myTooltip" type="password" name="Answer" class="form-control mandatory" [(ngModel)]="loanExportData.Password" (ngModelChange)="CheckPasswordPolicy()" id="Password" required="">
+                            <label class="control-label" for="input">Enter  Password</label><i class="bar"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="">
+                        <div class="form-group">
+                            <input type="password" class="form-control mandatory" name="password" [(ngModel)]="loanExportData.ConfirmPassword" id="ConfirmPassword" required="">
+                            <label class="control-label" for="input">Confirm Password</label><i class="bar"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button " class="btn btn-primary waves-effect waves-light" type="button" [disabled]="isDisabled" (click)="savePassword()">
+                    <i class="material-icons">save</i>&nbsp;Save</button>
+                <button type="button" class="btn btn-secondary bg-white waves-effect waves-light" type="button" (click)="CancelPassword()">
+                    <i class="material-icons">cancel</i>&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

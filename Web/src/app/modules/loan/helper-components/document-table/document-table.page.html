@@ -1,0 +1,63 @@
+<div *ngIf="_docTables.length > 0" class="col-md-12 m-t-30" [formGroup]="fieldFrmGrp">
+    <ng-container formArrayName="datatables">
+        <div class="box" *ngFor="let _table of fieldFrmGrp.controls.datatables['controls']; let i=index" [formGroupName]="i">
+            <div class="box-title collapsed" data-toggle="collapse" [attr.data-target]="'#' + (_table.controls[0].value['Name'] | replaceallchar)">
+                <div class="box-caption">
+                    <span>{{_table.controls[0].value['Name']}}</span>
+                </div>
+            </div>
+            <div class="box-body collapse" id="{{_table.controls[0].value['Name'] | replaceallchar}}">
+                <div class="row">
+                    <!-- <div *ngFor="let _table of _docTables"> -->
+                    <div class="col-md-12 m-b-10">
+                        <button class="btn  btn-info btn-sm waves-effect waves-light pull-right" (click)="AddLineItems(i)">
+                            <i class="material-icons">add_circle_outline</i>&nbsp;Add</button>
+                    </div>
+                    <div *ngIf="_table.controls[0].value['HeaderRow']['HeaderColumns'].length > 0">
+                        <div class="col-md-12">
+                            <table class="table table-striped table-bordered" width="100%">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th class="text-center" *ngFor="let tableHead of _table.controls[0].value['HeaderRow']['HeaderColumns']">{{tableHead.Name}}</th>
+                                        <th class="text-center">Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr *ngFor="let tableBodyRows of _table.controls[0].value['Rows'].controls; let j = index;">
+                                        <ng-container [formGroup]="tableBodyRows">
+                                            <ng-container formArrayName="columns">
+                                                <td class="text-left" *ngFor="let tableBody of tableBodyRows.controls.columns.controls; let l = index;" [formGroupName]="l">
+                                                    <div class="form-group m0">
+                                                        <input type="text" formControlName="Value" required="">
+                                                        <i class="bar"></i>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span style='cursor:pointer' (click)="DeleteLineItem(i,j)" class='delete-user material-icons txt-red'>delete_forever</span>
+                                                    <!-- <button class="btn  btn-danger btn-sm waves-effect waves-light" (click)="DeleteLineItem(j)"><i class="material-icons">delete_forever</i></button> -->
+                                                </td>
+                                            </ng-container>
+                                        </ng-container>
+                                        <!-- <td class="text-left" *ngFor="let tableBody of tableBodyRows.RowColumns; let l = index;">
+                            <div class="form-group m0">
+                                <input type="text" [formControlName]="tableBody.Value" required="">
+                                <i class="bar"></i>
+                            </div>
+                        </td> -->
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div *ngIf="_table.controls[0].value['HeaderRow']['HeaderColumns'].length == 0">
+                        <div class="col-md-12">
+                            No Table Available
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>

@@ -1,0 +1,68 @@
+<div class="box-title ">
+    <div class="box-caption">
+        <span>Loan Documents</span>
+    </div>
+</div>
+
+<div #loading class="box-body" [cgBusy]="promise">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group icon m0">
+                <input type="text" placeholder="Selected Loans" required="" [(ngModel)]="_selectLoans">
+                <i class="bar"></i>
+                <span class="material-icons">search</span>
+            </div>
+            <div class="card-spc slimScrollCustom sto_list m-t-9px m-l-3 selDocListData" malihu-scrollbar [scrollbarOptions]="scrollbarOptions">
+                <div>
+                    <div #allLoan title="{{item.LoanNumber}}" class="loandoclist" *ngFor='let item of _exportloanservice.LoanDetail | loanFilter: _selectLoans; let i = index;' [attr.data-docid]="item.LoanTypeID" (click)="SelectLoan(item.LoanID,i)">
+                        <span>{{item.LoanNumber}}</span>
+                        <span class="pull-right">
+                                                        <i class="fa fa-check-circle fa-lg p-r-5" style="color:#1e88e5" aria-hidden="true" *ngIf="item.IsSelected"></i>
+                                                        <i class="fa fa-times-circle fa-lg p-r-5" aria-hidden="true" *ngIf="!item.IsSelected"></i>
+                                                        <i title="Delete" class="fa fa-minus-circle fa-lg text-col" (click)="RemoveLoanList(item.LoanID,i)"></i>
+                                                    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group icon m0">
+                <input type="text" placeholder="Selected Documents" required="" [(ngModel)]="_selectDocuments">
+                <i class="bar"></i>
+                <span class="material-icons">search</span>
+            </div>
+            <div class="selDocList">
+                <div class="card-spc slimScrollCustom selDocListData" malihu-scrollbar [scrollbarOptions]="scrollbarOptions">
+                    <div class="" *ngIf="_showSelectall">
+                        <button class="btn btn-sm bt-info  m-b-10" id="bu_btnSelectAll" (click)="SelectAllDoc()">
+                                                        <i class="material-icons">select_all</i>&nbsp;&nbsp;{{selectAllDocBtn ? 'Select All' : 'Deselect'}}</button>
+                    </div>
+                    <div>
+
+                        <div *ngFor="let loan of _exportloanservice.LoanDetail">
+                            <div *ngIf="loan.CurrentLoan">
+                                <div title="{{item.DocumentTypeName}}" class="loandoclist checkbox m-t-0" *ngFor='let item of loan.DocumentDetails | docmastersearch: _selectDocuments; let i = index;'>
+                                    <label>
+                                                                    <input type="checkbox" [(ngModel)]="item.IsChecked" (change)="DocumentSelect(loan.LoanID)"
+                                                                        [value]="item.DocId" [attr.data-docid]="item.DocId" />
+                                                                    <i class="helper"></i>{{item.DocumentTypeName}}</label>
+                                </div>
+                                <div *ngIf="NoData" class="col-md-12 text-center m-t-50" style="font-size: 18px;">
+                                    No Data Available
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="row" selDocListData>
+                                                <div class="col-md-12 text-center p10">
+                                                    <button [disabled]="NoData" type="button" class="btn btn-primary btn-sm waves-effect waves-light" type="button" (click)="SaveDocuments()">
+                                                        <i class="material-icons">save</i>&nbsp;Save</button>
+                                                    <button type="button" class="btn btn-secondary btn-sm waves-effect waves-light" type="button" (click)="CancelDocuments()">
+                                                        <i class="material-icons">close</i>&nbsp;Cancel</button>
+                                                </div>
+                                            </div> -->
+            </div>
+        </div>
+    </div>
+</div>

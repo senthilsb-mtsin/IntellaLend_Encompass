@@ -1,0 +1,50 @@
+<div class="row" style="display: block;">
+    <div class="col-md-12">
+        <div class="table-panel box">
+            <div class="box-body">
+                <table datatable [dtOptions]="dtOptions" class="table table-bordered table-striped table-borderless table-responsive" style="width: 100%;"></table>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div bsModal #auditConfigConfirmModal="bs-modal" [config]="{ backdrop: 'static', keyboard: false }" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md" style="width: 510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Edit
+                    <label style="
+              float: right;
+              font-weight: 500;
+              font-size: 12px;
+              color: red;
+              line-height: 25px;
+            ">Use @ to populate computed values</label>
+                </h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <textarea rows="2" [(ngModel)]="auidtConfigRowDatas.Description" [mention]="items" [mentionConfig]="{ triggerChar: '@' }" type="text"></textarea>
+                        <label class="control-label" for="input">
+                            Description
+                        </label>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info waves-effect waves-light" (click)="Confirm()">
+                    Save
+                </button>
+                <button type="button" class="btn btn-secondary waves-effect waves-light" data-dismiss="modal" (click)="auditConfigConfirmModal.hide()">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

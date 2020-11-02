@@ -1,0 +1,123 @@
+<div class="row m-t-15">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-title">
+                <div class="box-caption">
+                    <span>Email Tracker</span>
+                </div>
+                <div class="box-action">
+                    <div class="col-md-12 pull-right">
+                        <div class="col-md-5">
+                            <div class="form-group m0">
+                                <ng-daterangepicker id="email_daterange" #dateRange [(ngModel)]="datevalue" [options]="daterangeoptions"></ng-daterangepicker>
+                            </div>
+                        </div>
+                        <div class="col-md-1 pull-right">
+                            <button class="btn btn-info waves-effect m-r-5 waves-light btn-sm" id="db_btnSearch" (click)="SearchEmailTracker(dateRange.dateFrom, dateRange.dateTo)" type="button" tabindex="7">
+                                <span class="fa fa-search"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-panel">
+                            <table datatable [dtOptions]="dtOptions" class="table table-bordered table-striped table-responsive" style="width: 100%;">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div bsModal #EmailconfirmModal="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width: 740px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Email</h5>
+            </div>
+            <h5 class="text-right m0 p10">
+                <small class="txt-themeRed">Use $ for Document Name </small>
+            </h5>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <div id="send_email">
+                    <div class="col-sm-12">
+                        <div class="row" style="margin-left:7.5px">
+                            <div class="col-md-2 m-t-4">
+                                <p style="color:#03A9F4">To:</p>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group m0">
+                                    <input type="text" [(ngModel)]="_emailModalValues.To" placeholder="To" disabled>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="row  m-t-30 m-b-30" style="margin-left:4.5px">
+                            <div class="col-md-2 m-t-4">
+                                <p style="color:#03A9F4">Subject:</p>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group m0">
+                                    <input type="text" [(ngModel)]="_emailModalValues.Subject" placeholder="Subject" disabled>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="col-md-2 m-t-4">
+                            <p style="color:#03A9F4">Attachment:</p>
+                        </div>
+                        <div class="row m-t-30 m-b-30" style="margin-left:8.5px">
+                            <div style="height:75px;border:1px solid black;overflow-y: auto">
+                                {{_emailModalValues.Attachments}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 " style="float:none">
+                        <div class="row m-t-30 m-b-30" style="margin-left:8.5px">
+                            <div style="height:150px;border:1px solid black;overflow-y: auto">
+                                <span *ngIf="!IsRuleFindings">{{_emailModalValues.Body}}</span>
+                                <p class="p-l-10" *ngIf="IsRuleFindings">Following is the Loan QC Findings from IntellaLend for Loan Number {{_emailModalValues.LoanNumber}}</p>
+                                <div *ngIf="IsRuleFindings" class="p-l-10 p-b-10 p-r-10">
+                                    <table class="" style="border-collapse :collapse;width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>S.No</th>
+                                                <th>Checklist Item Name</th>
+                                                <th>Result</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let _rules of RuleFindings ;let i=index">
+                                                <td class="text-center">{{i+1}}</td>
+                                                <td>{{_rules["CheckListName"]}}</td>
+                                                <td>{{_rules["Result"]}}</td>
+                                            </tr>
+                                            <tr class="text-center" *ngIf="IsRulesAvailable">
+                                                <td colspan="3">No Data Available</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary bg-white waves-effect waves-light" type="button" (click)="EmailconfirmModal.hide()">
+                    <i class="material-icons">cancel</i>&nbsp;&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

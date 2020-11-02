@@ -1,0 +1,93 @@
+.tab-base .nav-tabs li {
+    width: calc(100% / 2);
+}
+
+.tab-base .tab-pane {
+    min-height: calc(100vh - 590px);
+    height: unset;
+}
+
+.ui-group-buttons .or {
+    position: relative;
+    float: left;
+    width: .3em;
+    height: 1.3em;
+    z-index: 3;
+    font-size: 11px
+}
+
+.ui-group-buttons .or:before {
+    position: absolute;
+    top: 70%;
+    left: 30%;
+    content: 'or';
+    background-color: #fff;
+    margin-left: -.75em;
+    width: 1.6em;
+    height: 1.6em;
+    line-height: 1.55;
+    color: #555555;
+    font-style: normal;
+    font-weight: 400;
+    text-align: center;
+    border-radius: 500px;
+    -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box
+}
+
+.ui-group-buttons .or:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: ' ';
+    width: .3em;
+    height: 3em;
+    background-color: rgba(0, 0, 0, 0);
+    border-top: .6em solid #fff;
+    border-bottom: .6em solid #fff;
+}
+
+.ui-group-buttons .or.or-lg {
+    height: 1.3em;
+    font-size: 9px;
+}
+
+.ui-group-buttons .or.or-lg:after {
+    height: 3.2em
+}
+
+.ui-group-buttons {
+    display: inline-block;
+    vertical-align: middle
+}
+
+.ui-group-buttons:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden
+}
+
+.ui-group-buttons .btn {
+    float: left;
+    border-radius: 0
+}
+
+.ui-group-buttons .btn:first-child {
+    margin-left: 0;
+    border-top-left-radius: .25em;
+    border-bottom-left-radius: .25em;
+    padding: 5px 8px 5px 5px;
+}
+
+.ui-group-buttons .btn:last-child {
+    border-top-right-radius: .25em;
+    border-bottom-right-radius: .25em;
+    padding: 5px 5px 5px 8px;
+    margin-left: 1px;
+}

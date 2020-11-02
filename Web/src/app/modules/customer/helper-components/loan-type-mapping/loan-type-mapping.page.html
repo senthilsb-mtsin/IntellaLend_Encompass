@@ -1,0 +1,96 @@
+<div *ngIf="LoanTypesMapped.length > 0" class="headercontainer">
+    <div class="tablecontainer">
+        <table class="table table-bordered table-striped table-hover m-b-0" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th scope="col">Loan Type Name
+                        <div>Loan Type Name</div>
+                    </th>
+                    <th scope="col">Box Upload Path
+                        <div>Box Upload Path</div>
+                    </th>
+                    <th scope="col">Loan Upload Path
+                        <div>Loan Upload Path</div>
+                    </th>
+                    <th scope="col">&nbsp;
+                        <div>&nbsp;</div>
+                    </th>
+                    <th scope="col">&nbsp;
+                        <div class="fixedTitle_LT">&nbsp;</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let op of LoanTypesMapped">
+                    <td class="text-left" style="width:30%">{{op.LoanTypeName}}</td>
+                    <td style=" vertical-align: left;width: 25%">
+                        <input type="text" class="form-control" style="margin-right: 20px" [(ngModel)]="op.BoxUploadPath" name="loanPath" />
+                    </td>
+                    <td style=" vertical-align: left;width: 25%">
+                        <input type="text" class="form-control" style="margin-right: 20px" [(ngModel)]="op.LoanUploadPath" name="loanPath" />
+                    </td>
+                    <td #assign style="width: 10%" class="text-center">
+                        <div class="pu_toggle">
+                            <label class="tgl m-b-0" style="font-size:14px">                
+                                <input [checked]="op.Mapped"  (change)="SetLoanType(op);" name="Active" type="checkbox"/>
+                                <span data-on="Assigned" data-off="UnAssigned"></span>
+                            </label>
+                        </div>
+                    </td>
+                    <td style="width: 10%" *ngIf="op.Mapped">
+                        <p class="text-center m0"><i *ngIf="op.loading" class="fa fa-spinner fa-pulse fa-fw"></i></p>
+                        <button type="button" *ngIf="!op.loading" (click)="GetCheckList(op)" class="btn btn-secondary btn-sm btn-info waves-effect waves-light m-l-5">Next&nbsp;&nbsp;<span class="fa fa-arrow-right"></span></button>
+                    </td>
+                    <td style="width: 10%" *ngIf="!op.Mapped">&nbsp;</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="col-centered" *ngIf="LoanTypesMapped.length === 0">
+    <label>No Loan Type Mapping Avaliable for the selected Service Type</label>
+</div>
+
+<div bsModal #loanRetainConfirm="bs-modal" [config]="{backdrop: false}" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-left">
+                <h5 class="modal-title">Confirm
+                    <span class="pull-right" (click)="RevertLoanType()" style="cursor: pointer"><i class="material-icons"> close</i></span>
+                </h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body text-left">
+                <div>
+                    Pre-Configured <b>{{ LoanTypeName }}</b> mapping is available. Do you want to retain & update the configurations ?
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect waves-light" (click)="RetainLoanMapping()"><i class="material-icons">update</i>&nbsp; Retain & Update</button>
+                <button type="button" class="btn btn-default bg-white waves-effect waves-light" type="button" (click)="SetCustReviewLoanMapping()"><i class="material-icons">cloud_download</i>&nbsp;New Download</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #loanConfirmModal="bs-modal" [config]="{backdrop: false}" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-left">
+                <h5 class="modal-title">Confirm
+                    <span class="pull-right" (click)="RevertMappedLoanType()" style="cursor: pointer"><i class="material-icons"> close</i></span>
+                </h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body text-left">
+                <div>
+                    <b>{{ LoanTypeName }}</b> mapping will be removed. Do you still want to continue ?
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect waves-light" (click)="RemoveLoanMapping()"><i class="material-icons">check_circle</i>&nbsp; Yes</button>
+                <button type="button" class="btn btn-default bg-white waves-effect waves-light" type="button" (click)="CancelLoanTypeConfirm()"><i class="material-icons">cancel</i>&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

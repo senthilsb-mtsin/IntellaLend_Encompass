@@ -1,0 +1,59 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2018", "dom"],
+    "paths": {
+      "@mts-select2": ["src/app/shared/custom-plugins/select/index.ts"],
+      "@mts-date-picker/*": ["src/app/shared/custom-plugins/my-date-picker/*"],
+      "@mts-month-year-picker/*": [
+        "src/app/shared/custom-plugins/month-year-picker/*"
+      ],
+      "@mts-dragula": [
+        "src/app/shared/custom-plugins/ng2-dragula/public_api.ts"
+      ],
+      "@mts-notification": ["src/app/shared/service/notification.service.ts"],
+      "@mts-busy/*": ["src/app/shared/custom-plugins/angularbusy/*"],
+      "@mts-datepicker": [
+        "src/app/shared/custom-plugins/datepicker/datepicker.component.ts"
+      ],
+      "@mts-daterangepicker/*": [
+        "src/app/shared/custom-plugins/ng-daterangepicker-master/*"
+      ],
+      "@mts-mention-plus": [
+        "src/app/shared/custom-plugins/mention-plus/index.ts"
+      ],
+      "@mts-functions/*": ["src/app/shared/tools/*"],
+      "@mts-auth-guard/*": ["src/app/shared/authGuard/*"],
+      "@mts-app-session": [
+        "src/app/shared/model/session-models/app-session.ts"
+      ],
+      "@mts-appsession-model": ["src/app/shared/model/session-models/index.ts"],
+      "@mts-api-url": ["src/app/shared/constant/api-url-constants/index.ts"],
+      "@mts-api-response-model": ["src/app/shared/model/mts-response.index.ts"],
+      "@mts-app-setting": [
+        "src/app/shared/constant/app-setting-constants/index.ts"
+      ],
+      "@mts-status-constant": [
+        "src/app/shared/constant/status-constants/index.ts"
+      ],
+      "@mts-pipe":[
+        "src/app/shared/pipes/index.ts"
+      ]
+    }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  }
+}

@@ -1,0 +1,31 @@
+<div class="row m-t-15">
+    <div class="col-md-12" [cgBusy]="promise">
+        <div class="box">
+            <div class="box-title">
+                <div class="box-caption">
+                    <span>Document Library</span>
+                </div>
+                <div class="box-action">
+                    <button id="dl_btnAddDT" class="btn btn-primary btn-sm waves-effect waves-light" type="button" (click)="ShowDocumentTypeModal(0)"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add Document
+                            Type</button>
+                    <button id="dl_btnEditDT" class="btn btn-success btn-sm waves-effect waves-light" type="button" (click)="ShowDocumentTypeModal(1)" *ngIf="showHide[0]" [disabled]="rowSelected"><i
+                                class="fa fa-pencil"></i>&nbsp;&nbsp;Edit Document Type</button>
+                    <button id="dl_btnViewDT" class="btn btn-warning btn-sm waves-effect waves-light" type="button" (click)="ShowDocumentTypeModal(2)" *ngIf="showHide[1]" [disabled]="rowSelected"><i
+                                class="fa fa-eye"></i>&nbsp;&nbsp;View Document Type</button>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-panel">
+                            <div class="table-responsive">
+                                <table datatable [dtOptions]="dtOptions" class="table table-bordered table-striped table-hover" style="width: 100%;">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

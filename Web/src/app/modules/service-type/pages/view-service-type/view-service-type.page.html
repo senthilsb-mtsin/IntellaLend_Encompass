@@ -1,0 +1,55 @@
+<div class="col-md-4 col-md-offset-4 m-t-15" >
+    <div class="box">
+        <div class="box-title">
+            <div class="box-caption">
+                <span>Service Type</span>
+            </div>
+            <div class="box-action">
+                <button type="button" title="Close" class="btn btn-danger p-l-2 p-r-2 btn-sm waves-effect waves-light"
+                    type="button" (click)="GotoMaster()"><i class="material-icons">close</i></button>
+            </div>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="text-right pu_toggle">
+                        <label class="tgl" style="font-size:14px">
+                            <input [(ngModel)]="getReviewTypeData.Active" name="Active" type="checkbox"
+                                disabled="disabled" />
+                            <span data-on="Active" data-off="Inactive"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group m-t-20 m-b-20">
+                        <input type="text" class="form-control mandatory" name="ReviewTypeName"
+                            [(ngModel)]="getReviewTypeData.ReviewTypeName" required="" disabled>
+                        <label class="control-label" for="input">Service Type Name</label><i class="bar"></i>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="form-group m-t-20 m-b-20">
+                        <select class="form-control" name="ReviewTypePriority"
+                            [(ngModel)]="getReviewTypeData.ReviewTypePriority" disabled>
+                            <option [ngValue]="0">--Not Set--</option>
+                            <option *ngFor="let priLists of priorityList" [ngValue]="priLists.ReviewPriorityID">
+                                {{priLists.ReviewPriorityName}}</option>
+                            (data)="refreshValue($event)"
+                        </select>
+                        <label class="control-label" for="input">Priority</label><i class="bar"></i>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="form-group  m-t-40">
+                        <select class="form-control" name="UserGroup" [(ngModel)]="getReviewTypeData.UserRoleID"
+                            disabled>
+                            <option [ngValue]="0">--Not Set--</option>
+                            <option *ngFor="let roles of RoleItems" [ngValue]="roles.RoleID">{{roles.RoleName}}</option>
+                            (data)="refreshValue($event)"
+                        </select>
+
+                        <label class="control-label" for="input">User Group</label><i class="bar"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

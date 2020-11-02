@@ -1,0 +1,17 @@
+.min950Width {
+    min-width: 950px;
+}
+
+.form-radio,
+.form-group {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.inner-page-tgl .tgl span:before {
+    line-height: 1.3em;
+}
+
+.inner-page-tgl .tgl span:after {
+    top: 0.21em;
+}

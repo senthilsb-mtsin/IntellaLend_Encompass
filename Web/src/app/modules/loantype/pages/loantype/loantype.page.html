@@ -1,0 +1,74 @@
+<div class="m-t-15" [cgBusy]="promise">
+    <div class="row m-t-15">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-title">
+                    <div class="box-caption">
+                        <span>Loan Types</span>
+                    </div>
+                    <div class="box-action">
+                        <button id="lt_btnAddLoanType1" class="btn btn-primary btn-sm waves-effect waves-light" type="button" (click)="ShowLoanTypeModal(0)" *ngIf="showHide[0]"><i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Add Loan Type</button>
+                        <button id="lt_btnEditLoanType2" class="btn btn-success btn-sm waves-effect waves-light" type="button" (click)="ShowLoanTypeModal(1)" *ngIf="showHide[1]" [disabled]="rowSelected"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Edit Loan Type</button>
+                        <button title="Refresh" class="btn btn-info btn-sm waves-effect waves-light" (click)="getLoanTypeList()"><i class="fa fa-refresh"></i>&nbsp;&nbsp;Refresh</button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-panel">
+                                <table datatable [dtOptions]="dtOptions" id="StagingdTable" class="table table-bordered table-striped table-hover" style="width: 100%;">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #confirmModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm
+                    <span class="pull-right" (click)="closeSync()" style="cursor: pointer"><i class="material-icons"> close</i></span>
+                </h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <div>
+                    Are you sure, you want to synchronize <span style="font-size: 18px; color:red;"><b>{{ LoanTypeName }}</b> </span> configuration to all {{AuthorityLabelPlural}} ?
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect waves-light" (click)="SyncLoanType()">
+                        <i class="material-icons">check_circle</i>
+                        &nbsp; Yes
+                    </button>
+                <button type="button" class="btn btn-default bg-white waves-effect waves-light" type="button" (click)="closeSync()"><i class="material-icons">cancel</i>&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div bsModal #confirmdataModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:1000px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sync Details
+                    <span class="pull-right" (click)="Close()" style="cursor: pointer"><i class="material-icons" > close</i></span>
+                </h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <table datatable [dtOptions]="SyncDetailsOptions" id="StagingViewDTble" class="table table-bordered table-striped table-borderless table-responsive" style="width: 100%;"></table>
+                </div>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-default bg-white waves-effect waves-light" type="button" (click)="Close()"><i class="material-icons">cancel</i>&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

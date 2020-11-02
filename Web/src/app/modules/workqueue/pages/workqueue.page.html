@@ -1,0 +1,16 @@
+<div class="table-panel box  m-t-15">
+    <div class="box-title">
+        <div class="box-caption">
+            <span>Work Queue</span>
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="row" [cgBusy]="promise">
+            <div class="col-md-12">
+                <table datatable [dtOptions]="workQueuedtOptions"
+                    class="table table-bordered table-striped table-borderless table-responsive" style="width: 100%;">
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

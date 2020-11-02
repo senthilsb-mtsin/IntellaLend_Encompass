@@ -1,0 +1,16 @@
+<div class="row m20" [cgBusy]="promise">
+    <div class="col-md-12">
+        <div [ngClass]="soWidth">
+            <mts-loan-stacking-order></mts-loan-stacking-order>
+        </div>
+        <div [ngClass]="imgDivWidth">
+            <mts-loan-image-viewer></mts-loan-image-viewer>
+        </div>
+        <div [ngClass]="fieldWidth">
+            <mts-loan-document-field></mts-loan-document-field>
+        </div>
+    </div>
+    <div class="col-md-12 p0">
+        <mts-loan-document-table></mts-loan-document-table>
+    </div>
+</div>

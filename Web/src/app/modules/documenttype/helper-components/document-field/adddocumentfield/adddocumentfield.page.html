@@ -1,0 +1,28 @@
+<div>
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <input type="text" class="form-control mandatory" name="FieldName" [(ngModel)]="fieldName" required="">
+                    <label class="control-label" for="input">Field Name</label><i class="bar"></i>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <input type="text" class="form-control mandatory" name="FieldDisplayName" [(ngModel)]="fieldDisplayName" required="">
+                    <label class="control-label" for="input">Field Display Name</label><i class="bar"></i>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <button type="button" (click)="AddField()" class="btn btn-info waves-effect waves-light">
+                        <span class="fa fa-plus"></span>&nbsp;&nbsp;Add</button>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <table datatable [dtOptions]="dtOptions" class="table table-bordered table-striped table-responsive" style="width: 100%;">
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

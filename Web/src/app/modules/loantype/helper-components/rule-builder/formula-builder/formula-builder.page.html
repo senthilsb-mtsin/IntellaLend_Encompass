@@ -1,0 +1,95 @@
+<div class="row">
+    <div class="col-md-12 p-r-15">
+        <div *ngIf="ShowVersioning" class="col-md-2">
+            <div class="form-group m-t-10 m-b-10">
+                <select (change)="DocversionChange($event)" [(ngModel)]="rowData.DocVersion" id="DocTypeVersionID">
+                              <option [value]="1">All</option>
+                              <option [value]="2">Any</option>
+                              <option [value]="3">Final</option>
+                              <option [value]="4">Initial</option>
+                   </select>
+                <label class="control-label selected">Select Document Versions</label>
+                <i class="bar"></i>
+            </div>
+        </div>
+        <div [class]="!ShowVersioning ? 'ruleBuilderFormula text-left m-b-5 col-md-12' : 'col-md-10 text-left ruleBuilderFormula'">
+            <div class="m-b-0 " [style.color]="errMsgStyle">{{ruleFormationValues}}</div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-2 p0">
+            <ul class="nav nav-tabs tabs-left">
+                <li #ruleTab [id]="rule.Name" *ngFor="let rule of ruleTypes" [class]="rule.Active ? 'active' : ''"><a (click)="setFormulaType(rule.Name,'menuclick')" data-toggle="tab"><i [class]="'material-icons ' + rule.IconColor">{{rule.Icon}}</i> {{rule.Description}}</a></li>
+            </ul>
+        </div>
+        <div class="col-md-10 p-l-0">
+            <div class="tab_right" [ngSwitch]="ruleType">
+                <div *ngSwitchCase="'general'">
+                    <mts-general-formula-builder></mts-general-formula-builder>
+                </div>
+                <div *ngSwitchCase="'if'">
+                    <mts-if-formula-builder></mts-if-formula-builder>
+                </div>
+                <div *ngSwitchCase="'in'">
+                    <mts-in-formula-builder></mts-in-formula-builder>
+                </div>
+                <div *ngSwitchCase="'datediff'">
+                    <mts-datediff-formula-builder></mts-datediff-formula-builder>
+                </div>
+                <div *ngSwitchCase="'manual'">
+                    <mts-manual-formula-builder></mts-manual-formula-builder>
+                </div>
+                <div *ngSwitchCase="'empty'">
+                    <mts-isempty-formula-builder></mts-isempty-formula-builder>
+                </div>
+                <div *ngSwitchCase="'compareall'">
+                    <mts-compareall-formula-builder></mts-compareall-formula-builder>
+                </div>
+                <div *ngSwitchCase="'isnotempty'">
+                    <mts-isnotempty-formula-builder></mts-isnotempty-formula-builder>
+                </div>
+                <div *ngSwitchCase="'checkall'">
+                    <mts-checkall-formula-builder></mts-checkall-formula-builder>
+                </div>
+                <div *ngSwitchCase="'isexist'">
+                    <mts-isexist-formula-builder></mts-isexist-formula-builder>
+                </div>
+                <div *ngSwitchCase="'losrule'">
+                    <mts-losrule-formula-builder></mts-losrule-formula-builder>
+                </div>
+                <div *ngSwitchCase="'datatablerule'">
+                    <mts-datatablerule-formula-builder></mts-datatablerule-formula-builder>
+                </div>
+                <div *ngSwitchCase="'groupby'">
+                    <mts-groupby-formula-builder></mts-groupby-formula-builder>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 m-t-5">
+        <div class="col-md-6 text-left p0">
+            <button type="button" (click)="GotoEditChecklistGroup()" class="btn btn-secondary waves-effect waves-light btn-sm bg-white" id="cancelbtn"><span class="material-icons">clear</span>&nbsp;&nbsp;Cancel</button>
+        </div>
+        <div class="col-md-6 text-right">
+            <button class="btn btn-info btn-sm waves-effect waves-light" [disabled]="ruleNextButton" (click)="wizStep2()">Next&nbsp;&nbsp;<i class="fa fa-arrow-right"></i></button>
+        </div>
+    </div>
+</div>
+
+<div bsModal #confirmMsgModal="bs-modal" [config]="{backdrop: false}" class="modal fade gap_top" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-left">Confirm</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body text-left">
+                <p>By changing the Rule, Existing rules will be deleted!!! Do you still want to change the Rule ?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info waves-effect waves-light" (click)="changeFormula(currentRule);editRule = false;confirmMsgModal.hide()">Yes</button>
+                <button type="button" class="btn btn-secondary waves-effect waves-light" data-dismiss="modal" (click)="setRuleTabActive();confirmMsgModal.hide()">No</button>
+            </div>
+        </div>
+    </div>
+</div>

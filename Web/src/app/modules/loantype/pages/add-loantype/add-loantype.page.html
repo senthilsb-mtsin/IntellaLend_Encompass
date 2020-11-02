@@ -1,0 +1,125 @@
+<!--component html goes here -->
+<div class="row">
+    <div class="col-md-12">
+        <ul id="progressbar">
+            <li id="litab2" [ngClass]="stepModel.stepOneClass">
+                <a id="tab1" title="" href="javascript:void(0);">Loan Type</a>
+            </li>
+            <li id="litab3" [ngClass]="stepModel.stepTwoClass">
+                <a id="tab2" title="" href="javascript:void(0);">Assign Document Types</a>
+            </li>
+            <li id="litab4" [ngClass]="stepModel.stepThreeClass">
+                <a id="tab3" title="" href="javascript:void(0);">Checklist</a>
+            </li>
+            <li id="litab5" [ngClass]="stepModel.stepFourClass">
+                <a id="tab4" title="" href="javascript:void(0);">Stacking Order</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-12">
+        <div class="horizontal">
+            <div class="slider">
+                <div class="slides" #slidesDiv>
+                    <div id="slide-1" [ngClass]="slideOneTranClass">
+                        <div class="box m-b-0">
+                            <div class="box-title">
+                                <div class="box-caption bcEllipsis">{{LoanTypeName}}
+                                    <img *ngIf="stepModel.stepID > AddLoantypeSteps.Loantype" height="16" src="../../assets/images/right-arrow.png" width="16">
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="row-centered">
+                                    <div [ngSwitch]="stepModel.stepID">
+                                        <div *ngSwitchCase="AddLoantypeSteps.Loantype">
+                                            <div class="col-centered col-md-4 m-t-50">
+                                                <div class="row">
+                                                    <div class="col-md-12 text-right">
+                                                        <div class="text-right pu_toggle">
+                                                            <label class="tgl" style="font-size:14px">                
+                                                                <input [(ngModel)]="LoanTypeActive"  name="Active" type="checkbox"/>
+                                                                <span data-on="Active" data-off="Inactive"></span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <input type="text" id="LoanTypeName" class="form-control mandatory" name="LoanTypeName" [(ngModel)]="LoanTypeName" required="">
+                                                            <label class="control-label" for="input">Loan Type Name</label>
+                                                            <i class="bar"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div *ngSwitchCase="AddLoantypeSteps.AssignDocumentType">
+                                            <mts-assign-document-type></mts-assign-document-type>
+                                        </div>
+                                        <div *ngSwitchCase="AddLoantypeSteps.Checklist">
+                                            <div class="row-centered" [ngSwitch]="createChecklistType">
+                                                <div class="col-centered" *ngSwitchCase="''">
+                                                    <div class="col-md-12 m-t-50">
+                                                        <div class="ui-group-buttons">
+                                                            <button type="button" (click)="showChecklist('createEdit', 'checklist')" class="btn btn-info waves-effect waves-light custbtn btn-lg">Create CheckList</button>
+                                                            <div class="or or-lg"></div>
+                                                            <button type="button" (click)="showChecklist('clone', 'checklist')" class="btn btn-info waves-effect waves-light custbtn btn-lg">Clone CheckList</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div [class]="checkListType === '' ? 'col-md-12 m-t-50' : 'col-md-12'" *ngSwitchCase="'clone'">
+                                                    <mts-clone-checklist></mts-clone-checklist>
+                                                </div>
+                                                <div class="col-md-12" *ngSwitchCase="'createEdit'">
+                                                    <mts-edit-checklist-group></mts-edit-checklist-group>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div *ngSwitchCase="AddLoantypeSteps.StackingOrder">
+                                            <div class="row-centered" [ngSwitch]="createStackingOrder">
+                                                <div class="col-centered" *ngSwitchCase="''">
+                                                    <div class="col-md-12 m-t-50">
+                                                        <div class="ui-group-buttons">
+                                                            <button type="button" (click)="showChecklist('createEdit', 'stackingorder')" class="btn btn-info waves-effect waves-light custbtn btn-lg">Create Stacking Order</button>
+                                                            <div class="or or-lg"></div>
+                                                            <button type="button" (click)="showChecklist('clone', 'stackingorder')" class="btn btn-info waves-effect waves-light custbtn btn-lg">Clone Stacking Order</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div [class]="stackOrderType === '' ? 'col-md-12 m-t-50' : 'col-md-12'" *ngSwitchCase="'clone'">
+                                                    <mts-clone-stacking-order></mts-clone-stacking-order>
+                                                </div>
+                                                <div class="col-md-12" *ngSwitchCase="'createEdit'">
+                                                    <mts-edit-stacking-order></mts-edit-stacking-order>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div *ngSwitchDefault>
+                                            <div class="col-centered col-md-4 m-t-50">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        Error Contact Administrator
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box-footer p-t-5 p-b-5">
+                                <div class="row">
+                                    <div class="col-md-6 text-left">
+                                        <button type="button" (click)="GotoMaster()" class="btn btn-secondary bg-white waves-effect waves-light"><i class="material-icons">close</i>&nbsp;Cancel</button>
+                                    </div>
+                                    <div class="col-md-6 text-right">
+                                        <button type="button" *ngIf="stepModel.stepID > AddLoantypeSteps.Loantype" (click)="GotoPreviousStep()" class="btn  btn-info waves-effect waves-light m-l-5"><span class="fa fa-arrow-left"></span> Previous</button>
+                                        <button type="button" *ngIf="!loading" (click)="GotoNextStep()" class="btn  btn-info waves-effect waves-light m-l-5"><i *ngIf="stepModel.stepID === AddLoantypeSteps.StackingOrder" class="material-icons">done_all</i>{{stepModel.stepID === AddLoantypeSteps.StackingOrder ? ' Finish' : ' Save & Next '}} <span *ngIf="stepModel.stepID !== AddLoantypeSteps.StackingOrder" class="fa fa-arrow-right"></span></button>
+                                        <button type="button" *ngIf="loading" disabled class="btn  btn-info waves-effect waves-light m-l-5">Save & Next <span class="fa fa-spinner fa-pulse fa-fw"></span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

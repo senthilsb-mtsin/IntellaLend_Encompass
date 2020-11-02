@@ -1,0 +1,21 @@
+<div class="row m-t-15" [cgBusy]="promise">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-title">
+                <div class="box-caption">
+                    <span>{{AuthorityLabelSingular}} Administration</span>
+                </div>
+                <div class="box-action">
+                    <button class="btn btn-primary btn-sm waves-effect waves-light" type="button" (click)="ShowCustomerModal(0)" *ngIf="showHide[0]"><i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Add {{AuthorityLabelSingular}}</button>
+                    <button class="btn btn-success btn-sm waves-effect waves-light" type="button" (click)="ShowCustomerModal(1)" *ngIf="showHide[1]" [disabled]="rowSelected"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Edit {{AuthorityLabelSingular}}</button>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="table-panel">
+                    <table datatable [dtOptions]="dtOptions" class="table table-bordered table-striped table-hover" style="width: 100%;">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

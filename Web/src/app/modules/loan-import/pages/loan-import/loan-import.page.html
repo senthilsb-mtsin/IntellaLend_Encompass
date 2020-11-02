@@ -1,0 +1,36 @@
+<div class="m-t-15">
+
+    <div [ngClass]="showHide[0] && showHide[1] ? 'tab-base' :showHide[0] || showHide[1] ? 'tab-base tabCustWidth' :'tab-base singletab'">
+        <ul class="nav nav-tabs" role="tablist">
+            <li [ngClass]="importTab=='ad_loanImport'? 'tab1 col-bdg active' :'tab1 col-bdg' " *ngIf="showHide[0]">
+                <a href="#ad_loanImport" id="tab1" (click)="importTab='ad_loanImport'" role="tab" data-toggle="tab">
+                    <span class="Lh30 fa fa-cloud-upload"></span>
+                    <br />Ad-hoc Loan Import
+                </a>
+            </li>
+            <li [ngClass]="importTab=='loan_importBox' ? 'tab2 col-bdg active' :'tab2 col-bdg'" *ngIf="showHide[1]">
+                <a href="#loan_importBox" id="tab2" (click)="importTab='loan_importBox'" role="tab" data-toggle="tab">
+                    <span class="Lh30 fa fa-dropbox"></span><br />Loan Import from Box
+                </a>
+            </li>
+            <li [ngClass]="importTab=='loan_importMonitor'? 'tab3 col-bdg active' :'tab3 col-bdg'">
+                <a href="#loan_importMonitor" id="tab3" (click)="importTab='loan_importMonitor'" role="tab" data-toggle="tab">
+                    <span class="Lh30 fa fa-desktop"></span><br />Loan Import Monitor
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content p0">
+            <div role="tabpanel" *ngIf="importTab=='ad_loanImport'" [ngClass]="importTab=='ad_loanImport'? 'tab-pane tab1 active' :'tab-pane tab1'" id="ad_loanImport">
+                <mts-ad-hoc-loan-import></mts-ad-hoc-loan-import>
+            </div>
+            <div role="tabpanel" *ngIf="importTab=='loan_importBox'" [ngClass]="importTab=='loan_importBox'? 'tab-pane tab2 active' :'tab-pane tab2'" id="loan_importBox">
+                <mts-box-loan-import></mts-box-loan-import>
+            </div>
+            <div role="tabpanel" *ngIf="importTab=='loan_importMonitor'" [ngClass]="importTab=='loan_importMonitor'? 'tab-pane tab3 active' :'tab-pane tab3'" id="loan_importMonitor">
+                <mts-loan-import-monitor></mts-loan-import-monitor>
+            </div>
+
+        </div>
+
+
+    </div>

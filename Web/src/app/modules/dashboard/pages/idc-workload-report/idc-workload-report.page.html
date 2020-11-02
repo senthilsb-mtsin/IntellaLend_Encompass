@@ -1,0 +1,49 @@
+<div class="box cust_box" [cgBusy]="promise">
+    <div class="box-title  m-b-0">
+        <div class="box-caption">
+            <span>IDC Workload Report</span>
+        </div>
+         <div class="box-action">
+            <div class="col-md-12 pull-right">
+                <div class="col-md-6">
+                    <div class="form-group m0">
+                        <select id="ocrdrpdwn" [(ngModel)]="ocrSelectedvalue" tabindex="2">
+                            <option value="-1">All</option>
+                                <option
+                                *ngFor="let select of ocrSelect | orderBy: {property: 'fieldvalue', direction: 1}"
+                                [value]="select.id">{{select.fieldvalue}}</option>
+
+                        </select>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group m0 ">
+                        <MonthYearPicker class="input_date" [SelectedDate]="TempSelectedYearDate" (modelChange)="getMonthYear($event)"></MonthYearPicker>
+                     <i class="bar"></i>
+                    </div>
+
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-info waves-effect m-r-5 waves-light btn-sm" id="db_btnSearch"
+                        (click)="GetOCRClassification(ocrSelectedvalue,TempSelectedYearDate)"
+                        type="button" tabindex="7">
+                        <span class="fa fa-search"></span>
+                    </button>
+                </div>
+            </div>
+        </div> 
+    </div>
+     <div class="box-body">
+        <div class="table-panel">
+            <div class=" table-responsive">
+                <div class="col-md-12 text-right p0" id="downloadButton"></div>
+                <div [cgBusy]="promise" class="col-md-12">
+                    <table datatable [dtOptions]="_classificationOptions"
+                        class="table table-bordered table-striped table-responsive" style="width: 100%;">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>

@@ -1,0 +1,136 @@
+<div class="box m-b-0">
+    <div class="box-title" (click)="visibility = !visibility">
+        <div class="box-caption">
+            <span>Loan Search</span>
+        </div>
+        <div class="box-action" style="cursor: pointer;" (click)="visibility = !visibility">
+            <span class="fa icon" (click)="visibility = !visibility" [ngClass]="{'fa-chevron-down': !visibility, 'fa-chevron-up': visibility}"></span>
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="card-spc" [hidden]=!visibility>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <input type="text" id="ls_txtLoanNumber" [(ngModel)]="Request.LoanNumber" required="" tabindex="1">
+                        <label class="control-label" for="input">Borrower Loan Number </label>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <select id="ls_drpLoanType" [(ngModel)]="Request.LoanType" tabindex="2">
+                                                    <option *ngFor="let loanType of loanTypes | orderBy: {property: 'text', direction: 1}" [value]="loanType.id">{{loanType.text}}</option>
+                                                </select>
+                        <label class="control-label" for="input">Select Loan Type</label>
+                        <i class="bar"></i>
+                    </div>
+
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label selected" for="input" style="font-size: 15px !important">Received Date</label>
+                        <ng-daterangepicker id="ls_dtReceivedDate" #receivedDate [options]="options"></ng-daterangepicker>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <input type="text" id="ls_txtBorrowerName" [(ngModel)]="Request.BorrowerName" required="" tabindex="4">
+                        <label class="control-label" for="input">Borrower Name</label>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="row">
+                        <div class="col-xs-12 p-r-0">
+                            <div class="form-group">
+                                <input type="number" id="ls_txtLoanAmount" [(ngModel)]="Request.LoanAmount" required="" tabindex="5">
+                                <label class="control-label" for="input">Loan Amount</label>
+                                <i class="bar"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <select id="ls_drpLoanStatus" [(ngModel)]="Request.ReviewStatus" tabindex="6">
+                                                    <option *ngFor="let status of workFlowMaster | orderBy: {property: 'text', direction: 1}" [value]="status.id">{{status.text}}</option>
+                                                </select>
+                        <label class="control-label" for="input">Loan Status</label>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <select id="ls_drpCustomer" [(ngModel)]="Request.Customer" tabindex="8" disabled>
+                                                    <option value="0">--Select {{AuthorityLabelSingular}}--</option>
+                                                    <option *ngFor="let cus of activeCustomerLists | orderBy: {property: 'text', direction: 1}" [value]="cus.id">{{cus.text}}</option>
+                                                </select>
+                        <label class="control-label" for="input">{{AuthorityLabelSingular}}</label>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <select id="ls_drpReviewType" [(ngModel)]="Request.ReviewType" tabindex="7">
+                                                    <!-- <option *ngFor="let reviewType of reviewTypes | orderBy: {property: 'ReviewTypeName', direction: 1}" [value]="reviewType.ReviewTypeID">{{reviewType.ReviewTypeName}}</option> -->
+                                                    <option [ngValue]="-1">--Select Review Type--</option>
+                                                    <option [ngValue]="1">Post-Closing Audit</option>
+                                                </select>
+                        <label class="control-label" for="input">Service Type</label>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <MonthYearPicker class="input_date" #missingAuditMonthYear [SelectedDate]="TempSelectedYearDate" (modelChange)="getMonthYear($event)"></MonthYearPicker>
+                        <label class="control-label selected" for="input" style="font-size: 15px !important">Audit Month & Year</label>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <input type="text" id="ls_txtPropertyAddress" [(ngModel)]="Request.PropertyAddress" required="" tabindex="7">
+                        <label class="control-label" for="input">Property Address</label>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <input type="text" id="ls_txtInvestorLoanNumber" [(ngModel)]="Request.InvestorLoanNumber" required="" tabindex="8">
+                        <label class="control-label" for="input">Investor Loan Number</label>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <button class="btn btn-info waves-effect m-r-5 waves-light" id="ls_btnSearch" (click)="Search(receivedDate.dateFrom, receivedDate.dateTo)" type="button" tabindex="9">
+                                                    <span class="material-icons">search</span>&nbsp;Search</button>
+                        <button class="btn btn-secondary waves-effect waves-light bg-white" id="ls_btnReset" (click)="reset()" type="button" tabindex="10">
+                                                    <span class="material-icons">settings_backup_restore</span>&nbsp;Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-spc">
+            <div class="text-right">
+                <button class="btn btn-sm bt-info  m-b-10" id="bu_btnSelectAll" (click)="SelectAll()">
+                                            <i class="material-icons">select_all</i>&nbsp;&nbsp;{{selectAllBtn ? 'Select All' : 'Deselect'}}</button>
+            </div>
+            <div class="table-panel">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table datatable [dtOptions]="dtOptions" class="table table-bordered table-striped table-borderless table-responsive" style="width: 100%;">
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

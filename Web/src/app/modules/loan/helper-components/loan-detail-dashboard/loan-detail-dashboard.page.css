@@ -1,0 +1,46 @@
+.tab-base .nav-tabs li {
+    width: calc(100% / 5) !important;
+}
+
+.All_ani {
+    transition: all 0.2s;
+    z-index: 1!important;
+}
+
+.FIELD_textHide {
+    display: none
+}
+
+.FIELD_Width {
+    width: 5%;
+    transition: all 0.2s;
+    float: right;
+}
+
+.FIELD_title {
+    position: absolute;
+    top: 60px;
+    left: 22%;
+    transform: rotate(-90deg);
+    transition: all ease 0.3s;
+}
+
+.FieldHiddenContent {
+    display: contents;
+}
+
+.FI_sub_icon_R {
+    top: 5px;
+    right: 8px;
+    position: relative;
+    font-size: 18px;
+    color: #1e88e5;
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+    transition: all ease 0.3s;
+}
+
+.FI_sub_icon {
+    transform: rotate(0deg);
+    transition: all ease 0.3s;
+}

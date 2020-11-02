@@ -1,0 +1,35 @@
+<div class="ownPicker">
+    <input type="text" readonly value="{{model|date: 'MM/yyyy'}}" class="date_input myMonthAuditPicker" id="dash_txtLoanNumber" (click)="onCalendarIconClick()" required="">
+    <span (click)="onCalendarIconClick()" class="material-icons cust-datepicker myMonthAuditPicker">date_range</span>
+    <div class="fdms-month-picker" *ngIf="_monthPicker.state=='open'">
+        <div class="row myMonthAuditPicker">
+            <div class="d-title myMonthAuditPicker">
+                <div class="col-md-2 waves-effect myMonthAuditPicker" (click)="onPrevYearSelection()">
+
+                    <span class="myMonthAuditPicker">
+                            <i class="material-icons myMonthAuditPicker">keyboard_arrow_left</i>
+                        </span>
+
+                </div>
+                <div class="col-md-8 waves-effect myMonthAuditPicker" (click)="switchToYearMode()">{{_monthPicker.selectedMonth}}, {{_monthPicker.displayYear}}</div>
+                <div class="col-md-2 waves-effect myMonthAuditPicker" (click)="onNextYearSelection()">
+
+                    <span class="myMonthAuditPicker">
+                            <i class="material-icons myMonthAuditPicker">keyboard_arrow_right</i>
+                        </span>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="month_list">
+                <div class="col-md-3" *ngFor="let item of _monthPicker.selectionItems">
+                    <div (click)="onselectionItemClick(item)" [class]="item.type =='y' ? 'd-selection-item waves-effect myMonthAuditPicker' : 'd-selection-item waves-effect'">
+                        <span [class]="item.type =='y' ? 'myMonthAuditPicker' : ''">{{item.text}}</span>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>

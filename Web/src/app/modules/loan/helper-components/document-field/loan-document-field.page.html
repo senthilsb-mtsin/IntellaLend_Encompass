@@ -1,0 +1,75 @@
+<div class="box m-b-0">
+    <div class="box-title ">
+        <div class="box-caption" [ngClass]="FieldHeaderStyle">
+            Fields
+        </div>
+        <div class="box-action">
+            <div class="row">
+                <div class="col-md-6" [ngClass]="FIELD_textShow">
+                    <button (click)="saveNReevaluate()" class="btn  btn-info btn-sm waves-effect waves-light" type="button">
+                        <i class="material-icons">save</i>
+                    </button>
+                </div>
+                <div class="col-md-3 col-md-offset-2">
+                    <div (click)="FIELD_Toggle()">
+                        <a id="menu-toggle">
+                            <span [ngClass]="FIELD_sub_icon" class="FI_sub_icon_R fa fa-thumb-tack"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div #fields class="box-body" [ngClass]="CardHeight">
+        <div class="row" *ngIf="FIELD_textShow == ''" [ngClass]="FIELD_textShow">
+            <div class="col-md-12" *ngIf="FIELD_textShow == ''" [ngClass]="FIELD_textShow">
+                <div class="form-group icon m0">
+                    <input type="text" required="" placeholder="Search Fields" [(ngModel)]="fieldSearchVal">
+                    <i class="bar"></i>
+                    <span class="material-icons">search</span>
+                </div>
+                <div class="form-group m-b-10">
+                    <select [(ngModel)]="newDocTypeID" (change)="confirmModal.show()" [disabled]="showHide[0]">
+                        <option *ngFor="let loan of loanDocuments" [value]="loan.DocID">
+                            {{loan.DocName}}
+                        </option>
+                    </select>
+                    <label class="control-label" for="input">Current Document Type</label>
+                    <i class="bar"></i>
+                </div>
+            </div>
+            <div #focusField class="col-md-12 focusField" *ngIf="FIELD_textShow == ''" [ngClass]="FIELD_textShow" [formGroup]="fieldFrmGrp">
+                <div class="col-md-12" formArrayName="fields">
+                    <div *ngFor="let field of (formData.controls | fieldsearch:fieldSearchVal); let i=index" [formGroupName]="i">
+                        <div class="form-group">
+                            <input type="text" (focus)="SetFieldCordsInImage(field)" formControlName="Value" required="">
+                            <label class="control-label" for="input">{{ field.controls.FieldDisplayName.value }}
+                            </label>
+                            <i class="bar"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #confirmModal="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-left">
+                <h5 class="modal-title">Confirm</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body text-left">
+                Current Document Fields will be cleared. Do you still want to continue ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect waves-light" (click)="ChangeDocType()">
+                    <i class="material-icons">check_circle</i>&nbsp;&nbsp;Yes</button>
+                <button type="button" class="btn btn-secondary bg-white waves-effect waves-light" type="button" (click)="confirmModal.hide()">
+                    <i class="material-icons">cancel</i>&nbsp;&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

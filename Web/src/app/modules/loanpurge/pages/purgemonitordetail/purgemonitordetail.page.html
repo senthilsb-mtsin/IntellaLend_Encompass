@@ -1,0 +1,19 @@
+<div class='m-t-15'>
+    <div class="box">
+        <div class="box-title">
+            <div class="box-caption">
+                <span>Export/Purge Batch Details</span>
+            </div>
+            <div class="text-right">
+                <button (click)="BacktoPurgeMonitor()" title="Close" class="btn btn-danger p-l-2 p-r-2 btn-sm waves-effect waves-light pull-right" type="button">
+                <i class="material-icons">close</i>
+            </button>
+                <!-- <button type="button" id="lp_btnBack"  class="btn btn-primary btn-sm"><i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;Back</button> -->
+            </div>
+        </div>
+        <div class="box-body">
+            <!-- <batchdetails-tablecomponents #purgeMonitorBatchDetailsDTables [data]="pmBdata" [Options]="purgeMonitorBatchDetailsDTOptions"></batchdetails-tablecomponents> -->
+            <table datatable [dtOptions]="purgeMonitorBatchDetailsDTOptions" id="PurgeMonitorBatchDetails" class="table table-bordered table-striped table-borderless table-responsive" style="width: 100%;"></table>
+        </div>
+    </div>
+</div>

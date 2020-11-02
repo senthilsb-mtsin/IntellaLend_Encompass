@@ -1,0 +1,98 @@
+<div [cgBusy]="promise">
+
+    <div class="p20">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row p-t-10">
+                    <div class="col-md-4 col-md-offset-6">
+                        <div class="form-group">
+                            <label class="control-label selected" for="input">
+                                Received Date
+                            </label>
+                            <ng-daterangepicker id="lp_dtReceivedDate" #receivedDate [(ngModel)]="value" [options]="options"></ng-daterangepicker>
+                            <i class="bar"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="m-t-25">
+                            <button type="button" id="lp_btnSearch" class="btn btn-info waves-effect waves-light" (click)="LoanPurgeSearch(receivedDate.dateFrom, receivedDate.dateTo)">
+                                <span class="material-icons">search</span>
+                                &nbsp;&nbsp;Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row m-t-10">
+            <div class="table-panel">
+                <div class="col-md-12">
+                    <div class="m-b-10">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button id="lpm_btnSelectAll" class="btn btn-defult btn-sm waves-effect waves-light" [disabled]="isPurgeRowSelectEnabled" (click)="getSelectAllPurgeRowData()">
+                                  <i *ngIf="!isPurgeRowSelectDeselect"  class="fa fa-check-square-o"></i>
+                                <i *ngIf="isPurgeRowSelectDeselect"  class="fa fa-square-o"></i>
+                                    &nbsp;&nbsp;{{isPurgeRowSelectDeselect ? 'Select All' :  'Deselect' }}
+                                </button>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <div class="ui-group-buttons">
+                                    <button id="lp_btnPurge" class="btn btn-info btn-sm waves-effect waves-light" [disabled]="isPurgeEnabled" (click)="purgeMsgModal.show()">
+                                        <i
+                                            class="fa fa-retweet"
+                                            aria-hidden="true"
+                                        ></i>
+                                        &nbsp;&nbsp;Purge
+                                    </button>
+                                    <!-- <div class="or or-lg"></div>
+                                      <button id="lp_btnPurge" class="btn btn-info btn-sm waves-effect waves-light" [disabled]="isPurgeEnabled" (click)="RetentionPurge(104)"><i class="fa fa-stack-overflow" aria-hidden="true"></i>&nbsp;&nbsp;Export</button> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <table datatable #purgeTable [dtOptions]="dtOptions" class="table table-bordered table-striped table-borderless table-responsive" style="width: 100%;"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div bsModal #purgeMsgModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="purge">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Confirm
+                    <span (click)="purgeMsgModal.hide()" class="pull-right" style="cursor: pointer;">
+                        <i class="material-icons">close</i>
+                    </span>
+                </h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body" style="margin: 0px;">
+                <p>
+                    Do you want to Purge or Export the Selected Loan Documents ?
+                </p>
+            </div>
+            <div class="modal-footer p10">
+                <div class="ui-group-buttons">
+                    <button id="lp_btnPurge" class="btn btn-info btn-sm waves-effect waves-light" (click)="RetentionPurge(102)">
+                        <i
+                            class="fa fa-retweet"
+                            aria-hidden="true"
+                        ></i>
+                        &nbsp;&nbsp;Purge
+                    </button>
+                    <div class="or or-lg"></div>
+                    <button id="lp_btnPurge" class="btn btn-info btn-sm waves-effect waves-light" (click)="RetentionPurge(104)">
+                        <i
+                            class="fa fa-stack-overflow"
+                            aria-hidden="true"
+                        ></i>
+                        &nbsp;&nbsp;Export
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

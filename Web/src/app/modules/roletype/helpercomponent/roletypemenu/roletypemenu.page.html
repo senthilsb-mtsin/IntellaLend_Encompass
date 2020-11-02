@@ -1,0 +1,89 @@
+<div class="col-md-8 col-md-offset-2 slimScrollCustom" malihu-scrollbar style="height: calc(100vh - 364px);">
+    <div class="form-group">
+        <div *ngFor="let menu of menulist ">
+            <div *ngIf="menu.MenuGroupID === 0">
+                <div *ngFor="let sm of menu.SubMenus">
+                    <div class="card m5 custombxs">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 font-weight-bold">
+                                    <span>{{ sm.MenuTitle }}</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-6">
+                                        <div class="text-right pu_toggle">
+                                            <label class="tgl fs14" *ngIf="!sm.IsComponent">
+                                                <input name="Home" [(ngModel)]="sm.IsChecked"
+                                                    type="checkbox"
+                                                    (change)="StartPage($event,sm.MenuID)" />
+                                                <span data-on="Home" data-off=""></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="text-right pu_toggle">
+                                            <label class="tgl fs14">
+                                              <input *ngIf="!ismapped" [(ngModel)]="sm.Active" name="Active" type="checkbox" (change)="MenuActive(sm);" />
+                                                <input *ngIf="ismapped" [(ngModel)]="sm.IsMapped" name="Active" type="checkbox" (change)="MenuActive(sm);" />
+                                                <span data-on="Active" data-off="Inactive"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="menu.MenuGroupID > 0 ">
+                <div class="card panel-heading m5 custombxs" (click)="ShowSubMenus()">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8 font-weight-bold">
+                                {{ menu.MenuGroupTitle }} &nbsp;
+                            </div>
+                            <div class="col-md-4 text-right">
+                                <span class="fa icon" [ngClass]="{'fa-chevron-down': !_viewsubmenu, 'fa-chevron-up': _viewsubmenu}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-l-50">
+                    <div class="card m-b-10 " [style.display]="isSubMenu" id="sub1">
+                        <div class="card-body">
+                            <div *ngFor="let sm of menu.SubMenus">
+                                <div class="row mb-1">
+                                    <div class="col-md-6">
+                                        <span>{{ sm.MenuTitle }}</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="col-md-6">
+                                            <div class="text-right pu_toggle">
+                                                <label class="tgl fs14">
+                                                    <input name="Home" [(ngModel)]="sm.IsChecked"
+                                                        type="checkbox"
+                                                        (change)="StartPage($event,sm.MenuID)" />
+                                                    <span data-on="Home" data-off=""></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="text-right pu_toggle">
+                                                <label class="tgl fs14">
+                                                  <input *ngIf='!ismapped' [(ngModel)]="sm.Active" name="Active" type="checkbox" type="checkbox" (change)="MenuActive(sm);" />
+                                                  <input *ngIf='ismapped' [(ngModel)]="sm.IsMapped" name="Active" type="checkbox" type="checkbox" (change)="MenuActive(sm);" />
+
+                                                    <span data-on="Active" data-off="Inactive"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

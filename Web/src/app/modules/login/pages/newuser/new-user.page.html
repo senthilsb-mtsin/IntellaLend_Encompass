@@ -1,0 +1,57 @@
+<body>
+    <div id="wrapper">
+        <header class="main-header">
+            <nav class="navbar">
+                <a href="#" class="brand">
+                    <img src="assets\images\logo.png" width="190" />
+                </a>
+            </nav>
+        </header>
+        <div class="page-container">
+            <div class="page-content-wrapper m-l-0">
+                <div class="container-fluid">
+                    <div class="row m-t-15">
+                        <div class="col-md-4 col-md-offset-4">
+                            <div class="box">
+                                <div class="box-title">
+                                    <div class="box-caption">
+                                        <span>New User</span>
+                                    </div>
+                                    <div class="box-action">
+                                        <button routerLink="" title="Close" class="btn btn-danger p-l-2 p-r-2 btn-sm waves-effect waves-light pull-right" type="button">
+                                            <i class="material-icons">close</i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="box-body">
+                                    <form class="">
+                                        <div class="form-group pwd_tooltip">
+                                            <ng-template #myTooltip class="" isFade="true" placement="left">
+                                                <span placement="right" class="txt-indigo pwd-heading">Password must include:</span>
+                                                <ul>
+                                                    <li><span placement="right" [style.color]="isMinLengthValid">8-20 Characters</span></li>
+                                                    <li><span placement="right" [style.color]="isUpperCaseCharacterExist">At least one capital letter</span></li>
+                                                    <li><span placement="right" [style.color]="isNumberExist">At least one number</span></li>
+                                                    <li><span placement="right" [style.color]="isValid">At least one special character</span></li>
+                                                </ul>
+                                            </ng-template>
+                                            <input placement="right" [tooltip]="myTooltip" type="password" class="form-control mandatory" name="password" [(ngModel)]="password" (ngModelChange)="CheckPasswordPolicy()" id="password" required="">
+                                            <label class="control-label" for="input">New Password</label><i class="bar"></i>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 m-t-20">
+                                                <div class="col-sm-8 p0 col-sm-offset-2">
+                                                    <input type="button" class="btn btn-info btn-block waves-effect waves-light" [disabled]="isDisabled" (click)="submitForm()" id="submitForm" value="Confirm" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

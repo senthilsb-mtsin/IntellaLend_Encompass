@@ -1,0 +1,50 @@
+<div class="row m-t-15">
+    <div class="col-md-12" [cgBusy]="promise">
+        <div class="box">
+            <div class="box-title">
+                <div class="box-caption">
+                    <span>Document Library</span>
+                </div>
+                <div class="box-action">
+                    <button id="dl_btnEditDT" class="btn btn-success btn-sm waves-effect waves-light" type="button" (click)="ShowDocumentTypeModal(1)" *ngIf="showHide[0]" [disabled]="rowSelected"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Edit Document Type</button>
+                    <button id="dl_btnViewDT" class="btn btn-warning btn-sm waves-effect waves-light" type="button" (click)="ShowDocumentTypeModal(2)" *ngIf="showHide[1]" [disabled]="rowSelected"><i class="fa fa-eye"></i>&nbsp;&nbsp;View Document Type</button>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <div class="form-group ">
+                                <select id="SelectCustomer" [(ngModel)]="Customervalue" (click)="CheckTrigger()" (ngModelChange)="OnCustomerChange(Customervalue)">
+                                <option value="0">--Select {{AuthorityLabelSingular}}--</option>
+                            <option *ngFor="let Cust of CustomerItems" [value]="Cust.id"> {{Cust.text}}</option>                                    
+                        </select>
+                                <label class="control-label" for="select">{{AuthorityLabelSingular}}</label><i class="bar"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group ">
+                                <select id="Selectloantypes" [(ngModel)]="LoanTypevalue">
+                                    <option value="0">--Select Loan Type--</option>
+                            <option *ngFor="let loan of LoanTypeItems" [value]="loan.id">{{loan.text}}</option>                                    
+                        </select>
+                                <label class="control-label" for="select">Loan Type</label><i class="bar"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="button" class="btn btn-secondary btn-info waves-effect waves-light m-t-30 m-l-30" (click)="GetManagerDoctypes()"><span class="material-icons">search</span>&nbsp;Search</button>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="table-panel">
+                            <div class="table-responsive">
+                                <table datatable [dtOptions]="dtOptions" class="table table-bordered table-striped table-hover" style="width: 100%;">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

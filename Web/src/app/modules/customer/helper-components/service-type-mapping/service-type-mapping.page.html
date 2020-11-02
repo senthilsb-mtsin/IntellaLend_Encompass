@@ -1,0 +1,81 @@
+<div class="headercontainer">
+    <div class="tablecontainer">
+        <table class="table table-bordered table-striped table-hover m-b-0" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th scope="col">Service Type Name
+                        <div class="fixedTitle">Service Type Name</div>
+                    </th>
+                    <th style="width: 180px" scope="col">Assigned/UnAssigned
+                        <div class="fixedData">Assigned/UnAssigned</div>
+                    </th>
+                    <th style="width: 80px;" scope="col">&nbsp;
+                        <div class="fixedData">&nbsp;</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let op of ReviewTypesMapped">
+                    <td class="text-left">{{op.ReviewTypeName}}</td>
+                    <td style="width: 180px" class="text-center">
+                        <div class="pu_toggle">
+                            <label class="tgl m-b-0" style="font-size:14px">                
+                                <input [checked]="op.Mapped"  (change)="SetReviewType(op);" name="Active" type="checkbox"/>
+                                <span data-on="Assigned" data-off="UnAssigned"></span>
+                            </label>
+                        </div>
+                    </td>
+                    <td *ngIf="op.Mapped">
+                        <p class="text-center m0"><i *ngIf="op.loading" class="fa fa-spinner fa-pulse fa-fw"></i></p>
+                        <button *ngIf="!op.loading" type="button" (click)="GetLoanTypes(op)" class="btn  btn-sm btn-info waves-effect waves-light m-l-5">Next&nbsp;&nbsp;<span class="fa fa-arrow-right"></span></button>
+                    </td>
+                    <td *ngIf="!op.Mapped">&nbsp;</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div bsModal #confirmModal="bs-modal" [config]="{backdrop: false}" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-left">
+                <h5 class="modal-title">Confirm
+                    <span class="pull-right" (click)="RevertMappedReviewType()" style="cursor: pointer"><i class="material-icons"> close</i></span>
+                </h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body text-left">
+                <div>
+                    <b>{{ ReviewTypeName }}</b> mapping will be removed. Do you still want to continue ?
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect waves-light" (click)="RemoveMapping()"><i class="material-icons">check_circle</i>&nbsp; Yes</button>
+                <button type="button" class="btn btn-default bg-white waves-effect waves-light" type="button" (click)="_currtReviewType.Mapped = !_currtReviewType.Mapped; confirmModal.hide()"><i class="material-icons">cancel</i>&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #retainConfirm="bs-modal" [config]="{backdrop: false}" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-left">
+                <h5 class="modal-title">Confirm
+                    <span class="pull-right" (click)="RevertMappedReviewType()" style="cursor: pointer"><i class="material-icons"> close</i></span>
+                </h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body text-left">
+                <div>
+                    Pre-Configured <b>{{ ReviewTypeName }}</b> mapping is available. Do you want to retain the configurations ?
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect waves-light" (click)="RetainMapping()"><i class="material-icons">check_circle</i>&nbsp; Yes</button>
+                <button type="button" class="btn btn-default bg-white waves-effect waves-light" type="button" (click)="SetCustReviewMapping()"><i class="material-icons">cancel</i>&nbsp;No</button>
+            </div>
+        </div>
+    </div>
+</div>

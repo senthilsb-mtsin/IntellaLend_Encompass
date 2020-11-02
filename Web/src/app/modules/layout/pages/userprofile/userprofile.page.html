@@ -1,0 +1,58 @@
+<!--component html goes here -->
+<ul class="nav navbar-nav">
+    <li title="App Setting" class="menu profileImg" (click)="showHideProfile = !showHideProfile">
+        <a href="#" class="dropdown-toggle profile waves-effect profileImg" data-toggle="dropdown" aria-expanded="false">
+            <span class="material-icons profileImg txt-indigo">account_circle</span>
+        </a>
+    </li>
+</ul>
+
+<div id="side_dropdown" *ngIf="showHideProfile" class="">
+    <div class="main-menu" id="menu_list">
+        <div style="position: absolute; right: 0; top: 60px;">
+            <div class="clearfix"></div>
+            <ul class="profile-dropdown">
+                <li>
+                    <div title="{{ user.LastName + ' ' + user.FirstName }}" class="user-info">
+                        <div class="user-name">{{ user.LastName + ' ' + user.FirstName }}</div>
+                    </div>
+                </li>
+                <li *ngIf="ischangeRole">
+                    <a class="dropdown">
+                        <div data-toggle="dropdown">
+                            <div class="first_dd">
+                                <i class="material-icons">person</i>
+                                <i>Change Role</i>
+                                <i class="caret"></i>
+                            </div>
+                            <div class="second_dd">
+                                <i>{{userCurrentRoleName}}</i>
+                            </div>
+                        </div>
+                        <ul class="dropdown-menu sub_menu " style="overflow-y: auto;">
+                            <li *ngFor="let role of user.UserRoleMapping" (click)="setMenuRouteChangeRole(role.RoleID)">
+                                <a href="javascript:void(0)">{{role.RoleName}}</a>
+                            </li>
+                        </ul>
+                    </a>
+                </li>
+                <li *ngIf="!ischangeRole">
+                    <a class="dropdown">
+                        <div data-toggle="dropdown">
+                            <div class="first_dd">
+                                <i class="material-icons">person</i>
+                                <i>Role Name</i>
+                            </div>
+                            <div class="second_dd">
+                                <i>{{userCurrentRoleName}}</i>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li *ngIf="!AD_login"><a [routerLink]="resetLink"><span class="material-icons">settings_backup_restore</span>Reset Password</a></li>
+                <li><a href="javascript:void(0)" (click)="signOut()"><span class="material-icons">exit_to_app</span>Sign out</a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>

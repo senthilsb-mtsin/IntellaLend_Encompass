@@ -1,0 +1,129 @@
+/* System Mapping CSS End */
+
+.headercontainer {
+    position: relative;
+    border: 1px solid #eee;
+    padding-top: 37px;
+    background: #fff;
+}
+
+
+/* This is for the data area that is scrollable */
+
+.tablecontainer {
+    overflow-y: auto;
+    height: calc(100vh - 340px);
+    background: #fff;
+}
+
+
+/* Removes default cell borders and ensures table width 100% of its container*/
+
+.tablecontainer table {
+    border-spacing: 0;
+    width: 100%;
+}
+
+
+/* adds a thin border to the left of cells, but not the first */
+
+.tablecontainer td+td {
+    border-left: 1px solid #eee;
+}
+
+
+/* cell padding and bottom border */
+
+.tablecontainer td,
+th {
+    border-bottom: 1px solid #eee;
+    padding: 8px;
+    vertical-align: middle;
+}
+
+
+/* make the default header height 0 and make text invisible */
+
+.tablecontainer th {
+    height: 0px;
+    padding-top: 0;
+    padding-bottom: 0;
+    line-height: 0;
+    visibility: hidden;
+    white-space: nowrap;
+}
+
+
+/* reposition the divs in the header cells and place in the blank area of the headercontainer */
+
+.tablecontainer th div {
+    visibility: visible;
+    position: absolute;
+    background: #fff;
+    padding: 9px 10px;
+    top: 0;
+    margin-left: -9px;
+    line-height: normal;
+    border-left: 1px solid #eee;
+}
+
+
+/* prevent the left border from above appearing in first div header */
+
+th:first-child div {
+    border: none;
+}
+
+
+/* alternate colors for rows */
+
+.tablecontainer tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.tablecontainer tbody tr:nth-child(even) {
+    background-color: #fff;
+}
+
+.fixedTitle {
+    border-bottom: 1px solid #accaea!important;
+    width: 86%;
+}
+
+.fixedData {
+    border-bottom: 1px solid #accaea!important;
+    width: 15.7%;
+}
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+    .fixedTitle {
+        border-bottom: 1px solid #accaea!important;
+        width: 85.5%;
+    }
+    .fixedData {
+        border-bottom: 1px solid #accaea!important;
+        width: 14.5%;
+    }
+}
+
+@media (min-width: 1400px) and (max-width: 1679px) {
+    .fixedTitle {
+        border-bottom: 1px solid #accaea!important;
+        width: 86.5%;
+    }
+    .fixedData {
+        border-bottom: 1px solid #accaea!important;
+        width: 13.7%;
+    }
+}
+
+@media (min-width: 1680px) and (max-width: 1920px) {
+    .fixedTitle {
+        border-bottom: 1px solid #accaea!important;
+        width: 90%;
+    }
+    .fixedData {
+        border-bottom: 1px solid #accaea!important;
+        width: 10%;
+    }
+}

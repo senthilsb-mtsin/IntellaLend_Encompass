@@ -1,0 +1,13 @@
+.control-label-builder {
+    font-size: 15px;
+    color: #03A9F4;
+    top: -20px;
+    left: 0;
+    font-weight: normal;
+}
+
+.control-label-builder-div {
+    border: solid 1px #d9d9d9;
+    height: calc(100vh - 498px);
+    overflow-y: auto;
+}

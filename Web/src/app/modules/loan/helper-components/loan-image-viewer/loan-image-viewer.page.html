@@ -1,0 +1,108 @@
+<div [cgBusy]="promiseImage">
+    <div *ngIf="imageViewerType==3" class="row">
+        <div class="col-md-12" [style.display]="imageStyle">
+            <div *ngIf="multiImageSource.length > 0" class="row">
+                <div class="col-md-5 pag_num p-r-0">
+                    <div class="tra_bg p-l-0">
+                        <h4>{{doc._currentDocName.length > 26 ? doc._currentDocName.substring(0, 23) + '...' : doc._currentDocName }} ({{doc._totalImageCount}})</h4>
+                    </div>
+                </div>
+                <div class="col-md-7 text-left p-l-0">
+                    <div class="tra_bg">
+                        <ul class="img_control list-inline text-right m-b-0">
+                            <li>
+                                <button title="Zoom In" (click)="ImageZoomIn()" type="button"><i class="fa fa-search-plus"></i></button>
+                            </li>
+                            <li>
+                                <button title="Zoom Out" (click)="ImageZoomOut()" type="button"><i class="fa fa-search-minus"></i></button>
+                            </li>
+                            <li>
+                                <button title="Fit" (click)="ImageFitIn()" type="button"><i class="fa fa-compress"></i></button>
+                            </li>
+                            <!-- <li>
+                                    <button title="Single View" (click)="ShowListView()" type="button"> <i   class="fa fa-file-o"></i></button>
+                                </li> -->
+                            <li *ngIf="_isReverifyImg || _isReverifyImg == undefined">
+                                <button title="Comparison View" (click)="show()" type="button"><i class="fa fa-copy"></i></button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div [style.height]="ImageViewerHeight" style="background-color: rgba(0,0,0,0.85);">
+                <div [style.height]="ImageViewerHeight" #imgDivList class="m0" style="position:relative; padding: 1px;border-top: 0px; border-radius: 0;">
+                    <div class="col-md-12 p0" *ngIf="this.multiImageSource.length > 0">
+                        <div #imgScrollList [style.height]="ImageViewerHeight" class="col-md-12 p0 viewer_full_height_image">
+                            <div #loading class="imageSource" style="margin-bottom:15px" *ngFor="let img of multiImageSource">
+                                <div #imageHeight style="position:relative;" [style.height.px]="img.currentHeight" [style.width.px]="img.currentWidth" class=" bg-white text-center">
+                                    <i *ngIf="!img.ImageShown" class="m-t-20" style="color:#333;font-size:22px;">Loading...</i>
+                                    <img #listImages (load)="InitListViewer(img.PageNo)" attr.pageNo="{{img.PageNo}} " [style.height.px]="img.currentHeight " [style.width.px]="img.currentWidth " [src]="img.Image ">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div [cgBusy]="promiseImage" *ngIf="this.promiseImage==undefined" (onload)="InitViewer()" class="m-t-50 text-center" style="font-size: 20px;color:rgba(255,255,255,0.6);">
+                    </div>
+                    <div *ngIf="this.promiseImage!=undefined" (onload)="InitViewer()" class="m-t-50 text-center" style="font-size: 20px;color:rgba(255,255,255,0.6);">
+                        Image Not Found
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="imageViewerType==2" class="row">
+        <div class="col-md-12" [style.display]="imageStyle">
+            <div class="row">
+                <div class="col-md-5 pag_num p-r-0">
+                    <div class="tra_bg">
+                        <h1 style="margin-top: 22px;"></h1>
+                    </div>
+                </div>
+                <div class="col-md-7 text-left p-l-0">
+                    <div class="tra_bg">
+                        <ul class="img_control list-inline text-right m-b-0">
+                            <li>
+                                <button title="Zoom In" (click)="ImageZoomIn()" type="button"><i class="fa fa-search-plus"></i></button>
+                            </li>
+                            <li>
+                                <button title="Zoom Out" (click)="ImageZoomOut()" type="button"><i class="fa fa-search-minus"></i></button>
+                            </li>
+                            <li>
+                                <button title="Sync Scroll" (click)="ToogleScrollSync()" type="button"> <i  [ngClass]="{viewer_enable_highlight:syncScroll}"  class="fa fa-link"></i></button>
+                            </li>
+                            <li>
+                                <button title="Normal View" (click)="ShowDocCompare()" type="button">
+                                        <i [ngClass]="{viewer_enable_highlight:imageViewerType==2}" class="fa fa-file-o"></i>
+                                    </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div [style.height]="ImageViewerHeight" style="background-color: rgba(0,0,0,0.85);">
+                <div [style.height]="ImageViewerHeight" class="m0" style="position:relative; padding: 1px;border-top: 0px; border-radius: 0;">
+                    <div class="col-md-12 p0 " *ngIf="this.multiImageSource.length>0">
+                        <div #rightImgScroll [style.height]="ImageViewerHeight" class="col-md-6 p0 viewer_full_height_image">
+                            <p class="txt-white m-b-0 m-l-10 so_textEllipsis">{{ImgDocName }}</p>
+                            <div style="margin-bottom:15px" *ngFor="let img of multiImageSource">
+                                <img [@rotatedState]='state' class="img-responsive" [src]="img.Image" attr.pageNo="{{imgSrc.PageNo}}" [style.height.px]="imgSrc.currentHeight" [style.width.px]="imgSrc.currentWidth">
+                            </div>
+                        </div>
+                        <div #leftImgScroll (scroll)="scrollSync()" [style.height]="ImageViewerHeight" class="col-md-6 p0 viewer_full_height_image loanSelect2">
+                            <ng-select id="select2" class="customSelectWidth" style="width:100%" [(ngModel)]="selectedIndex" (data)="SetDocumentName($event)" #documentSelect [items]="versionedDocs" [multiple]="false" placeholder="-- Select Document --"></ng-select>
+                            <div style="margin-bottom:15px" *ngFor="let img of leftImageSource">
+                                <img [@rotatedState]='state' class="img-responsive" [src]="img.Image" attr.pageNo="{{imgSrc.PageNo}}" [style.height.px]="imgSrc.currentHeight" [style.width.px]="imgSrc.currentWidth">
+                            </div>
+                        </div>
+                    </div>
+                    <div [cgBusy]="promiseImage" *ngIf="this.promiseImage==undefined" (onload)="InitViewer()" class="m-t-50 text-center" style="font-size: 20px;color:rgba(255,255,255,0.6);">
+                        Loading...
+                    </div>
+                    <div *ngIf="this.promiseImage!=undefined" (onload)="InitViewer()" class="m-t-50 text-center" style="font-size: 20px;color:rgba(255,255,255,0.6);">
+                        Image Not Found
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

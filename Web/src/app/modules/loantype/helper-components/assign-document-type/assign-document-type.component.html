@@ -1,0 +1,169 @@
+<div class="row-centered">
+    <div id="review_detail" class="review_detail fadeIn">
+        <div class="col-md-5 col-centered">
+            <div class="form-group icon m0">
+                <input type="text" placeholder="All Document Types" (ngModelChange)="UnassignedDocFilterSearch($event)"
+                    required="" [(ngModel)]="allDocSearchval">
+                <i class="bar"></i>
+                <span class="material-icons">search</span>
+            </div>
+            <div class="card-spc slimScrollCustom sto_list" id="document" malihu-scrollbar>
+                <div [dragula]='"nested-type"' class='dragScroll' DivType="UnAssigned" [(dragulaModel)]='AllDocTypes'>
+                    <div #allDocs class="draganddrop" (click)="setDocSelected(i)"
+                        [attr.data-docid]="docType.DocumentTypeID" *ngFor="let docType of AllDocTypes; let i = index;">
+                        <span>{{ docType.Name }}</span>
+                        <i class="fa fa-plus-circle fa-lg pull-right text-col-green"
+                            (click)="AddDocumentType(docType.DocumentTypeID)"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1 col-centered">
+            <div class="text-center movbtn">
+                <button title="Add" class="btn btn-secondary btn-rounded waves-effect waves-light bg-white"
+                    (click)="MoveFromAllDoc()" id="addDocType">
+                    <span class="material-icons">arrow_forward</span>
+                </button>
+            </div>
+            <div class="text-center p-t-15 movbtn">
+                <button title="Remove" class="btn btn-secondary btn-rounded waves-effect waves-light bg-white"
+                    (click)="MoveToAllDoc()" id="removeDocType">
+                    <span class="material-icons">arrow_back</span>
+                </button>
+            </div>
+            <div class="text-center p-t-15 movbtn">
+                <button class="btn btn-secondary waves-effect btn-rounded waves-light bg-white"
+                    (click)="MoveAllDocumentsToAssignedDocuments()" id="removeDocType" title="Assign All Documents">
+                    <span class="material-icons">playlist_add</span></button>
+            </div>
+            <div class="text-center p-t-15">
+                <button title="Reset" class="btn btn-secondary btn-rounded waves-effect waves-light bg-white"
+                    (click)="resetPageData()" id="reset">
+                    <i class="material-icons">settings_backup_restore</i></button>
+            </div>
+        </div>
+        <div class="col-md-5 col-centered">
+            <div class="form-group icon m0">
+                <div class="col-md-12">
+                    <div class="col-md-8">
+                        <input type="text" placeholder="Assigned Document Types" required=""
+                            [(ngModel)]="assignedDocSearchval">
+                        <i class="bar"></i>
+                        <span class="material-icons">search</span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th><b>CRI</b></th>&nbsp;&nbsp;
+                                    <th><b>CON</b></th>&nbsp;&nbsp;
+                                    <th><b>DEL</b></th>&nbsp;
+                                </tr>
+                            </thead>
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="card-spc slimScrollCustom sto_list" malihu-scrollbar>
+
+                <div [dragula]='"nested-type"' class="dragScroll" DivType="Assigned" [(dragulaModel)]='AssignedDocTypes'>
+                    <div *ngFor='let doc of AssignedDocTypes|docmastersearch: assignedDocSearchval; let i = index;'>
+                        <div class="col-md-12">
+                            <div #assignedDoc class="col-md-8 draganddrop" [attr.data-documentid]="doc.DocumentTypeID"
+                                (click)="setDocAssignSelected(i)">
+                                <span>{{doc.Name}}</span>
+                            </div>
+                            <div class="col-md-4">
+                                <table>
+                                    <th>
+                                        <input id="Doclevel" name="DocumentLevel"
+                                            [title]="doc.DocumentLevel == 11 ? 'Critical' : 'Non-Critical'" id="DocumentLevel"
+                                            type="checkbox" [checked]="doc.DocumentLevel==11"
+                                            (click)="ShowDocLevelModal(doc.DocumentTypeID,doc.Name)"
+                                            style="cursor: pointer;font-size: medium; padding-top: 10px;" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </th>
+                                    <th>
+                                        <i class="fa fa-file-o" style="cursor: pointer"
+                                            *ngIf="doc.Condition == null || doc.Condition == ''"
+                                            (click)="AddCondition(doc.Name,doc.DocumentTypeID,doc.DocumentLevel)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i>
+                                        <i class="fa fa-file-text-o" style="cursor: pointer"
+                                            *ngIf="doc.Condition != null && doc.Condition != ''" title="Condition"
+                                            style="color:green;cursor: pointer;font-size: medium;padding-top: 10px;"
+                                            (click)="AddCondition(doc.Name,doc.DocumentTypeID,doc.DocumentLevel)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i>
+        
+                                    </th>
+                                    <th>
+                                        <i class="fa fa-trash-o" title="Remove"
+                                            style="cursor: pointer;color:red;font-size: medium;padding-top: 10px;"
+                                            (click)="RemoveDocumentType(doc.DocumentTypeID,doc.Name,doc.Condition)"></i>
+        
+                                    </th>
+                                </table>
+        
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #GeneralREuleModal="bs-modal" [config]="{backdrop: false}" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm" style="width: 84%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title pull-left">{{DocName}}
+                    <span (click)="GeneralREuleModal.hide()" style="cursor: pointer"><i class="material-icons">
+                            close</i></span>
+                </h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body rulBuilderBodyHeightAss">
+                <div [class]="'ruleBuilderFormula text-left m-b-5 col-md-12'">
+                    <div class="m-b-0 " [style.color]="errMsgStyle">{{ruleFormationValues}}</div>
+                </div>
+                <mts-general-rule></mts-general-rule>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect waves-light" type="button"
+                    [disabled]="ruleSaveButton" (click)="SaveGeneralRule()"><i
+                        class="fa fa-save"></i>&nbsp;Save</button>
+                <button type="button" class="btn btn-info waves-effect waves-light" type="button"
+                [disabled]="ruleSaveButton" (click)="RemoveGeneralRule()"><i class="fa fa-close"></i>&nbsp;Clear</button>
+
+                <button type="button" class="btn btn-danger waves-effect waves-light" type="button"
+                    (click)="CancelGeneralREuleModal()"><i class="material-icons">cancel</i>&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div bsModal #DocLevelModal="bs-modal" class="modal fade" [config]="{backdrop: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title pull-left">{{_currentDocname}}
+                    <span (click)="CloseModal()" style="cursor: pointer"><i class="material-icons"> close</i></span>
+
+                </h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                Do you want to change DocumentLevel?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect waves-light" type="button"
+                    (click)="SaveDocLevelValue()"><i class="fa fa-save"></i>&nbsp;Yes</button>
+
+                <button type="button" class="btn btn-info waves-effect waves-light" (click)="CloseModal()">
+                    <i class="material-icons">check_circle</i>&nbsp;&nbsp;No</button>
+            </div>
+        </div>
+    </div>
+</div>

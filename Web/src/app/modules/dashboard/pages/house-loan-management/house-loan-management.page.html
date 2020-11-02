@@ -1,0 +1,66 @@
+<div class="box cust_box">
+    <div class="box-title p-b-5">
+        <div title="Top of the House Loan Management" class="box-caption w100 title_ellipsis w32">
+            <span class="caption-subject bold">Top of the House Loan Management</span>
+        </div>
+        <div class="box-action w100">
+            <div class="row">
+                <div class="col-xs-3">
+                    <div class="form-group m0">
+                        <select [(ngModel)]="customerid" (change)="GetTopOftheHouseDocument(false)" name="customerid">
+                            <option value="0">All {{staticLabel}}</option>
+                            <option *ngFor="let c of ActiveCustomers"
+                                [value]="c.CustomerID">
+                                {{c.CustomerName}}
+                            </option>
+                        </select>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-xs-3">
+                    <div class="form-group m0">
+                        <select [(ngModel)]="topReviewTypeId" name="topReviewType">
+                            <option [ngValue]="0"> -- Select ServiceType -- </option>
+                            <option *ngFor="let review of ReviewTypes" [ngValue]="review.ReviewTypeID">
+                                {{review.ReviewTypeName}}
+                            </option>
+                        </select>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-xs-5">
+                    <div class="form-group m0">
+                        <ng-daterangepicker id="houseLoanDateRange" #houseLoanDateRange [(ngModel)]="houseLoanDateRangevalues" [options]="daterangeoptions">
+                        </ng-daterangepicker>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-xs-1">
+                    <button class="btn btn-info waves-effect m-r-5 waves-light btn-sm" id="top_btnSearch" (click)="getMonthYear($event, 'TopOfTheHouse')" type="button">
+                        <span class="fa fa-search"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="box-body p-b-0">
+        <div class="card-spc" style="min-height:244px;">
+            <div *ngIf="houseLoanData._showtopOfHousePDF" class="col-md-1 pull-right ">
+                <button title="Download As PDF" (click)="DownloadTopOftheHouseChart()" type="button" class="btn btn-info btn-xs loaninfo-back m-t-0 pull-right waves-effect waves-light m-t-0">
+                    <i class="material-icons">file_download</i>
+                </button>
+            </div>
+            <div class="col-md-11" id="TopOfTheHouse" style="height: 240px;">
+                <div [hidden]="!houseLoanData._showtopOfHousePDF">
+                    <highcharts-chart (chartInstance)="saveInstance($event)" [Highcharts]="Highcharts" [runOutsideAngular]="true" [options]="_topOfHouseOptions" style="width: 100%; height: 240px; display: block;">
+                    </highcharts-chart>
+                </div>
+                <div [hidden]="houseLoanData._showtopOfHousePDF" class="text-center m-t-50" style="font-size: 18px;">
+                    No Data Available
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>

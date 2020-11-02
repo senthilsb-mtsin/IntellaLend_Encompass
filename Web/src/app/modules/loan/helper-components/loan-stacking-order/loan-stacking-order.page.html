@@ -1,0 +1,194 @@
+<div class="box m-b-0">
+    <div class="box-title">
+        <div class="box-caption" [ngClass]="SO_textShow" style='width:70%;'>
+            <div>
+                <span class="title-ellipsis pull-left" [ngClass]="FieldHeaderStyle" [title]="!typeCheck(loan.loanStackingOrder) ? loan.loanStackingOrder.StackingOrderName :'' ">{{!typeCheck(loan.loanStackingOrder) ? loan.loanStackingOrder.StackingOrderName : '' }} &nbsp;</span>
+            </div>
+            <div>
+                <span class="badge">{{ !typeCheck(loan.loanDocuments) ? (loan.loanDocuments.length > 0) ? loan.loanDocuments.length : "" : "" }}</span>
+            </div>
+        </div>
+        <div class="box-action">
+            <div class="row">
+                <div [ngClass]="showImgDiv ? 'col-md-4' : 'col-md-6' ">
+                    <a title="Download" *ngIf="ShowDownload && PanelShow" class=" SO_download_icon waves-effect waves-light" [href]="downloadLoanPDFLink">
+                        <i class="fa fa-download"></i>
+                    </a>
+                </div>
+                <div [ngClass]="showImgDiv ? 'col-md-4' : 'col-md-6 '" [style.display]="PanelShow ? 'block' : 'none'">
+                    <i (click)="RefreshStackDocs()" title="Refresh Stacking Order" class="fa fa-refresh refreshIcon"></i>
+                </div>
+                <div class="col-md-4" *ngIf="showImgDiv">
+                    <div [ngClass]="SO_fullWidth">
+                        <div class="sidebar-brand" (click)="SO_Toggle()">
+                            <a id="menu-toggle">
+                                <span [ngClass]="SO_sub_icon" class="sub_icon fa fa-thumb-tack"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box-body p-t-0">
+        <div class="row" *ngIf="!typeCheck(loan.loanDocuments)">
+            <div class="col-md-12 p0">
+                <div class="col-md-10" [ngClass]="SO_textShow">
+                    <div class="form-group icon m0">
+                        <input type="text" required="" [(ngModel)]="searchval">
+                        <i class="bar"></i>
+                        <span class="material-icons">search</span>
+                    </div>
+                </div>
+                <div class="col-md-2 text-center" [ngClass]="SO_textShow" style="height: 36px;">
+                    <div class="dropdown text-center" class="show_inline" [ngClass]="SO_textShow">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                            <span class="fa fa-filter icon"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a (click)="filterVal = ''" href="javascript:void(0);">All</a>
+                            </li>
+                            <li>
+                                <a (click)="filterVal = 'In Loan'" href="javascript:void(0);">Available</a>
+                            </li>
+                            <li>
+                                <a (click)="filterVal = 'Critical'" href="javascript:void(0);">Critical</a>
+                            </li>
+                            <li>
+                                <a (click)="filterVal = 'Non-Critical'" href="javascript:void(0);">Non-Critical</a>
+                            </li>
+                            <li>
+                                <a (click)="filterVal = 'Obsolete'" href="javascript:void(0);">Obsolete</a>
+                            </li>
+                            <li>
+                                <a (click)="filterVal = '401'" href="javascript:void(0);">Moved To IDC</a>
+                            </li>
+                            <li>
+                                <a (click)="filterVal = '403'" href="javascript:void(0);">Ready For IDC Review</a>
+                            </li>
+                            <li>
+                                <a (click)="filterVal = '404'" href="javascript:void(0);">Ready For IDC Validation</a>
+                            </li>
+                            <li>
+                                <a (click)="filterVal = '407'" href="javascript:void(0);">IDC Error</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 p0">
+                <ul class="list-group slimScrollCustom full_height_so" [ngClass]="CardHeight != '' ? CardHeight : SO_CustHeight" malihu-scrollbar>
+                    <li [style.display]="PanelShow ? 'block' : 'none'" *ngFor="let stackDoc of (loanDocuments | documentsearch : [searchval, filterVal]); let i = index">
+                        <div *ngIf="stackDoc.IsGroup" style="cursor:pointer;" class="bcEllipsis staGroupArrow collapsed m-r-15" data-toggle="collapse" [attr.data-target]="'#' + (i + 1)"> {{(i + 1)}}. {{stackDoc.StackingOrderGroupName}} - {{stackDoc.StackingOrderFieldName}} - {{stackDoc.StackingOrderFieldValue}}
+                        </div>
+                        <div id={{(i+1)}} class="collapse">
+                            <div *ngIf="stackDoc.StackingOrderGroupDetails.length>0">
+                                <div *ngFor="let stackingGroup of stackDoc.StackingOrderGroupDetails; let j = index">
+                                    <div *ngIf="stackingGroup.StackingOrderGroupName==stackDoc.StackingOrderGroupName" class="m-t-5 p-t-5 p-b-5">
+                                        <div class="list-actions" [ngClass]="SO_Icon">
+                                            <span *ngIf="stackingGroup.DocumentLevelIcon !== 'Success' && CheckPermissionsforRoles('View\\LoanSearch\\LoanInfo\\MissingDocUpload')" style="right:8px;top:-6px;">
+                                                <span *ngIf="stackDoc.IDCStatus === '' || stackDoc.IDCStatus === '3'">
+                                                    <label #missingUploadDivGrp [attr.data-DocID]="stackingGroup.DocID" style="cursor: pointer;position: absolute;right: 39px;" for="upload">
+                                                        <i class="material-icons">cloud_upload</i>
+                                                    </label>
+                                                    <input  type="file"  style="display: none;" id="upload" *ngIf="uploader.queue.length==0" ng2FileSelect [uploader]="uploader"
+                                                        (change)="onFileSelected()" />
+                                                </span>
+                                            <span style="cursor: pointer;position: absolute;right: 18px;" *ngIf="stackDoc.IDCStatus !== ''">
+                                                    <i [attr.data-IDCUrl]="stackDoc.IDCUrl" (click)="openIDCLink(stackDoc.IDCUrl)" [title]="STATUS_DESCRIPTION[stackDoc.IDCStatus]" class="material-icons">{{IDC_STATUS_ICON[stackDoc.IDCStatus]}}</i>
+                                                </span>
+                                            </span>
+                                            <span *ngIf="stackingGroup.DocumentLevelIcon === 'Success'" style="right:8px;top:-6px;">
+                                                <span>
+                                                    <label (click)="DownloadDocument(stackingGroup)" title="Download" style="cursor: pointer;position: absolute;right: 37px;">
+                                                        <i *ngIf="stackingGroup.Loading" class="fa fa-spinner fa-pulse fa-fw"></i>
+                                                        <i *ngIf="!stackingGroup.Loading" class="fa fa-download"></i>
+                                                    </label>
+                                                </span>
+                                            <div class="custom-fa-select">
+                                                <label [attr.title]="stackingGroup.Obsolete?'Active':'obsolete'" style="cursor: pointer;position: absolute;right: 16px;">
+                                                        <input (change)="docobsolete(stackingGroup)"  type="checkbox" [checked]="stackingGroup.Obsolete" />
+                                                        <span></span>
+                                                    </label>
+                                            </div>
+                                            </span>
+                                        </div>
+                                        <a *ngIf="stackingGroup.DocumentLevelIcon === 'Success' && !stackingGroup.Obsolete " href="javascript:void(0);" style="text-decoration: underline;" [ngClass]="SO_textShow" class="p-l-10" style="font-size:14px;" (click)="getImage(stackingGroup)" [title]="stackingGroup.ToolTipGroup">
+                                            {{(j + 1)}}. {{ stackingGroup.ToolTipGroup }}</a>
+                                        <a *ngIf="stackingGroup.DocumentLevelIcon === 'Success' && stackingGroup.Obsolete" href="javascript:void(0);" style="text-decoration: underline;" [ngClass]="SO_textShow" class="p-l-10" style="font-size:14px;" (click)="getImage(stackingGroup)" [title]="stackingGroup.ToolTipGroup">
+                                            {{(j + 1)}}. {{ stackingGroup.ToolTipGroup }}</a>
+                                        <a *ngIf="stackingGroup.DocumentLevelIcon !== 'Success' && !stackingGroup.Obsolete " [class]="stackingGroup.DocumentLevelIconColor" [ngClass]="SO_textShow" class="p-l-10" href="javascript:void(0);" [title]="stackingGroup.DocName">
+                                            {{(j + 1)}}. {{stackingGroup.DocName}}</a>
+                                        <a *ngIf="stackingGroup.DocumentLevelIcon !== 'Success' && stackingGroup.Obsolete" [class]="stackDoc.DocumentLevelIconColor" [ngClass]="SO_textShow" href="javascript:void(0);" [title]="stackingGroup.DocName">
+                                            {{(j + 1)}}. {{stackingGroup.DocName}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="!stackDoc.IsGroup">
+                            <div class="list-actions" [ngClass]="SO_Icon">
+                                <span *ngIf="stackDoc.DocumentLevelIcon !== 'Success' && CheckPermissionsforRoles('View\\LoanSearch\\LoanInfo\\MissingDocUpload')" style="right:8px;top:-6px;">
+                                    <span *ngIf="stackDoc.IDCStatus === '' || stackDoc.IDCStatus === '3'">
+                                        <label  #missingUploadDiv style="cursor: pointer;position: absolute;right: 39px;" class="mDocID" [attr.data-DocID]="stackDoc.DocID"
+                                            for="upload">
+                                            <i [attr.data-DocID]="stackDoc.DocID" class="material-icons mDocID">cloud_upload</i>
+                                        </label>
+                                        <input type="file" style="display: none;" id="upload" [attr.data-DocID]="stackDoc.DocID"
+                                            *ngIf="uploader.queue.length==0" ng2FileSelect [uploader]="uploader" (change)="onFileSelected()" />
+                                    </span>
+                                <span style="cursor: pointer;position: absolute;right: 18px;" *ngIf="stackDoc.IDCStatus !== ''">
+                                        <i [attr.data-IDCUrl]="stackDoc.IDCUrl" (click)="openIDCLink(stackDoc.IDCUrl)"
+                                            [title]="STATUS_DESCRIPTION[stackDoc.IDCStatus]"
+                                            class="material-icons">{{IDC_STATUS_ICON[stackDoc.IDCStatus]}}</i>
+                                    </span>
+                                </span>
+                                <span *ngIf="stackDoc.DocumentLevelIcon === 'Success'" style="right:8px;top:-6px;">
+                                    <span>
+                                        <label (click)="DownloadDocument(stackDoc)" title="Download" style="cursor: pointer;position: absolute;right: 35px;">
+                                            <i *ngIf="stackDoc.Loading" class="fa fa-spinner fa-pulse fa-fw"></i>
+                                            <i *ngIf="!stackDoc.Loading" class="fa fa-download"></i>
+                                        </label>
+                                    </span>
+                                <div class="custom-fa-select">
+                                    <label [attr.title]="stackDoc.Obsolete?'Active':'obsolete'" style="cursor: pointer;position: absolute;right: 16px;">
+                                            <input (change)="docobsolete(stackDoc)"  type="checkbox" [checked]="stackDoc.Obsolete" />
+                                            <span></span>
+                                        </label>
+                                </div>
+                                </span>
+                            </div>
+                            <a *ngIf="stackDoc.DocumentLevelIcon === 'Success' && !stackDoc.Obsolete" href="javascript:void(0);" style="text-decoration: underline;" [ngClass]="SO_textShow" (click)="getImage(stackDoc)" [title]="stackDoc.ToolTipValue">
+                        {{(i + 1)}}. {{ stackDoc.DocNameVersion }}</a>
+                            <a *ngIf="stackDoc.DocumentLevelIcon === 'Success' && stackDoc.Obsolete" href="javascript:void(0);" style="text-decoration: underline;" [ngClass]="SO_textShow" (click)="getImage(stackDoc)" [title]="stackDoc.ToolTipValue">
+                        {{(i + 1)}}. {{ stackDoc.DocNameVersion }}</a>
+                            <a *ngIf="stackDoc.DocumentLevelIcon !== 'Success' && !stackDoc.Obsolete" [class]="stackDoc.DocumentLevelIconColor" [ngClass]="SO_textShow" href="javascript:void(0);" [title]="stackDoc.DocName">
+                        {{(i + 1)}}. {{stackDoc.DocName}}</a>
+                            <a *ngIf="stackDoc.DocumentLevelIcon !== 'Success' && stackDoc.Obsolete" [class]="stackDoc.DocumentLevelIconColor" [ngClass]="SO_textShow" href="javascript:void(0);" [title]="stackDoc.DocName">
+                        {{(i + 1)}}. {{stackDoc.DocName}}</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div bsModal #documentObsolete="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-left">
+                <h5 class="modal-title">Confirm</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body text-left">
+                <p>Are you sure want to Mark this Document as {{ObsoleteMsg}}?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect waves-light" (click)="DocumentObsolete()">
+                    <i class="material-icons">check_circle</i>&nbsp;&nbsp;Yes</button>
+                <button type="button" class="btn btn-secondary bg-white waves-effect waves-light" type="button" (click)="revertDocObsolete()">
+                    <i class="material-icons">cancel</i>&nbsp;&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

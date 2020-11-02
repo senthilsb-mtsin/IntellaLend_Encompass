@@ -1,0 +1,55 @@
+#slider {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.cBox {
+    border: 0px;
+    box-shadow: none;
+    margin-bottom: 0px;
+}
+
+.cBox hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.cBoxIcon {
+    transform: rotate(45deg);
+    color: #fc4b6c;
+    position: absolute;
+    font-size: 30px;
+    right: 10px;
+    top: 50%;
+    margin-top: -10.5px;
+}
+
+.cBoxTran {
+    transition: all 0.5s ease 0s;
+    display: block;
+}
+
+.cBoxOpacityShow {
+    opacity: 1;
+}
+
+.cBoxOpacityHide {
+    opacity: 0;
+}
+
+.slide-in {
+    width: 100%;
+    animation: slide-in 0.5s forwards;
+    -webkit-animation: slide-in 0.5s forwards;
+}
+
+.slide-out {
+    width: 0 !important;
+    animation: slide-out 0.5s forwards;
+    -webkit-animation: slide-out 0.5s forwards;
+}

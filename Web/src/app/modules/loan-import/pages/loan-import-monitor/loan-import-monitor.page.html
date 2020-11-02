@@ -1,0 +1,209 @@
+<div class="p20">
+    <div class="row">
+        <div class="col-md-12" [cgBusy]="promise">
+            <div class="row m-b-25 p-t-10">
+                <div class="col-md-3">
+                    <div class="form-group m-b-0">
+                        <select id="bu_drpStatus" [(ngModel)]="StatusSelect">
+                          <option [ngValue]="-3">All</option>
+                          <option [ngValue]="5">Box Download Failed</option>
+                          <option [ngValue]="-2">IDC Error</option>
+                          <option [ngValue]="999">Loan Deleted</option>
+                          <!-- <option [ngValue]="8">Moved To Processing Queue</option> -->
+                          <option [ngValue]="8">Pending IDC Import</option>
+                          <option *ngIf="_showHide[1]" [ngValue]="_pendingBOXDownload">Pending Box Import</option>
+                          <!-- <option [ngValue]="_pendingIDC">Pending IDC Processing</option> -->
+                          <option [ngValue]="_readyForAudit">Ready For Audit</option>
+                          <option [ngValue]="6">Ready For IDC</option>
+                          <option [ngValue]="403">Ready For IDC Review</option>
+                          <option [ngValue]="404">Ready For IDC Validation</option>
+                          <option [ngValue]="10">Pending Encompass Download</option>
+                          <option [ngValue]="11">Failed Encompass Download</option>
+                          <option [ngValue]="-1">LOS Import Failed</option>
+                          <option [ngValue]="0">LOS Import Staged</option>
+                          <option [ngValue]="1">LOS Import Processing</option>
+                          <option [ngValue]="500">LOS Export Staged</option>
+
+
+
+                          </select>
+                        <label class="control-label" for="input">Status</label>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <select id="select2" id="dash_drpUploadCustomer" [(ngModel)]="customerSelect">
+                          <option [ngValue]="0">All</option>
+                           <option *ngFor="let cust of commonActiveCustomerItems" [ngValue]="cust">{{cust.text}}</option>
+            </select>
+                        <label class="control-label" for="input">{{AuthorityLabelSingular}}</label>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group m-b-0">
+                        <label class="control-label selected" for="input">Imported Date</label>
+                        <ng-daterangepicker id="bu_dtUploadedDate" #receivedDate [(ngModel)]="value" [options]="Dateoptions">
+                        </ng-daterangepicker>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-2 text-right p-l-0 p-r-0 p-t-25">
+                    <button id="bu_btnSearch" #searchBtn class="btn btn-info waves-effect waves-light m-r-5" (click)="Search(receivedDate.dateFrom, receivedDate.dateTo)" type="button">
+            <span class="material-icons">search</span>&nbsp;Search</button>
+                    <button id="bu_btnReset" class="btn btn-secondary bg-white waves-effect waves-light" (click)="reset()" type="button" tabindex="8">
+            <span class="material-icons">settings_backup_restore</span>&nbsp;Reset</button>
+                </div>
+            </div>
+            <hr class="fancy-line">
+            <div class="row m-t-30">
+                <div class="col-md-12">
+                    <div class="table-panel">
+                        <div class=" table-responsive">
+                            <div class="col-sm-12 text-right p0">
+                                <button *ngIf="!isAssignLoanType" (click)="AssignLoanTypes()" class="btn btn-sm btn-info m-b-10">Assign LoanType</button>
+                                <button [disabled]="isDeleteLoan" (click)="ConfirmDeleteLoans()" class="btn btn-sm btn-danger m-b-10"><i class="material-icons">delete_forever</i>&nbsp;Delete Loan</button>
+                                <button class="btn btn-sm bt-info  m-b-10" id="bu_btnSelectAll" (click)="SelectAll()">
+                                 <i class="material-icons">select_all</i>&nbsp;&nbsp;{{selectAllBtn ? 'Select All' : 'Deselect'}}</button>
+                                <div class="" id="downloadButton"></div>
+                            </div>
+                            <!--  -->
+                            <div class="col-md-12 monitor">
+
+                                <table datatable [dtOptions]="dtOptions" id="firstTable" class="table table-striped" style="width: 100%;">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #confirmModal="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <p [innerHtml]=LoanAlertMessage></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="ls_yes" class="btn btn-info waves-effect waves-light" (click)="overrideLoanUser()"><i
+            class="material-icons">check_circle</i>&nbsp;Yes</button>
+                <button type="button" id="ls_cancel" class="btn btn-secondary waves-effect waves-light bg-white" type="button" (click)="confirmModal.hide()"><i class="material-icons">cancel</i>&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #assignlTypemodal="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Assign Loan Type</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <div *ngIf="!isConfirmed" class="form-group m-b-0">
+                    <select [(ngModel)]="selectedLoanTypes">
+            <option [ngValue]="0">--Select--</option>
+            <option *ngFor="let lTypes of AllActiveLoanTypes" [ngValue]="lTypes.LoanTypeID">{{lTypes.LoanTypeName}}
+            </option>
+          </select>
+                    <label class="control-label" for="input">Select Loan Type</label>
+                    <i class="bar"></i>
+                </div>
+
+                <div *ngIf="isConfirmed">
+                    <p>Are you sure you want to Assign this Loan Type ?</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button *ngIf="!isConfirmed" type="button" id="ls_yes" class="btn btn-info waves-effect waves-light" (click)="isConfirmed=true"><i class="material-icons">check_circle</i>&nbsp;Assign</button>
+                <button *ngIf="isConfirmed" type="button" id="ls_yes" class="btn btn-info waves-effect waves-light" (click)="Assign(); isConfirmed=false"><i class="material-icons">check_circle</i>&nbsp;Yes</button>
+                <button *ngIf="!isConfirmed" type="button" id="ls_cancel" class="btn btn-secondary waves-effect waves-light bg-white" type="button" (click)="CancelAssign();isConfirmed=false; "><i class="material-icons">cancel</i>&nbsp;Cancel</button>
+                <button *ngIf="isConfirmed" type="button" id="ls_cancel" class="btn btn-secondary waves-effect waves-light bg-white" type="button" (click)="isConfirmed=false;"><i
+            class="material-icons">cancel</i>&nbsp;No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loan Delete Confirmation Modal -->
+
+<div bsModal #confirmDeleteModal="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm ?</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <p>Are you sure you want to Delete this Loan(s) ?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="ls_yes" class="btn btn-success waves-effect waves-light" (click)="DeleteLoans()"><i
+            class="material-icons">check_circle</i>&nbsp;Yes</button>
+                <button type="button" id="ls_yes" class="btn btn-danger waves-effect waves-light" (click)="confirmDeleteModal.hide()"><i class="material-icons">cancel</i>&nbsp;No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div bsModal #RetryConfirmModel="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog">
+
+    <div class="modal-dialog modal-sm" style="widows: 500px !important; padding-top: 49px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm
+                    <span class="pull-right" (click)="RetryConfirmModel.hide()" style="cursor: pointer">
+            <i class="material-icons"> close</i>
+          </span>
+                </h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <div>
+                    <p>Do you want to retry download ?</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button (click)="RetryDownloadELoan()" class="btn btn-success waves-effect waves-light m-l-5">
+          <i class="material-icons">check_circle</i> &nbsp;Yes
+        </button>
+                <button type="button" class="btn btn-danger waves-effect waves-light" type="button" (click)="RetryConfirmModel.hide()">
+          <i class="material-icons">cancel</i>&nbsp;No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Loan Delete -->
+<div bsModal #missingDocModal="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:900px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Trailing Document(s)</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <div class="table-panel">
+                    <div class="table-responsive">
+                        <table datatable [dtOptions]="missingDocDTOptions" id="secondTable" class="table table-bordered table-striped table-borderless table-responsive" style="width: 100%;"></table>
+                    </div>
+                </div>
+                <!-- <missing-doc-data-table #missingDocDTable [data]="missingDocData"></missing-doc-data-table> -->
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="ls_yes" class="btn btn-default btn-sm waves-effect waves-light" (click)="missingDocModal.hide()">
+          <i class="material-icons">cancel</i>&nbsp;Close</button>
+            </div>
+        </div>
+    </div>
+</div>

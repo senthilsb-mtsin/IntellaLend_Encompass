@@ -1,0 +1,142 @@
+<div class="row" style="display: block;">
+    <div class="col-md-12">
+        <div class="table-panel box">
+            <div class="box-body">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" class="form-control mandatory" name="SMTP Name" [(ngModel)]="getSMTPDetails.SMTPNAME" required>
+                                <label class="control-label" for="input">
+                                    SMTP Name
+                                </label>
+                                <i class="bar"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" class="form-control mandatory" name="SMTP Client Host" [(ngModel)]="getSMTPDetails.SMTPCLIENTHOST" required>
+                                <label class="control-label" for="input">
+                                    SMTP Client Host
+                                </label>
+                                <i class="bar"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" class="form-control mandatory" name="SMTP Client Port" [(ngModel)]="getSMTPDetails.SMTPCLIENTPORT" required>
+                                <label class="control-label" for="input">
+                                    SMTP Client Port
+                                </label>
+                                <i class="bar"></i>
+                            </div>
+                        </div>
+                        <div class="clear-fix"></div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" class="form-control mandatory" name="User Name" [(ngModel)]="getSMTPDetails.USERNAME" required>
+                                <label class="control-label" for="input">
+                                    Username
+                                </label>
+                                <i class="bar"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="password" class="form-control mandatory" name="User Password" [(ngModel)]="getSMTPDetails.PasswordString" required>
+                                <label class="control-label" for="input">
+                                    Password
+                                </label>
+                                <i class="bar"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" class="form-control mandatory" name="Domain" [(ngModel)]="getSMTPDetails.DOMAIN" required>
+                                <label class="control-label" for="input">
+                                    Domain Name
+                                </label>
+                                <i class="bar"></i>
+                            </div>
+                        </div>
+                        <div class="clear-fix"></div>
+
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" class="form-control mandatory" name="Timeout" [(ngModel)]="getSMTPDetails.TIMEOUT" required>
+                                <label class="control-label" for="input">
+                                    Time Out
+                                </label>
+                                <i class="bar"></i>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" class="form-control mandatory" name="SMTPDeliveryMethod" [(ngModel)]="getSMTPDetails.SMTPDELIVERYMETHOD" required>
+                                <label class="control-label" for="input">
+                                    SMTP Delivery Method
+                                </label>
+                                <i class="bar"></i>
+                            </div>
+                        </div>
+                        <!-- <div class="clear-fix"></div> -->
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="pu_toggle">
+                                <label class="control-label" for="input">
+                                    UserDefaultCredentials
+                                </label>
+                                <label class="tgl" style="font-size: 14px; position: absolute; right: 173px;">
+                                    <input
+                                        [(ngModel)]="getSMTPDetails.USEDEFAULTCREDENTIALS"
+                                        type="checkbox"
+                                    >
+                                    <span
+                                        data-on="Yes"
+                                        data-off="No"
+                                    ></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="pu_toggle">
+                                <label class="control-label" for="input">
+                                    EnableSSL
+                                </label>
+                                <label class="tgl" style="font-size: 14px; position: absolute; right: 231px;">
+                                    <input
+                                        [(ngModel)]="getSMTPDetails.ENABLESSL"
+                                        type="checkbox"
+                                    >
+                                    <span
+                                        data-on="Active"
+                                        data-off="Inactive"
+                                    ></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="row m-t-20">
+                    <div class="col-md-12 text-right">
+                        <button class="btn btn-info waves-effect waves-light m-r-8" type="button" (click)="SaveSMTPSubmit()">
+                            <i class="material-icons">save</i>
+                            &nbsp;Save
+                        </button>
+                        <button type="button" class="btn btn-secondary waves-effect waves-light bg-white" type="button" (click)="editSMTPHide()">
+
+
+                            <i class="material-icons">clear</i>
+                            &nbsp;Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

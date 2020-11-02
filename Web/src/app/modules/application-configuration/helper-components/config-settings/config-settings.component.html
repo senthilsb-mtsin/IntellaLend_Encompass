@@ -1,0 +1,61 @@
+<div class="col-md-5">
+    <div class="col-md-8">
+        <div class="form-group">
+            <div *ngIf="ischeckbox" class="text-center">
+                <label class="tgl" style="font-size: 14px;">
+                    <input
+                        [(ngModel)]="configvalues"
+                        type="checkbox"
+                        checkecd
+                    >
+                    <span
+                        data-on="True"
+                        data-off="False"
+                    ></span>
+                </label>
+            </div>
+            <div *ngIf="istextbox">
+                <input [(ngModel)]="configvaluesTextBox" (ngModelChange)="onvaluechange(configvaluesTextBox)" type="text">
+                <label class="control-label" for="input">
+                    Configuration value
+                </label>
+                <i class="bar"></i>
+                <span class="label label-danger" *ngIf="!isDaysErrMsgs">
+                    Value must be greater than 0 and lesser than 30
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <div *ngIf="isactive" class="text-center">
+                <label class="tgl" style="font-size: 14px;">
+                    <input
+                        [(ngModel)]="Active"
+                        type="checkbox"
+                    >
+                    <span
+                        data-on="Active"
+                        data-off="Inactive"
+                    ></span>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-2 p-t-25 text-center">
+    <button *ngIf="isAddConfig" class="btn btn-info waves-effect waves-light" [disabled]="!isDaysErrMsgs" (click)="AddAppConfigData()">
+        <span class="material-icons">add_circle_outline</span>
+        &nbsp;&nbsp;Add
+    </button>
+
+
+
+
+
+    <button *ngIf="isupdateConfig" class="btn btn-info waves-effect waves-light" [disabled]="!isDaysErrMsgs" (click)="UpdateAppConfigData()">
+        <span class="material-icons">save</span>
+        &nbsp;&nbsp;Update
+    </button>
+    <!-- <button *ngIf="isreset" class="btn btn-secondary waves-effect waves-light" (click)="ResetData()"><i class="material-icons">refresh</i>&nbsp;Reset</button> -->
+</div>

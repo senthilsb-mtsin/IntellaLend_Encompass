@@ -1,0 +1,28 @@
+    .checkListRemove:focus,
+    .checkListRemove:focus-within {
+        outline: none !important;
+    }
+    
+    .control-label-builder {
+        font-size: 15px;
+        color: #03A9F4;
+        top: -20px;
+        left: 0;
+        font-weight: normal;
+    }
+    
+    .matchUnMatch {
+        font-size: 14px;
+        height: 23px;
+        width: 95px;
+        margin-top: 27px;
+        overflow: inherit;
+        display: inherit;
+        position: absolute;
+    }
+    
+    .headerAlert {
+        color: red;
+        font-weight: normal;
+        font-size: 11px;
+    }

@@ -1,0 +1,49 @@
+<form [formGroup]="rulesFrmGrp" novalidate [style.display]="waitingForData ? 'none': 'block'">
+    <div formArrayName="docIsExist">
+        <div *ngFor="let isExistRule of formData.controls; let i =index">
+            <div class="panel-body p-t-0 p-b-0" [formGroupName]="i">
+                <div class="row m-t-5">
+                    <div class="col-md-12">
+                        <div class="col-md-8">
+                            <div class="col-md-10 p0">
+                                <div class="form-group m-t-25 m-b-10">
+                                    <select formControlName="IsExistDocTypes">
+                                        <option value="" disabled selected>--Select--</option>
+                                        <option *ngFor="let edtype of genDocTypes" [ngValue]="edtype.text">{{edtype.text}}</option>
+                                    </select>
+                                    <label class="control-label selected">Doc Type</label>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-2 p-t-15">
+                                <label class="tgl">   
+                                    <input formControlName="MatchAllType"  type="checkbox"/>
+                                  <span   style="font-size:14px;height:25px ;margin-top: 17px;"   data-on="Any"   data-off="All"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="col-md-12 p0">
+                                <label class="tag-item-header m0 control-label-builder pull-left">Document Collection</label>
+                            </div>
+                            <div class="col-md-12 p0">
+                                <div class="form-group m-t-5 icon text-left control-label-builder-div">
+                                    <span class="tag-item m-l-5" *ngFor="let tag of IsExistDocValues">
+                                        {{tag}}
+                                        <span  style="color: red;font-size: 21px;" class="remove-tag" (click)="removesTag(tag)">×</span><br>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div [style.display]="waitingForData ? 'block': 'none'">
+    <div class="spinner">
+        <div class="double-bounce1" style="top: 65px;"></div>
+        <div class="double-bounce2" style="top: 65px;"></div>
+    </div>
+</div>

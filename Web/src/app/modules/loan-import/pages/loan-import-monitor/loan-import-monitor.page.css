@@ -1,0 +1,4 @@
+#downloadButton,
+#downloadButton>.dt-buttons {
+    display: inline-block;
+}

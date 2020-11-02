@@ -1,0 +1,91 @@
+<div *ngIf="ChecklistMapped" [style.display]="!enableRuleBuilder ? 'block' : 'none'">
+    <div class="col-md-12" [cgBusy]="promise" [style.display]="showTable ? 'block' : 'none'">
+        <div class="row m-t-10 m-b-10">
+            <div class="col-md-6 text-left">
+                <button class="btn btn-defult btn-sm waves-effect waves-light" (click)="selectRowData()"> <i class="fa fa-check-square-o"></i>&nbsp;&nbsp;{{isRowSelectrDeselect ? 'Select All' : 'Deselect' }}
+        </button>
+            </div>
+            <div class="col-md-6 text-right" id="downloadButton">
+                <button class="btn btn-primary btn-sm waves-effect waves-light" (click)="isNewCheckListButton()">
+            <span class="fa fa-plus-circle"></span>&nbsp;&nbsp;New Checklist Item </button>
+                <button class="btn btn-info btn-sm waves-effect waves-light" (click)="CloneCheckListItem()" [disabled]="isRowNotSelected">
+            <span class="fa fa-clone"></span>&nbsp;&nbsp;Clone Item</button>
+                <button class="btn btn-danger btn-sm waves-effect waves-light" [disabled]="isRowNotSelected" (click)="DeleteMsgModal.show()">
+            <i class="fa fa-trash"></i>&nbsp;&nbsp;Delete</button>
+            </div>
+        </div>
+        <div class="table-panel">
+            <table datatable [dtOptions]="dtOptions" class="wrapperTable table table-bordered table-striped table-borderless table-responsive" style="width: 100%;"></table>
+        </div>
+    </div>
+    <div class="col-md-12 m-t-50" [style.display]="!showTable ? 'block' : 'none'">
+        <div class="table-panel">
+            <table class="table table-bordered table-striped table-borderless table-responsive">
+                <thead>
+                    <tr>
+                        <th style="width: 50%;">
+                            Checklist Item Name
+                        </th>
+                        <th style="width: 50%;">
+                            Formula
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="text-left">
+                        <td>{{viewCheckListName}}</td>
+                        <td>{{viewCheckListFormula}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <button class="btn btn-default pull-right waves-effect waves-light" (click)="showTable = !showTable"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;Cancel</button>
+    </div>
+
+    <div bsModal #DeleteMsgModal="bs-modal" [config]="{backdrop: false}" class="modal fade gap_top" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content ">
+                <div class="modal-header text-left">
+                    <h5 class="modal-title">Delete Checklist Item</h5>
+                </div>
+                <hr class="fancy-line">
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer p10">
+                    <button class="btn btn-info waves-effect waves-light" (click)="DeleteConfirm();DeleteMsgModal.hide()">Yes</button>
+                    <button type="button" class="btn btn-secondary waves-effect waves-light" data-dismiss="modal" autofocus (click)="DeleteMsgModal.hide()">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div bsModal #cloneMsgModal="bs-modal" [config]="{backdrop: false}" class="modal fade gap_top" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-left">
+                    <h5 class="modal-title">New Checklist Item Name</h5>
+                </div>
+                <hr class="fancy-line">
+                <div class="modal-body">
+                    <div class="col-md-12  text-left">
+                        <div class="form-group ">
+                            <input type="text" #clonechecklistitem="ngModel" [(ngModel)]="CloneCheckListItemName" (ngModelChange)="checklistItemChange()" required="">
+                            <label for="input" class="control-label">Checklist Item Name</label><i class="bar"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer p10">
+                    <button class="btn btn-info waves-effect waves-light" [disabled]="clonechecklistitem.invalid" (click)="CloneConfirmMsg();cloneMsgModal.hide()">Yes</button>
+                    <button type="button" class="btn btn-secondary waves-effect waves-light" data-dismiss="modal" autofocus (click)="cloneMsgModal.hide()">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-centered" *ngIf="!ChecklistMapped">
+    Checklist Not Mapped for the selected Loan Type
+</div>
+<div *ngIf="enableRuleBuilder">
+    <mts-rule-builder></mts-rule-builder>
+</div>

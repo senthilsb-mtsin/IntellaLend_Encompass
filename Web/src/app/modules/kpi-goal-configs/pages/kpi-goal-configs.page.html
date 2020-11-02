@@ -1,0 +1,85 @@
+<div class="m-t-20" [cgBusy]="promise">
+    <div class="row m-t-15">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-title">
+                    <div class="box-caption">
+                        <span> KPI Management</span>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <select (change)="RoleChange()" [(ngModel)]="_KpiUserGroupConfig.RoleID">
+                                <option value="0">--Select--</option>
+                                <option *ngFor="let roles of roleItems" [ngValue]="roles.RoleID">{{roles.RoleName}} </option>
+                            </select>
+                            <label class="control-label selected" for="input">User Group</label>
+                            <i class="bar"></i>
+                        </div>
+                        <div class="col-md-4" *ngIf="_addGoalShow">
+                            <div class="form-group">
+                                <select [(ngModel)]="_KpiUserGroupConfig.ConfigType">
+                                                <option value="0">--Select Period--</option>
+                                                <option *ngFor="let _config of PeriodConfigTypes" [ngValue]="_config.id"  >{{_config.text}} </option>
+                                            </select>
+                                <label class="control-label selected" for="input">Period</label>
+                                <i class="bar"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-3" *ngIf="_addGoalShow">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="Goal" [(ngModel)]="_KpiUserGroupConfig.Goal" required="">
+                                <label class="control-label" for="input">Goal</label>
+                                <i class="bar"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-2 pull-right m-t-25" *ngIf="_addGoalShow">
+                            <button class="btn btn-info waves-effect waves-light m-r-8" type="button" (click)="ValidateConfiguration()">
+                                    <i class="material-icons">save</i>&nbsp;Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 p0" *ngIf="_kpiUserShow">
+        <mts-kpi-user-config></mts-kpi-user-config>
+    </div>
+</div>
+<div bsModal #infoModal="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Alert</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                Cannot able to split the configured goal for all users on the group. Kindly update the goal count
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect waves-light" (click)="infoModal.hide()">
+              <i class="material-icons">check_circle</i>&nbsp;&nbsp;OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div bsModal #confirmModal="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                You will not be able to see the history of KPI when changing from <b>{{previousConfigType}}</b> to <b>{{currentConfigType}} </b> . Do you still want to continue ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect waves-light" (click)="AddKPIConfigStagingDetails()">
+                                    <i class="material-icons">check_circle</i>&nbsp;&nbsp;Yes</button>
+                <button type="button" class="btn btn-secondary bg-white waves-effect waves-light" type="button" (click)="confirmModal.hide()">
+                                    <i class="material-icons">cancel</i>&nbsp;&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

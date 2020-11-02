@@ -1,0 +1,162 @@
+<div class="row p-t-10">
+    <div *ngIf="CheckPermissionsforRoles('View\\LoanSearch\\LoanInfo\\InitiateReverification') && !showHide[0]">
+        <div class="col-md-6">
+            <div class="form-group  m-t-20 m-b-20">
+                <select id="select2" [(ngModel)]="ReverificationID">
+                    <option *ngFor="let _reverify of ReverificationMaster" [value]="_reverify.ReverificationID">{{_reverify.ReverificationName}}</option>
+                </select>
+                <label class="control-label" for="input">Select Re-Verification Type</label>
+                <i class="bar"></i>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <button type="button" class="btn btn-info waves-effect waves-light  m-t-20" (click)="ChooseReverifyDocuments()">
+                <i class="material-icons">touch_app</i>&nbsp; Initiate</button>
+        </div>
+    </div>
+    <div class="col-md-12 p-l-20 p-r-20">
+        <div *ngIf="initReverification.length > 0">
+            <ul class="checklistReverify  p-r-5" style="overflow:auto; height:calc(100vh - 440px);" malihu-scrollbar id="reverificationItem">
+                <li #ReverificationList style="border-bottom: 1px solid #cccccc;" title="Download" *ngFor="let reverify of initReverification; let i = index;">
+                    <a href="javascript:void(0);" (click)="DownloadReverification(reverify, i)">
+                        {{reverify.UserRevericationName }}
+                        <span class="pull-right">
+                            <i *ngIf="reverify.Download" style="font-size: 24px;" class="fa fa-spinner fa-spin"></i>
+                            <i *ngIf="!reverify.Download" style="font-size: 24px;" class="fa fa-cloud-download"></i>
+                        </span>
+                    </a>
+                    <a href="javascript:void(0);" title="Delete" (click)="DeleteConfirmation(reverify)">
+                        <span class="pull-right">
+                            <i style="font-size: 24px;" class="material-icons">delete</i>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div bsModal #confirmDeleteModal="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmation</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <p> <b>{{_reverifyDownload.UserRevericationName}}</b> do you want to Delete ?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="ls_yes" class="btn btn-success waves-effect waves-light" (click)="DeletedReverification()"><i class="material-icons">check_circle</i>&nbsp;Yes</button>
+                <button type="button" id="ls_yes" class="btn btn-danger waves-effect waves-light" (click)="confirmDeleteModal.hide()"><i class="material-icons">cancel</i>&nbsp;No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #chooseReverify="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" style="width: 700px;">
+        <div class="modal-content">
+            <div class="modal-header text-left">
+                <h5 class="modal-title">
+                    Choose Re-Verification Documents
+                </h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 p0">
+                        <div class="col-md-6 m-l-30">
+                            <div class="form-group text-left">
+                                <input type="text" [(ngModel)]="_userReverificationName" required="">
+                                <label class="control-label" for="input">Re-Verification Name</label>
+                                <i class="bar"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 p10" style="height: calc(100vh - 280px); overflow:auto">
+                        <div class="col-md-4 m-b-15 p0 text-center" (click)="_isCoverLetter = !_isCoverLetter">
+                            <span class="fa-stack fa-lg text-center">
+                                <i class="fa fa-file-o fa-stack-2x"></i>
+                                <i [class]="!_isCoverLetter ? '' : 'fa fa-check fa-stack-1x'" [style.color]="!_isCoverLetter ? '' : 'green' "></i>
+                            </span>
+                            <p class="m0">Cover Letter</p>
+                        </div>
+                        <div *ngFor="let doc of _availableReverifiyDocs" class="col-md-4 m-b-15 text-center" (click)="doc.Download = !doc.Download">
+                            <span class="fa-stack fa-lg text-center">
+                                <i class="fa fa-file-o fa-stack-2x"></i>
+                                <i [class]="!doc.Download ? '' : 'fa fa-check fa-stack-1x'" [style.color]="!doc.Download ? '' : 'green' "></i>
+                            </span>
+                            <p class="m0">
+                                {{doc.DocumentName}}
+                            </p>
+                        </div>
+                        <div *ngFor="let doc of _missingReverifiyDocs" class="col-md-4 m-b-15 p0 text-center">
+                            <span class="fa-stack fa-lg text-center">
+                                <i class="fa fa-file-o fa-stack-2x"></i>
+                                <i class="fa fa-times txt-warm fa-stack-1x"></i>
+                            </span>
+                            <p class="m0">{{doc.DocumentName}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer m-t-5 p10">
+                <button type="button" class="btn btn-info btn-flat waves-effect waves-light" type="button" (click)="Initiate()">
+                    <i class="material-icons">check</i>&nbsp;Ok</button>
+                <button type="button" class="btn btn-default btn-flat waves-effect waves-light" type="button" (click)="chooseReverify.hide()">
+                    <i class="material-icons">cancel</i>&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div bsModal #reverificationModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:80%;">
+        <div class="modal-content">
+            <div class="modal-header text-left p-b-5">
+                <h5 class="modal-title col-md-4">Initiate Re-Verification</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 p0 templateModalBody" *ngIf="showDivTemplate">
+                        <div *ngIf="_isCoverLetter" [hidden]="showDocument" style="height: calc(100vh - 200px);overflow-x: hidden;overflow-y: auto;">
+                            <ng-container [ngSwitch]="templateName">
+                                <mts-loan-cpa-letter #strContainer *ngSwitchCase="'CPALetter.html'"></mts-loan-cpa-letter>
+                                <mts-loan-gift-letter #strContainer *ngSwitchCase="'GiftLetter.html'"></mts-loan-gift-letter>
+                                <mts-loan-occupancy-letter #strContainer *ngSwitchCase="'OccupancyLetter.html'"> </mts-loan-occupancy-letter>
+                                <mts-loan-vod-letter #strContainer *ngSwitchCase="'VODLetter.html'"> </mts-loan-vod-letter>
+                                <mts-loan-voe-letter #strContainer *ngSwitchCase="'VOELetter.html'"> </mts-loan-voe-letter>
+                            </ng-container>
+                        </div>
+                        <div [hidden]="!showDocument" style="height: calc(100vh - 200px);">
+                            <div class="row" *ngIf="showDocument">
+                                <div class="col-md-12 All_ani">
+                                    <mts-loan-image-viewer></mts-loan-image-viewer>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-md-6 text-left">
+                        <button class="btn btn-info waves-effect waves-light" type="button" (click)="GetPreviousDocument()" [disabled]="disablePrevious">
+                            <i class="fa fa-arrow-left"></i>&nbsp;&nbsp;Previous Document</button>
+                        <button class="btn btn-info waves-effect waves-light" type="button" (click)="GetNextDocument()" [disabled]="disableNext">
+                            Next Document&nbsp;&nbsp;
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-info waves-effect waves-light" (click)="DownloadInitiated()" [disabled]="disabledDownloadInit">
+                            <i class="material-icons">cloud_download</i>&nbsp;&nbsp;Download</button>
+                        <button type="button" class="btn btn-secondary bg-white waves-effect waves-light" type="button" (click)="reverificationModal.hide(); chooseReverify.show();">
+                            <i class="material-icons">cancel</i>&nbsp;&nbsp;Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

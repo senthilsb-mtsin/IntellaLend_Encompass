@@ -1,0 +1,11 @@
+.KPIFont {
+    font-size: 14px;
+    top: -6px;
+    position: relative;
+    padding-right: 5px;
+    font-weight: bold;
+}
+
+.fs14 {
+    font-size: 14px;
+}

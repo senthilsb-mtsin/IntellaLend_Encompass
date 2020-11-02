@@ -1,0 +1,67 @@
+<div class="box cust_box m-t-25 m-b-0">
+    <div class="box-caption">
+        <span class="caption-subject bold">Add Configuration</span>
+    </div>
+    <div class="box-title">
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 slimScrollCustom" malihu-scrollbar [scrollbarOptions]="scrollbarOptions" style="height: calc(100vh - 364px);overflow-y: auto;">
+                <div class="form-group">
+                    <div class="card m5" style="box-shadow:0 1px 12px 3px rgba(0, 0, 0, .05)">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6" style="font-weight: 600;">
+                                    <span>Include Cover Letter</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="text-right pu_toggle">
+                                        <label class="tgl" style="font-size:14px">
+                                                                    <input [(ngModel)]="_exportloanservice.CoverLetter" name="coverLetter" (change)="ShowCoverLetter()" type="checkbox"
+                                                                    />
+                                                                    <span data-on="Active" data-off="Inactive"></span>
+                                                                </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card m5" style="box-shadow:0 1px 12px 3px rgba(0, 0, 0, .05)">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6" style="font-weight: 600;">
+                                    <span>Include Table Of Content</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="text-right pu_toggle">
+                                        <label class="tgl" style="font-size:14px">
+                                                                    <input [(ngModel)]="_exportloanservice.TableOfContent" name="Toc"  type="checkbox" />
+                                                                    <span data-on="Active" data-off="Inactive"></span>
+                                                                </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card m5" style="box-shadow:0 1px 12px 3px rgba(0, 0, 0, .05)">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6" style="font-weight: 600;">
+                                    <span>Password Protected</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="text-right pu_toggle">
+                                        <label class="tgl" style="font-size:14px">
+                                                                    <input [(ngModel)]="_exportloanservice.PasswordProtected" name="pwdProtected" (change)="SetPasswordConfig(_exportloanservice.PasswordProtected)" type="checkbox" />
+                                                                    <span data-on="Active" data-off="Inactive"></span>
+                                                                </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,188 @@
+.SO_fullWidth {
+    width: 100%;
+    transition: all 0.2s;
+}
+
+.soCustHeight332 {
+    height: calc(100vh - 332px)!important;
+}
+
+.soCustHeight368 {
+    height: calc(100vh - 368px) !important;
+}
+
+.FIELD_title {
+    position: absolute;
+    top: 60px;
+    left: 22%;
+    transform: rotate(-90deg);
+    transition: all ease 0.3s;
+}
+
+.SO_download_icon {
+    border: 0;
+    background-color: transparent;
+    color: #1b5e20;
+    font-size: 21px;
+    padding-top: 4px;
+    border-radius: 3px;
+}
+
+.SO_sub_icon {
+    /* right: -20px; */
+    transform: rotate(90deg) !important;
+}
+
+.SO_textHIde {
+    display: none !important;
+}
+
+.SOPopOutHeight {
+    height: calc(100vh - 170px) !important;
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .SO_width {
+        width: 8.9%;
+        transition: all 0.2s;
+    }
+    .DOC_width {
+        width: 91.1%;
+        transition: all 0.2s;
+    }
+    .FIELD_Width {
+        width: 11%;
+        float: right;
+        transition: all 0.2s;
+    }
+    .width95 {
+        width: 89%;
+        transition: all 0.2s;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+    .SO_width {
+        width: 7.2%;
+        transition: all 0.2s;
+    }
+    .DOC_width {
+        width: 92.8%;
+        transition: all 0.2s;
+    }
+    .FIELD_Width {
+        width: 8%;
+        float: right;
+        transition: all 0.2s;
+    }
+    .width95 {
+        width: 92%;
+        transition: all 0.2s;
+    }
+}
+
+@media (min-width: 1400px) and (max-width: 1679px) {
+    .SO_width {
+        width: 6.1%;
+        transition: all 0.2s;
+    }
+    .DOC_width {
+        width: 93.9%;
+        transition: all 0.2s;
+    }
+    .FIELD_Width {
+        width: 8%;
+        float: right;
+        transition: all 0.2s;
+    }
+    .width95 {
+        width: 92%;
+        transition: all 0.2s;
+    }
+}
+
+@media (min-width: 1680px) and (max-width: 1920px) {
+    .SO_width {
+        width: 5.1%;
+        transition: all 0.2s;
+    }
+    .DOC_width {
+        width: 94.9%;
+        transition: all 0.2s;
+    }
+    .FIELD_Width {
+        width: 6%;
+        float: right;
+        transition: all 0.2s;
+    }
+    .width95 {
+        width: 94%;
+        transition: all 0.2s;
+    }
+}
+
+.so_textEllipsis {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.refreshIcon {
+    border: 0;
+    background-color: transparent;
+    color: #1b5e20;
+    font-size: 20px;
+    padding-top: 4px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.sub_icon {
+    float: right;
+    top: 5px;
+    right: 1px;
+    position: relative;
+    font-size: 18px;
+    color: #1e88e5;
+    transform: rotate(0deg);
+    transition: all ease 0.3s;
+}
+
+.staGroupArrow::before {
+    content: "\E313";
+    float: right;
+    font-family: 'Material Icons';
+    font-size: 20px;
+    position: absolute;
+    right: 0px;
+    line-height: 18px;
+}
+
+.staGroupArrow.collapsed::before {
+    content: "\E315";
+}
+
+.custom-fa-select input[type="checkbox"] {
+    position: absolute;
+    left: -999px;
+}
+
+.custom-fa-select label {
+    cursor: pointer;
+}
+
+.custom-fa-select label input[type="checkbox"]+span:before {
+    font-family: FontAwesome;
+    content: "\f014";
+    display: inline-block;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1.4em;
+    text-align: center;
+    letter-spacing: 6px;
+}
+
+.custom-fa-select label input[type="checkbox"]:checked+span:before {
+    content: "\f0e2 ";
+    letter-spacing: 3px;
+}

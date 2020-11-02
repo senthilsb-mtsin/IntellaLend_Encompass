@@ -1,0 +1,29 @@
+<div class="m-t-15">
+    <div [ngClass]="isExportMonitorTab[0] && isExportMonitorTab[1] && isExportMonitorTab[2] ? 'tab-base' : isExportMonitorTab[0] || isExportMonitorTab[1] ||isExportMonitorTab[2] ? 'tab-base tabCustWidth' :'tab-base singletab'">
+        <ul class="nav nav-tabs" role="tablist">
+            <li [ngClass]="exportTab=='ad_loanexport' ? 'tab1 col-bdg active' : 'tab1 col-bdg'" *ngIf="isExportMonitorTab[0]">
+                <a href="#Adhoc-Export" role="tab" id="tab1" (click)="exportTab='ad_loanexport'; checkPermission('Adhoc.export', 0)" data-toggle="tab"><span class="Lh30 fa fa-exchange"></span>
+                    <br />Loan Export Monitor</a>
+            </li>
+            <li [ngClass]="exportTab=='encompass_export' ? 'tab2 col-bdg active': 'tab2 col-bdg'" *ngIf="isExportMonitorTab[1]">
+                <a href="#Encompass_monitor" role="tab" id="tab2" (click)="exportTab='encompass_export'" data-toggle="tab"><span class="Lh30 fa fa-desktop"></span>
+                    <br />Encompass Export Monitor</a>
+            </li>
+            <li [ngClass]="exportTab=='los_export'  ? 'tab3 col-bdg active': 'tab3 col-bdg'" *ngIf="isExportMonitorTab[2]">
+                <a href="#los_export" role="tab" id="tab3" (click)="exportTab='los_export'" data-toggle="tab"><span class="Lh30 fa fa-desktop"></span>
+                    <br />LOS Export Monitor</a>
+            </li>
+        </ul>
+        <div class="tab-content p0">
+            <div role="tabpanel" *ngIf="exportTab=='ad_loanexport'" [ngClass]="exportTab=='ad_loanexport' ? 'tab-pane tab1 active' : 'tab-pane tab1'" id="ad_loanexport">
+                <mts-loan-export-monitor></mts-loan-export-monitor>
+            </div>
+            <div role="tabpanel" *ngIf="exportTab=='encompass_export'" [ngClass]="exportTab=='encompass_export'? 'tab-pane tab2 active' : 'tab-pane tab2'" id="encompass_export">
+                <mts-encompass-export-monitor></mts-encompass-export-monitor>
+            </div>
+            <div role="tabpanel" *ngIf="exportTab=='los_export'" [ngClass]="exportTab=='los_export' ? 'tab-pane tab3 active' : 'tab-pane tab3'" id="los_export">
+                <mts-los-export-monitor></mts-los-export-monitor>
+            </div>
+        </div>
+    </div>
+</div>

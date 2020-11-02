@@ -1,0 +1,55 @@
+<div id="wrapper">
+    <header class="main-header" *ngIf="activeURL!='/view/loandetails'">
+        <nav class="navbar">
+            <span class="brand">
+                <img src="assets\images\logo.png" width="190" />
+            </span>
+            <div class="navbar-custom-menu">
+                <mts-userprofile></mts-userprofile>
+            </div>
+        </nav>
+    </header>
+    <div [ngClass]="mainViewClass">
+        <aside class="main-sidebar sidebar-light" *ngIf="activeURL!='/view/loandetails'">
+            <div class="sidebar" style="height: auto;">
+                <div *ngFor="let menu of menus ">
+                    <div *ngIf="menu.MenuGroupID === 0">
+                        <div *ngFor="let sm of menu.SubMenus">
+                            <ul class="sidebar-menu">
+                                <li class="treeview " *ngIf="sm.IsComponent==0">
+                                    <a [routerLink]="sm.RouteLink">
+                                        <i class="material-icons" [ngClass]="sm.color">{{sm.Icon}}</i><span>{{ sm.MenuTitle }}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div *ngIf="menu.MenuGroupID > 0 ">
+                        <ul class="sidebar-menu">
+                            <li class="treeview">
+                                <a>
+                                    <i class="material-icons" [ngClass]="menu.color">{{ menu.MenuGroupIcon }}</i><span>{{ menu.MenuGroupTitle }}</span>
+                                </a>
+                                <ul class="treeview-menu" malihu-scrollbar style="display: none;">
+                                    <li *ngFor="let sm of menu.SubMenus">
+                                        <a [routerLink]="sm.RouteLink">
+                                            <span>{{ sm.MenuTitle }}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <div [ngClass]="viewFotterClass">
+            <div class="container-fluid">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+        <footer class="page-footer">
+            Powered by MTS Software Solutions Inc.
+        </footer>
+    </div>
+</div>

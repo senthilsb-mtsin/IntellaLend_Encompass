@@ -1,0 +1,35 @@
+<div class="m-t-15" [cgBusy]="promise">
+    <div class="row m-t-15">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-title">
+                    <div class="box-caption">
+                        <span>Service Types</span>
+                    </div>
+                    <div class="box-action">
+                        <button id="lt_btnAddLoanType1" class="btn btn-primary btn-sm waves-effect waves-light"
+                            type="button" (click)="ShowServiceTypeModal(0)" *ngIf="showHide[0]"><i
+                                class="fa fa-plus-circle"></i>&nbsp;&nbsp;Add Service Type</button>
+                        <button id="lt_btnEditLoanType2" class="btn btn-success btn-sm waves-effect waves-light"
+                            type="button" (click)="ShowServiceTypeModal(1)" *ngIf="showHide[1]"
+                            [disabled]="rowSelected"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Edit Service Type</button>
+                        <button id="lt_btnViewLoanType3" class="btn btn-warning btn-sm waves-effect waves-light"
+                            type="button" (click)="ShowServiceTypeModal(2)" *ngIf="showHide[2]"
+                            [disabled]="rowSelected"><i class="fa fa-eye"></i>&nbsp;&nbsp;View Service Type</button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-panel">
+                                <table datatable [dtOptions]="dtOptions" id="serviceTypeTable"
+                                    class="table table-bordered table-striped table-hover" style="width: 100%;">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

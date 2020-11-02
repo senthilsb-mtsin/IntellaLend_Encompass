@@ -1,0 +1,379 @@
+#formula-builder .form-group {
+    margin-top: 18px;
+}
+
+.tgl {
+    position: relative;
+    outline: 0;
+    display: inline-block;
+    cursor: pointer;
+    user-select: none;
+    margin: 0 0 5px 0;
+}
+
+.tgl,
+.tgl:after,
+.tgl:before,
+.tgl *,
+.tgl *:after,
+.tgl *:before,
+.tgl+.tgl-btn {
+    box-sizing: border-box;
+}
+
+.tgl::selection,
+.tgl:after::selection,
+.tgl:before::selection,
+.tgl *::selection,
+.tgl *:after::selection,
+.tgl *:before::selection,
+.tgl+.tgl-btn::selection {
+    background: none;
+}
+
+.tgl span {
+    position: relative;
+    display: block;
+    height: 24px;
+    line-height: 1.2em;
+    overflow: hidden;
+    font-weight: normal;
+    text-align: center;
+    border-radius: 2em;
+    padding: 0.2em 1em;
+    border: 1px solid #fafafa;
+    box-shadow: inset 0 2px 0 rgba(0, 0, 0, 0.2), 0 2px 0 rgba(255, 255, 255, 0.7);
+    transition: color 0.3s ease, padding 0.3s ease-in-out, background 0.3s ease-in-out;
+}
+
+.tgl span:before {
+    position: relative;
+    display: block;
+    line-height: 1.1em;
+    padding: 0 0.2em;
+    font-size: 1em;
+}
+
+.tgl span:after {
+    position: absolute;
+    display: block;
+    content: '';
+    border-radius: 2em;
+    width: 16px;
+    height: 16px;
+    margin-left: -19px;
+    top: 0.2em;
+    background: #FFFFFF;
+    transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 0.97), background 0.3s ease-in-out;
+}
+
+.tgl input[type="checkbox"] {
+    display: none !important;
+}
+
+.tgl input[type="checkbox"]:not(:checked)+span {
+    background: #FF6B6B;
+    color: #FFFFFF;
+    padding-left: 1.6em;
+    padding-right: 0.4em;
+}
+
+.tgl input[type="checkbox"]:not(:checked)+span:before {
+    content: attr(data-off);
+    color: #FFFFFF;
+}
+
+.tgl input[type="checkbox"]:not(:checked)+span:after {
+    background: #FFFFFF;
+    left: 1.6em;
+}
+
+.tgl input[type="checkbox"]:checked+span {
+    background: #4caf50;
+    color: #FFFFFF;
+    padding-left: 0.4em;
+    padding-right: 1.6em;
+}
+
+.tgl input[type="checkbox"]:checked+span:before {
+    content: attr(data-on);
+}
+
+.tgl input[type="checkbox"]:checked+span:after {
+    background: #FFFFFF;
+    left: 100%;
+}
+
+.tgl input[type="checkbox"]:disabled,
+.tgl input[type="checkbox"]:disabled+span,
+.tgl input[type="checkbox"]:read-only,
+.tgl input[type="checkbox"]:read-only+span {
+    cursor: not-allowed;
+}
+
+.tgl-gray input[type="checkbox"]:not(:checked)+span {
+    background: #e3e3e3;
+    color: #999999;
+}
+
+.tgl-gray input[type="checkbox"]:not(:checked)+span:before {
+    color: #999999;
+}
+
+.tgl-gray input[type="checkbox"]:not(:checked)+span:after {
+    background: #ffffff;
+}
+
+.tgl-inline {
+    display: inline-block !important;
+    vertical-align: top;
+}
+
+.tgl-inline.tgl {
+    font-size: 16px;
+}
+
+.tgl-inline.tgl span {
+    min-width: 50px;
+}
+
+.tgl-inline.tgl span:before {
+    line-height: 1.4em;
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+}
+
+.tgl-inline-label {
+    display: inline-block !important;
+    vertical-align: top;
+    line-height: 26px;
+}
+
+
+/*General Component*/
+
+.check .btn:focus,
+.check .btn:active:focus,
+.check .btn.active:focus,
+.check .btn.focus,
+.check .btn:active.focus,
+.check .btn.active.focus {
+    outline: none;
+}
+
+.check label.btn {
+    line-height: 30px;
+    padding: 0 13px;
+    transition: 1s;
+}
+
+.check label.btn.active {
+    color: #fff;
+    background-color: #e0e0e0;
+    border-color: #e0e0e0;
+}
+
+.check label.btn,
+.check label.btn:hover {
+    box-shadow: none;
+}
+
+.check label.btn:hover {
+    -webkit-transform: scale(1.03);
+    -ms-transform: scale(1.03);
+    transform: scale(1.03);
+}
+
+
+/*Braces Css*/
+
+.check input[type=checkbox] {
+    display: inline-block;
+    width: 100%;
+    height: 30px;
+    position: relative;
+    top: 0px;
+    z-index: 1;
+    margin-top: 0px;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.check label {
+    position: absolute;
+    top: 0px;
+    right: 0;
+    padding: 0px 10px 0px 10px;
+    margin-bottom: 0px;
+    text-align: center;
+    cursor: pointer;
+    line-height: 30px;
+    color: #fff;
+    background-color: rgba(50, 64, 143, 0.13);
+    -webkit-transition: opacity 0.5s;
+    transition: opacity 0.5s;
+    -webkit-transition: background-color 0.5s;
+    transition: background-color 0.5s;
+    left: 8px;
+    width: 36px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 3px;
+}
+
+.check input[type=checkbox]:checked+label {
+    color: white;
+    background-color: #5c6bc0;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 3px;
+}
+
+
+/*Braces*/
+
+
+/*General Component*/
+
+
+/*Common Css for Switch*/
+
+.tgl .rule_toggle {
+    font-size: 12px;
+    height: 20px;
+}
+
+.tgl input[type="checkbox"]:not(:checked)+.rule_toggle:after {
+    left: 1.85em;
+}
+
+.tgl .rule_toggle:after {
+    width: 12px;
+    height: 12px;
+    top: 0.25em;
+    margin-left: -17px;
+}
+
+.tgl input[type="checkbox"]:not(:checked)+.rule_toggle {
+    background: #0a85ff;
+}
+
+.tgl input[type="checkbox"]:checked+.rule_toggle {
+    background: #f57838;
+}
+
+
+/*Common Css fro Switch*/
+
+
+/* Conditional Extra Fields*/
+
+.check .btn:focus,
+.check .btn:active:focus,
+.check .btn.active:focus,
+.check .btn.focus,
+.check .btn:active.focus,
+.check .btn.active.focus {
+    outline: none;
+}
+
+.check label.btn {
+    line-height: 30px;
+    padding: 0 13px;
+    transition: 1s;
+}
+
+.check label.btn.active {
+    color: #fff;
+    background-color: #e0e0e0;
+    border-color: #e0e0e0;
+}
+
+.check label.btn,
+.check label.btn:hover {
+    box-shadow: none;
+}
+
+.check label.btn:hover {
+    -webkit-transform: scale(1.03);
+    -ms-transform: scale(1.03);
+    transform: scale(1.03);
+}
+
+
+/*Braces Css*/
+
+.check input[type=checkbox] {
+    display: inline-block;
+    width: 100%;
+    height: 30px;
+    position: relative;
+    top: 0px;
+    z-index: 1;
+    margin-top: 0px;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.check label {
+    position: absolute;
+    top: 0px;
+    right: 0;
+    padding: 0px 10px 0px 10px;
+    margin-bottom: 0px;
+    text-align: center;
+    cursor: pointer;
+    line-height: 30px;
+    color: #fff;
+    background-color: rgba(50, 64, 143, 0.13);
+    -webkit-transition: opacity 0.5s;
+    transition: opacity 0.5s;
+    -webkit-transition: background-color 0.5s;
+    transition: background-color 0.5s;
+    left: 8px;
+    width: 36px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 3px;
+}
+
+.check input[type=checkbox]:checked+label {
+    color: white;
+    background-color: #5c6bc0;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 3px;
+}
+
+
+/*Braces*/
+
+
+/* Conditional */
+
+.conditional-rule-line .row {
+    border-bottom: 1px solid #ddd;
+}
+
+
+/* Conditional */
+
+
+/* Conditional Extra Fields*/
+
+.rulBuilderBodyHeight {
+    height: calc(100vh - 415px);
+    overflow-y: auto;
+}
+
+.validErrorMsg {
+    color: red;
+    font-size: 12px;
+    float: left;
+}
+
+.validErrorMsg>i {
+    font-style: normal;
+}

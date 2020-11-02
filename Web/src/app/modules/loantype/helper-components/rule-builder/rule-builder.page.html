@@ -1,0 +1,108 @@
+<div *ngIf="EditSteps.Step1 && !EditSteps.Step2 && !EditSteps.Step3" id="step1" class="row">
+    <div class="wizard col-md-12">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-12">
+                <table style="width: 100%;">
+                    <tr>
+                        <td style="padding-left: 0px;padding-right: 10px;">
+                            <div class="form-group text-left">
+                                <input [disabled]="editData" type="text" #checklistitemname="ngModel" [(ngModel)]="rowData.CheckListName" (ngModelChange)="checklistItemChange()" required="">
+                                <label class="control-label">Checklist Item Name</label>
+                                <i class="bar"></i>
+                            </div>
+                        </td>
+                        <td style="padding-left: 10px;padding-right: 10px;" rowspan="2">
+                            <div class="form-group text-left" style="margin-bottom: auto;margin-top: 4px;">
+                             <textarea style="border-left: 1px solid #ccc;border-right: 1px solid #ccc;" required="" [(ngModel)]="rowData.CheckListDescription" id="formula" rows="4"></textarea>
+                                <label style="top: -20px;" class="control-label">Checklist Description</label><i class="bar"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 0px;padding-right: 10px;">
+                            <div class="form-group">
+                                <select name="Category" [(ngModel)]="rowData.Category" #checklistCategory="ngModel" required="">
+                            <option value="">-- Select Category --</option>
+                            <option *ngFor ="let lists of CategoryGroups" value="{{lists}}">{{lists}}</option>
+                        </select>
+                                <label class="control-label">Category</label><i class="bar"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <input [(ngModel)]="headerFieldID" (change)="EncompassHeaderFieldsChange($event)" [typeahead]="losEncompassFields" typeaheadOptionField="FieldIDDescription" (typeaheadLoading)="OnChangeLOSHeaderFieldValue()" [typeaheadOptionsLimit]="7" [typeaheadMinLength]="1"
+                        placeholder="Search Fields" class="form-control">
+                    <label class="control-label selected">Encompass Header Fields</label>
+                    <i class="bar"></i>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group col-md-6">
+                    <input class="form-control" type="text" [(ngModel)]="Headervalue">
+                    <label class="control-label selected">Value</label>
+                    <i class="bar"></i>
+                </div>
+                <div class="pull-left p0 col-md-2">
+                    <button class="btn btn-default checkListRemove m-t-20" style="border-radius: 50%;" (click)="ShowConfirmModal()"><i class="fa fa-plus fa-1x"></i></button>
+                </div>
+                <div class="pull-left p0 col-md-4">
+                    <label class="tgl matchUnMatch">
+                            <input   [(ngModel)]="rowData.LosMatched" (change)="OnchangeLosField()" type="checkbox" />
+                            <span data-on="Match" data-off="UnMatch"></span>
+                        </label>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <label class="tag-item-header control-label-builder pull-left">Encompass Values</label>&nbsp;<span *ngIf="tagItems.length !== 0">                   
+                    <span class="m-l-10 pull-left">
+                        <label class="headerAlert">(If <b>{{EncompassHeaderValues}}</b> value(s) {{ !rowData.LosMatched ? 'do not ' : '' }}exist, then this rule will be evaluated)</label>
+                    </span>
+                </span>
+                <div class="form-group icon m-t-10 m-b-0 text-left" style="border: solid 1px #d9d9d9;height: 90px;">
+                    <span class="tag-item m-l-5" *ngFor="let tag of tagItems">
+                        {{tag}}
+                        <span  style="color: red;font-size: 21px;" class="remove-tag" (click)="removeTag(tag)">×</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 col-md-offset-2 m-t-10">
+            <div class="col-md-6 text-left p0">
+                <button type="button" (click)="GotoEditChecklistGroup()" class="btn btn-secondary waves-effect waves-light btn-sm bg-white" id="cancelbtn"><span class="material-icons">clear</span>&nbsp;&nbsp;Cancel</button>
+            </div>
+            <div class="col-md-6 text-right">
+                <button class="btn btn-info btn-sm waves-effect waves-light" [disabled]="inValidateChecklistName ||checklistitemname.invalid || checklistCategory.invalid || (headerFieldID !='' && headerFieldValue === '') ||  (headerFieldID =='' && headerFieldValue !== '' )"
+                    (click)="wizStep1()">Next&nbsp;&nbsp;<i class="fa fa-arrow-right"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="!EditSteps.Step1 && EditSteps.Step2 && !EditSteps.Step3" id="step2">
+    <mts-formula-builder></mts-formula-builder>
+</div>
+<div *ngIf="!EditSteps.Step1 && !EditSteps.Step2 && EditSteps.Step3" id="step3">
+    <mts-preview-rule-builder></mts-preview-rule-builder>
+</div>
+
+<!--Add encompass values-->
+<div bsModal #EncompassValuesModal="bs-modal" [config]="{backdrop: false}" class="modal fade gap_top" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-left">
+                <h5 class="modal-title">Confirm</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body text-left">
+                <p>Are you sure the field value entered matches with Encompass? </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info waves-effect waves-light" (click)="addEncompassValues();EncompassValuesModal.hide()">Yes</button>
+                <button type="button" class="btn btn-secondary waves-effect waves-light" data-dismiss="modal" (click)="EncompassValuesModal.hide()">No</button>
+            </div>
+        </div>
+    </div>
+</div>

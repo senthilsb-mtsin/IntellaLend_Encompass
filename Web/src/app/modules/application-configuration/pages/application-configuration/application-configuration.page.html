@@ -1,0 +1,83 @@
+<div id="list-rule ">
+    <div class="row m-t-15">
+        <div class="col-md-12">
+            <div class="box" id="card">
+                <div class="box-title">
+                    <div class="box-caption">
+                        <span>Application Configuration</span>
+                    </div>
+                    <div class="box-action">
+                        <div class="card-icon"></div>
+                    </div>
+                </div>
+                <div class="box-body" style="display: block;" id="scroll">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <select [(ngModel)]="TenantConfigValues" autocomplete="off" (ngModelChange)="onConfigTypeChange($event)">
+                                    <option [ngValue]="0">Select</option>
+                                    <option
+                                        *ngFor="let configtype of configTypeItems"
+                                        [ngValue]="configtype"
+                                    >
+                                        {{configtype.ConfigValue}}
+                                    </option>
+                                </select>
+                                <label class="control-label" for="select">
+                                    Type of configuration
+                                </label>
+                                <i class="bar"></i>
+                            </div>
+                        </div>
+                        <div *ngIf="isconfigsettings">
+                            <mts-config-settings></mts-config-settings>
+                        </div>
+                        <div *ngIf="!isconfigsettings" class="col-md-2 p-t-25 text-center" [ngSwitch]="belowcomponent">
+                            <button *ngSwitchCase="'List'" class="btn btn-info waves-effect waves-light" (click)="AddCategoryLists()">
+                                <span class="material-icons">add_circle_outline</span>
+                                &nbsp;&nbsp;Add
+                            </button>
+                            <button *ngSwitchCase="'Stipulation'" class="btn btn-info waves-effect waves-light" (click)="AddInvestor()">
+                                <span class="material-icons">add_circle_outline</span>
+                                &nbsp;&nbsp;Add
+                            </button>
+                            <button *ngSwitchCase="'Report'" class="btn btn-info waves-effect waves-light" (click)="AddReportMaster()">
+                                <span class="material-icons">add_circle_outline</span>
+                                &nbsp;&nbsp;Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div [ngSwitch]="belowcomponent">
+    <div *ngSwitchCase="'configtable'">
+        <mts-config-table #configtable></mts-config-table>
+    </div>
+    <div *ngSwitchCase="'smtp'">
+        <mts-smtp-settings></mts-smtp-settings>
+    </div>
+    <div *ngSwitchCase="'LoanSearchFilter'">
+        <mts-custom-loansearch #customLoanSearch></mts-custom-loansearch>
+    </div>
+    <div *ngSwitchCase="'Stipulation'">
+        <mts-stipulation-category #InverstorStipulation></mts-stipulation-category>
+    </div>
+    <div *ngSwitchCase="'List'">
+        <mts-category-list #CategoryList></mts-category-list>
+    </div>
+    <div *ngSwitchCase="'Table'">
+        <mts-audit-config></mts-audit-config>
+    </div>
+    <div *ngSwitchCase="'Box'">
+        <mts-box-settings></mts-box-settings>
+    </div>
+    <div *ngSwitchCase="'password'">
+        <mts-password-policy></mts-password-policy>
+    </div>
+    <div *ngSwitchCase="'Report'">
+        <mts-report-master #ReportMaster></mts-report-master>
+    </div>
+</div>

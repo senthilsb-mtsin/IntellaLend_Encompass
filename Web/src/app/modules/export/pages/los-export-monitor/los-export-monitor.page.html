@@ -1,0 +1,126 @@
+<div class="p20">
+    <div class="m-t-15">
+        <div class="row">
+            <div class="col-md-12" [cgBusy]="promise">
+                <div class="box-body">
+                    <div class="card-spc">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group m-b-0">
+                                    <select id="bu_drpCustomer" [(ngModel)]="customerSelect">
+                                                        <option [ngValue]="0">All</option>
+                                                        <option *ngFor="let cust of commonActiveCustomerItems" [ngValue]="cust.id">
+                                                            {{cust.text}}
+                                                        </option>
+                                                    </select>
+                                    <label class="control-label" for="input">{{AuthorityLabelSingular}}</label>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group m-b-0">
+                                    <select [(ngModel)]="ReviewTypeSelect">
+                                                        <option [ngValue]="0">All</option>
+                                                        <option *ngFor="let _rev of commonActiveReviewTypeItems" [ngValue]="_rev.ReviewTypeID">
+                                                            {{_rev.ReviewTypeName}}
+                                                        </option>
+                                                    </select>
+                                    <label class="control-label" for="input">Service Type</label>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group m-b-0">
+                                    <select [(ngModel)]="LoanTypeSelect">
+                                                        <option [ngValue]="0">All</option>
+                                                        <option *ngFor="let loan of commonActiveLoanTypeItems" [ngValue]="loan.LoanTypeID">
+                                                            {{loan.LoanTypeName}}
+                                                        </option>
+                                                    </select>
+                                    <label class="control-label" for="input">Loan Type</label>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label selected" for="input">LOS
+                                                          Export  Date</label>
+                                    <ng-daterangepicker id="ls_dtReceivedDate" #receivedDate [options]="Dateoptions">
+                                    </ng-daterangepicker>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <button class="btn btn-info waves-effect m-r-5 waves-light" id="ls_btnSearch" (click)="SearchLOSExportDetails(receivedDate.dateFrom, receivedDate.dateTo)" type="button" tabindex="9">
+                                                            <span
+                                                                class="material-icons">search</span>&nbsp;Search</button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="table-panel" style="overflow-x: scroll;">
+                                <table #LosExportDetails id="LosExportDetails" datatable [dtOptions]="dtOptions" class="table table-striped" style="width: 100%;">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- LOS Export Details - modal -->
+<div bsModal #LosExportDetailsModal="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-lg" style="width:80%;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="box-action">
+                    <button (click)="LosExportDetailsModal.hide()" title="Close" class="btn btn-danger p-l-2 p-r-2 btn-sm waves-effect waves-light" type="button">
+                    <i class="material-icons">close</i>
+                  </button>
+                </div>
+                <h4 class="modal-title">LOS Export Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12">
+                    <table #LosExportStagingDetails id="LosExportStagingDetails" datatable [dtOptions]="LosExportStagingdtOptions" class="table table-bordered table-striped table-hover" style="width: 100%;">
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<div bsModal #RetryConfirmModel="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog">
+
+    <div class="modal-dialog modal-sm" style="widows: 500px !important; padding-top: 49px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm
+                    <span class="pull-right" (click)="RetryConfirmModel.hide()" style="cursor: pointer">
+                        <i class="material-icons"> close</i>
+                    </span>
+                </h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <div>
+                    <p>Do you want to retry the <b>{{RetryFileType}}</b>?</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button (click)="RetryLOSexportDetails()" class="btn btn-success waves-effect waves-light m-l-5">
+                    <i class="material-icons">check_circle</i> &nbsp;Yes
+                </button>
+                <button type="button" class="btn btn-danger waves-effect waves-light" type="button" (click)="RetryConfirmModel.hide()">
+                    <i class="material-icons">cancel</i>&nbsp;No</button>
+            </div>
+        </div>
+    </div>
+</div>

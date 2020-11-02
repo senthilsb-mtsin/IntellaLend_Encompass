@@ -1,0 +1,23 @@
+.infoDiv {
+    overflow-y: auto;
+    border-bottom: 1px solid #adadad;
+    height: calc(100vh - 595px);
+    display: block;
+}
+
+#formula {
+    height: calc(100vh - 574px);
+}
+
+.cBoxIcon {
+    position: absolute;
+    font-size: 24px;
+    left: 60px;
+    top: 74%;
+    margin-top: -10.5px;
+}
+
+.formHeight {
+    height: calc(100vh - 366px);
+    overflow-y: auto;
+}

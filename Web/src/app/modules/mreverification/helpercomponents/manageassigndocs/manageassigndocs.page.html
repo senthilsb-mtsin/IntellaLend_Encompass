@@ -1,0 +1,48 @@
+<div class="row-centered">
+    <div id="review_detail" class="review_detail fadeIn">
+        <div class="col-md-5 col-centered">
+            <div class="form-group icon m0">
+                <input type="text" placeholder="All Document Types" (ngModelChange)="UnassignedDocFilterSearch($event)" required="" [(ngModel)]="allDocSearchval">
+                <i class="bar"></i>
+                <span class="material-icons">search</span>
+            </div>
+            <div class="card-spc slimScrollCustom sto_list" id="document" malihu-scrollbar>
+                <div [dragula]='"nested-type"' class="dragScroll" #assign DivType="UnAssigned" [(dragulaModel)]='AllDocTypes'>
+                    <div #allDocs class="draganddrop" title="{{ docType.Name }}" (click)="setDocSelected(i)" [attr.data-docid]="docType.DocumentTypeID" *ngFor="let docType of AllDocTypes; let i = index;">
+                        <span>{{ docType.Name }}</span>
+                        <i class="fa fa-plus-circle fa-lg pull-right text-col-green" (click)="AddDocumentType(docType.DocumentTypeID)"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1 col-centered">
+            <div class="text-center movbtn">
+                <button class="btn btn-secondary waves-effect btn-rounded waves-light bg-white" (click)="MoveFromAllDoc()" id="addDocType" title="Add"><span
+                                class="material-icons">arrow_forward</span></button>
+            </div>
+            <div class="text-center p-t-15 movbtn">
+                <button class="btn btn-secondary waves-effect btn-rounded waves-light bg-white" (click)="MoveToAllDoc()" id="removeDocType" title="Remove"><span
+                                class="material-icons">arrow_back</span></button>
+            </div>
+            <div class="text-center p-t-15">
+                <button class="btn btn-secondary waves-effect btn-rounded waves-light bg-white" (click)="GetLoanDocuments()" id="reset" title="Reset"><span
+                                class="material-icons">settings_backup_restore</span></button>
+            </div>
+        </div>
+        <div class="col-md-5 col-centered">
+            <div class="form-group icon m0">
+                <input type="text" placeholder="Assigned Document Types" required="" (ngModelChange)="assignDocChange($event)" [(ngModel)]="assignedDocSearchval">
+                <i class="bar"></i>
+                <span class="material-icons">search</span>
+            </div>
+            <div class="card-spc slimScrollCustom sto_list" malihu-scrollbar>
+                <div [dragula]='"nested-type"' class="dragScroll" DivType="Assigned" [(dragulaModel)]='AssignedDocTypes'>
+                    <div #assignedDoc class="draganddrop" title="{{doc.Name}}" (click)="setDocAssignSelected(i)" [attr.data-docid]="doc.DocumentTypeID" *ngFor='let doc of AssignedDocTypes let i = index;'>
+                        <span>{{doc.Name}}</span>
+                        <i class="fa fa-minus-circle fa-lg pull-right text-col" (click)="RemoveDocumentType(doc.DocumentTypeID)"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

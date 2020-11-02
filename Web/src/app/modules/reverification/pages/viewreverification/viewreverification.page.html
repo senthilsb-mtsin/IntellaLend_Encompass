@@ -1,0 +1,46 @@
+<div class="row m-t-15">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="box">
+            <div class="box-title">
+                <div class="box-caption">
+                    <span>View Re-verification</span>
+                </div>
+                <div class="box-action">
+                    <button type="button" class="btn btn-danger p-l-2 p-r-2 btn-sm waves-effect waves-light" type="button" (click)="CloseReverification()"><i
+                            class="material-icons">clear</i></button>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="text-right pu_toggle">
+                            <label class="tgl" style="font-size:14px">
+                                <input [(ngModel)]="_viewReverificationData.Active" name="Active" type="checkbox"
+                                    disabled />
+                                <span data-on="Active" data-off="Inactive"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group m-t-20 m-b-20">
+                            <input type="text" class="form-control mandatory" name="LoanTypeName" [(ngModel)]="_viewReverificationData.LoanTypeName" required="" disabled>
+                            <label class="control-label" for="input">LoanType Name</label><i class="bar"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group m-t-20 m-b-20">
+                            <input type="text" class="form-control mandatory" name="TemplateName" [(ngModel)]="TemplateName" required="" disabled>
+                            <label class="control-label" for="input">Template Name</label><i class="bar"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group m-t-20 m-b-20">
+                            <input type="text" class="form-control mandatory" name="ReverificationName" [(ngModel)]="_viewReverificationData.ReverificationName" required="" disabled>
+                            <label class="control-label" for="input">Re-verification Name</label><i class="bar"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

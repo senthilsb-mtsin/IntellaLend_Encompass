@@ -1,0 +1,114 @@
+<div class="row">
+    <ul class="nav nav-tabs">
+        <li class="active" (click)="historyTabClick()" style="width: calc(100% / 2)!important;">
+            <a href="#history" aria-controls="messages" role="tab" data-toggle="tab">Loan History
+            </a>
+        </li>
+        <li class="" (click)="emailTabClick()" style="width: calc(100% / 2)!important;">
+            <a href="#emailhistory" aria-controls="profile" role="tab" data-toggle="tab">Email History
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div id="history" class="tab-pane heightPane active">
+            <div class="row">
+                <div class="col-md-12 table-panel" style="height: calc(100vh - 380px);" malihu-scrollbar>
+                    <table datatable [dtOptions]="dtOptions" class="table table-bordered table-striped table-hover" style="width:100%!important;" id="audit_table">
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="emailhistory" class="tab-pane heightPane">
+            <div class="row">
+                <div class="col-md-12 text-right m-b-5">
+                    <button class="btn  btn-info btn-sm waves-effect waves-light" (click)="GetEmailTrackerDetails()" type="button">
+                            <i class="fa fa-refresh"></i> &nbsp;&nbsp; Refresh
+                        </button>
+                </div>
+                <div class="col-md-12 table-panel" malihu-scrollbar>
+                    <table datatable [dtOptions]="addEmailHisdtOptions" class="table table-bordered table-striped table-hover" style="width:100%!important;" id="audit_table">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #AuditEmailconfirmModal="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width: 740px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-left">
+                <h5 class="modal-title">Compose</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <div id="send_email">
+                    <div class="col-sm-12" style="float:none">
+                        <div class="row  m-t-20 m-b-20" style="margin-left:7.5px">
+                            <div class="col-md-2 m-t-4">
+                                <p style="color:#03A9F4">To:</p>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group m0 text-left">
+                                    <input type="text" [(ngModel)]="Email.To" placeholder="To" [disabled]="!Email.showEmailSendBtn">
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12" style="float:none">
+                        <div class="row  m-t-20 m-b-20" style="margin-left:4.5px">
+                            <div class="col-md-2 m-t-4">
+                                <p style="color:#03A9F4">Subject:</p>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group m0 text-left">
+                                    <input type="text" [(ngModel)]="Email.Subject" placeholder="Subject" [disabled]="!Email.showEmailSendBtn">
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12" style="float:none">
+                        <div class="col-md-2 m-t-4">
+                            <p style="color:#03A9F4">Attachment:</p>
+                        </div>
+                        <div class="row m-t-20 m-b-20" style="margin-left:8.5px">
+                            <textarea style="resize:none" rows="3" [(ngModel)]="Email.Attachement" class="form-control msg_text" id="Attachement" [disabled]="!Email.showEmailSendBtn"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 " style="float:none">
+                        <div class="row m-t-20 m-b-20" style="margin-left:8.5px;cursor: pointer">
+                            <textarea rows="5" style="resize:none" [(ngModel)]="Email.Body" class="form-control msg_text" id="Body" [disabled]="!Email.showEmailSendBtn"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary bg-white waves-effect waves-light" type="button" (click)="AuditEmailconfirmModal.hide()">
+                  <i class="material-icons">cancel</i>&nbsp;&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div bsModal #retryModal="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-left">
+                <h5 class="modal-title">Resend Mail Confirmation</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body text-left">
+                Do You Want to Resend the Mail?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect waves-light" (click)="ResendMail()">
+                                    <i class="material-icons">check_circle</i>&nbsp;&nbsp;Yes</button>
+                <button type="button" class="btn btn-secondary bg-white waves-effect waves-light" type="button" (click)="retryModal.hide()">
+                                    <i class="material-icons">cancel</i>&nbsp;&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

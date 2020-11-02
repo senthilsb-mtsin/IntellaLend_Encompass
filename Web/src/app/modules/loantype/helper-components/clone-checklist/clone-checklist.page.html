@@ -1,0 +1,61 @@
+<div [cgBusy]="promise" *ngIf="checkListType === 'clone'">
+    <div class="col-md-6">
+        <div class="col-md-10 p0">
+            <div class="form-group m0 m-t-5">
+                <select [(ngModel)]="checkDropValue" (change)="EditCheckListMaster();">                                            
+                <option [ngValue]="0">--Select Checklist--</option>          
+                    <option *ngFor="let op of checkListGroupMaster" [ngValue]="op">{{ op.CheckListName }}</option>
+                </select>
+                <label class="control-label" for="input">Select Checklist Group</label>
+                <i class="bar"></i>
+            </div>
+        </div>
+        <div class="col-md-2 p0">
+            <button class="btn btn-secondary waves-effect waves-light bg-white" (click)="CreateClose()"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;Cancel</button>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="col-md-8">
+            <div class="form-group icon m0 text-left">
+                <input type="text" class="form-control mandatory" #editSysCheckListGrp="ngModel" (ngModelChange)="SysCheckListRedundancyCheck($event)" [(ngModel)]="sysEditCheckListName" required="">
+                <label class="control-label" for="input">System Checklist Name</label>
+                <i class="bar"></i>
+            </div>
+        </div>
+        <div class="col-md-4 p-t-5">
+            <button class="btn btn-info waves-effect waves-light m-r-8" (click)="AssignCheckList()" type="button"> <i class="material-icons">content_copy</i>&nbsp;&nbsp;Clone CheckList</button>
+        </div>
+    </div>
+    <div class="col-md-12 m-t-20" [style.display]="showTable ? 'block' : 'none'">
+        <div class="table-panel">
+            <table datatable [dtOptions]="dtOptions" class="wrapperTable table table-bordered table-striped table-borderless table-responsive" style="width: 100%;"></table>
+        </div>
+    </div>
+    <div class="col-md-12 m-t-50" [style.display]="!showTable ? 'block' : 'none'">
+        <div class="table-panel">
+            <table class="table table-bordered table-striped table-borderless table-responsive">
+                <thead>
+                    <tr>
+                        <th style="width: 50%;">
+                            Checklist Item Name
+                        </th>
+                        <th style="width: 50%;">
+                            Formula
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="text-left">
+                        <td>{{viewCheckListName}}</td>
+                        <td>{{viewCheckListFormula}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <button class="btn btn-default pull-right waves-effect waves-light" (click)="showTable = !showTable"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;Cancel</button>
+    </div>
+</div>
+<div *ngIf="checkListType === 'edit'">
+    <mts-edit-checklist-group></mts-edit-checklist-group>
+</div>

@@ -1,0 +1,139 @@
+<div class="row">
+    <div class="col-md-12">
+        <ul id="progressbar">
+            <li id="litab2" [ngClass]="stepModel.stepOneClass">
+                <a id="tab1" title="" href="javascript:void(0);">Reverification</a>
+            </li>
+            <li id="litab3" [ngClass]="stepModel.stepTwoClass">
+                <a id="tab2" title="" href="javascript:void(0);">Assign Document Types</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-12">
+        <div class="horizontal">
+            <div class="slider">
+                <div class="slides" #slidesDiv>
+                    <div id="slide-1" [ngClass]="slideOneTranClass">
+                        <div class="box m-b-0">
+                            <div class="box-title">
+                                <div class="box-caption bcEllipsis">{{ReverificationName}}
+                                    <img *ngIf="stepModel.stepID> AddReverifSteps.Reverification" height="16" src="../../assets/images/right-arrow.png" width="16">
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div [ngSwitch]="stepModel.stepID">
+                                    <div *ngSwitchCase="AddReverifSteps.Reverification">
+                                        <div class="row-centered">
+                                            <div class="col-centered col-md-4 m-t-50">
+                                                <div class="row">
+                                                    <div class="col-md-12 text-right">
+                                                        <div class="pull-right">
+                                                            <span class="m-r-10 valign-t"> {{ReverificationFileName}}</span>
+                                                            <label for="dash_upload" class="upload valign-t m-t-0">Browse</label>
+                                                            <input type="file" style="display: none;cursor: pointer;" id="dash_upload" (change)="fileEvent($event)" ng2FileSelect [uploader]="uploader" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12 ">
+                                                        <div class="form-group  m-t-30 m-b-30">
+                                                            <select id="select2" [(ngModel)]="LoanTypeID">
+                                                                    <option [ngValue]="0">--Select Loan Type--</option>
+                                                                          <option *ngFor="let loanType of LoanTypeMaster"
+                                                                                [value]="loanType.LoanTypeID">{{loanType.LoanTypeName}}
+                                                                            </option>
+                                                                        </select>
+                                                            <label class="control-label" for="input">Select Loan Type</label><i class="bar"></i>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12  ">
+                                                        <div class="form-group m-t-30 m-b-30">
+                                                            <input type="text" class="form-control mandatory" name="ReverificationName" [(ngModel)]="ReverificationName" required="">
+                                                            <label class="control-label" for="input">Re-verification
+                                                                        Name</label><i class="bar"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group  m-t-30 m-b-30">
+                                                            <select id="select2" [(ngModel)]="TemplateID">
+                                                                <option [ngValue]="0">--Select Template--</option>
+                                                                <option *ngFor="let template of TemplateMaster"
+                                                                    [value]="template.TemplateID">{{template.TemplateName}}
+                                                                </option>
+                                                            </select>
+                                                            <label class="control-label" for="input">Select Template</label><i class="bar"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div *ngSwitchCase="AddReverifSteps.AssignDocTypes">
+                                        <mts-assign-documents></mts-assign-documents>
+                                    </div>
+
+                                    <div *ngSwitchDefault>
+                                        default
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="box-footer p-t-5 p-b-5">
+                                <div class="row">
+                                    <div class="col-md-6 text-left">
+                                        <button type="button" (click)="GotoPrevious()" class="btn btn-secondary bg-white waves-effect waves-light"><i
+                                                class="material-icons">close</i>&nbsp;Cancel</button>
+                                    </div>
+                                    <div class="col-md-6 text-right">
+                                        <button *ngIf="isPrevious" type="button" id="dl_btnPrevious" (click)="SetPrevious()" class="btn  btn-info waves-effect waves-light"><i class="material-icons">arrow_back</i>&nbsp;&nbsp;Previous</button>
+                                        <button *ngIf="!isPrevious" type="button" (click)="GotoNextStep()" class="btn  btn-info waves-effect waves-light m-l-5">Save&nbsp;&&nbsp;Next&nbsp;&nbsp;<span
+                                                class="fa fa-arrow-right"></span></button>
+                                        <button *ngIf="isPrevious" type="button" (click)="GotoNextStep()" class="btn  btn-info waves-effect waves-light m-l-5"><i class="material-icons">done_all</i>&nbsp;Finish</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div bsModal #confirmModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:80%;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ TemplateName }}<label style="color: red;font-weight: 500;float: right;">#DocumentName.FieldName</label></h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <div class="row templateModalClass">
+                    <div class="col-md-12" malihu-scrollbar>
+                        <ng-container>
+                            <mts-cpa-letter #strContainer *ngIf='_isShowCPA'>
+
+                            </mts-cpa-letter>
+                            <mts-gift-letter #strContainer *ngIf='_isShowGIF'>
+                            </mts-gift-letter>
+                            <mts-occupancy-letter #strContainer *ngIf='_isShowOccu'>
+                            </mts-occupancy-letter>
+                            <mts-vod-letter #strContainer *ngIf='_isShowVod'>
+                            </mts-vod-letter>
+                            <mts-voe-letter #strContainer *ngIf='_isShowVoe'>
+                            </mts-voe-letter>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer m-t-15 ">
+                <button type="button " class="btn btn-info waves-effect waves-light " (click)="saveTemplate() "><i
+                        class="material-icons ">save</i>&nbsp; Save</button>
+                <button type="button " class="btn btn-secondary bg-white waves-effect waves-light " type="button " (click)="confirmModal.hide() "><i class="material-icons ">close</i>&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

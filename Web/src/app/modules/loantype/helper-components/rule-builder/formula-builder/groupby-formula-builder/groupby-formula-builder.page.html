@@ -1,0 +1,146 @@
+<form [formGroup]="rulesFrmGrp" novalidate [style.display]="waitingForData ? 'none': 'block'">
+    <div class="col-md-12">
+        <div class="validErrorMsg">
+            <i class="m-l-10">{{ErrorMsg}}</i>
+        </div>
+        <div class="text-right">
+            <button (click)="addRules()" class="btn btn-info m5 waves-effect waves-dark btn-sm"><i class="fa fa-plus"></i> Add</button>
+        </div>
+    </div>
+    <div class="col-md-12 rulBuilderBodyHeight" formArrayName="groupby">
+        <ul class="rules-list">
+            <li *ngFor="let genrule of formData.controls; let i=index">
+                <div class="panel panel-default m-b-0">
+                    <div class="panel-body p-t-0 p-b-0" [formGroupName]="i">
+                        <div class="col-md-12 p0 m-t-5">
+                            <div class="pull-left radio-group optRadio">
+                                <input value="Field" (click)="ChangeFieldOrGroup($event,i)" type="radio" id="field_{{i}}" [checked]="genrule.controls.fieldOrGroupSelect.value === 'Field'" name="fieldOrGroupSelect_{{i}}">
+                                <label for="field_{{i}}">Field</label>
+                                <input type="radio" value="Value" (click)="ChangeFieldOrGroup($event,i)" id="value_{{i}}" [checked]="genrule.controls.fieldOrGroupSelect.value === 'Value'" name="fieldOrGroupSelect_{{i}}">
+                                <label for="value_{{i}}">Value</label>
+                                <input type="radio" value="Group" (click)="ChangeFieldOrGroup($event,i)" id="group_{{i}}" [checked]="genrule.controls.fieldOrGroupSelect.value === 'Group'" name="fieldOrGroupSelect_{{i}}">
+                                <label for="group_{{i}}">Group</label>
+                            </div>
+                            <span class="fa fa-minus-circle fa-lg pull-right text-col" *ngIf="formData.controls.length >= 1" (click)="removeRules(i)"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="form-group text-center m-t-25 m-b-10">
+                                    <div class="check">
+                                        <input type="checkbox" (change)="openCheckboxChange($event,i)" value="(" formControlName="openBrace"><label>(</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="genrule.controls.fieldOrGroupSelect.value === 'Field'" [id]="'fieldDisplay_'+i">
+                                <div class="col-md-4">
+                                    <div class="form-group  m-t-25 m-b-10">
+                                        <select (change)="GroupByAllInitEditDocTypesChanged($event,i)" formControlName="generalDocumentTypes">
+                                            <option value="" disabled selected>--Select--</option>
+                                            <option *ngFor="let dttype of genDocTypes" [ngValue]="dttype.text">{{dttype.text}}</option>
+                                        </select>
+                                        <label class="control-label selected">Doc Type</label>
+                                        <i class="bar"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group  m-t-25 m-b-10">
+                                        <select formControlName="docField">
+                                            <option value="" disabled selected>--Select--</option>
+                                            <option *ngFor="let dttype of currtDocFields[i]"  [ngValue]="dttype">{{dttype}}</option>
+                                        </select>
+                                        <!-- <ng-select class="ng-select-required" formControlName="docField" #ruleDocFields [multiple]="false" [items]="generalEditDocFieldMasters" placeholder="No Document Field Selected"></ng-select> -->
+                                        <label class="control-label selected">Doc Field</label>
+                                        <i class="bar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="genrule.controls.fieldOrGroupSelect.value === 'Group'" [id]="'groupDisplay_'+i">
+                                <div class="col-md-1">
+                                    <div class="form-group   m-t-25 m-b-10">
+                                        <select class="form-control" formControlName="groupByMainOperator">
+                                            <option value="">--Select--</option>
+                                            <option *ngFor="let operator of groupByRuleOperator"  [ngValue]="operator.id">{{operator.value}}</option>
+                                            </select>
+                                        <label class="control-label selected">Operator</label>
+                                        <i class="bar"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group  m-t-25 m-b-10">
+                                        <select (change)="GroupByAllInitEditDocTypesChanged($event,i)" formControlName="generalDocumentTypes">
+                                            <option value="" disabled selected>--Select--</option>
+                                            <option *ngFor="let editDType of genDocTypes" [ngValue]="editDType.text">{{editDType.text}}</option>
+                                        </select>
+                                        <label class="control-label selected">Doc Type</label>
+                                        <i class="bar"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group  m-t-25 m-b-10">
+                                        <select formControlName="groupByField">
+                                            <option value="" disabled selected>--Select--</option>
+                                            <option *ngFor="let editDType of currtGroupByField[i]"  [ngValue]="editDType">{{editDType}}</option>
+                                        </select>
+                                        <label class="control-label selected">Group By</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group  m-t-25 m-b-10">
+                                        <select formControlName="orderByField">
+                                            <option value="" disabled selected>--Select--</option>
+                                            <option *ngFor="let editDType of currtOrderByField[i]" [ngValue]="editDType">{{editDType}}</option>
+                                        </select>
+                                        <label class="control-label selected">Order By</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group  m-t-25 m-b-10">
+                                        <select formControlName="groupField">
+                                            <option value="" disabled selected>--Select--</option>
+                                            <option *ngFor="let editDType of currtGroupField[i]" [ngValue]="editDType">{{editDType}}</option>
+                                        </select>
+                                        <label class="control-label selected">Doc Fields</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8" *ngIf="genrule.controls.fieldOrGroupSelect.value === 'Value'" [id]="'valueDisplay_'+i">
+                                <div class="form-group  m-t-25 m-b-10">
+                                    <input type="text" formControlName="valueDocField">
+                                    <label class="control-label selected">Value</label>
+                                    <i class="bar"></i>
+                                    <div *ngIf="isErrMsgs">
+                                        <span class="validErrorMsg">{{FieldErrorMsg}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-group text-center m-t-25 m-b-10">
+                                    <div class="check">
+                                        <input type="checkbox" value=")" (change)="closeCheckboxChange($event,i)" formControlName="closeBrace"><label>)</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div [class]="genrule.controls.fieldOrGroupSelect.value === 'Group' ? 'col-md-1' : 'col-md-2'">
+                                <div class="form-group   m-t-25 m-b-10">
+                                    <select class="form-control" formControlName="docFieldOperator">
+                                        <option value="">--Select--</option>
+                                        <option *ngFor="let operator of RuleOperator" value="{{operator.id}}">{{operator.value}}</option>
+                                    </select>
+                                    <label class="control-label selected">Operator</label>
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear-fix"></div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</form>
+<div [style.display]="waitingForData ? 'block': 'none'">
+    <div class="spinner">
+        <div class="double-bounce1" style="top: 65px;"></div>
+        <div class="double-bounce2" style="top: 65px;"></div>
+    </div>
+</div>

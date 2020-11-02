@@ -1,0 +1,126 @@
+<div class="row">
+    <div class="col-md-12">
+        <ul id="progressbar">
+            <li id="litab2" [ngClass]="stepModel.stepOneClass">
+                <a id="tab1" title="" href="javascript:void(0);">Service Type</a>
+            </li>
+            <li id="litab3" [ngClass]="stepModel.stepTwoClass">
+                <a id="tab2" title="" href="javascript:void(0);">Assign Loan Types</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-12">
+        <div class="horizontal">
+            <div class="slider">
+                <div class="slides" #slidesDiv>
+                    <div id="slide-1" [ngClass]="slideOneTranClass">
+                        <div class="box m-b-0">
+                            <div class="box-title">
+                                <div class="box-caption bcEllipsis">{{ServiceTypeName}}
+                                    <img *ngIf="stepModel.stepID > AddServiceTypeSteps.ServiceType" height="16" src="../../assets/images/right-arrow.png" width="16">
+                                </div>
+                                <div class="box-action"></div>
+                            </div>
+                            <div class="box-body">
+                                <div class="row-centered">
+                                    <div [ngSwitch]="stepModel.stepID">
+                                        <div *ngSwitchCase="AddServiceTypeSteps.ServiceType">
+                                            <div class="col-centered col-md-4 m-t-50">
+                                                <div class="row">
+                                                    <div class="col-md-12" *ngIf="_serviceType.Type !== 'Add'">
+                                                        <div class="text-right pu_toggle">
+                                                            <label class="tgl" style="font-size:14px">                
+                                                                    <input [(ngModel)]="ReviewDetails.Active"  name="Active" type="checkbox"/>
+                                                                    <span data-on="Active" data-off="Inactive"></span>
+                                                                </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <input type="text" class="form-control mandatory" name="ServiceTypeName" [(ngModel)]="ReviewDetails.ReviewTypeName" required="">
+                                                                <label class="control-label" for="input">Service Type
+                                                                    Name</label><i class="bar"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <select class="form-control" name="ReviewTypePriority" [(ngModel)]="ReviewDetails.ReviewTypePriority" required="">
+                                                                <option [ngValue]="0">--Select Priority--</option>
+                                                                <option *ngFor="let priLists of priorityList"
+                                                                    [ngValue]="priLists.ReviewPriorityID">
+                                                                    {{priLists.ReviewPriorityName}}</option>
+                                                                (data)="refreshValue($event)"
+                                                            </select>
+                                                                <label class="control-label" for="input">Priority</label><i class="bar"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <select class="form-control" [(ngModel)]="ReviewDetails.SearchCriteria">
+                                                                <option value="0">--Select Search Criteria--</option>
+                                                                <option value="Audit_Due_Date">Audit Due Date </option>
+                                                                <option value="Received_Date">Received Date</option>
+                                                            </select>
+                                                                <label class="control-label" for="input">Search
+                                                                Criteria</label><i class="bar"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <select class="form-control" name="UserGroup" [(ngModel)]="ReviewDetails.UserRoleID">
+                                                                <option [ngValue]="0">--Select User Group--</option>
+                                                                <option *ngFor="let roles of RoleItems"
+                                                                    [ngValue]="roles.RoleID">{{roles.RoleName}}</option>
+                                                            </select>
+                                                                <label class="control-label" for="input">User
+                                                                Group</label><i class="bar"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div *ngSwitchCase="AddServiceTypeSteps.AssignLoanType">
+                                            <mts-assign-loan-type></mts-assign-loan-type>
+                                        </div>
+                                        <div *ngSwitchDefault>
+                                            <div class="col-centered col-md-4 m-t-50">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        Error Contact Administrator
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box-footer p-t-5 p-b-5">
+                                <div class="row">
+                                    <div class="col-md-6"><button type="button" (click)="GotoMaster()" class="btn btn-secondary bg-white waves-effect waves-light"><span
+                                                class="material-icons">close</span>&nbsp;&nbsp;Cancel</button></div>
+
+                                    <div class="col-md-6 text-right">
+                                        <button type="button" *ngIf="stepModel.stepID > AddServiceTypeSteps.ServiceType" (click)="GotoPreviousStep()" class="btn  btn-info waves-effect waves-light m-l-5"><span
+                                                class="fa fa-arrow-left"></span> Previous</button>
+                                        <button type="button" *ngIf="!loading" (click)="GotoNextStep()" class="btn  btn-info waves-effect waves-light m-l-5">
+                                            <i *ngIf="stepModel.stepID === AddServiceTypeSteps.AssignLoanType"
+                                                class="material-icons">done_all</i>{{stepModel.stepID === AddServiceTypeSteps.AssignLoanType ? ' Finish' : ' Save & Next '}}
+                                            <span *ngIf="stepModel.stepID !== AddServiceTypeSteps.AssignLoanType"
+                                                class="fa fa-arrow-right"></span></button>
+                                        <button type="button" *ngIf="loading" disabled class="btn  btn-info waves-effect waves-light m-l-5">Save & Next
+                                            <span class="fa fa-spinner fa-pulse fa-fw"></span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1" style="visibility: hidden;"></div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,58 @@
+<div class="row m-t-15">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="box" style="min-height: 300px;">
+            <div class="box-title">
+                <div class="box-caption">
+                    <span>View Document Type</span>
+                </div>
+                <div class="box-action">
+                    <button (click)="CloseViewDoc()" title="Close" class="btn btn-danger p-l-2 p-r-2 btn-sm waves-effect waves-light" type="button">
+        <i class="material-icons">close</i>
+      </button>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="col-md-12">
+
+                    <div class="text-right pu_toggle">
+                        <label class="tgl" style="font-size:14px">                
+                  <input [(ngModel)]="_viewDocumentTypeData.Active"  name="Active" type="checkbox"  disabled="disabled"/>
+               <span data-on="Active" data-off="Inactive"></span>
+               </label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="text" class="form-control mandatory" name="DocumentTypeName" [(ngModel)]="_viewDocumentTypeData.Name" required="" disabled>
+                        <label class="control-label" for="input">Document Name</label><i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-4" style="display: none;">
+                    <div class="form-group">
+                        <select id="select1" [(ngModel)]="_viewDocumentTypeData.DocumentLevel" disabled>
+    <option value="0" >Non-Critical</option>                                    
+    <option value="11" >Critical</option>                                    
+    </select>
+                        <label class="control-label" for="input">Document Level</label><i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="text" class="form-control mandatory" name="DocumentDisplayName" [(ngModel)]="_viewDocumentTypeData.DisplayName" required="" disabled>
+                        <label class="control-label" for="input">Document Display Name</label><i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <select id="select" [(ngModel)]="_viewDocumentTypeData.ParkingSpotID" disabled>
+                            <option value="0">Not Mapped</option>
+    <option *ngFor="let item of _parkingSpotItems" [value]="item.ID" >{{item.ParkingSpotName}}</option>      
+    </select>
+                        <label class="control-label" for="input">EFolder Name</label><i class="bar"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

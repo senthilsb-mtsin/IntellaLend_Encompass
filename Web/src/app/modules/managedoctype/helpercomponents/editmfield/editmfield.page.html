@@ -1,0 +1,35 @@
+<div class="col-md-8 col-md-offset-2" *ngIf="showHide[1]" [cgBusy]="promise">
+    <div>
+        <div class="box-title">
+            <div class="box-caption">
+                <span>Edit Document Type Field</span>
+            </div>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="text" class="form-control mandatory" name="DocumentTypeFieldName" [(ngModel)]="DocumentTypeName" required="" disabled>
+                        <label class="control-label" for="input">Document Name</label><i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="text" class="form-control mandatory" name="LoanType" [(ngModel)]="SelectRow.Name" required="" disabled>
+                        <label class="control-label" for="input">Field Name</label><i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="text" class="form-control mandatory" name="DocumentDisplayName" [(ngModel)]="SelectRow.DisplayName" required="">
+                        <label class="control-label" for="input">Field Display Name</label><i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-12 text-right">
+                    <button class="btn  btn-info waves-effect waves-light m-r-8" type="button" (click)="EditDocumentTypeFieldSubmit()"><i class="material-icons">save</i>&nbsp;Save</button>
+                    <button type="button" class="btn btn-secondary waves-effect waves-light bg-white " type="button" (click)="Hide()"><i class="material-icons">clear</i>&nbsp;Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

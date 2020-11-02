@@ -1,0 +1,139 @@
+<div class="row">
+    <div class="col-md-12">
+        <ul id="progressbar">
+            <li id="litab2" [ngClass]="stepModel.stepOneClass">
+                <a id="tab1" title="" href="javascript:void(0);">Reverification</a>
+            </li>
+            <li id="litab3" [ngClass]="stepModel.stepTwoClass">
+                <a id="tab2" title="" href="javascript:void(0);">Assign Document Types</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col-md-12">
+        <div class="horizontal">
+            <div class="slider">
+                <div class="slides" #slidesDiv>
+                    <div id="slide-1" [ngClass]="slideOneTranClass">
+                        <div class="box m-b-0">
+                            <div class="box-title">
+                                <div class="box-caption bcEllipsis">{{_editManagerReverificationData.ReverificationName}}
+                                    <img *ngIf="stepModel.stepID > EditManagerReverifSteps.Reverification" height="16" src="../../assets/images/right-arrow.png" width="16">
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div [ngSwitch]="stepModel.stepID">
+                                    <div *ngSwitchCase="EditManagerReverifSteps.Reverification">
+                                        <div class="row-centered">
+                                            <div class="col-centered col-md-8 m-t-50">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="pu_toggle">
+                                                            <div class="pull-right">
+                                                                <span class="m-r-10 valign-t"> {{reVerificationFileName}}</span>
+                                                                <label for="dash_upload" class="upload m-t-0 valign-t m-r-5">Browse</label>
+                                                                <input type="file" style="display: none;cursor: pointer;" (change)="fileEvent($event)" id="dash_upload" ng2FileSelect [uploader]="uploader" />
+                                                                <label class="tgl" style="font-size:14px">
+                                                        <input [(ngModel)]="_editManagerReverificationData.Active" name="Active" type="checkbox" />
+                                                        <span data-on="Active" data-off="Inactive"></span>
+                                                    </label>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group  m-t-30 m-b-30">
+                                                            <input type="text" class="form-control mandatory" name="CustomerName" [(ngModel)]="_editManagerReverificationData.CustomerName" required="" disabled>
+                                                            <label class="control-label" for="input">{{AuthorityLabelSingular}} Name</label><i class="bar"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 ">
+                                                        <div class="form-group  m-t-30 m-b-30">
+                                                            <input type="text" class="form-control mandatory" name="LoanTypeName" [(ngModel)]="_editManagerReverificationData.LoanTypeName" required="" disabled>
+                                                            <label class="control-label" for="input">LoanType Name</label><i class="bar"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 ">
+                                                        <div class="form-group  m-t-30 m-b-30">
+                                                            <input type="text" class="form-control mandatory" name="TemplateName" [(ngModel)]="TemplateName" required="" disabled>
+                                                            <label class="control-label" for="input">Template Name</label><i class="bar"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group m-t-30 m-b-30">
+                                                            <input type="text" class="form-control mandatory" name="ReverificationName" [(ngModel)]="_editManagerReverificationData.ReverificationName" required="">
+                                                            <label class="control-label" for="input">Re-verification Name</label><i class="bar"></i>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div *ngSwitchCase="EditManagerReverifSteps.AssignDocTypes">
+                                        <mts-manageassigndocs></mts-manageassigndocs>
+                                    </div>
+                                    <div *ngSwitchDefault>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="box-footer p-t-5 p-b-5">
+                                <div class="row">
+                                    <div class="col-md-6 text-left">
+                                        <button type="button" (click)="GotoPrevious()" class="btn btn-secondary bg-white waves-effect waves-light"><i
+                                                class="material-icons">close</i>&nbsp;Cancel</button>
+                                    </div>
+                                    <div class="col-md-6 text-right">
+                                        <button *ngIf="isPrevious" type="button" id="dl_btnPrevious" (click)="SetPrevious()" class="btn  btn-info waves-effect waves-light"><i class="material-icons">arrow_back</i>&nbsp;&nbsp;Previous</button>
+                                        <button type="button" *ngIf="!isPrevious" (click)="GotoNextStep()" class="btn  btn-info waves-effect waves-light m-l-5">Save&nbsp;&&nbsp;Next&nbsp;&nbsp;<span
+                                                class="fa fa-arrow-right"></span></button>
+                                        <button type="button" *ngIf="isPrevious" (click)="GotoNextStep()" class="btn  btn-info waves-effect waves-light m-l-5"><i class="material-icons">done_all</i>&nbsp;Finish</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div bsModal #confirmationModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:80%;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ TemplateName }}<label style="color: red;font-weight: 500;float: right;">#DocumentName.FieldName</label></h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <div class="row templateModalClass">
+                    <div class="col-md-12" malihu-scrollbar>
+                        <ng-container>
+                            <mts-manager-cpa-letter #strContainer *ngIf='_isShowCPA'>
+
+                            </mts-manager-cpa-letter>
+                            <mts-manager-gift-letter #strContainer *ngIf='_isShowGIF'>
+                            </mts-manager-gift-letter>
+                            <mts-manager-occupancy-letter #strContainer *ngIf='_isShowOccu'>
+                            </mts-manager-occupancy-letter>
+                            <mts-manager-vod-letter #strContainer *ngIf='_isShowVod'>
+                            </mts-manager-vod-letter>
+                            <mts-manager-voe-letter #strContainer *ngIf='_isShowVoe'>
+                            </mts-manager-voe-letter>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer m-t-15">
+                <button type="button" class="btn btn-info waves-effect waves-light" (click)="saveTemplate()"><i
+                        class="material-icons">save</i>&nbsp; Save</button>
+                <button type="button" class="btn btn-secondary bg-white waves-effect waves-light" type="button" (click)="confirmationModal.hide()"><i class="material-icons">close</i>&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

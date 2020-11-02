@@ -1,0 +1,114 @@
+<div class="p20">
+    <div class="row">
+        <div class="col-md-12" [cgBusy]="promise">
+            <div class="row p-t-10">
+                <div class="col-md-2">
+                    <div class="form-group ">
+                        <MonthYearPicker class="input_date" [SelectedDate]="BoxAuditDateTemp" (modelChange)="getBoxAuditMonthYear($event)"></MonthYearPicker>
+                        <label class="control-label selected" for="input">Audit Month & Year </label><i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group ">
+                        <label class="control-label selected" for="input">Audit Due Date</label>
+                        <my-date-picker name="mydate" [options]="box.myDatePickerOptions" [selDate]="box.selDate" [(ngModel)]="BoxAuditDueDate "></my-date-picker>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group m-b-0">
+                        <select id="bu_drpCustomer" [(ngModel)]="box.customerSelect" (change)="custModelChange()">
+                                                    <option [ngValue]="0">--Select--</option>
+                                                    <option *ngFor="let cust of box.commonActiveCustomerItems" [ngValue]="cust">{{cust.text}}</option>
+                                                </select>
+                        <label class="control-label" for="input">{{box.AuthorityLabelSingular}}</label>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <select id="bu_drpServiceType" [(ngModel)]="box.reviewTypeId" (change)="serviceTypesChange()" class="ng-select-required">
+                                                    <option [ngValue]="0">--Select Service Type--</option>
+                                                    <option *ngFor="let cust of box.reviewTypeItems" [ngValue]="cust.id">{{cust.text}}</option>
+                                                </select>
+                        <label class="control-label selected">Service Type</label>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <select id="bu_drpLoanType" [(ngModel)]="box.loanSelect" class="ng-select-required" #LoanTypeDropDown (change)="custLoanTypeChange()">
+                                                    <option [ngValue]="0">--Select Loan Type--</option>
+                                                    <option *ngFor="let cust of box.loanTypeItems" [ngValue]="cust.id">{{cust.text}}</option>
+                                                </select>
+                        <label class="control-label selected">Loan Type</label>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="row p-t-5 p-b-5 m-b-15" style="background-color:#f1f1f1;margin-left: -20px;margin-right: -20px;">
+                <div class="col-md-9">
+                    <ol class="breadcrumb p-t-15 p-b-10">
+                        <li class="active" *ngFor="let b of boxFiles.Path">
+                            <a href="javascript:void(0)" (click)="ShowFolder(b.Id)">{{b.Name}}</a>
+                        </li>
+                    </ol>
+                </div>
+                <div class="col-md-3 text-right p-t-10 p-b-10">
+                    <button class="btn btn-sm btn-info" id="bu_btnUpload" [disabled]="box.enableUpload" (click)="UploadBoxFileConfirmation()">
+                                                <i class="material-icons">file_upload</i>&nbsp;&nbsp;Upload</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <button class="btn btn-sm bt-info m0 m-b-5 pull-right" id="bu_btnSelectAll" (click)="SelectAll()">
+                                                    <i class="material-icons">select_all</i>&nbsp;&nbsp; {{selectallUpload ? 'Select All' : 'Deselect'}}</button>
+                        <div class="col-md-3">
+
+                            <label>Priority Types</label>
+                            <select (change)="PriorityVlauesChange()" class="m-l-10" [(ngModel)]="priorityValues">
+                                      <option [ngValue]="0">--Select--</option>
+                                      <option [ngValue]="1">Critical(1)</option>
+                                      <option [ngValue]="2">High(2)</option>
+                                      <option [ngValue]="3">Medium(3)</option>
+                                      <option [ngValue]="4">Low(4)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="box_upload">
+                        <table datatable id="boxtable" [dtOptions]="dtOptions" class="table table-striped" style="width: 100%;">
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div bsModal #confirmModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" [cgBusy]="promise">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <p [style.color]="isDuplicateMsg" [innerHtml]=AlertMessage></p>
+                <div [style.display]="isTable ? 'block' : 'none'">
+                    <button style="position: absolute;top: 4px;left: 788px;" class="btn btn-defult btn-sm waves-effect waves-light" (click)="getSelectedRowData()">
+                                <i class="fa fa-check-square-o"></i>&nbsp;&nbsp;{{isRowSelectrDeselect ? 'Select All' : 'Deselect' }} </button>
+                    <div class="addChecklistTable">
+                        <table datatable id="duplicateboxtable" [dtOptions]="dupBoxDTOptions" class="table table-bordered table-striped table-borderless table-responsive" style="width: 100%;">
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-b-15">
+                <button *ngIf="ModalType!='Link'" [disabled]="isRowSelectrDeselect" type="button" id="bu_btnLink" class="btn btn-info waves-effect waves-light" (click)="ConfirmAction()">
+                    <i class="material-icons">check_circle</i>&nbsp;{{ModalType}}</button>
+                <button type="button" id="bu_btnCancel" class="btn btn-secondary waves-effect waves-light bg-white" type="button" (click)="confirmModal.hide()">
+                    <i class="material-icons">close</i>&nbsp;{{ModalType!='Link'?'Cancel':'Close'}}</button>
+            </div>
+        </div>
+    </div>
+</div>

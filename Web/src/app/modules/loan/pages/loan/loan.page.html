@@ -1,0 +1,38 @@
+<div [cgBusy]="Promise">
+    <div *ngIf="LoanFound">
+        <div class="col-md-12 m-t-10">
+            <mts-loan-header></mts-loan-header>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-3 p0" [ngClass]="SO_width">
+                <mts-loan-stacking-order></mts-loan-stacking-order>
+            </div>
+            <div class="col-md-9" [ngClass]="imgWidth">
+                <mts-loan-detail-dashboard></mts-loan-detail-dashboard>
+            </div>
+        </div>
+        <div *ngIf="ShowDocumentDetailView" class="col-md-12">
+            <mts-loan-document-table></mts-loan-document-table>
+        </div>
+    </div>
+    <div *ngIf="ShowErrorDiv">
+        <div class="row-centered">
+            <div class="col-centered m-t-50">
+                <div class="box">
+                    <div class="box-title">
+                        <div class="box-action">
+                            <button (click)="back()" title="Close" class="btn btn-danger p-l-2 p-r-2 btn-sm waves-effect waves-light" type="button">
+                                <i class="material-icons">close</i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body loanNotFoundError">
+                        <div class="m20">
+                            Error while fetching loan details
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

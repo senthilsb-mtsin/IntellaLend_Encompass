@@ -1,0 +1,125 @@
+.upload {
+    padding: 8px 0px;
+    background-color: #1e88e5;
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    border-radius: 4px;
+    width: 150px;
+    margin: 12px auto 2px auto;
+}
+
+.MTS-uploadQueue .upload-card span.remove .material-icons {
+    background-color: #e53935;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 16px;
+    padding: 3px;
+    height: 25px;
+    width: 25px;
+    line-height: 18px;
+    text-align: center;
+}
+
+.MTS-uploadQueue .upload-card span.cancel .material-icons {
+    background-color: #ffb300;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 16px;
+    padding: 3px;
+    height: 25px;
+    width: 25px;
+    line-height: 18px;
+    text-align: center;
+}
+
+.my-drop-zone {
+    border: dotted 3px lightgray;
+}
+
+.h3Class {
+    border: dashed 1px #ccc;
+    margin: 0px;
+    padding: 50px 6px;
+}
+
+.well {
+    box-shadow: none;
+}
+
+.MTS-dropZOne {
+    border: dashed 2px #c2cdda;
+    border-radius: 3px;
+    padding: 60px 0 0;
+    background-color: #fafafa;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.MTS-dropZOne img {
+    vertical-align: middle;
+}
+
+.MTS-dropZOne h3 {
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+}
+
+.MTS-dropZOne {
+    border: 0px;
+    background-color: #fff;
+}
+
+.MTS-uploadQueue h3 {
+    font-weight: 300;
+}
+
+.MTS-uploadQueue .progress {
+    height: 3px;
+    margin-bottom: 0px;
+    border: 1px solid #e8e8e8;
+    border-top: 0px;
+    border-radius: 0 0 4px 4px;
+}
+
+.MTS-uploadQueue .upload-card {
+    margin-top: 0px;
+    background-color: #ebeeff;
+    border-radius: 4px 4px 0 0;
+    border: 1px solid #e8e8e8;
+    padding: 10px;
+}
+
+.MTS-uploadQueue .upload-card h5 {
+    font-size: 14px;
+    font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 5px 0 5px 0;
+}
+
+.MTS-uploadQueue .upload-card span {
+    top: 8px;
+    position: relative;
+    cursor: pointer;
+}
+
+.MTS-uploadQueue .upload-card span {
+    position: relative;
+    top: 0px;
+    margin-right: 10px;
+}
+
+.MTS-uploadQueue .upload-card span.success .material-icons {
+    background-color: #43a047;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 16px;
+    padding: 3px;
+    height: 25px;
+    width: 25px;
+    line-height: 18px;
+    text-align: center;
+}

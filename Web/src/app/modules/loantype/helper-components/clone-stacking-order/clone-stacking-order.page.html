@@ -1,0 +1,93 @@
+<div *ngIf="stackOrderType === 'clone'" class="col-md-6">
+    <div class="col-md-10 p0">
+        <div class="form-group m0 m-t-5">
+            <select [(ngModel)]="stackDropValue" (change)="EditStackingMaster();">
+                <option [ngValue]="0">--Select Stacking Order--</option>  
+                <option *ngFor="let op of stackingOrderList" [ngValue]="op">{{ op.Description }}</option>
+            </select>
+            <label class="control-label" for="input">Select Stacking Order</label>
+            <i class="bar"></i>
+        </div>
+    </div>
+    <div class="col-md-2 p0">
+        <button class="btn btn-secondary waves-effect waves-light bg-white" (click)="CreateClose()"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;Cancel</button>
+    </div>
+</div>
+<div *ngIf="stackOrderType === 'clone'" class="col-md-6">
+    <div class="col-md-8">
+        <div class="form-group icon m0 text-left">
+            <input type="text" class="form-control mandatory" #editSysStackOrderGrp="ngModel" (ngModelChange)="SysStackingOrderRedundancyCheck($event)" [(ngModel)]="sysEditStackingOrderName" required="">
+            <label class="control-label" for="input">System Stacking Order Name</label>
+            <i class="bar"></i>
+        </div>
+    </div>
+    <div class="col-md-4 p-t-5">
+        <button class="btn btn-info waves-effect waves-light m-r-8" (click)="AssignStackingOrder()" type="button"> <i class="material-icons">content_copy</i>&nbsp;&nbsp;Clone Stacking Order</button>
+    </div>
+</div>
+<div *ngIf="stackOrderType === 'clone'" class="col-md-12 m-t-20 col-centered" [cgBusy]="promise">
+    <div class="form-group icon m0" [style.display]="showDocuments ? 'block':'none'">
+        <input type="text" placeholder="Assigned Document Types" required="" [(ngModel)]="assignedDocSearchval">
+        <i class="bar"></i>
+        <span class="material-icons">search</span>
+    </div>
+    <div class="card-spc" class="slimScrollCustom sto_list" malihu-scrollbar [style.display]="showDocuments ? 'block':'none'">
+        <div #assignedDiv [dragula]='"nested-bag"' class="dragScroll assignedDiv" DivType="Assigned" [(dragulaModel)]='docSysStackingOrder'>
+            <div class="draganddrop groupElements" #stackDocs [attr.data-docid]="item.DocumentTypeID" *ngFor='let item of docSysStackingOrder|docmastersearch: assignedDocSearchval; let i = index;'>
+                <div class="col-md-12">
+                    <div *ngIf="!item.isGroup" title="{{item.DocumentTypeName}}" title="{{item.DocumentTypeName}}" class="col-md-6 p-l-0 so_textEllipsis">
+                        {{item.DocumentTypeName}}
+                    </div>
+                    <div *ngIf="item.isGroup" class=" p-l-0 so_textEllipsis">
+                        <div class="row ">
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {{item.StackingOrderGroupName}}
+                                    </div>
+                                    <div class="col-md-6 " [attr.data-docName]="item.StackingOrderGroupName">
+                                        <select id="FieldValues" [(ngModel)]="item.OrderByFieldID" style="width:88%;">
+                                            <option value="">Select</option>
+                                            <option *ngFor="let field of item.DocFieldList" [value]="field.FieldID">{{ field.DisplayName }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <i style="cursor: pointer;" class="fa icon pull-right m-r-5" (click)="item.DocumentTypeID = !item.DocumentTypeID" [ngClass]="{'fa-chevron-down': item.DocumentTypeID, 'fa-chevron-up': !item.DocumentTypeID}"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-r-5 p-l-5 ">
+                        <div *ngIf="item.isGroup" #assignedDiv [dragula]='"nested-bag"' [attr.data-docName]="item.StackingOrderGroupName" [hidden]="item.DocumentTypeID" class="dragScroll2" [(dragulaModel)]='docGroupStackingOrder'>
+                            <div class="" *ngFor='let docitem of docGroupStackingOrder|docmastersearch: assignedDocSearchval; let i = index;'>
+                                <div *ngIf="item.StackingOrderGroupName === docitem.StackingOrderGroupName" class="draganddrop" [attr.data-docid]="docitem.DocumentTypeID">
+                                    <div class="col-md-12">
+                                        <div title="{{docitem.DocumentTypeName}}" class="col-md-6 p-l-0 so_textEllipsis">
+                                            {{docitem.DocumentTypeName}}
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="!item.isGroup" class="col-md-3 p-l-0 ">
+                        <select style="width: 88%;" [(ngModel)]="item.OrderByFieldID" title="Sort By Document Type">
+                                    <option *ngFor="let field of item.DocFieldList" [value]="field.FieldID">{{ field.DisplayName }}</option>
+                                </select>
+                    </div>
+                    <div *ngIf="!item.isGroup" class="col-md-3 p-l-0">
+                        <select style="width: 86%;" [(ngModel)]="item.DocFieldValueId" title="Append On Document Type">
+                            <option *ngFor="let Docfield of item.DocFieldList" [value]="Docfield.FieldID">{{ Docfield.DisplayName }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="stackOrderType === 'edit'">
+    <mts-edit-stacking-order></mts-edit-stacking-order>
+</div>

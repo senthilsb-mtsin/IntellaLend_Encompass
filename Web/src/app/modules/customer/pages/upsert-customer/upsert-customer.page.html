@@ -1,0 +1,144 @@
+<!--component html goes here -->
+<div class="row">
+    <div class="col-md-12">
+        <ul id="progressbar">
+            <li id="litab1" [ngClass]="stepModel.stepOneClass">
+                <a id="tab1" title="" href="javascript:void(0);">{{AuthorityLabelSingular}}</a>
+            </li>
+            <li id="litab2" [ngClass]="stepModel.stepTwoClass">
+                <a id="tab2" title="" href="javascript:void(0);">Service Type</a>
+            </li>
+            <li id="litab3" [ngClass]="stepModel.stepThreeClass">
+                <a id="tab3" title="" href="javascript:void(0);">Loan Type</a>
+            </li>
+            <li id="litab4" [ngClass]="stepModel.stepFourClass">
+                <a id="tab4" title="" href="javascript:void(0);">Checklist</a>
+            </li>
+            <li id="litab5" [ngClass]="stepModel.stepFiveClass">
+                <a id="tab5" title="" href="javascript:void(0);">Stacking Order</a>
+            </li>
+            <li id="litab6" [ngClass]="stepModel.stepSixClass">
+                <a id="tab6" title="" href="javascript:void(0);">{{AuthorityLabelSingular}} Configuration</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-12">
+        <div class="horizontal">
+            <div class="slider">
+                <div class="slides" #slidesDiv>
+                    <div id="slide-1" [ngClass]="slideOneTranClass">
+                        <div class="box m-b-0">
+                            <div class="box-title">
+                                <div class="box-caption bcEllipsis"> {{customer.CustomerName}}
+                                    <img *ngIf="stepModel.stepID > UpsertCustomerSteps.Customer" height="16" src="../../assets/images/right-arrow.png" width="16"> {{ReviewTypeName}}
+                                    <img *ngIf="stepModel.stepID > UpsertCustomerSteps.ServiceType" height="16" src="../../assets/images/right-arrow.png" width="16"> {{LoanTypeName}}
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <div class="row-centered">
+                                    <div [ngSwitch]="stepModel.stepID">
+                                        <div *ngSwitchCase="UpsertCustomerSteps.Customer">
+                                            <div class="col-centered col-md-8 m-t-50">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="col-md-6 pull-right text-right">
+                                                            <div class="text-right pu_toggle">
+                                                                <label class="tgl" style="font-size:14px">                
+                                                                    <input [(ngModel)]="customer.Active"  name="Active" type="checkbox"/>
+                                                                    <span data-on="Active" data-off="Inactive"></span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <input type="text" id="CustomerName" class="form-control mandatory" name="CustomerName" [(ngModel)]="customer.CustomerName" required="">
+                                                                <label class="control-label" for="input">{{AuthorityLabelSingular}} Name</label>
+                                                                <i class="bar"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <input type="text" id="CustomerCode" class="form-control mandatory" name="CustomerCode" [(ngModel)]="customer.CustomerCode" required="">
+                                                                <label class="control-label" for="input">{{AuthorityLabelSingular}} Code</label>
+                                                                <i class="bar"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <input type="text" class="form-control" name="State" [(ngModel)]="customer.State" required="">
+                                                                <label class="control-label" for="input">State</label><i class="bar"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <input type="text" class="form-control" name="Country" [(ngModel)]="customer.Country" required="">
+                                                                <label class="control-label" for="input">Country</label><i class="bar"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <input type="text" class="form-control" name="Zip" [(ngModel)]="customer.ZipCode" required="">
+                                                                <label class="control-label" for="input">Zip Code</label><i class="bar"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div *ngSwitchCase="UpsertCustomerSteps.ServiceType">
+                                            <mts-service-type-mapping></mts-service-type-mapping>
+                                        </div>
+                                        <div *ngSwitchCase="UpsertCustomerSteps.LoanType">
+                                            <mts-loan-type-mapping></mts-loan-type-mapping>
+                                        </div>
+                                        <div *ngSwitchCase="UpsertCustomerSteps.Checklist">
+                                            <mts-customer-checklist></mts-customer-checklist>
+                                        </div>
+                                        <div *ngSwitchCase="UpsertCustomerSteps.StackingOrder">
+                                            <mts-customer-stacking-order></mts-customer-stacking-order>
+                                        </div>
+                                        <div *ngSwitchCase="UpsertCustomerSteps.CustomerConfig">
+                                            <mts-customer-config></mts-customer-config>
+                                        </div>
+                                        <div *ngSwitchDefault>
+                                            <div class="col-centered col-md-4 m-t-50">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        Error Contact Administrator
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box-footer p-t-5 p-b-5">
+                                <div class="row">
+                                    <div class="col-md-6 text-left">
+                                        <button type="button" (click)="GotoMaster()" class="btn btn-secondary bg-white waves-effect waves-light"><i class="material-icons">close</i>&nbsp;Cancel</button>
+                                    </div>
+                                    <div class="col-md-6 text-right">
+                                        <div *ngIf="stepModel.stepID === UpsertCustomerSteps.ServiceType || stepModel.stepID === UpsertCustomerSteps.LoanType">
+                                            <button type="button" *ngIf="stepModel.stepID > UpsertCustomerSteps.Customer" (click)="GotoPreviousStep()" class="btn  btn-info waves-effect waves-light m-l-5"><span class="fa fa-arrow-left"></span> Previous</button>
+                                        </div>
+                                        <div *ngIf="stepModel.stepID !== UpsertCustomerSteps.ServiceType && stepModel.stepID !== UpsertCustomerSteps.LoanType">
+                                            <button type="button" *ngIf="stepModel.stepID > UpsertCustomerSteps.Customer" (click)="GotoPreviousStep()" class="btn  btn-info waves-effect waves-light m-l-5"><span class="fa fa-arrow-left"></span> Previous</button>
+                                            <button type="button" *ngIf="!loading" (click)="GotoNextStep()" class="btn  btn-info waves-effect waves-light m-l-5"><i *ngIf="stepModel.stepID === UpsertCustomerSteps.CustomerConfig" class="material-icons">done_all</i>{{stepModel.stepID === UpsertCustomerSteps.CustomerConfig ? ' Finish' : ' Save & Next '}} <span *ngIf="stepModel.stepID !== UpsertCustomerSteps.CustomerConfig" class="fa fa-arrow-right"></span></button>
+                                            <button type="button" *ngIf="loading" disabled class="btn  btn-info waves-effect waves-light m-l-5">Save & Next <span class="fa fa-spinner fa-pulse fa-fw"></span></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

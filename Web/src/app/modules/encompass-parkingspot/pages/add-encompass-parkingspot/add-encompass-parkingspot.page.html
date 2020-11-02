@@ -1,0 +1,47 @@
+<div class="m-t-15">
+    <div class="col-md-8 col-md-offset-2" style="display: block;">
+        <div class="box">
+            <div class="box-title">
+                <div class="box-caption">
+                    <span>Add Encompass Parking Spot</span>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="col-md-12">
+                    <div class="col-md-6 col-md-offset-1">
+                        <div class="text-right pu_toggle">
+                            <label class="tgl" style="font-size: 14px;">
+                              <input [(ngModel)]="ParkingActive" name="ParkingActive" type="checkbox"  />
+                               <span   data-on="Active"    data-off="Inactive" ></span>
+                           </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-md-offset-1">
+                        <div class="form-group">
+                            <input type="text" class="form-control mandatory" name="ParkingSpotName" [(ngModel)]="ParkingSpotName" required>
+                            <label class="control-label" for="input">
+                            Encompass ParkingSpot Name
+                        </label>
+                            <i class="bar"></i>
+                            <span *ngIf='validationMsg !=""' class="text-center required txt-red m0">
+                            {{validationMsg}}
+                        </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-right">
+                        <button class="btn btn-info waves-effect waves-light m-r-8" type="button" (click)="AddParkSpotSubmit()">
+                        <i class="material-icons">save</i>
+                        &nbsp;Save
+                    </button>
+                        <button type="button" class="btn btn-secondary bg-white waves-effect waves-light" type="button" (click)="CloseParkSpot()">
+                        <i class="material-icons">clear</i>
+                        &nbsp;Cancel
+                    </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

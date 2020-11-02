@@ -1,0 +1,70 @@
+<div class="box cust_box">
+    <div class="box-title p-b-5">
+        <div title="Check List Loans" class="box-caption w100  title_ellipsis">
+            <span class="caption-subject bold">Loan Qc Index </span>
+        </div>
+        <div class="box-action w100">
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="form-group m0">
+                        <select [(ngModel)]="QCReviewTypeID" name="QCReviewTypeID">
+                            <option [ngValue]="0"> -- Select ServiceType -- </option>
+                            <option *ngFor="let review of ReviewTypes" [ngValue]="review.ReviewTypeID">
+                                {{review.ReviewTypeName}}
+                            </option>
+                        </select>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-xs-5">
+                    <div class="form-group m0">
+                        <ng-daterangepicker id="QCIndexDateRange" #QCIndexDateRange [(ngModel)]="QCIndexDateRangeValue" [options]="daterangeoptions">
+                        </ng-daterangepicker>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-xs-1">
+                    <button class="btn btn-info waves-effect m-r-5 waves-light btn-sm" id="QC_btnSearch" (click)="getMonthYear($event, 'LoanQcIndex')" type="button">
+                        <span class="fa fa-search"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="box-body  p-b-0">
+        <div class="card-spc" style="min-height:249px;">
+            <div class="col-md-12" *ngIf="qualityIndexData.showIndex">
+                <div class="col-md-5 m-t-40 p0 countLoan">
+                    <div class="p15">
+                        <h2 class="txt-green">{{qualityIndexData.loanFailedCount}}/{{qualityIndexData.totalloancount}}</h2>
+                    </div>
+                    <div class="p10 totalCountLable">
+                        <span>
+                            <h4>Total Passed Rule(s)</h4>
+                        </span>
+                    </div>
+                </div>
+                <div (click)="getLoanRecords($event)" style="cursor:pointer; height: 249px;" class="col-md-7 percentageWrapper">
+                    <div [class]="qualityIndexData.LColor">
+                        <div class="progress m-b-5">
+                            <div class="inner">
+                                <div class="percent">
+                                    <span>{{qualityIndexData.LoanPercentange }}</span>%</div>
+                                <div class="water" [style.top]="qualityIndexData.waterPercentage +'%'"></div>
+                                <div class="glare"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5 text-center">
+                        <h4>Quality Index</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 text-center m-t-50" *ngIf="!qualityIndexData.showIndex" style="font-size: 18px;">
+                No Data Available
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>

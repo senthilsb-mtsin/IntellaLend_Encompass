@@ -1,0 +1,96 @@
+<form [formGroup]="rulesFrmGrp" novalidate [style.display]="waitingForData ? 'none': 'block'">
+    <div class="m-b-10 m-t-0" formArrayName="manualGroup">
+        <h5 class="text-right m0">
+            <small class="txt-themeRed" style="font-size: 13px;">Use $ for Document Name </small>
+        </h5>
+        <div *ngFor="let QuestionsTypes of formDataQuestionsTypes.controls; let x =index">
+            <div [formGroup]="QuestionsTypes">
+                <div class="col-md-12 m-t-10 p-r-15 p-l-15">
+                    <table>
+                        <tr>
+                            <td class="text-left" style="width: 60%;">
+                                <div class="form-group m-b-0">
+                                    <textarea *ngIf="showMention" rows="4" name="Question" required="" formControlName="question" (ngModelChange)="OnManualChange()" class="form-control mandatory" id="Question" [mention]="itemsNotes" [mentionConfig]="{triggerChar:'$'}" (selectedItem)="changeManualDocs($event)"
+                                        (keypress)="changeManualDocs($event)"></textarea>
+                                    <label class="control-label" for="input">Question</label>
+                                    <i class="bar"></i>
+                                </div>
+                            </td>
+                            <td style="width: 40%;">
+                                <div class="col-md-12 m-t-25">
+                                    <div class="col-md-1">
+                                        <button type="button" (click)="increment()" class="btn decrementBtn btn-success btn-sm p0 waves-effect waves-light"><i class="material-icons">add</i></button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group customMargin text-left">
+                                            <input type="text" class="form-control mandatory" formControlName="choicenumber" name="CompNum" required="">
+                                            <label class="control-label" for="input">No of Choices</label>
+                                            <i class="bar"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button type="button" (click)="decrement()" class="btn decrementBtn btn-danger btn-sm p0 waves-effect waves-light"><i class="material-icons">remove</i></button>
+                                    </div>
+                                    <div class="col-md-4 p0 p-l-25">
+                                        <div class="checkbox setCheckboxPosition decrementBtn">
+                                            <label>
+                                                <input type="checkbox" formControlName="isNotesEnabled"><i class="helper"></i>Enable notes
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 m-t-10">
+                                    <div class="col-md-8">
+                                        <div class="form-group  m-t-25 m-b-0">
+                                            <select formControlName="inputtypes" class="form-control" (change)="OnManualChange()">
+                                                <option value="0" selected disabled>--Select Type--</option>
+                                                <option *ngFor="let inptArr of inputArray" value="{{inptArr.id}}">{{inptArr.value}}</option>
+                                            </select>
+                                            <label class="control-label selected">Input Type</label>
+                                            <i class="bar"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 m-t-20">
+                                        <button type="button" [disabled]="isCreateBtnEnabled" class="btn btn-info waves-effect waves-light" (click)="createElements()"><i class="material-icons">settings_applications</i> Create</button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="formDataCheckBoxChoices.controls.length > 0" class="col-md-12  m-t-10" formArrayName="manualGroup">
+        <div *ngFor="let CheckBoxChoices of formDataCheckBoxChoices.controls; let x =index">
+            <div [formGroup]="CheckBoxChoices">
+                <div class="col-md-4 text-left">
+                    <div class="form-group">
+                        <input type="text" formControlName="checkboxoptions" class="form-control mandatory" required="">
+                        <label class="control-label" for="input">CheckBox {{x + 1}}</label>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="formDataRadioChoices.controls.length > 0" class="col-md-12 m-t-10" formArrayName="manualGroup">
+        <div *ngFor="let RadioChoices of formDataRadioChoices.controls; let x =index">
+            <div [formGroup]="RadioChoices">
+                <div class="col-md-4 text-left">
+                    <div class="form-group">
+                        <input type="text" formControlName="radiooptions" class="form-control mandatory" required="">
+                        <label class="control-label" for="input">Option {{x + 1}}</label>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div [style.display]="waitingForData ? 'block': 'none'">
+    <div class="spinner">
+        <div class="double-bounce1" style="top: 65px;"></div>
+        <div class="double-bounce2" style="top: 65px;"></div>
+    </div>
+</div>

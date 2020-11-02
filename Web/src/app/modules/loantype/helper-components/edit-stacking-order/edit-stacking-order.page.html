@@ -1,0 +1,223 @@
+<div class="row m-t-20">
+    <div class="col-md-6">
+        <div class="form-group m-t-0 text-left">
+            <input type="text" (ngModelChange)="SysStackingOrderRedundancyCheck($event)" [(ngModel)]="sysEditStackingOrderName" required="">
+            <label class="control-label" for="input">Stacking Order Name</label>
+            <i class="bar"></i>
+        </div>
+    </div>
+    <div class="col-md-1 text-left">
+        <button type="button" *ngIf="stackOrderType === 'createEdit'" class="btn btn-secondary waves-effect waves-light bg-white" type="button" (click)="StackingClose()">
+            <i class="material-icons">clear</i></button>
+    </div>
+    <div class="col-md-5 text-right m-t-10">
+        <button id="lt_collapse" class="btn btn-info btn-sm waves-effect waves-light" type="button" (click)="CollapseGroup()">
+                    <i class="fa fa-angle-down fa-lg"></i>&nbsp;&nbsp;Collapse Group(s)</button>
+        <button id="lt_btnAddLoanType1" class="btn btn-primary btn-sm waves-effect waves-light" type="button" (click)="StackingOrderGroupName = ''; addGroupModal.show()">
+            <i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Add Group</button>
+    </div>
+</div>
+<div class="row" [cgBusy]="promise">
+    <div class="col-md-4 col-centered">
+        <div class="form-group icon m0">
+            <input type="text" placeholder="All Document Types" (ngModelChange)="UnassignedDocFilterSearch($event)" required="" [(ngModel)]="allDocSearchval">
+            <i class="bar"></i>
+            <span class="material-icons">search</span>
+        </div>
+        <div class="card-spc slimScrollCustom" malihu-scrollbar class="sto_list">
+            <div [dragula]='"nested-bag"' DivType="UnAssigned" class="dragScroll" [(dragulaModel)]='UnAssignedDocTypes'>
+                <div #allDocs title="{{item.DocumentTypeName}}" class="draganddrop" *ngFor='let item of UnAssignedDocTypes; let i = index;' [attr.data-docid]="item.DocumentTypeID" (click)="setDocSelected(i)">
+                    <span>{{item.DocumentTypeName}}</span>
+                    <i class="fa fa-plus-circle fa-lg pull-right text-col-green" (click)="AddSysStackingOrder(item.DocumentTypeID)"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-1 col-centered">
+        <div class="text-center movbtn">
+            <button class="btn btn-secondary btn-rounded waves-effect waves-light bg-white" (click)="MoveFromAllDoc()" id="addDocType" title="Add">
+                <span class="material-icons">arrow_forward</span>
+            </button>
+        </div>
+        <div class="text-center p-t-15 movbtn">
+            <button class="btn btn-secondary btn-rounded waves-effect waves-light bg-white" (click)="MoveToAllDoc()" id="removeDocType" title="Remove">
+                <span class="material-icons">arrow_back</span>
+            </button>
+        </div>
+    </div>
+    <div class="col-md-7 col-centered">
+        <div class="form-group icon m0">
+            <input type="text" placeholder="Assigned Document Types" required="" [(ngModel)]="assignedDocSearchval">
+            <i class="bar"></i>
+            <span class="material-icons">search</span>
+        </div>
+        <div class="card-spc" class="slimScrollCustom sto_list" malihu-scrollbar>
+            <div #assignedDiv [dragula]='"nested-bag"' class="dragScroll assignedDiv" DivType="Assigned" [(dragulaModel)]='docSysStackingOrder'>
+                <div class="draganddrop groupElements" #stackDocs [attr.data-docid]="item.DocumentTypeID" *ngFor='let item of docSysStackingOrder|docmastersearch: assignedDocSearchval; let i = index;'>
+                    <div class="col-md-12">
+                        <div *ngIf="!item.isGroup" title="{{item.DocumentTypeName}}" title="{{item.DocumentTypeName}}" class="col-md-6 p-l-0 so_textEllipsis" (click)="setStackDocSelected(i)">
+                            {{item.DocumentTypeName}}
+                        </div>
+                        <div *ngIf="item.isGroup" class=" p-l-0 so_textEllipsis">
+                            <div class="row ">
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{item.StackingOrderGroupName}}
+                                        </div>
+                                        <div class="col-md-6 " [attr.data-docName]="item.StackingOrderGroupName">
+                                            <select id="FieldValues" [(ngModel)]="item.OrderByFieldID" style="width:88%;" (change)="SetDocGroupFieldValue($event.target.value,$event.target,item.StackingOrderGroupID)">
+                                                    <option value="">Select</option>
+                                                    <option *ngFor="let field of item.DocFieldList" [value]="field.FieldID">{{ field.DisplayName }}</option>
+                                                </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <i style="cursor: pointer;" class="fa icon pull-right m-r-5" (click)="item.DocumentTypeID = !item.DocumentTypeID" [ngClass]="{'fa-chevron-down': item.DocumentTypeID, 'fa-chevron-up': !item.DocumentTypeID}"></i>
+                                    <i class="fa fa-minus-circle fa-lg pull-right text-col" (click)="RemoveGroup(item.StackingOrderGroupName)"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-r-5 p-l-5 ">
+                            <div *ngIf="item.isGroup" #assignedDiv [dragula]='"nested-bag"' [attr.data-docName]="item.StackingOrderGroupName" [hidden]="item.DocumentTypeID" class="dragScroll2" [(dragulaModel)]='docGroupStackingOrder'>
+                                <div class="" *ngFor='let docitem of docGroupStackingOrder|docmastersearch: assignedDocSearchval; let i = index;'>
+                                    <div *ngIf="item.StackingOrderGroupName === docitem.StackingOrderGroupName" class="draganddrop" [attr.data-docid]="docitem.DocumentTypeID">
+                                        <div class="col-md-12">
+                                            <div title="{{docitem.DocumentTypeName}}" class="col-md-6 p-l-0 so_textEllipsis">
+                                                {{docitem.DocumentTypeName}}</div>
+                                            <div class="col-md-6 p-l-0 text-right">
+                                                <select style="width: 86%;" [(ngModel)]="docitem.DocFieldValueId" title="Append On Document Type" (change)="SetDocFieldValue($event.target.value, docitem.DocumentTypeID, 'DocFieldValue')">
+                                                        <option *ngFor="let Docfield of docitem.DocFieldList" [value]="Docfield.FieldID">{{ Docfield.DisplayName }}</option>
+                                                    </select>
+                                                <i class="fa fa-minus-circle fa-lg pull-right text-col" (click)="RemoveGroupSysStackingOrder(docitem.DocumentTypeID)"></i>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="!item.isGroup" class="col-md-3 p-l-0 ">
+                            <select style="width: 88%;" [(ngModel)]="item.OrderByFieldID" title="Sort By Document Type" (change)="SetDocFieldValue($event.target.value, item.DocumentTypeID,'OrderByField')">
+                                    <option *ngFor="let field of item.DocFieldList" [value]="field.FieldID">{{ field.DisplayName }}</option>
+                                </select>
+                        </div>
+                        <div *ngIf="!item.isGroup" class="col-md-3 p-l-0">
+                            <select style="width: 86%;" [(ngModel)]="item.DocFieldValueId" title="Append On Document Type" (change)="SetDocFieldValue($event.target.value, item.DocumentTypeID,'DocFieldValue')">
+                                    <option *ngFor="let Docfield of item.DocFieldList" [value]="Docfield.FieldID">{{ Docfield.DisplayName }}</option>
+                                </select>
+                            <i class="fa fa-minus-circle fa-lg pull-right text-col" (click)="RemoveSysStackingOrder(item.DocumentTypeID)"></i>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #addGroupModal="bs-modal" class="modal fade" [config]="{backdrop: false, keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-left">
+                <h5 class="modal-title">Add Group</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <div class="form-group m-b-0 text-left">
+                    <input type="text" [(ngModel)]="StackingOrderGroupName" required="">
+                    <label class="control-label" for="input">Group Name</label>
+                    <i class="bar"></i>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="ls_yes" class="btn btn-info waves-effect waves-light" (click)="SaveGroupName()">
+                    <i class="material-icons">save</i>&nbsp;Save</button>
+                <button type="button" id="ls_yes" class="btn btn-info waves-effect waves-light" (click)="addGroupModal.hide()">
+                    <i class="material-icons">close</i>&nbsp;Cancel</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 
+
+<div class="col-md-6">
+    <div class="col-md-8">
+        <div class="form-group icon m0 text-left">
+            <input type="text" class="form-control mandatory" #editSysStackOrderGrp="ngModel" (ngModelChange)="SysStackingOrderRedundancyCheck($event)" [(ngModel)]="sysEditStackingOrderName" required="">
+            <label class="control-label" for="input">System Stacking Order Name</label>
+            <i class="bar"></i>
+        </div>
+    </div>
+    <div class="col-md-4 p-t-5">
+        <button class="btn btn-info waves-effect waves-light m-r-8" (click)="AssignStackingOrder()" type="button"> <i class="material-icons">content_copy</i>&nbsp;&nbsp;Clone Stacking Order</button>
+    </div>
+</div>
+<div class="col-md-12  m-t-20 col-centered">
+    <div class="form-group icon m0" [style.display]="showDocuments ? 'block':'none'">
+        <input type="text" placeholder="Assigned Document Types" required="" [(ngModel)]="assignedDocSearchval">
+        <i class="bar"></i>
+        <span class="material-icons">search</span>
+    </div>
+    <div class="card-spc" class="slimScrollCustom sto_list" malihu-scrollbar [style.display]="showDocuments ? 'block':'none'">
+        <div #assignedDiv [dragula]='"nested-bag"' class="dragScroll assignedDiv" DivType="Assigned" [(dragulaModel)]='docSysStackingOrder'>
+            <div class="draganddrop groupElements" #stackDocs [attr.data-docid]="item.DocumentTypeID" *ngFor='let item of docSysStackingOrder|docmastersearch: assignedDocSearchval; let i = index;'>
+                <div class="col-md-12">
+                    <div *ngIf="!item.isGroup" title="{{item.DocumentTypeName}}" title="{{item.DocumentTypeName}}" class="col-md-6 p-l-0 so_textEllipsis">
+                        {{item.DocumentTypeName}}
+                    </div>
+                    <div *ngIf="item.isGroup" class=" p-l-0 so_textEllipsis">
+                        <div class="row ">
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {{item.StackingOrderGroupName}}
+                                    </div>
+                                    <div class="col-md-6 " [attr.data-docName]="item.StackingOrderGroupName">
+                                        <select id="FieldValues" [(ngModel)]="item.OrderByFieldID" style="width:88%;">
+                                            <option value="">Select</option>
+                                            <option *ngFor="let field of item.DocFieldList" [value]="field.FieldID">{{ field.DisplayName }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <i style="cursor: pointer;" class="fa icon pull-right m-r-5" (click)="item.DocumentTypeID = !item.DocumentTypeID" [ngClass]="{'fa-chevron-down': item.DocumentTypeID, 'fa-chevron-up': !item.DocumentTypeID}"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-r-5 p-l-5 ">
+                        <div *ngIf="item.isGroup" #assignedDiv [dragula]='"nested-bag"' [attr.data-docName]="item.StackingOrderGroupName" [hidden]="item.DocumentTypeID" class="dragScroll2" [(dragulaModel)]='docGroupStackingOrder'>
+                            <div class="" *ngFor='let docitem of docGroupStackingOrder|docmastersearch: assignedDocSearchval; let i = index;'>
+                                <div *ngIf="item.StackingOrderGroupName === docitem.StackingOrderGroupName" class="draganddrop" [attr.data-docid]="docitem.DocumentTypeID">
+                                    <div class="col-md-12">
+                                        <div title="{{docitem.DocumentTypeName}}" class="col-md-6 p-l-0 so_textEllipsis">
+                                            {{docitem.DocumentTypeName}}
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="!item.isGroup" class="col-md-3 p-l-0 ">
+                        <select style="width: 88%;" [(ngModel)]="item.OrderByFieldID" title="Sort By Document Type">
+                                    <option *ngFor="let field of item.DocFieldList" [value]="field.FieldID">{{ field.DisplayName }}</option>
+                                </select>
+                    </div>
+                    <div *ngIf="!item.isGroup" class="col-md-3 p-l-0">
+                        <select style="width: 86%;" [(ngModel)]="item.DocFieldValueId" title="Append On Document Type">
+                            <option *ngFor="let Docfield of item.DocFieldList" [value]="Docfield.FieldID">{{ Docfield.DisplayName }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div> -->

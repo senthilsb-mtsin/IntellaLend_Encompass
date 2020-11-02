@@ -1,0 +1,118 @@
+<div class="row m-t-15">
+    <div class="col-sm-12 col-sm-offset-0 col-md-12 col-md-offset-0">
+        <div class="box coverletter">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <img [src]="ImageURL" style="width: 230px;height: 46px;">
+                        <hr>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="col-sm-6 left">
+                            <input type="text" [(ngModel)]="Fields['date']" [originalFieldArry]="mentionDocFields" [originalFieldArry]="mentionDocFields" (selectedItem)="selectedItem($event)" *ngIf="showReverifyMention" [mentionConfig]="mentionConfig" class="custformcontrol input-sm width230"
+                                placeholder="Date">
+                            <br>
+                            <textarea rows="5" [(ngModel)]="Fields['address']" [originalFieldArry]="mentionDocFields" [originalFieldArry]="mentionDocFields" (selectedItem)="selectedItem($event)" *ngIf="showReverifyMention" [mentionConfig]="mentionConfig" class="custformcontrol input-sm width230 m-t-10"
+                                placeholder="Address"></textarea>
+                        </div>
+                        <div class="col-sm-6 text-right right">
+                            <div class="m-b-5">
+                                Lender Name :
+                                <input type="text" [(ngModel)]="Fields['lenderValue']" [originalFieldArry]="mentionDocFields" [originalFieldArry]="mentionDocFields" (selectedItem)="selectedItem($event)" *ngIf="showReverifyMention" [mentionConfig]="mentionConfig" class="custformcontrol input-sm width230"
+                                    placeholder="Lender Name">
+                            </div>
+                            <div class="m-b-5">
+                                Borrower Last Name :
+                                <input type="text" [(ngModel)]="Fields['borrowerName']" [originalFieldArry]="mentionDocFields" [originalFieldArry]="mentionDocFields" (selectedItem)="selectedItem($event)" *ngIf="showReverifyMention" [mentionConfig]="mentionConfig" class="custformcontrol input-sm width230"
+                                    placeholder="Borrower Last Name">
+                            </div>
+                            <div class="m-b-5">
+                                Loan Number :
+                                <input type="text" [(ngModel)]="Fields['loanNumber']" [originalFieldArry]="mentionDocFields" [originalFieldArry]="mentionDocFields" (selectedItem)="selectedItem($event)" *ngIf="showReverifyMention" [mentionConfig]="mentionConfig" class="custformcontrol input-sm width230"
+                                    placeholder="Loan Number">
+                            </div>
+                            <div class="m-b-5">
+                                Audit Group :
+                                <textarea [(ngModel)]="Fields['auditGroup']" [originalFieldArry]="mentionDocFields" [originalFieldArry]="mentionDocFields" (selectedItem)="selectedItem($event)" *ngIf="showReverifyMention" [mentionConfig]="mentionConfig" class="custformcontrol input-sm valign-middle width230"
+                                    rows="2" placeholder="Audit Group"></textarea>
+                            </div>
+
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                    </div>
+
+                    <div class="col-sm-12 m-b-10">
+                        <div>
+                            RE :
+                            <input type="text" [(ngModel)]="Fields['verificationGift']" [originalFieldArry]="mentionDocFields" [originalFieldArry]="mentionDocFields" (selectedItem)="selectedItem($event)" *ngIf="showReverifyMention" [mentionConfig]="mentionConfig" class="custformcontrol input-sm width230"
+                                placeholder="Verification of Gift">
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <h5 class="m-b-15 p-l-30"><ins>PERSONAL & CONFIDENTIAL - SENSITIVE INFORMATION</ins></h5>
+                        <p>To Whom It May Concern:</p>
+                        <p class="text-justify m-b-15">Republic Bank has been contracted to conduct a random sampling of Stearns recently closed residential mortgage loans. In accordance with audit procedures, we have attached the signed Borrower’s Certification & Authorization form
+                            allowing the release of this information.</p>
+                        <p class="text-justify m-b-5">We would appreciate your review of the attached <input type="text" [(ngModel)]="Fields['giftLetter']" [originalFieldArry]="mentionDocFields" [originalFieldArry]="mentionDocFields" (selectedItem)="selectedItem($event)" *ngIf="showReverifyMention"
+                                [mentionConfig]="mentionConfig" class="custformcontrol input-sm width230" placeholder="Gift Letter"> and confirmation of the following:</p>
+                        <ul class="m-b-15">
+                            <li>
+                                <p class="m-b-5">The amount and source of the gift is correct as of the date signed by you.</p>
+                            </li>
+                            <li>
+                                <p class="m-b-5">You certify that there is no repayment expected from the recipient.</p>
+                            </li>
+                        </ul>
+                        <p class="text-justify m-b-15">In our efforts to gather accurate information, we kindly request your participation in completing the section below. This document in conjunction with the attachments should be returned via regular mail using the enclosed pre-paid
+                            envelope. Please respond within 20 days from the receipt of this letter. You may also fax the documents directly to us by using our secure fax line <input type="text" [(ngModel)]="Fields['faxNumber']" [originalFieldArry]="mentionDocFields"
+                                [originalFieldArry]="mentionDocFields" (selectedItem)="selectedItem($event)" *ngIf="showReverifyMention" [mentionConfig]="mentionConfig" class="custformcontrol input-sm width230" placeholder="FAX Number"></p>
+                        <p class="text-justify m-b-15">Should you have any questions or concerns regarding this request for re-verification, please contact us directly at <input type="text" [(ngModel)]="Fields['phNumber']" [originalFieldArry]="mentionDocFields" [originalFieldArry]="mentionDocFields"
+                                (selectedItem)="selectedItem($event)" *ngIf="showReverifyMention" [mentionConfig]="mentionConfig" class="input-sm custformcontrol width230" placeholder="Phone Number"> .
+                        </p>
+                        <p class="text-justify m-b-20">Sincerely,</p>
+                        <p class="text-justify">Republic Bank QC Support Team</p>
+                    </div>
+                    <div class="col-sm-12 m-b-25">
+                        <h5 class="m-b-15">Please complete by comparing your records and commenting below:</h5>
+                        <ol class="m-b-20">
+                            <li>
+                                <p><input type="radio" class="rdalign" name="optradio"> <b>ACCURATE:</b> The enclosed information provided as of the date indicated on the document(s) is correct.</p>
+                            </li>
+                            <li>
+                                <p><input type="radio" class="rdalign" name="optradio"> <b>INACCURATE:</b> The enclosed information contains discrepancies or inaccuracies.</p>
+                            </li>
+                        </ol>
+                        <p class="m-b-0">If inaccurate , please explain:</p>
+                        <textarea [(ngModel)]="Fields['plainText']" class="form-control custformcontrol inaccurateFullWidth" rows="4"></textarea>
+                    </div>
+                    <div class="col-sm-12 down">
+                        <div class="row">
+                            <div class="col-md-8 m-b-15">
+                                <p class="m-b-0">Signature</p>
+                                <input type="text" [(ngModel)]="Fields['signatureOne']" [originalFieldArry]="mentionDocFields" [originalFieldArry]="mentionDocFields" (selectedItem)="selectedItem($event)" *ngIf="showReverifyMention" [mentionConfig]="mentionConfig" class="input-sm custformcontrol col-md-8"
+                                    placeholder="Signature">
+                            </div>
+                            <div class="col-md-4 m-b-15">
+                                <p class="m-b-0">Date</p>
+                                <input type="text" [(ngModel)]="Fields['docDateOne']" [originalFieldArry]="mentionDocFields" [originalFieldArry]="mentionDocFields" (selectedItem)="selectedItem($event)" *ngIf="showReverifyMention" [mentionConfig]="mentionConfig" class="input-sm custformcontrol col-md-8"
+                                    placeholder="Date">
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-8 m-b-15">
+                                <p class="m-b-0">Title</p>
+                                <input type="text" [(ngModel)]="Fields['title']" [originalFieldArry]="mentionDocFields" [originalFieldArry]="mentionDocFields" (selectedItem)="selectedItem($event)" *ngIf="showReverifyMention" [mentionConfig]="mentionConfig" class="input-sm custformcontrol col-md-8"
+                                    placeholder="Title">
+                            </div>
+                            <div class="col-md-4 m-b-15">
+                                <p class="m-b-0">Contact Number</p>
+                                <input type="text" [(ngModel)]="Fields['contactNumber']" [originalFieldArry]="mentionDocFields" [originalFieldArry]="mentionDocFields" (selectedItem)="selectedItem($event)" *ngIf="showReverifyMention" [mentionConfig]="mentionConfig" class="input-sm custformcontrol col-md-8"
+                                    placeholder="Contact Number">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

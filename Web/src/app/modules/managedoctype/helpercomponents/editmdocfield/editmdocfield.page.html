@@ -1,0 +1,23 @@
+<div class="row m-t-15">
+    <div class="col-md-12" *ngIf="showHide[0]" [cgBusy]="promise">
+        <div>
+            <div class="box-title" *ngIf="isTitleEnabled">
+                <div class="box-caption">
+                    <span>Document Fields</span>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12  m-t-20">
+                        <div class="table-panel">
+                            <table datatable [dtOptions]="dtOptions" class="table table-bordered table-striped table-hover" style="width: 100%;">
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf='isEditEnabled'>
+        <mts-editmfield></mts-editmfield>
+    </div>

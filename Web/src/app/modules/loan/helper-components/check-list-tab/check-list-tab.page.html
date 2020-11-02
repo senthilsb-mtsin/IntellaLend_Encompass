@@ -1,0 +1,197 @@
+<div class="col-md-12 p10">
+    <div [cgBusy]="promiseChk">
+        <div class="col-md-12 m-b-5">
+            <div class="col-md-6 p0">
+                <button [disabled]="_disableAudit" *ngIf="!showHide[0] && (!isRevertToReadyForAudit && !isAuditComplete)" (click)="auditCompleteModal.show()" class="btn btn-info btn-sm m-l-1 waves-effect waves-light" title="Complete Audit" type="button">
+                    <i class="material-icons">check</i> Complete Audit
+                </button>
+                <button *ngIf="isAuditComplete && isRevertToReadyForAudit" (click)="revertToReadyforAudit.show()" class="btn btn-danger btn-sm m-l-1 waves-effect waves-light" title="Re-Audit" type="button">
+                    <i class="material-icons">keyboard_return</i> Re-Audit
+                </button>
+                <button (click)="DownloadChecklistDetails()" class="btn btn-info m-l-1 btn-sm waves-effect waves-light" title="Download Excel" type="button">
+                    <i class="fa fa-file-excel-o"></i> Download
+                </button>
+                <button class="btn btn-info m-l-1 btn-sm waves-effect waves-light" (click)="GetChecklistDetails(true)" title="Re-Evaluate" type="button"><i class="fa fa-refresh"></i> Re-Evaluate </button>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div id="slider" [class]="testSlide">
+                <div id="loanChecklist">
+                    <div class="table-panel">
+                        <table datatable [dtOptions]="dtChecklistOptions" class="table table-bordered table-striped table-hover checklistTable" style="width:100%!important;">
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div [class]="testSlide == 'slide-in' ? 'cBoxTran cBoxOpacityHide' : 'cBoxTran cBoxOpacityShow'">
+                <div class="container p0" style="width: 100%;">
+                    <div class="box cBox p-l-0 p-r-0">
+                        <div class="box-title">
+                            <div class="box-caption"><span class="pull-left">{{checkListItemRows.Category}}</span></div>
+                            <div class="box-action"><span class="pull-right">
+                                    <button class="btn btn-info btn-sm waves-effect waves-light m-l-1"
+                                        *ngIf="!showHide[0] && checkListItemRows.Type == 'Manual'" [disabled]="enableQuestionerSave==0"
+                                        (click)="SaveQuetionerAnswer()">
+                                        <i class="material-icons">save</i>&nbsp;&nbsp;Save
+                                    </button>
+                                    <button id="toggle" type="button" (click)=ToggleChecklist()
+                                        class="btn btn-info btn-sm waves-effect waves-light m-l-1"><i class="material-icons">arrow_back</i>&nbsp;&nbsp;back
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div *ngIf="checkListItemRows.Type == 'Automatic'" class="box-body" style="height:calc(100vh - 432px);overflow-y:auto;">
+                            <div class="col-md-12">
+                                <span title="Error" class="material-icons cBoxIcon" *ngIf="checkListItemRows.Error.length > 0; else elseBlock" style="color: #ff0000;transform: rotate(0deg);">error</span>
+                                <ng-template #elseBlock>
+                                    <span title="Fail" class="material-icons cBoxIcon" *ngIf="checkListItemRows.Result == 'False'" style="color:  #fc4b6c;">add_circle</span>
+                                    <span title="Pass" class="material-icons cBoxIcon" *ngIf="checkListItemRows.Result == 'True'" style="color: #64ab23;transform: rotate(0deg);">check_circle</span>
+                                </ng-template>
+                                <p style="padding-right: 35px;">
+                                    {{checkListItemRows.CheckListName}}
+                                </p>
+                                <hr>
+                            </div>
+                            <div class="col-md-12">
+                                <p style="font-weight: 600;color: #336699;">
+                                    Expression
+                                </p>
+                                <p style="font-size: 12px;">
+                                    {{checkListItemRows['Checklist']['Formula']}}
+                                </p>
+                                <hr>
+                            </div>
+                            <div class="col-md-12">
+                                <p style="font-weight: 600;color: #336699;">
+                                    Evaluated Expression
+                                </p>
+                                <p style="font-size: 12px;">
+                                    {{checkListItemRows['Checklist']['Expression']}}
+                                </p>
+                                <hr>
+                            </div>
+                            <div class="col-md-12">
+                                <p style="font-weight: 600;color: #336699;">
+                                    {{checkListItemRows.Error.length > 0 ? 'Error Message' : 'Message'}}
+                                </p>
+                                <p style="font-size: 12px;" [class]="checkListItemRows.Error.length > 0 ? 'text-danger' : ''">
+                                    {{checkListItemRows.Error.length > 0 ? checkListItemRows.Error : checkListItemRows.Message}}
+                                </p>
+                                <hr *ngIf="checkListItemRows.AssociatedDoc.length > 0">
+                            </div>
+                            <div class="col-md-12" *ngIf="checkListItemRows.AssociatedDoc.length > 0">
+                                <p style="font-weight: 600;color: #336699;">
+                                    Associated Documents
+                                </p>
+                                <ul>
+                                    <li *ngFor="let doc of checkListItemRows.AssociatedDoc">
+                                        <div *ngIf="doc.MissingDoc">
+                                            <span class="text-danger">{{doc.DocumentName}}</span>
+                                        </div>
+                                        <div *ngIf="!doc.MissingDoc">
+                                            <span><a href="javascript:void(0);" (click)="FromImageDocLink(doc.DocumentName,doc.FieldName)"
+                                                    style="text-decoration: underline;font-size: 13px;">{{doc.DocumentName}}</a></span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div *ngIf="checkListItemRows.Type == 'Manual'" class="box-body" style="height:calc(100vh - 432px);overflow-y:auto;">
+                            <div class="col-md-12">
+                                <p>
+                                    {{checkListItemRows.qitem.Question}}
+                                </p>
+                            </div>
+                            <div class="col-md-12">
+                                <ul style="padding-left: 14px;list-style-type: none;padding-top: 5px;margin-bottom: 0;">
+                                    <div class="form-radio m0">
+                                        <li *ngFor="let optItem of checkListItemRows.qitem.inputList" style="padding: 5px 0;">
+                                            <div class="{{optItem.type}} m0">
+                                                <label>
+                                                    <input name="ruleQuest{{checkListItemRows.qitem.RuleID}}" id="ruleQuest{{checkListItemRows.qitem.RuleID}}"
+                                                        [checked]="optItem.checked"
+                                                        (click)="SetQuetionerAnswer(checkListItemRows.qitem.RuleID,optItem.label,optItem.type)"
+                                                        type="{{optItem.type}}" value="{{optItem.label}}">
+                                                    <i class="helper"></i>{{optItem.label}}
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </div>
+                                </ul>
+                                <hr *ngIf="checkListItemRows.Formula.length > 0">
+                            </div>
+                            <div class="col-md-12" *ngIf="checkListItemRows.qitem.NotesEnabled">
+                                <p style="font-weight: 600;color: #336699;">
+                                    Notes
+                                </p>
+                                <textarea rows="1" name="ruleQuest{{checkListItemRows.qitem.RuleID}}" id="ruleQuest{{checkListItemRows.qitem.RuleID}}" [value]="checkListItemRows.qitem.QuestionNotes" (input)="SetQuetionerNotes(checkListItemRows.qitem.RuleID, $event.currentTarget.value)"
+                                    class="form-control msg_text"></textarea>
+                                <hr *ngIf="checkListItemRows.Formula.length > 0">
+                            </div>
+                            <div class="col-md-12" *ngIf="checkListItemRows.Formula.length > 0">
+                                <p style="font-weight: 600;color: #336699;">
+                                    Associated Documents
+                                </p>
+                                <ul>
+                                    <li *ngFor="let doc of checkListItemRows.Formula">
+                                        <div *ngIf="doc.MissingDoc">
+                                            <span class="text-danger">{{doc.DocumentName}}</span>
+                                        </div>
+                                        <div *ngIf="!doc.MissingDoc">
+                                            <span><a href="javascript:void(0);" (click)="FromImageDocLink(doc.DocumentName,'ManualDocs')"
+                                                    style="text-decoration: underline;font-size: 13px;">{{doc.DocumentName}}</a></span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<div bsModal #auditCompleteModal="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-left">
+                <h5 class="modal-title">Confirm</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body text-left">
+                Are you sure, you want to complete audit ?
+                <div class="form-group m-t-30 m-b-30">
+                    <textarea [(ngModel)]="completeNotes" id="formula"></textarea>
+                    <label class="control-label">Audit Completion Notes</label><i class="bar"></i>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect waves-light" (click)="AuditComplete()">
+                    <i class="material-icons">check_circle</i>&nbsp;&nbsp;Yes</button>
+                <button type="button" class="btn btn-secondary bg-white waves-effect waves-light" type="button" (click)="auditCompleteModal.hide()">
+                    <i class="material-icons">cancel</i>&nbsp;&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #revertToReadyforAudit="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-left">
+                <h5 class="modal-title">Confirm</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body text-left">
+                Are you sure to Revert To Re-Audit ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect waves-light" (click)="RevertToReadyForAudit()">
+                    <i class="material-icons">check_circle</i>&nbsp;&nbsp;Yes</button>
+                <button type="button" class="btn btn-secondary bg-white waves-effect waves-light" type="button" (click)="CloseRevertAudit()">
+                    <i class="material-icons">cancel</i>&nbsp;&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

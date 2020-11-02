@@ -1,0 +1,27 @@
+<div class="m-t-15" [cgBusy]="promise">
+    <div class="row m-t-15">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-title">
+                    <div class="box-caption">
+                        <span>Re-verification Administration</span>
+                    </div>
+                    <div class="box-action">
+                        <button class="btn btn-primary btn-sm waves-effect waves-light" type="button" (click)="ShowReverificationModal(0)"><i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Add
+                            Re-verification</button>
+                        <button class="btn btn-success btn-sm waves-effect waves-light" type="button" (click)="ShowReverificationModal(1)" [disabled]="rowSelected"><i
+                                class="fa fa-pencil"></i>&nbsp;&nbsp;Edit Re-verification</button>
+                        <button class="btn btn-warning btn-sm waves-effect waves-light" type="button" (click)="ShowReverificationModal(2)" [disabled]="rowSelected"><i
+                                class="fa fa-eye"></i>&nbsp;&nbsp;View Re-verification</button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="table-panel">
+                        <table datatable [dtOptions]="dtOptions" class="table table-bordered table-striped table-borderless table-responsive" style="width: 100%;">
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+<div class="m-t-15">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-panel box">
+                <div class="box-title">
+                        <div class="box-title">
+                                <div class="box-caption bcEllipsis" style="width:60%"  *ngIf="UserName!=''"> {{_reportService.ReportDescription}} <img height="16" src="../../assets/images/right-arrow.png" width="16">{{_reportService.ReportModel.UserName}} </div>
+                                <div class="box-caption bcEllipsis" style="width:60%"   *ngIf="UserName==''"> {{_reportService.ReportDescription}}  </div>
+                               
+                        <div class="box-action">
+                            <button (click)="back()" title="Close" class="btn btn-danger p-l-2 p-r-2 btn-sm waves-effect waves-light pull-right" type="button">
+                                    <i class="material-icons">close</i>
+                                </button>
+                        </div>
+                    </div>
+                <div [cgBusy]="promise" class="box-body reportGrid">
+                    <div class="col-md-12 text-right m-b-10" id="downloadButton"></div>
+                    <div class="col-md-12">
+                        <table datatable [dtOptions]="dtOptions" class="table table-bordered table-striped table-borderless table-responsive" style="width: 100%;">
+                        </table>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #confirmModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <p [innerHtml]=AlertMessage></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="ls_yes" class="btn btn-info waves-effect waves-light" (click)="overrideLoanUser()">
+                    <i class="material-icons">check_circle</i>&nbsp;Yes</button>
+                <button type="button" id="ls_cancel" class="btn btn-secondary waves-effect waves-light bg-white" type="button" (click)="confirmModal.hide()">
+                    <i class="material-icons">cancel</i>&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div> 

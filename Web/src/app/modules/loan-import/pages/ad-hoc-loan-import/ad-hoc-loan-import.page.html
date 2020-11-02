@@ -1,0 +1,107 @@
+<div class="p20">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="MTS-uploadQueue">
+                <div class="row p-t-10">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <MonthYearPicker class="input_date" [SelectedDate]="SelectedAuditDateTemp" (modelChange)="getAuditMonthYear($event)"></MonthYearPicker>
+                            <label class="control-label selected" for="input">Audit Month & Year </label><i class="bar"></i>
+
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label selected" for="input">Audit Due Date</label>
+                            <my-date-picker name="mydate" [options]="adhoc.myDatePickerOptions" [selDate]="adhoc.selDate" [(ngModel)]="AdhocAuditDate"></my-date-picker>
+                            <i class="bar"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group m-b-0">
+                            <select id="select2" id="dash_drpUploadCustomer" [(ngModel)]="adhoc.customerSelect" (change)="custModelChange()">
+                              <option [ngValue]="0">--Select--</option>
+                              <option *ngFor="let cust of adhoc.commonActiveCustomerItems" [ngValue]="cust"> {{cust.text}}</option>
+                              </select>
+                            <label class="control-label" for="input">{{adhoc.AuthorityLabelSingular}}</label>
+                            <i class="bar"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <select id="dash_drpServiceType" #ReviewItemsDrpDwn [(ngModel)]="adhoc.reviewTypeId" (change)="getReviewTypeDatas()" placeholder="Select Service Type">
+                              <option [ngValue]="0">--Select Service Type--</option>
+                               <option *ngFor="let cust of adhoc.reviewTypeItems" [ngValue]="cust.id">{{cust.text}}</option>
+                            </select>
+                            <label class="control-label selected">Service Type</label>
+                            <i class="bar"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <select id="dash_drpServicePriority" [(ngModel)]="adhoc.selectedPriority" (change)="ValidateAdhocUploadFields()" placeholder="Priority Types">
+                              <option [ngValue]="0">--Select Priority--</option>
+                              <option [ngValue]="1">Critical(1)</option>
+                              <option [ngValue]="2">High(2)</option>
+                              <option [ngValue]="3">Medium(3)</option>
+                              <option [ngValue]="4">Low(4)</option>
+                            </select>
+                            <label class="control-label selected">Priority</label>
+                            <i class="bar"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <select class="ng-select-required" id="dash_drpLoanType" #LoanTypeDropDown [(ngModel)]="adhoc.loanSelect" (change)="adHocLoanTypeChange()" placeholder="Select Loan Type">
+                              <option [ngValue]="0">--Select Loan Type--</option>
+                              <option *ngFor="let cust of adhoc.loanTypeItems" [ngValue]="cust.id">{{cust.text}}</option>
+                            </select>
+                            <label class="control-label selected">Loan Type</label>
+                            <i class="bar"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div ng2FileDrop [ngClass]="{'nv-file-over': hasBaseDropZoneOver}" (fileOver)="fileOverBase($event)" (onFileDrop)="onFileDropUpload($event)" [uploader]="uploader" class="well my-drop-zone p-t-0 MTS-dropZOne m-b-0">
+
+                        <div class="col-md-12 text-center" style="margin-bottom: 10px; margin-top: 5px;">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3 class="h3Class"><img style="width: auto;height: 50px;" class="m-b-10" src="../../assets/images/upload.png"><br>Drag & Drop File Here
+                                        <br>
+                                        <label class="p-t-15 p-b-15">or</label>
+                                        <label for="dash_upload" class="upload btn-block m-t-0">Browse</label>
+                                        <input type="file" style="display: none;" id="dash_upload" (click)="singleFileUpload($event)" [disabled]="adhoc.enableUpload" *ngIf="uploader.queue.length==0" ng2FileSelect [uploader]="uploader" />
+                                    </h3>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div *ngFor="let item of uploader.queue">
+                            <div class="upload-card">
+                                <div class="pull-right">
+                                    <span (click)="item.upload()" class="success">
+                                              <i class="material-icons">file_upload</i>
+                                    </span>
+                                    <span (click)="item.remove()" class="remove">
+                    <i class="material-icons">remove</i>
+                  </span>
+                                </div>
+                                <h5 class="m0">{{ item?.file?.name }}</h5>
+                            </div>
+                            <div class="progress ">
+                                <div class="progress-bar " role="progressbar " [ngStyle]="{ 'width': uploader.progress + '%' } "></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

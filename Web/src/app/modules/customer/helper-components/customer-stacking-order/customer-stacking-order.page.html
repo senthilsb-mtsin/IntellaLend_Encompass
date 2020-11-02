@@ -1,0 +1,109 @@
+<div *ngIf="StackingOrderMapped">
+    <div class="row" [cgBusy]="promise" [style.display]="!showEditor ? 'block' : 'none'">
+        <div class="col-md-12 text-right m-b-10">
+            <button class="btn btn-primary btn-sm waves-effect waves-light" (click)="showEditor=true; EditStackingOrder();">
+        <span class="fa fa-pencil"></span>&nbsp;Edit Stacking Order</button>
+        </div>
+        <div class="col-md-12 table-panel">
+            <table datatable [dtOptions]="dtOptions" class="table table-bordered table-striped table-borderless table-responsive" style="width: 100%;">
+            </table>
+        </div>
+    </div>
+    <div class="row" *ngIf="showEditor">
+        <div class="col-md-12 text-right m-b-10">
+            <button type="button" class="btn pull-left btn-sm btn-secondary txt-themeRed waves-effect waves-light" type="button" (click)="CloseEditStackingOrderModal()">
+            <i class="material-icons">clear</i>&nbsp;Cancel</button>
+            <button id="lt_collapse" class="btn btn-info btn-sm waves-effect waves-light" type="button" (click)="CollapseGroup()">
+                    <i class="fa fa-angle-down fa-lg"></i>&nbsp;&nbsp;Collapse Groups</button>
+            <button class="btn btn-info btn-sm waves-effect waves-light" (click)="AddGroup()">
+            <span class="fa fa-plus-circle"></span>&nbsp;&nbsp;Add Group</button>
+            <button class="btn btn-success btn-sm waves-effect waves-light" (click)="SaveStackingOrder()" type="button">
+                <i class="material-icons">save</i>&nbsp;Save</button>
+        </div>
+        <div class="col-md-12" style="overflow-y:auto;height:calc(100vh - 345px);">
+            <div class='wrapper'>
+                <div [dragula]='"nested-bag"' [(dragulaModel)]='docStackingOrder' id="dragScrollContainer">
+                    <div class="draganddrop col-md-12 groupElements" [attr.data-docid]="item.DocumentTypeID" *ngFor='let item of docStackingOrder; let i=index'>
+                        <div *ngIf="!item.isGroup" class="col-md-4 p-l-0 so_textEllipsis" title="{{item.DocumentTypeName}}" (click)="setStackDocSelected(i)">
+                            {{item.DocumentTypeName}}
+                        </div>
+                        <div *ngIf="!item.isGroup" class="col-md-4 p-l-0">
+                            <select style="width: 68%;" [(ngModel)]="item.OrderByFieldID" title="Sort By Document Type" (change)="SetOrderByField($event.target.value, item.DocumentTypeID)">
+                            <option *ngFor="let field of item.DocFieldList" [value]="field.FieldID">{{ field.DisplayName }}</option>
+                        </select>
+                        </div>
+                        <div *ngIf="!item.isGroup" class="col-md-4 p-l-0">
+                            <select style="width: 68%;" [(ngModel)]="item.DocFieldValueId" title="Append On Document Type" (change)="SetDocFieldValue($event.target.value, item.DocumentTypeID)">
+                            <option *ngFor="let Docfield of item.DocFieldList" [value]="Docfield.FieldID">{{ Docfield.DisplayName }}</option>
+                        </select>
+                            <i class="fa fa-minus-circle fa-lg pull-right text-col" (click)="removeOrder(i)"></i>
+                        </div>
+                        <div *ngIf="item.isGroup" class="col-md-12 p-l-0 so_textEllipsis" title="{{item.StackingOrderGroupDetails[0].StackingOrderGroupName}}" [attr.data-docid]="item.DocumentTypeID">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {{item.StackingOrderGroupDetails[0].StackingOrderGroupName}}
+                                        </div>
+                                        <div class="col-md-6" [attr.data-docName]="item.StackingOrderGroupDetails[0].StackingOrderGroupName">
+                                            <select id="FieldValues" [(ngModel)]="item.OrderByFieldID" style="width:88%;" class="{{item.StackingOrderGroupDetails[0].TrimmedStackingOrderGroupName}}" (change)="SetDocGroupFieldValue(item.StackingOrderGroupDetails[0].StackingOrderGroupName,item.StackingOrderGroupDetails[0].StackingOrderGroupID,item.OrderByFieldID,$event)">
+                                            <option value="0">Select</option>
+                                            <option *ngFor="let field of item.DocFieldList" [value]="field.FieldID" >{{ field.DisplayName }}</option>
+                                        </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <i style="cursor: pointer;" class="fa icon pull-right m-r-5" (click)="item.DocumentTypeID = !item.DocumentTypeID" [ngClass]="{'fa-chevron-down': item.DocumentTypeID, 'fa-chevron-up': !item.DocumentTypeID}"></i>
+                                    <i class="fa fa-minus-circle fa-lg pull-right text-col" (click)="removeGroup(item.StackingOrderGroupDetails[0].StackingOrderGroupName,i)"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div *ngIf="item.isGroup" [dragula]='"nested-bag"' [attr.data-docName]="item.StackingOrderGroupDetails[0].StackingOrderGroupName" class="dragScroll2" [(dragulaModel)]='docGroupStackingOrder' [hidden]="item.DocumentTypeID">
+                            <div class="column" *ngFor='let docitem of docGroupStackingOrder; let i = index;'>
+                                <div *ngIf="(item.StackingOrderGroupDetails.length>0 ? item.StackingOrderGroupDetails[0].StackingOrderGroupName :'none') === (docitem.StackingOrderGroupDetails.length>0 ? docitem.StackingOrderGroupDetails[0].StackingOrderGroupName:'')" class="draganddrop col-md-12">
+                                    <div title="{{docitem.DocumentTypeName}}" title="{{docitem.DocumentTypeName}}" class="col-md-6 p-l-0 so_textEllipsis">
+                                        {{docitem.DocumentTypeName}}</div>
+                                    <div class="col-md-6 p-l-0 text-right">
+                                        <select style="width: 68%;" [(ngModel)]="docitem.DocFieldValueId" title="Append On Document Type" (change)="SetDocFieldValue($event.target.value, docitem.DocumentTypeID)">
+                                        <option *ngFor="let Docfield of docitem.DocFieldList" [value]="Docfield.FieldID">{{ Docfield.DisplayName }}</option>
+                                    </select>
+                                        <i class="fa fa-minus-circle fa-lg pull-right text-col" (click)="removeGroupOrder(i)"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div bsModal #addGroupModal="bs-modal" class="modal fade" [config]="{backdrop: false, keyboard: false}" role="dialog">
+        <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-left">
+                    <h5 class="modal-title">Add Group</h5>
+                </div>
+                <hr class="fancy-line">
+                <div class="modal-body text-left">
+                    <div class="form-group m-b-0">
+                        <input type="text" [(ngModel)]="StackingOrderGroupName" required="">
+                        <label class="control-label" for="input">Group Name</label>
+                        <i class="bar"></i>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="ls_yes" class="btn btn-info waves-effect waves-light" (click)="SaveGroupName()">
+                    <i class="material-icons">save</i>&nbsp;Save</button>
+                    <button type="button" id="ls_yes" class="btn btn-info waves-effect waves-light" (click)="addGroupModal.hide()">
+                    <i class="material-icons">close</i>&nbsp;Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-centered" *ngIf="!StackingOrderMapped">
+    No Stacking Order mapped for the selected Loan Type
+</div>

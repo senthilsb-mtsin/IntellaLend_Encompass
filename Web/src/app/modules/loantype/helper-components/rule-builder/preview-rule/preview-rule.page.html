@@ -1,0 +1,224 @@
+<div class="col-md-12" [cgBusy]="promise">
+    <div class="col-md-12 m-b-5">
+        <div class="pull-right">
+            <div class="text-right pu_toggle">
+                <label class="tgl" style="font-size:14px">  
+                    <input [(ngModel)]="rowData.ChecklistActive" type="checkbox"/>
+                    <span data-on="Active" data-off="In-Active"></span>
+                </label>
+            </div>
+            <div class="tg-list-item ">
+            </div>
+        </div>
+        <button *ngIf="showInput" (click)="EvaluateRules(myForm.value)" class="btn pull-right m-r-10 btn-success btn-sm waves-effect waves-light"><i class="material-icons">play_circle_filled</i>&nbsp;Test Run</button>
+    </div>
+    <div [class]="showInput ? 'col-md-5 p0 m-b-5' : 'col-md-6 p0 col-md-offset-3'">
+        <table class="text-left" style="width: 100%;table-layout: fixed;">
+            <tbody style="height: calc(100vh - 360px);">
+                <tr>
+                    <td class="infoDiv"><b style="color: #326598;">Checklist Item Name:</b><br>{{rowData.CheckListName}}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="infoDiv" id="formula">
+                        <b *ngIf="showManualOptions" style="color: #326598;">Question: </b><br>
+                        <b *ngIf="!showManualOptions" style="color: #326598;">Formula: </b><br>{{rowData.RuleDescription}}
+                    </td>
+                </tr>
+                <tr *ngIf="showInput">
+                    <td class="infoDiv">
+                        <table style="width: 100%;" class="m-t-5">
+                            <tbody>
+                                <tr>
+                                    <td valign="top" style="color: #326598;width: 33%;"><b>Result</b> </td>
+                                    <td valign="top" style="color: #326598;width: 2%;">: </td>
+                                    <td valign="top" class="p-l-10" style="width: 65%;">
+                                        <span title="Fail" class="btn btn-sm btn-danger m0 m-t-5 bg-themeRed" *ngIf="testResult === 'False'">Fail</span>
+                                        <span title="Pass" class="btn btn-sm btn-success m0 m-t-5" *ngIf="testResult === 'True'">Pass</span> <br>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="ErrorMSG === ''">
+                                    <td valign="top" style="color: #326598;width: 33%;"><b>Evaluated Expression</b> </td>
+                                    <td valign="top" style="color: #326598;width: 2%;">: </td>
+                                    <td valign="top" class="p-l-10" style="width: 65%;">{{testResultExp}}</td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" style="color: #326598;width: 33%;"><b>Error Message </b></td>
+                                    <td valign="top" style="color: #326598;width: 2%;">:</td>
+                                    <td valign="top" class="p-l-10 txt-themeRed" style="width: 65%;">{{ErrorMSG}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr *ngIf="!showInput && showManualOptions">
+                    <td class="infoDiv">
+                        <b style="color: #326598;">Options Entered: </b><br>
+                        <div *ngFor="let opts of allOptions; let i =index;">{{i + 1}}.&nbsp;&nbsp;{{opts}}</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-7 table-panel">
+        <form novalidate #myForm="ngForm" [class]="showInput ? 'formHeight': ''">
+            <table *ngIf="showInput" style="width: 100%;">
+                <!-- <thead>
+                    <tr>
+                        <th width="20% ">Document Name</th>
+                        <th width="50% ">Document Field</th>
+                        <th width="30% ">Document Field Value</th>
+                    </tr>
+                </thead> -->
+                <tbody>
+                    <tr *ngFor="let input of EvalFields ; let i = index">
+                        <td valign="bottom" class="text-left" style="width: 40%;">{{input.DocName}}.{{input.Fieldname}}</td>
+                        <td style="width: 10%;"></td>
+                        <td style="width: 50%;">
+                            <div class="form-group m-t-15 m-b-5">
+                                <input type="text" [name]="input.DocName+'.'+ input.Fieldname " [(ngModel)]="input.originalField">
+                                <label class="control-label selected">Value</label><i class="bar"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- <ng-container *ngIf="getSelectedOperator === 'general'">
+                                <tr *ngFor="let input of distinctEvalFields ; let i = index">
+                                    <td>
+                                        {{input.DocName}}
+                                    </td>
+                                    <td>{{input.Fieldname}}</td>
+                                    <td>
+                                        <div class="form-group m-t-15 m-b-5">
+                                            <input type="text" [name]="input.DocName+'.'+ input.Fieldname " [(ngModel)]="input.originalField">
+                                            <label class="control-label selected">Value</label><i class="bar"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="getSelectedOperator === 'if'">
+                                <tr *ngFor="let input of distinctConditionalEvalutedValues ; let i = index">
+                                    <td>
+                                        {{input.DocName}}
+                                    </td>
+                                    <td>{{input.Fieldname}}</td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" [name]="input.DocName+'.'+ input.Fieldname" [(ngModel)]="input.originalField">
+                                            <label class="control-label selected">Value</label><i class="bar"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="getSelectedOperator === 'in'">
+                                <tr *ngFor="let input of distinctInValues ; let i = index">
+                                    <td>
+                                        {{input.DocName}}
+                                    </td>
+                                    <td>{{input.Fieldname}}</td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" [name]="input.DocName+'.'+ input.Fieldname" [(ngModel)]="input.originalField">
+                                            <label class="control-label selected">Value</label><i class="bar"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="getSelectedOperator === 'datediff'">
+                                <tr *ngFor="let input of distinctEvalDocTypes ; let i = index">
+                                    <td>
+                                        {{input.DocTypes}}
+                                    </td>
+                                    <td>{{input.DocField}}</td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" [name]="input.DocTypes+'.'+ input.DocField" [(ngModel)]="input.originalField">
+                                            <label class="control-label selected">Value</label><i class="bar"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="getSelectedOperator === 'empty'">
+                                <tr *ngFor="let input of emptyDocValues ; let i = index">
+                                    <td>
+                                        {{input.DocName}}
+                                    </td>
+                                    <td>{{input.Fieldname}}</td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" [name]="input.DocName+'.'+ input.Fieldname" [(ngModel)]="input.originalField">
+                                            <label class="control-label selected">Value</label><i class="bar"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="getSelectedOperator === 'compareall'">
+                                <tr *ngFor="let input of distinctCompareAllValues ; let i = index">
+                                    <td>
+                                        {{input.DocName}}
+                                    </td>
+                                    <td>{{input.Fieldname}}</td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" [name]="input.DocName+'.'+ input.Fieldname" [(ngModel)]="input.originalField">
+                                            <label class="control-label selected">Value</label><i class="bar"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="getSelectedOperator === 'isnotempty'">
+                                <tr *ngFor="let input of notEmptyDocValues ; let i = index">
+                                    <td>
+                                        {{input.DocName}}
+                                    </td>
+                                    <td>{{input.Fieldname}}</td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" [name]="input.DocName+'.'+ input.Fieldname" [(ngModel)]="input.originalField">
+                                            <label class="control-label selected">Value</label><i class="bar"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="getSelectedOperator === 'losrule'">
+                                <tr *ngFor="let losDocVals of losDocValues ; let i = index">
+                                    <td>
+                                        {{losDocVals.DocTypes}}
+                                    </td>
+                                    <td>
+                                        {{losDocVals.DocField}}</td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" [name]="losDocVals.DocTypes+'.'+ losDocVals.DocField" [(ngModel)]="losDocVals.commonEvalValues">
+                                            <label class="control-label selected">Value</label><i class="bar"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="getSelectedOperator === 'datatablerule'">
+                                <tr *ngFor="let distinctFields of distinctDatatableFields ; let i = index">
+                                    <td>
+                                        {{distinctFields.DocName}}
+                                    </td>
+                                    <td>
+                                        {{distinctFields.Fieldname}}</td>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" [name]="distinctFields.DocName+'.'+ distinctFields.Fieldname" [(ngModel)]="distinctFields.commonEvalValues">
+                                            <label class="control-label selected">Value</label><i class="bar"></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container> -->
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <div class="col-md-12 p0">
+        <div class="col-md-6 text-left p0">
+            <button type="button" (click)="GotoEditChecklistGroup()" class="btn btn-secondary waves-effect waves-light btn-sm bg-white" id="cancelbtn"><span class="material-icons">clear</span>&nbsp;&nbsp;Cancel</button>
+        </div>
+        <div class="col-md-6 text-right">
+            <button class="btn btn-info btn-sm waves-effect waves-light" (click)="Save()">Save&nbsp;&nbsp;<i class="fa fa-save"></i></button>
+        </div>
+    </div>
+</div>

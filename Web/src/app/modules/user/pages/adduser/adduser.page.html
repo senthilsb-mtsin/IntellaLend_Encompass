@@ -1,0 +1,107 @@
+<div class="row m-t-15">
+    <div class=" col-md-8 col-md-offset-2 ">
+        <div class="box ">
+            <div class="box-title ">
+                <div class="box-caption ">
+                    <span>Add User</span>
+                </div>
+            </div>
+            <div class="box-body ">
+                <div class="col-md-6 ">
+                    <div class="form-group ">
+                        <input type="text " class="form-control " name="UserName " [(ngModel)]="_addUserData.UserName "
+                            required=" ">
+                        <label class="control-label " for="input ">UserName</label><i class="bar "></i>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group ">
+                        <input type="text " class="form-control " name="Email" [(ngModel)]="_addUserData.Email "
+                            required=" ">
+                        <label class="control-label " for="input ">Email</label><i class="bar "></i>
+                    </div>
+                </div>
+                <div class="clearfix "></div>
+                <div class="col-md-6 ">
+                    <div class="form-group ">
+                        <input type="text " class="form-control " name="FirstName "
+                            [(ngModel)]="_addUserData.FirstName " required=" ">
+                        <label class="control-label " for="input ">First Name</label><i class="bar "></i>
+                    </div>
+                </div>
+                <div class="col-md-6 ">
+                    <div class="form-group ">
+                        <input type="text " class="form-control " [(ngModel)]="_addUserData.LastName " name="LastName "
+                            required=" ">
+                        <label class="control-label " for="input ">Last Name</label><i class="bar "></i>
+                    </div>
+                </div>
+                <div class="clearfix "></div>
+
+                <div class="col-md-6 ">
+                    <div class="form-group ">
+                        <input type="text " class="form-control " name="MiddleName "
+                            [(ngModel)]="_addUserData.MiddleName " required=" ">
+                        <label class="control-label " for="input ">Middle Name</label><i class="bar "></i>
+                    </div>
+                </div>
+
+                <div class="col-md-6 ">
+                    <div class="form-group ">
+                        <input type="text " class="form-control " [(ngModel)]="_addUserData.UserAddressDetail.City "
+                            name="City " required=" ">
+                        <label class="control-label " for="input ">City</label><i class="bar "></i>
+                    </div>
+                </div>
+                <div class="clearfix "></div>
+
+                <div class="col-md-6 ">
+                    <div class="form-group ">
+                        <input type="text " class="form-control " [(ngModel)]="_addUserData.UserAddressDetail.Country "
+                            name="Country " required=" ">
+                        <label class="control-label " for="input ">Country</label><i class="bar "></i>
+                    </div>
+                </div>
+
+                <div class="col-md-6 ">
+                    <div class="form-group ">
+                        <input type="text " class="form-control " [(ngModel)]="_addUserData.UserAddressDetail.ZipCode "
+                            name="ZipCode " required=" ">
+                        <label class="control-label " for="input ">Zip Code</label><i class="bar "></i>
+                    </div>
+                </div>
+                <div class="clearfix "></div>
+
+                <div class="col-md-6 ">
+                    <div class="form-group ">
+                        <ng-select #RoleDropDown [items]="roleItems " [multiple]="true " placeholder="--Select Role-- ">
+                        </ng-select>
+                        <label class="control-label selected " for="input ">Role</label>
+                    </div>
+                </div>
+                <div class="col-md-6 p0 ">
+                    <div class="form-group ">
+                        <select [(ngModel)]="custValue ">
+                            <option [ngValue]="0 ">--Select {{AuthorityLabelSingular}}--</option>
+                            <option *ngFor="let cusLists of customerItems " [ngValue]="cusLists ">{{cusLists.text}}
+                            </option>
+                        </select>
+                        <label class="control-label selected " for="input ">{{AuthorityLabelSingular}}</label><i
+                            class="bar "></i>
+                    </div>
+                </div>
+                <div class="clearfix "></div>
+
+                <div class="row ">
+                    <div class="col-md-12 text-right ">
+                        <button class="btn btn-info waves-effect waves-light m-r-8 " type="button "
+                            (click)="AddUser() "><i class="material-icons ">save</i>&nbsp;Save</button>
+                        <button type="button " class="btn btn-secondary bg-white waves-effect waves-light "
+                            type="button " (click)="CloseUser() "><i
+                                class="material-icons ">clear</i>&nbsp;Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,276 @@
+<div class="box">
+    <div class="box-title">
+        <div class="box-caption" (click)="visibility = !visibility" style="width: 40%;cursor:pointer">
+            <span>Loan Information</span>
+            <span class="fa icon m-l-10" (click)="visibility = !visibility" [ngClass]="{'fa-chevron-down': !visibility, 'fa-chevron-up': visibility}"></span>
+        </div>
+        <div class="box-action">
+            <div class="pull-right">
+                <span id="assignUser" *ngIf="showHide[1]">
+                  <div class="form-group m0" style="width: 200px;display: inline-block;">
+                      <select class="assignedUser" [(ngModel)]="assignedUserID" [disabled] ="EnabledAssignUser">
+                          <option *ngFor="let users of userList" [value]="users.UserID">{{users.UserName}}</option>
+                      </select>
+                      <i class="bar"></i>
+                  </div>
+                  <button [disabled] ="EnabledAssignUser" class="btn-info btn btn-sm waves-effect waves-light assignedUser" (click)="assignedUserID > 0 ? assignUser.show() : showError()" type="button">
+                      <i class="material-icons assignedUser">check</i>&nbsp;Assign</button>
+              </span>
+                <button class=" btn btn-info btn-sm waves-effect waves-light" (click)="auditPDFModal.show()" type="button">
+                    <i class="material-icons">pie_chart</i>&nbsp;Audit Report</button>
+                <button class=" btn btn-info btn-sm waves-effect waves-light" (click)="EmailModal(); EmailconfirmModal.show();" type="button">
+                    <i class="material-icons">email</i>&nbsp;Email</button>
+                <button *ngIf="showHide[2]" class=" btn btn-info btn-sm waves-effect waves-light" (click)="LoanDetailExport()" type="button">
+                    <i class="fa fa-file-excel-o"></i>&nbsp;Export</button>
+                <span *ngIf="showHide[2] && !isRevertToReadyForAudit" style="cursor: pointer" class=" btn btn-info btn-sm waves-effect waves-light">
+                    <i class="material-icons">cloud_upload</i>&nbsp;
+                        <label for="upload" style="font-size: 12px;font-weight: 500;margin-bottom: 0px;">
+                            Upload Trailing Document
+                        </label>
+                        <input type="file" style="display: none;" id="upload" ng2FileSelect [uploader]="uploader"  (change)="UploadTrailingDocument($event)" />
+                    </span>
+                <button (click)="back()" title="Close" class="btn btn-danger p-l-2 p-r-2 btn-sm waves-effect waves-light" type="button">
+                <i class="material-icons">close</i>
+            </button>
+            </div>
+        </div>
+    </div>
+    <div class="box-body" [hidden]="!visibility">
+        <div class="row">
+            <div *ngIf="loanFilterResult.BorrowerLoanNumber" class="col-md-4">
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="LoanHeaderInfo.LoanNumber" required="" [disabled]="showHide[0]">
+                    <!-- <div class="input-group-append saveIcon">
+                        <span class="input-group-text" style="cursor:pointer;" (click)="SaveLoans('LoanNumber')">
+                            <i class="material-icons">save</i>
+                        </span>
+                    </div> -->
+                    <label class="control-label" for="input">Borrower Loan Number</label>
+                    <i class="bar"></i>
+                </div>
+            </div>
+            <div *ngIf="loanFilterResult.LoanType" class="col-md-4">
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="LoanHeaderInfo.LoanType" disabled="disabled" required="">
+                    <label class="control-label" for="input">Loan Type</label>
+                    <i class="bar"></i>
+                </div>
+            </div>
+            <div *ngIf="loanFilterResult.BorrowerName" class="col-md-4">
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="LoanHeaderInfo.BorrowerName" required="" [disabled]="showHide[0]">
+                    <!-- <div class="input-group-append saveIcon">
+                        <span class="input-group-text" style="cursor:pointer;" (click)="SaveLoans('BorrowerName')">
+                            <i class="material-icons">save</i>
+                        </span>
+                    </div> -->
+                    <label class="control-label" for="input">Borrower Name</label>
+                    <i class="bar"></i>
+                </div>
+            </div>
+            <div *ngIf="loanFilterResult.LoanAmount" class="col-md-4">
+                <div class="form-group">
+                    <input currencyMask type="text" class="txt-left-imp" [(ngModel)]="LoanHeaderInfo.LoanAmount" [disabled]="showHide[0]" required="">
+                    <label class="control-label" for="input">Loan Amount</label>
+                    <i class="bar"></i>
+                </div>
+            </div>
+            <div *ngIf="loanFilterResult.Customer" class="col-md-4">
+                <div class="form-group">
+                    <input currencyMask type="text" class="txt-left-imp" [(ngModel)]="LoanHeaderInfo.CustomerName" disabled="disabled" required="">
+                    <label class="control-label" for="input">{{AuthorityLabelSingular}}</label>
+                    <i class="bar"></i>
+                </div>
+            </div>
+            <div *ngIf="loanFilterResult.ServiceType" class="col-md-4">
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="LoanHeaderInfo.ServiceType" disabled="disabled" required="">
+                    <label class="control-label" for="input">Service Type</label>
+                    <i class="bar"></i>
+                </div>
+            </div>
+            <div *ngIf="loanFilterResult.AuditMonthYear" class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label selected" for="input">Audit Month & Year</label>
+                    <MonthYearPicker class="input_date" #missingAuditMonthYear [SelectedDate]="AuditMonthyear" (modelChange)="getMonthYear($event)"></MonthYearPicker>
+                    <!-- <input type="text" [(ngModel)]="LoanHeaderInfo.AuditMonthYear" required=""> -->
+                    <i class="bar"></i>
+                </div>
+            </div>
+            <div *ngIf="loanFilterResult.PropertyAddress" class="col-md-4">
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="LoanHeaderInfo.PropertyAddress" [disabled]="showHide[0]" required="">
+                    <label class="control-label" for="input">Property Address</label>
+                    <i class="bar"></i>
+                </div>
+            </div>
+            <div *ngIf="loanFilterResult.InvestorLoanNumber" class="col-md-4">
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="LoanHeaderInfo.InvestorLoanNumber" [disabled]="showHide[0]" required="">
+                    <label class="control-label" for="input">Investor Loan Number</label>
+                    <i class="bar"></i>
+                </div>
+            </div>
+            <div *ngIf="loanFilterResult.PostCloser" class="col-md-4">
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="LoanHeaderInfo.PostCloser" [disabled]="showHide[0]" required="">
+                    <label class="control-label" for="input">Post-Closer</label>
+                    <i class="bar"></i>
+                </div>
+            </div>
+            <div *ngIf="loanFilterResult.LoanOfficer" class="col-md-4">
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="LoanHeaderInfo.LoanOfficer" [disabled]="showHide[0]" required="">
+                    <label class="control-label" for="input">Loan Officer</label>
+                    <i class="bar"></i>
+                </div>
+            </div>
+            <div *ngIf="loanFilterResult.UnderWriter" class="col-md-4">
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="LoanHeaderInfo.UnderWriter" [disabled]="showHide[0]" required="">
+                    <label class="control-label" for="input">Underwriter</label>
+                    <i class="bar"></i>
+                </div>
+            </div>
+            <div *ngIf="loanFilterResult.AuditDueDate" style="padding-bottom: 3px" class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label selected" for="input">Audit Due Date</label>
+                    <my-date-picker name="mydate" [options]="myDatePickerOptions" [selDate]="selDate" [disabled]="showHide[0]"></my-date-picker>
+                    <i class="bar"></i>
+                    <!-- <div class="input-group-append saveIcon" style="top: 2px;">
+                        <span class="input-group-text" style='cursor:pointer' (click)="SaveAuditDueDate()">
+                          <i class="material-icons">save</i>
+                      </span>
+                    </div> -->
+                </div>
+            </div>
+            <div *ngIf="loanFilterResult.LoanStatus" class="col-md-4">
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="LoanHeaderInfo.LoanStatus" disabled="disabled" required="">
+                    <label class="control-label" for="input">Loan Status</label>
+                    <i class="bar"></i>
+                </div>
+            </div>
+            <div [style.display]="isReceivedDate" class="col-md-4">
+                <div class="form-group">
+                    <input type="text" [(ngModel)]="LoanHeaderInfo.ReceivedDate" disabled="disabled" required="">
+                    <label class="control-label" for="input">Received Date</label>
+                    <i class="bar"></i>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 m-t-10">
+                <button class="btn btn-info btn-sm pull-right waves-effect waves-light" id="ln_search" (click)="SaveLoanHeader()" type="button" tabindex="9">
+                  <span class="material-icons">save</span>&nbsp;Save header</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div bsModal #EmailconfirmModal="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width: 740px;" role="document" [cgBusy]="promise">
+        <div class="modal-content">
+            <div class="modal-header text-left">
+                <h5 class="modal-title">Compose</h5>
+            </div>
+            <h5 class="text-right m0 p10">
+                <small class="txt-themeRed">Use $ for Document Name </small>
+            </h5>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <div id="send_email">
+                    <div class="col-sm-12" style="float:none">
+                        <div class="row  m-t-20 m-b-20" style="margin-left:7.5px">
+                            <div class="col-md-2 m-t-4">
+                                <p style="color:#03A9F4">To:</p>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group m0 text-left">
+                                    <input type="text" [(ngModel)]="Email.To" placeholder="To" [disabled]="!Email.showEmailSendBtn">
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12" style="float:none">
+                        <div class="row  m-t-20 m-b-20" style="margin-left:4.5px">
+                            <div class="col-md-2 m-t-4">
+                                <p style="color:#03A9F4">Subject:</p>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group m0 text-left">
+                                    <input type="text" [(ngModel)]="Email.Subject" placeholder="Subject" [disabled]="!Email.showEmailSendBtn">
+                                    <i class="bar"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12" style="float:none">
+                        <div class="col-md-2 m-t-4">
+                            <p style="color:#03A9F4">Attachment:</p>
+                        </div>
+                        <div class="row m-t-20 m-b-20" style="margin-left:8.5px">
+                            <textarea style="resize:none" *ngIf="showAttachmentMention" rows="3" [(ngModel)]="Email.Attachement" class="form-control msg_text" id="Attachement" [mention]="itemsDocuments" [mentionConfig]="{triggerChar:'$'}" (selectedItem)="changeEmailfunc($event)"
+                                (keypress)="changeEmailfunc($event)" [disabled]="!Email.showEmailSendBtn"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 " style="float:none">
+                        <div class="row m-t-20 m-b-20" style="margin-left:8.5px;cursor: pointer">
+                            <textarea rows="5" style="resize:none" [(ngModel)]="Email.Body" class="form-control msg_text" id="Body" [disabled]="!Email.showEmailSendBtn"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button *ngIf="Email.showEmailSendBtn" type="button" class="btn btn-info waves-effect waves-light" (click)="SendEmail();">
+                  <i class="material-icons">send</i>&nbsp; Send</button>
+                <button type="button" class="btn btn-secondary bg-white waves-effect waves-light" type="button" (click)="EmailconfirmModal.hide()">
+                  <i class="material-icons">cancel</i>&nbsp;&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #assignUser="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document" [cgBusy]="promise">
+        <div class="modal-content">
+            <div class="modal-header text-left">
+                <h5 class="modal-title">Confirm</h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body text-left">
+                Are you sure you want to assign to this user? </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info waves-effect waves-light" (click)="AssignUser();assignUser.hide()">
+                  <i class="material-icons">check_circle</i>&nbsp;&nbsp;Yes</button>
+                <button type="button" class="btn btn-secondary bg-white waves-effect waves-light" type="button" (click)="assignUser.hide()">
+                  <i class="material-icons">cancel</i>&nbsp;&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #auditPDFModal="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:900px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="col-lg-6 text-left">
+                    <h5 class="modal-title">Audit Report</h5>
+                </div>
+                <div class="col-lg-6">
+                    <button class=" btn btn-info btn-sm waves-effect waves-light pull-right" (click)="getAuditReport()" type="button">
+                          <i class="material-icons">cloud_download</i>&nbsp;Download Report</button>
+                </div>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body" style="height: 500px;overflow: hidden;">
+                <pdf-viewer [src]="pdfSrc" [render-text]="true" [zoom]="1.0" [autoresize]="true" style="display: block;overflow-y: auto;height: 499px;"></pdf-viewer>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="ls_yes" class=" btn btn-default btn-sm waves-effect waves-light" (click)="auditPDFModal.hide()"><i class="material-icons">cancel</i>&nbsp;Close</button>
+            </div>
+        </div>
+    </div>
+</div>

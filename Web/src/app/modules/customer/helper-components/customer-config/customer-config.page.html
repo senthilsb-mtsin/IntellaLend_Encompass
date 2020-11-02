@@ -1,0 +1,54 @@
+<div class="" [formGroup]="getCustConfigForm" novalidate>
+    <div class="row">
+        <div class="row-centered">
+            <div class="col-centered m-t-50">
+                <div formArrayName="ConfigItems" *ngFor="let item of formData.controls; let i = index;">
+                    <div [formGroupName]="i">
+                        <div class="col-md-12">
+                            <label *ngIf="item.controls.ConfigKey.value === 'Retention_Policy'" class="control-label m-b-0  fz-14 pull-left selected" style="color: #03A9F4;" for="input">Retention Policy</label>
+                            <div class="pu_toggle text-right">
+                                <label class="tgl" style="font-size:14px">
+                                    <input formControlName="Active" type="checkbox" />
+                                    <span data-on="Active" data-off="Inactive"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div *ngIf="item.controls.ConfigKey.value === 'Retention_Policy'">
+                                <div class="col-md-6">
+                                    <div class="form-group m-t-20">
+                                        <input type="number" onkeydown="return event.keyCode !== 69" min="1" (data)="DaysChanged($event)" formControlName="inputValues">
+                                        <label class="control-label " for="input ">Value</label><i class="bar "></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group m-t-20">
+                                        <select (change)="DaysChanged($event)" formControlName="daysValues">
+                                            <option *ngFor="let option of months" [value]="option.id">
+                                                {{option.text}}
+                                            </option>
+                                        </select>
+                                        <label class="control-label selected" for="select ">Period</label><i class="bar "></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group m-t-20" *ngIf="item.controls.ConfigKey.value === 'Export_Path'">
+                                <input type="text" formControlName="ConfigValue" required="">
+                                <label class="control-label selected" for="input">Export Path</label>
+                                <i class="bar"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row-centered">
+    <div class="col-centered">
+        <div class="col-md-12 text-right">
+            <button class="btn btn-info btn-sm waves-effect waves-light" (click)="SaveRetention()" [disabled]="!getCustConfigForm.valid"><span
+                class="material-icons ">save</span>&nbsp;&nbsp;Save</button>
+        </div>
+    </div>
+</div>

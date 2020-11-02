@@ -1,0 +1,104 @@
+<div class="col-md-12" [ngClass]="[KpiDivClass]" [style.display]="KpiDivdisplay">
+    <div class="row">
+        <div class="col-md-12">
+            <div id="Carousel" data-interval="false" class="carousel slide" [ngClass]="[kpiUserGroupClass]" [style.display]="KpiUserGroupDivdisplay">
+                <div class="carousel-inner">
+                    <div [class]="i == 0 ? 'item active': 'item'" *ngFor="let _carsl of _UserGroupCarousel; let i = index;">
+                        <div class="row">
+                            <div class="col-md-2" style="width: calc(100% - 79%)" *ngFor="let _CData of _carsl.carouselSet; let idx = index;">
+                                <div class="box cust_box" style="cursor:pointer;min-height: 185px;">
+                                    <div class="box-title m-b-0" [style.border-bottom]="'1px solid #eee' ">
+                                        <div class="box-caption display-block w100p bcEllipsis text-center">
+                                            <span [title]="_CData.UserGroupName">{{_CData.UserGroupName }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="box-body" *ngIf="_CData.IsConfigured">
+                                        <div class="form-group m0" style="cursor: default">
+                                            <div class="text-center">{{_CData.ConfigType}}</div>
+                                            <div class="text-center">
+                                                <button type="button" class="buttonSize" (click)="ScrollDate('next',_CData)"><i class="fa fa-chevron-left"
+                                                        aria-hidden="true"></i></button>
+                                                <span class="selectedDate" style="cursor:unset">
+                                                    {{_CData.dateFromTo}}
+                                                </span>
+                                                <button type="button" class="buttonSize" (click)="ScrollDate('prev',_CData)"><i class="fa fa-chevron-right"
+                                                        aria-hidden="true"></i></button>
+                                            </div>
+
+
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="ScoreCard col-md-8" style="cursor:pointer" (click)="GetKpiGoalDetails($event,'click',_CData)">
+                                                <h1 [class]="_CData.AchievedGoalCount < _CData.Goal ? 'text-center txt-themeRed' : 'text-center txt-green'">
+                                                    {{_CData.AchievedGoalCount}}
+                                                    <small class="txt-themeOrg"> / {{_CData.Goal}}</small>
+                                                </h1>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span *ngIf="_CData.AchievedGoalCount > _CData.Goal" class="ScoreCard_Icon txt-green fa fa-arrow-circle-up"></span>
+                                                <span *ngIf="_CData.AchievedGoalCount == _CData.Goal" class="ScoreCard_Icon txt-themeOrg fa fa-minus-circle"></span>
+                                                <span *ngIf="_CData.AchievedGoalCount < _CData.Goal" class="ScoreCard_Icon txt-themeRed fa fa-arrow-circle-down"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="box-body" *ngIf="!_CData.IsConfigured" style="height : 119px; font-size: 15px; padding-top:28px">
+                                        <div class="col-md-6">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a data-slide="prev" href="#Carousel" class="left carousel-control" [class.disabled]="KpiUserGroupData.length<=4">‹</a>
+                <a data-slide="next" href="#Carousel" class="right carousel-control" [class.disabled]="KpiUserGroupData.length<=4">›</a>
+            </div>
+
+            <div id="CarouselChild" class="carousel slide">
+                <div *ngIf="kpisearch" class="text-center" [cgBusy]="KpiPromise">
+                </div>
+                <div *ngIf="ShowKpiUserDetails">
+                    <div tabindex="-1" id="back_KpiGoal" (click)="gotoback()" class=" login-arrow waves-effect waves-light">
+                        <span class="material-icons">arrow_back</span></div>
+                    <div class="carousel-inner">
+                        <div [class]="i == 0 ? 'item active': 'item'" *ngFor="let _carsl of _carousel; let i = index;">
+                            <div class="row">
+                                <div class="col-md-2" *ngFor="let _CData of _carsl.carouselSet; let idx = index;">
+                                    <div class="box cust_box" style="cursor:pointer" (click)="GetKpiLoanDetail(_CData.UserID,_CData.PeriodFrom,_CData.PeriodTo,_CData.UserName,_CData.AchievedGoalCount)" style="cursor:pointer">
+                                        <div class="box-title m-b-0">
+                                            <div class="box-caption title_ellipsis text-center">
+                                                <span [title]="_CData.UserName">{{_CData.UserName}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="box-body">
+                                            <div class="row">
+                                                <span> Achieved Goals </span>
+                                            </div>
+                                            <div class="row">
+                                                <div class="ScoreCard col-md-8">
+                                                    <h1 [class]="_CData.AchievedGoalCount < _CData.GoalCount ? 'text-center txt-themeRed' : 'text-center txt-green'">
+                                                        {{_CData.AchievedGoalCount}}
+                                                        <small class="txt-themeOrg"> /
+                                                            {{_CData.GoalCount}}</small>
+                                                    </h1>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <span *ngIf="_CData.AchievedGoalCount > _CData.GoalCount" class="ScoreCard_Icon txt-green fa fa-arrow-circle-up"></span>
+                                                    <span *ngIf="_CData.AchievedGoalCount == _CData.GoalCount" class="ScoreCard_Icon txt-themeOrg fa fa-minus-circle"></span>
+                                                    <span *ngIf="_CData.AchievedGoalCount < _CData.GoalCount" class="ScoreCard_Icon txt-themeRed fa fa-arrow-circle-down"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a data-slide="prev" href="#CarouselChild" class="left carousel-control" [class.disabled]="KpiScoreCardData[0]<=6">‹</a>
+                    <a data-slide="next" href="#CarouselChild" class="right carousel-control" [class.disabled]="KpiScoreCardData[0]<=6">›</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,120 @@
+.ownPicker {
+    margin-right: 0px;
+    cursor: pointer;
+    background-color: #1e88e514;
+    border-radius: 5px;
+}
+
+.fdms-mp-input .input-group-addon {
+    background: #1792e5;
+    color: #FFF;
+    border: none;
+}
+
+.fdms-month-picker {
+    width: 250px;
+    position: absolute;
+    background: #FFF;
+    right: 0px;
+    top: 34px;
+    z-index: 1010;
+}
+
+.d-selection-item {
+    padding: 0;
+}
+
+.d-title {
+    height: 50px;
+    text-align: center;
+    background: #1792e5;
+    color: #FFF;
+    font-weight: 400;
+    border-radius: 5px 5px 0 0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.d-title [class*='col-md-'] {
+    line-height: 50px;
+    height: 50px;
+}
+
+.d-nav {
+    padding: 2px;
+}
+
+.d-nav span {
+    cursor: pointer;
+}
+
+.d-nav>.col-md-6>span {
+    display: block;
+    text-align: center;
+}
+
+.d-selection-item {
+    height: 50px;
+    width: 50px;
+    margin: 3px auto;
+    text-align: center;
+    color: #303030;
+    line-height: 50px;
+    cursor: pointer;
+    display: block;
+    border-radius: 50%;
+}
+
+.d-selection-item.active {
+    background-color: #0070ba;
+    color: #fff;
+    border-radius: 50%;
+    font-weight: 700;
+}
+
+.d-selection-item:hover {
+    background-color: #1792e5;
+    color: #fff;
+    border-radius: 50%;
+}
+
+.d-actions {
+    /* border-top: solid 1px #1382ce; */
+    height: 40px;
+}
+
+span.d-action.d-action-cancel {
+    color: #1792e5;
+    line-height: 40px;
+    float: right;
+    cursor: pointer;
+}
+
+.cust-datepicker {
+    position: absolute;
+    top: 15px;
+    vertical-align: middle;
+    right: 15px;
+    color: #1E88E5;
+}
+
+.date_input {
+    color: #333333c4;
+    padding-left: 8px;
+    letter-spacing: 1px;
+    padding-bottom: 3px;
+    cursor: pointer;
+}
+
+.month_list {
+    border: 1px solid #eee;
+    border-radius: 0 0 5px 5px;
+    background-color: #fff;
+    padding: 3px 0px;
+    cursor: default;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+}
+
+.month_list [class*='col-md-'] {
+    cursor: default;
+}
