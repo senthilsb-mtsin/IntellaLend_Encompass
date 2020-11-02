@@ -1,0 +1,62 @@
+Timestamp: 9/1/2020 4:12:31 PM
+
+Message: HandlingInstanceID: 054ce013-0737-4f3f-b7fa-9e116dff2ec0
+An exception of type 'Minio.Exceptions.ConnectionException' occurred and was caught.
+------------------------------------------------------------------------------------
+09/01/2020 16:12:31
+Type : Minio.Exceptions.ConnectionException, Minio, Version=3.1.13.0, Culture=neutral, PublicKeyToken=348239ebd7debb4c
+Message : MinIO API responded with message=Connection error: Unable to connect to the remote server. Status code=0, response=Unable to connect to the remote server, content=
+Source : Minio
+Help link : 
+ServerMessage : Connection error: Unable to connect to the remote server
+ServerResponse : RestSharp.RestResponse
+Response : 
+XmlError : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : Void ParseErrorNoContent(RestSharp.IRestResponse)
+HResult : -2146233088
+Stack Trace :    at Minio.MinioClient.ParseErrorNoContent(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 445
+   at Minio.MinioClient.ParseError(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 426
+   at Minio.MinioClient.<>c.<.ctor>b__84_0(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 81
+   at Minio.MinioClient.HandleIfErrorResponse(IRestResponse response, IEnumerable`1 handlers, DateTime startTime) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 604
+   at Minio.MinioClient.<ExecuteTaskCoreAsync>d__91.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 404
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.BucketRegionCache.<Update>d__9.MoveNext() in /q/.q/sources/minio-dotnet/Minio/BucketRegionCache.cs:line 104
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<GetRegion>d__80.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 134
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<CreateRequest>d__81.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 167
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<BucketExistsAsync>d__2.MoveNext() in /q/.q/sources/minio-dotnet/Minio/ApiEndpoints/BucketOperations.cs:line 124
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at IntellaLend.MinIOWrapper.ImageMinIOWrapper.CheckFileExists(Int64 loanID) in D:\Prakash\GitHub\ILProduct\IntellaLendBlocks\IntellaLend.MinIOWrapper\MinIOWrapper.cs:line 223
+   at IntellaLend.EntityDataHandler.LoanDataAccess.CheckLoanPDFExists(Int64 LoanID) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.LoanData\LoanDataAccess.cs:line 1170
+   at IntellaLend.CommonServices.LoanService.CheckLoanPDFExists(Int64 LoanID) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.Services\LoanService\LoanService.cs:line 103
+   at IntellaLendAPI.Controllers.LoanController.CheckLoanPDFExists(LoanRequest loan) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLendAPI\Controllers\LoanController.cs:line 708
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 9/1/2020 10:42:31 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132434301429567752
+ThreadIdentity : APIResponse
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------

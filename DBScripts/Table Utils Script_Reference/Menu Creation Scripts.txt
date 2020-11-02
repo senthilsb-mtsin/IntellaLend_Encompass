@@ -1,0 +1,32 @@
+DECLARE @MENUID TABLE (ID BIGINT)
+DECLARE @ROLEID BIGINT = 1
+DECLARE @SEQID BIGINT = (SELECT TOP 1 MENUORDER FROM [T1].[RoleMenuMappings] WHERE RoleID = @ROLEID ORDER BY MenuOrder DESC) + 1
+
+INSERT INTO [T1].[MenuMasters]
+           ([Icon]
+           ,[MenuTitle]
+           ,[RouteLink]
+           ,[MenuGroupID])
+OUTPUT INSERTED.MenuID into @menuid
+VALUES
+           ('flight_takeoff',
+		   'On-Boarding',
+		   'onboarding',
+		   1)
+
+INSERT INTO [T1].[RoleMenuMappings]
+           ([MenuID]
+           ,[MenuOrder]
+           ,[RoleID])
+     VALUES
+           ((select id from @menuid)
+           ,@SEQID
+           ,@ROLEID)	
+
+
+ INSERT INTO [T1].[AccessURLs]
+           ([URL]
+           ,[RoleID])
+     VALUES
+           ('View\OnBoarding'
+           ,@ROLEID)

@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PublishTargetUrl>D:\Prakash\GitHub\ILProduct\IntellaLendWorkflow\IntellaLendWorkflow\..\..\BuildFiles\WorkFlow</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="bin/Antlr3.Runtime.dll">
+      <publishTime>09/10/2013 16:29:20</publishTime>
+    </File>
+    <File Include="bin/Client.dll">
+      <publishTime>10/25/2018 11:08:52</publishTime>
+    </File>
+    <File Include="bin/ClientServer.dll">
+      <publishTime>10/25/2018 11:08:52</publishTime>
+    </File>
+    <File Include="bin/ClientSession.dll">
+      <publishTime>10/25/2018 11:08:52</publishTime>
+    </File>
+    <File Include="bin/DataAccess.dll">
+      <publishTime>10/25/2018 11:08:52</publishTime>
+    </File>
+    <File Include="bin/DocumentConverter.dll">
+      <publishTime>10/25/2018 11:08:54</publishTime>
+    </File>
+    <File Include="bin/Elli.AdvCode.dll">
+      <publishTime>08/20/2018 10:28:54</publishTime>
+    </File>
+    <File Include="bin/Elli.ElliEnum.dll">
+      <publishTime>10/25/2018 10:56:04</publishTime>
+    </File>
+    <File Include="bin/Elli.Interface.dll">
+      <publishTime>10/25/2018 10:56:06</publishTime>
+    </File>
+    <File Include="bin/Elli.Metrics.dll">
+      <publishTime>10/25/2018 10:56:06</publishTime>
+    </File>
+    <File Include="bin/Elli.Server.Remoting.dll">
+      <publishTime>10/25/2018 11:08:52</publishTime>
+    </File>
+    <File Include="bin/EllieMae.Encompass.AsmResolver.dll">
+      <publishTime>08/20/2018 10:28:54</publishTime>
+    </File>
+    <File Include="bin/EllieMae.Encompass.Runtime.dll">
+      <publishTime>10/25/2018 11:08:54</publishTime>
+    </File>
+    <File Include="bin/EMBAM15.dll">
+      <publishTime>10/25/2018 11:08:52</publishTime>
+    </File>
+    <File Include="bin/EMCommon.dll">
+      <publishTime>10/25/2018 11:08:52</publishTime>
+    </File>
+    <File Include="bin/EMExport.dll">
+      <publishTime>10/25/2018 11:08:52</publishTime>
+    </File>
+    <File Include="bin/EMLoanUtils15.dll">
+      <publishTime>10/25/2018 11:08:52</publishTime>
+    </File>
+    <File Include="bin/EncompassConsoleConnector.dll">
+      <publishTime>10/21/2020 16:33:41</publishTime>
+    </File>
+    <File Include="bin/EncompassObjects.dll">
+      <publishTime>10/25/2018 11:08:52</publishTime>
+    </File>
+    <File Include="bin/EncompassRequest.dll">
+      <publishTime>10/21/2020 16:24:03</publishTime>
+    </File>
+    <File Include="bin/EncompassWrapperInterseptor.dll">
+      <publishTime>05/24/2020 14:03:10</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.dll">
+      <publishTime>03/02/2015 09:32:26</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.SqlServer.dll">
+      <publishTime>03/02/2015 09:32:26</publishTime>
+    </File>
+    <File Include="bin/GdPicture.NET.10.dll">
+      <publishTime>08/20/2018 10:28:54</publishTime>
+    </File>
+    <File Include="bin/GdPicture.NET.10.PDF.dll">
+      <publishTime>08/20/2018 10:28:56</publishTime>
+    </File>
+    <File Include="bin/GenuineChannels.dll">
+      <publishTime>08/20/2018 10:28:54</publishTime>
+    </File>
+    <File Include="bin/ICSharpCode.SharpZipLib.dll">
+      <publishTime>08/20/2018 10:28:54</publishTime>
+    </File>
+    <File Include="bin/Import.dll">
+      <publishTime>10/25/2018 11:08:52</publishTime>
+    </File>
+    <File Include="bin/Infragistics2.Shared.v7.1.dll">
+      <publishTime>08/20/2018 10:28:56</publishTime>
+    </File>
+    <File Include="bin/Infragistics2.Win.UltraWinSchedule.v7.1.dll">
+      <publishTime>08/20/2018 10:28:56</publishTime>
+    </File>
+    <File Include="bin/Infragistics2.Win.v7.1.dll">
+      <publishTime>08/20/2018 10:28:56</publishTime>
+    </File>
+    <File Include="bin/IntellaLend.Audit.dll">
+      <publishTime>10/21/2020 16:24:04</publishTime>
+    </File>
+    <File Include="bin/IntellaLend.AuditData.dll">
+      <publishTime>10/21/2020 16:24:04</publishTime>
+    </File>
+    <File Include="bin/IntellaLend.CheckRule.dll">
+      <publishTime>10/21/2020 16:33:45</publishTime>
+    </File>
+    <File Include="bin/IntellaLend.Constance.dll">
+      <publishTime>10/21/2020 16:24:21</publishTime>
+    </File>
+    <File Include="bin/IntellaLend.EncompassWrapper.dll">
+      <publishTime>06/11/2019 11:31:26</publishTime>
+    </File>
+    <File Include="bin/IntellaLend.LOSWorkflow.dll">
+      <publishTime>10/21/2020 16:33:43</publishTime>
+    </File>
+    <File Include="bin/IntellaLend.Model.dll">
+      <publishTime>10/21/2020 16:24:03</publishTime>
+    </File>
+    <File Include="bin/IntellaLend.RuleEngine.dll">
+      <publishTime>10/21/2020 16:33:44</publishTime>
+    </File>
+    <File Include="bin/IntellaLend.WorkFlow.dll">
+      <publishTime>10/21/2020 16:24:03</publishTime>
+    </File>
+    <File Include="bin/IntellaLend.WorkFlowBase.dll">
+      <publishTime>10/21/2020 16:33:44</publishTime>
+    </File>
+    <File Include="bin/IntellaLendWorkflow.dll">
+      <publishTime>10/21/2020 16:33:45</publishTime>
+    </File>
+    <File Include="bin/itextsharp.dll">
+      <publishTime>08/20/2018 10:28:54</publishTime>
+    </File>
+    <File Include="bin/Jed.dll">
+      <publishTime>08/20/2018 10:28:54</publishTime>
+    </File>
+    <File Include="bin/Microsoft.mshtml.dll">
+      <publishTime>07/07/2015 00:51:38</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.EnterpriseLibrary.Common.dll">
+      <publishTime>04/25/2013 10:04:08</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.EnterpriseLibrary.Data.dll">
+      <publishTime>04/25/2013 10:04:12</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.dll">
+      <publishTime>04/25/2013 10:04:30</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.Logging.dll">
+      <publishTime>04/25/2013 10:04:32</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Practices.EnterpriseLibrary.Logging.dll">
+      <publishTime>04/25/2013 10:04:16</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Administration.dll">
+      <publishTime>03/08/2016 11:28:06</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Services2.dll">
+      <publishTime>02/22/2005 10:45:24</publishTime>
+    </File>
+    <File Include="bin/MTSEntBlocks.DataBlock.dll">
+      <publishTime>10/21/2020 16:33:42</publishTime>
+    </File>
+    <File Include="bin/MTSEntBlocks.ExceptionBlock.dll">
+      <publishTime>10/21/2020 16:24:03</publishTime>
+    </File>
+    <File Include="bin/MTSEntBlocks.LoggerBlock.dll">
+      <publishTime>10/21/2020 16:33:41</publishTime>
+    </File>
+    <File Include="bin/MTSEntityDataAccess.dll">
+      <publishTime>10/21/2020 16:24:04</publishTime>
+    </File>
+    <File Include="bin/MTSRuleEngine.dll">
+      <publishTime>10/21/2020 16:33:43</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>06/18/2017 13:57:10</publishTime>
+    </File>
+    <File Include="bin/PostSharp.dll">
+      <publishTime>08/20/2018 10:28:58</publishTime>
+    </File>
+    <File Include="bin/RazorEngine.dll">
+      <publishTime>08/20/2018 10:28:54</publishTime>
+    </File>
+    <File Include="bin/ReportingDbUtils.dll">
+      <publishTime>10/25/2018 11:08:52</publishTime>
+    </File>
+    <File Include="bin/RestSharp.dll">
+      <publishTime>08/20/2018 10:28:58</publishTime>
+    </File>
+    <File Include="bin/Server.dll">
+      <publishTime>10/25/2018 11:08:52</publishTime>
+    </File>
+    <File Include="bin/System.Web.Razor.dll">
+      <publishTime>08/20/2018 10:28:54</publishTime>
+    </File>
+    <File Include="bin/VersionInterface15.dll">
+      <publishTime>10/25/2018 11:08:54</publishTime>
+    </File>
+    <File Include="bin/Xml3WayMerge.dll">
+      <publishTime>10/25/2018 11:08:52</publishTime>
+    </File>
+    <File Include="IntellaLendWF.xamlx">
+      <publishTime>10/21/2020 10:23:22</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>10/21/2020 13:57:12</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>10/21/2020 14:30:01</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

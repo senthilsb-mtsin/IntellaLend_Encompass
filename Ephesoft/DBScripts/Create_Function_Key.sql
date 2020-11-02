@@ -1,0 +1,120 @@
+DECLARE @BATCHID BIGINT = 27
+DECLARE @INDEX BIGINT;
+DECLARE @DOCCOUNT BIGINT;
+
+SELECT @INDEX = MAX(ID) + 1
+FROM function_key
+
+DELETE
+FROM FUNCTION_KEY
+WHERE DOCUMENT_TYPE_ID IN (
+		SELECT DOCUMENT_TYPE_ID
+		FROM BATCH_CLASS_DOCUMENT_TYPE
+		WHERE BATCH_CLASS_ID = @BATCHID
+		);
+
+SELECT @DOCCOUNT = COUNT(document_type_id)
+FROM batch_class_document_type
+WHERE batch_class_id = @BATCHID
+
+DECLARE @F2INDEX BIGINT = @INDEX;
+DECLARE @F3INDEX BIGINT = @F2INDEX + @DOCCOUNT;
+DECLARE @F4INDEX BIGINT = @F3INDEX + @DOCCOUNT;
+DECLARE @F6INDEX BIGINT = @F4INDEX + @DOCCOUNT;
+DECLARE @F7INDEX BIGINT = @F6INDEX + @DOCCOUNT;
+DECLARE @F8INDEX BIGINT = @F7INDEX + @DOCCOUNT;
+
+INSERT INTO FUNCTION_KEY
+SELECT GETDATE()
+	,GETDATE()
+	,'FK' + SUBSTRING(CONVERT(VARCHAR(4), CONVERT(VARBINARY(2), @F2INDEX - 1 + row_number() OVER (
+					ORDER BY (
+							SELECT NULL
+							)
+					)), 2), 2, 4)
+	,'copyLimitedFieldsFromPreviousDoc'
+	,'F2'
+	,'Copy Configured Fields'
+	,document_type_id
+FROM BATCH_CLASS_DOCUMENT_TYPE
+WHERE BATCH_CLASS_ID = @BATCHID
+
+UNION ALL
+
+SELECT GETDATE()
+	,GETDATE()
+	,'FK' + SUBSTRING(CONVERT(VARCHAR(4), CONVERT(VARBINARY(2), @F3INDEX - 1 + row_number() OVER (
+					ORDER BY (
+							SELECT NULL
+							)
+					)), 2), 2, 4)
+	,'copyAllFieldsFromPreviousDoc'
+	,'F3'
+	,'Copy Fields to Current Doc'
+	,document_type_id
+FROM BATCH_CLASS_DOCUMENT_TYPE
+WHERE BATCH_CLASS_ID = @BATCHID
+
+UNION ALL
+
+SELECT GETDATE()
+	,GETDATE()
+	,'FK' + SUBSTRING(CONVERT(VARCHAR(4), CONVERT(VARBINARY(2), @F4INDEX - 1 + row_number() OVER (
+					ORDER BY (
+							SELECT NULL
+							)
+					)), 2), 2, 4)
+	,'QCIQLookupWSCall'
+	,'F4'
+	,'QCIQ Lookup'
+	,document_type_id
+FROM BATCH_CLASS_DOCUMENT_TYPE
+WHERE BATCH_CLASS_ID = @BATCHID
+
+UNION ALL
+
+SELECT GETDATE()
+	,GETDATE()
+	,'FK' + SUBSTRING(CONVERT(VARCHAR(4), CONVERT(VARBINARY(2), @F6INDEX - 1 + row_number() OVER (
+					ORDER BY (
+							SELECT NULL
+							)
+					)), 2), 2, 4)
+	,'markAllFieldsAsValid'
+	,'F6'
+	,'Validate All Fields'
+	,document_type_id
+FROM BATCH_CLASS_DOCUMENT_TYPE
+WHERE BATCH_CLASS_ID = @BATCHID
+
+UNION ALL
+
+SELECT GETDATE()
+	,GETDATE()
+	,'FK' + SUBSTRING(CONVERT(VARCHAR(4), CONVERT(VARBINARY(2), @F7INDEX - 1 + row_number() OVER (
+					ORDER BY (
+							SELECT NULL
+							)
+					)), 2), 2, 4)
+	,'copyToAllDocsFromCurrentDoc'
+	,'F7'
+	,'Copy Fields to All Docs'
+	,document_type_id
+FROM BATCH_CLASS_DOCUMENT_TYPE
+WHERE BATCH_CLASS_ID = @BATCHID
+
+UNION ALL
+
+SELECT GETDATE()
+	,GETDATE()
+	,'FK' + SUBSTRING(CONVERT(VARCHAR(4), CONVERT(VARBINARY(2), @F8INDEX - 1 + row_number() OVER (
+					ORDER BY (
+							SELECT NULL
+							)
+					)), 2), 2, 4)
+	,'copyAllFieldsFromSelectedDocToCurrentDocument'
+	,'F8'
+	,'Copy from FINAL doc to Current doc'
+	,document_type_id
+FROM BATCH_CLASS_DOCUMENT_TYPE
+WHERE BATCH_CLASS_ID = @BATCHID

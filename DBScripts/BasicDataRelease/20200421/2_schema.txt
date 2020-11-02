@@ -1,0 +1,30 @@
+INSERT INTO [IL].[ServiceConfigs]
+           ([SERVICENAME]
+           ,[SERVICEDISPLAYNAME]
+           ,[SERVICEDESCRIPTION]
+           ,[SERVICEINVOKETYPE]
+           ,[DLLNAME]
+           ,[TIME]
+           ,[RETRYCOUNT]
+           ,[MAXERRORS]
+           ,[STATUS]
+           ,[ENVIRONMENT]
+           ,[SERVICEPARAMS]
+           ,[SERVICE_TYPE])
+     VALUES
+           ('ILProductDemo_EncompassUpload'
+           ,'ILProductDemo_EncompassUpload'
+           ,'ILProductDemo_EncompassUpload'
+           ,0
+           ,'IL.EncompassUpload.dll'
+           ,1
+           ,3
+           ,3
+           ,0
+           ,NULL
+           ,'<ServiceParams>
+  <add key="EvaluatedResultParkingSpotName">5</add>
+<add key="EncompassWrapperAPIURL">http://10.0.2.229/EncompassAPI/</add>
+</ServiceParams>' 
+           ,0)
+GO

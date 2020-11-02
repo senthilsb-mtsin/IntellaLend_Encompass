@@ -1,0 +1,4 @@
+ALTER TABLE il.ELoanAttachmentUpload
+ADD CustomerID bigint
+ALTER TABLE t1.ELoanAttachmentUpload
+ADD CustomerID bigint

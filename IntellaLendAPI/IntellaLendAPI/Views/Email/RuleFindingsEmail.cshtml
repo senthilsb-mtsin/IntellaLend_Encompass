@@ -1,0 +1,65 @@
+﻿
+
+
+@{
+    Layout = null;
+}
+<email>
+    <To>@ViewBag.To</To>
+    <Subject>@ViewBag.Subject</Subject>
+    <From>no-reply@IntellaLend.com</From>
+    <Cc />
+    <BCc />
+    <Body>
+        <![CDATA[
+        <div>
+            <p>Hello @ViewBag.UserName,</p>
+            <p>Following is the Loan QC Findings from IntellaLend for Loan Number @ViewBag.LoanNumber. These results were based on the loan files imported from your LOS.</p>
+            <br />
+            <p>
+                 <table border="1" style ="border-collapse :collapse">
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Checklist Item Name</th>
+                            <th>Result</th>
+                        </tr>
+                        
+                    </thead>
+                    <tbody>
+                        @if(((List<Dictionary<string, string>>)ViewBag.Rules).Count > 0)
+                        {
+                            int count = 1;
+                         foreach (var rule in (List<Dictionary<string, string>>)ViewBag.Rules)
+                        {
+                            <tr>
+                                <td class="text-center">@count</td>
+                                <td>@rule["CheckListName"] </td>
+                                <td>@rule["Result"] </td>
+                                
+                            </tr>
+                                count = count+1;
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="3">No Data AVailable</td></tr>
+                        }
+                    </tbody>
+                </table>
+               
+               @* You can login to IntellaLend either through the Web Portal by clicking on following link:*@
+               
+            </p>
+            <p>You can login to IntellaLend and find additional details by clicking this link: @ViewBag.ApplicationURL </p>
+
+            <br />
+            <br />
+            <br />
+            <br /> IntellaLend Team <br />
+
+        </div>
+        <footer> <p>Note: This is an auto generated email. Replies to this email is not monitored.</p></footer>
+        ]]>
+    </Body>
+</email>

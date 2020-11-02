@@ -1,0 +1,55 @@
+﻿@{
+    Layout = null;
+}
+{
+	"LenderCode": $CustomerMaster.CustomerCode^,
+	"LenderName":"$CustomerMaster.CustomerName^",
+	"LoanID": $Loan.LoanNumber^,
+	"LoanType": "$LoanTypeMaster.LoanTypeName^",
+	"ServiceType": "$ReviewTypeMaster.ReviewTypeName^",
+	"Priority": $Loan.Priority^,
+	"AuditPeriod": "$Loan.AuditMonthYear:MMM yyyy^",
+	"AuditDueDate": "$LoanLoanSearch.AuditDueDate:MM/dd/yyyy^",
+	"IDCBatchID": "$IDCFields.IDCBatchInstanceID^",
+	"IDCBatchName": "$TenantSchema^_$Loan.LoanID^",
+	"IDCBC": "$IDCFields.IDCBatchClassID^",
+	"IDCBCName": "$IDCFields.IDCBatchClassName^",
+	"ReviewBy": "$IDCFields.IDCReviewerName^",
+	"ReviewOn": "$IDCFields.IDCLevelOneCompletionDate:MM/dd/yyyy^",
+	"ReviewDuration": "$IDCFields.IDCLevelOneDuration^",
+	"ValidationBy": "$IDCFields.IDCValidatorName^",
+	"ValidatedOn": "$IDCFields.IDCLevelTwoCompletionDate:MM/dd/yyyy^",
+	"ValidationDuration": "$IDCFields.IDCLevelTwoDuration^",
+	"Event": "$Event^",
+	"EventDescription": "$EventDescription^",
+	"Version": "$Version^",
+	"URL": "$LoanURL^",
+	"Documents": [
+		 $Documents: {
+		"DocumentID" : "$DocumentID^",
+		"DocumentType" : "$DocumentType^",
+		"DocumentDesc": "$DocumentDesc^",
+		"Version": "$Version^",
+		"DocumentFile": "$DocumentFile^",
+		"Pages": [ $Pages:list:"$^"|, |,^ ],
+		"DataFields":{ $DataFields: "$PropertyName^" : "$PropertyValue^"|, |, ^ },
+        "DataTables":[ $DataTables: { "$TableName^" : { "Columns" : [ $Columns:list:"$^"|, |, ^ ], "Rows" : [ $Rows: { $CellValues: "$PropertyName^" : "$PropertyValue^"|, |, ^ }|, |, ^ ] } }|, |, ^  ]
+		}|, |, ^
+	],
+    "Rules": [
+	$Rules:{
+			"RuleID" : "$RuleID^",
+			"RuleType" : "$RuleType^",
+			"RuleName" : "$RuleName^",
+			"RuleDescription" : "$RuleDescription^",
+			"Options" : [ $Options:list:"$^"|, |,^ ],
+			"SelectedAnswer" :  [ $SelectedAnswer:list:"$^"|, |,^ ] ,
+			"DocTypes" : [ $DocTypes: { "DocumentType" : "$DocumentType^", "DocumentDesc" : "$DocumentDesc^" } |, |, ^],
+			"Notes" : "$Notes^",
+			"Result" : "$Result^",
+			"Expression" : "$Expression^",
+			"EvaluatedExpression" : "$EvaluatedExpression^",
+			"ErrorMessage" : "$ErrorMessage^"
+		}|, |, ^
+	]
+}

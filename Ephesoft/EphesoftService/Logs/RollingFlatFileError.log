@@ -1,0 +1,126 @@
+Timestamp: 8/17/2020 3:54:42 PM
+
+Message: HandlingInstanceID: 03719b73-b800-45fd-8ee1-03729f55401f
+An exception of type 'MTSEntBlocks.ExceptionBlock.MTSPassThruException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/17/2020 15:54:42
+Type : MTSEntBlocks.ExceptionBlock.MTSPassThruException, MTSEntBlocks.ExceptionBlock, Version=2020.8.17.1525, Culture=neutral, PublicKeyToken=null
+Message : Error Parsing Input request
+Source : EphesoftService
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : EphesoftService.Models.EphesoftRequest ProcessRequest(System.String)
+HResult : -2146233088
+Stack Trace :    at EphesoftService.Controllers.DocumentController.ProcessRequest(String requestJson) in D:\Prakash\GitHub\ILProduct\Ephesoft\EphesoftService\Controllers\DocumentController.cs:line 647
+   at EphesoftService.Controllers.DocumentController.MergeConfigDocuments() in D:\Prakash\GitHub\ILProduct\Ephesoft\EphesoftService\Controllers\DocumentController.cs:line 176
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/17/2020 10:24:42 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132421327202784326
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: General
+EventID: 8000
+Priority: 4
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------
+Timestamp: 8/17/2020 3:57:21 PM
+
+Message: HandlingInstanceID: 60ea8d7a-75e5-4d85-82d4-0ab04bac145d
+An exception of type 'MTSEntBlocks.ExceptionBlock.MTSPassThruException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/17/2020 15:57:21
+Type : MTSEntBlocks.ExceptionBlock.MTSPassThruException, MTSEntBlocks.ExceptionBlock, Version=2020.8.17.1555, Culture=neutral, PublicKeyToken=null
+Message : Error Parsing Input request
+Source : EphesoftService
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : EphesoftService.Models.EphesoftRequest ProcessRequest(System.String)
+HResult : -2146233088
+Stack Trace :    at EphesoftService.Controllers.DocumentController.ProcessRequest(String requestJson) in D:\Prakash\GitHub\ILProduct\Ephesoft\EphesoftService\Controllers\DocumentController.cs:line 647
+   at EphesoftService.Controllers.DocumentController.MergeConfigDocuments() in D:\Prakash\GitHub\ILProduct\Ephesoft\EphesoftService\Controllers\DocumentController.cs:line 176
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/17/2020 10:27:21 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132421335718386275
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: General
+EventID: 8000
+Priority: 4
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------
+Timestamp: 8/17/2020 4:12:10 PM
+
+Message: HandlingInstanceID: 7014ba60-2323-4bf3-a9da-06e8966a2c90
+An exception of type 'MTSEntBlocks.ExceptionBlock.MTSPassThruException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/17/2020 16:12:10
+Type : MTSEntBlocks.ExceptionBlock.MTSPassThruException, MTSEntBlocks.ExceptionBlock, Version=2020.8.17.1555, Culture=neutral, PublicKeyToken=null
+Message : Error retrieving the ConfigId for the batch class of the input XML from the database
+Source : EphesoftService
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : Int32 GetCongidId(System.String)
+HResult : -2146233088
+Stack Trace :    at EphesoftService.MTSEphesoftServiceDBAccess.GetCongidId(String ephesoftBatchClass) in D:\Prakash\GitHub\ILProduct\Ephesoft\EphesoftService\DataAccess\MTSEphesoftServiceDBAccess.cs:line 59
+   at EphesoftService.Controllers.DocumentController.GetConfigId(XPathNavigator inputXmlNavigator) in D:\Prakash\GitHub\ILProduct\Ephesoft\EphesoftService\Controllers\DocumentController.cs:line 673
+   at EphesoftService.Controllers.DocumentController.MergeConfigDocuments() in D:\Prakash\GitHub\ILProduct\Ephesoft\EphesoftService\Controllers\DocumentController.cs:line 178
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/17/2020 10:42:10 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132421335718386275
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: General
+EventID: 8000
+Priority: 4
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------
+Timestamp: 8/17/2020 4:12:26 PM
+
+Message: HandlingInstanceID: b3aa9c67-b5a5-499a-bd3d-44bbb92bc6a0
+An exception of type 'MTSEntBlocks.ExceptionBlock.MTSPassThruException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/17/2020 16:12:26
+Type : MTSEntBlocks.ExceptionBlock.MTSPassThruException, MTSEntBlocks.ExceptionBlock, Version=2020.8.17.1555, Culture=neutral, PublicKeyToken=null
+Message : Error retrieving the ConfigId for the batch class of the input XML from the database
+Source : EphesoftService
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : Int32 GetCongidId(System.String)
+HResult : -2146233088
+Stack Trace :    at EphesoftService.MTSEphesoftServiceDBAccess.GetCongidId(String ephesoftBatchClass) in D:\Prakash\GitHub\ILProduct\Ephesoft\EphesoftService\DataAccess\MTSEphesoftServiceDBAccess.cs:line 59
+   at EphesoftService.Controllers.DocumentController.GetConfigId(XPathNavigator inputXmlNavigator) in D:\Prakash\GitHub\ILProduct\Ephesoft\EphesoftService\Controllers\DocumentController.cs:line 673
+   at EphesoftService.Controllers.DocumentController.MergeConfigDocuments() in D:\Prakash\GitHub\ILProduct\Ephesoft\EphesoftService\Controllers\DocumentController.cs:line 178
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/17/2020 10:42:26 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132421335718386275
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: General
+EventID: 8000
+Priority: 4
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------

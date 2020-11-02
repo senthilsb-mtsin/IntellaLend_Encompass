@@ -1,0 +1,750 @@
+Timestamp: 8/25/2020 8:41:14 PM
+
+Message: HandlingInstanceID: 9235be69-088e-4204-b397-f34dd4062e53
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/25/2020 20:41:14
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2037, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-25T15:10:49.521Z. Cannot read property 'Data' of undefined
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Cannot read property 'Data' of undefined
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/25/2020 3:11:14 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428417874527326
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/25/2020 8:41:41 PM
+
+Message: HandlingInstanceID: 46ddd2fe-9447-41b9-9b57-b9db245f03ed
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/25/2020 20:41:41
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2037, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-25T15:10:49.582Z. Cannot read property 'Data' of undefined
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Cannot read property 'Data' of undefined
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/25/2020 3:11:41 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428417874527326
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/25/2020 8:41:59 PM
+
+Message: HandlingInstanceID: 25c081e3-bd60-4233-af55-80614d7bcfcb
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/25/2020 20:41:59
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2037, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-25T15:11:59.170Z. Cannot read property 'Data' of undefined
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Cannot read property 'Data' of undefined
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/25/2020 3:11:59 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428417874527326
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/25/2020 9:01:37 PM
+
+Message: HandlingInstanceID: fd17995a-db6a-42af-b0a6-ea2a88fcb8df
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/25/2020 21:01:37
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2037, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-25T15:31:37.643Z. Cannot read property 'Data' of undefined
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Cannot read property 'Data' of undefined
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/25/2020 3:31:37 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428417874527326
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/25/2020 9:01:40 PM
+
+Message: HandlingInstanceID: 5c0331e1-ed7f-4950-879f-97ec571bc6f0
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/25/2020 21:01:40
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2037, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-25T15:31:37.706Z. Cannot read property 'Data' of undefined
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Cannot read property 'Data' of undefined
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/25/2020 3:31:40 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428417874527326
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/25/2020 10:21:38 PM
+
+Message: HandlingInstanceID: aeb7cc80-d371-4abb-ae69-ea31e1c833ba
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/25/2020 22:21:38
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2158, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-25T16:51:38.271Z. Uncaught (in promise): TypeError: Cannot read property 'UserID' of undefined
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Uncaught (in promise): TypeError: Cannot read property 'UserID' of undefined
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/25/2020 4:51:38 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428466072648136
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/25/2020 10:22:10 PM
+
+Message: HandlingInstanceID: 80b3e66a-c707-4248-b230-3afabb5234ac
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/25/2020 22:22:10
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2158, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-25T16:52:10.916Z. Cannot read property 'Data' of undefined
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Cannot read property 'Data' of undefined
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/25/2020 4:52:10 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428466072648136
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/25/2020 10:22:13 PM
+
+Message: HandlingInstanceID: 7ce886c7-f6d5-4872-a24d-eeb54990ceec
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/25/2020 22:22:13
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2158, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-25T16:52:11.012Z. Cannot read property 'Data' of undefined
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Cannot read property 'Data' of undefined
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/25/2020 4:52:13 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428466072648136
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/25/2020 10:22:37 PM
+
+Message: HandlingInstanceID: 78df8624-2299-4c52-a6be-71942ef568a1
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/25/2020 22:22:37
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2158, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-25T16:52:32.304Z. Cannot read property 'Data' of undefined
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Cannot read property 'Data' of undefined
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/25/2020 4:52:37 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428466072648136
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/25/2020 10:24:03 PM
+
+Message: HandlingInstanceID: d765de2f-be2e-4e7f-b40c-6f3e89fbc356
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/25/2020 22:24:03
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2158, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-25T16:54:03.309Z. Cannot read property 'Data' of undefined
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Cannot read property 'Data' of undefined
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/25/2020 4:54:03 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428466072648136
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/25/2020 10:24:28 PM
+
+Message: HandlingInstanceID: 7032bf39-aa0e-4be1-a969-c1749eadedfe
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/25/2020 22:24:28
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2158, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-25T16:54:28.665Z. Cannot read property 'Data' of undefined
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Cannot read property 'Data' of undefined
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/25/2020 4:54:28 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428466072648136
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/25/2020 10:29:28 PM
+
+Message: HandlingInstanceID: 3c2e7c5e-7dd3-448f-914e-f72fbf795d4d
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/25/2020 22:29:28
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2158, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-25T16:59:28.303Z. Cannot read property 'Data' of undefined
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Cannot read property 'Data' of undefined
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/25/2020 4:59:28 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428466072648136
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/25/2020 10:29:41 PM
+
+Message: HandlingInstanceID: da6a3d57-302f-4814-bab1-91aefa68bcf5
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/25/2020 22:29:41
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2158, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-25T16:59:41.661Z. Cannot read property 'Data' of undefined
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Cannot read property 'Data' of undefined
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/25/2020 4:59:41 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428466072648136
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/25/2020 10:29:45 PM
+
+Message: HandlingInstanceID: 95fd7f93-0871-4286-bcc5-059ebdd33052
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/25/2020 22:29:45
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2158, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-25T16:59:41.801Z. ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'undefined'. Current value: '[object Object]'.
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'undefined'. Current value: '[object Object]'.
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/25/2020 4:59:45 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428466072648136
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/25/2020 10:31:18 PM
+
+Message: HandlingInstanceID: 1ca8cce7-2495-4296-b577-6b03ca0998a6
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/25/2020 22:31:18
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2158, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-25T17:01:18.025Z. Cannot read property 'Data' of undefined
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Cannot read property 'Data' of undefined
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/25/2020 5:01:18 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428466072648136
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/25/2020 10:31:21 PM
+
+Message: HandlingInstanceID: 6ecf967b-b53f-436b-8a35-2aa0ab365798
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/25/2020 22:31:21
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2158, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-25T17:01:18.146Z. ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'undefined'. Current value: '[object Object]'.
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'undefined'. Current value: '[object Object]'.
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/25/2020 5:01:21 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428466072648136
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/25/2020 10:31:40 PM
+
+Message: HandlingInstanceID: 75661ca0-d5df-40bb-a525-c1b6882f9d04
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/25/2020 22:31:40
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2158, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-25T17:01:40.643Z. Cannot read property 'Data' of undefined
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Cannot read property 'Data' of undefined
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/25/2020 5:01:40 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428466072648136
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/25/2020 10:31:55 PM
+
+Message: HandlingInstanceID: 1065ab05-490d-4b96-9453-a16ac9b4c10b
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/25/2020 22:31:55
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2158, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-25T17:01:40.719Z. ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'undefined'. Current value: '[object Object]'.
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'undefined'. Current value: '[object Object]'.
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/25/2020 5:01:55 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428466072648136
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/25/2020 10:34:52 PM
+
+Message: HandlingInstanceID: d7523d95-b5de-4c84-969b-e4c23a81c487
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/25/2020 22:34:52
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2158, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-25T17:04:52.010Z. Cannot set property 'Data' of undefined
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Cannot set property 'Data' of undefined
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/25/2020 5:04:52 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428466072648136
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/26/2020 11:01:46 AM
+
+Message: HandlingInstanceID: 4fe747e1-b4e7-4a0c-870c-0bd6c742ff68
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/26/2020 11:01:46
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2158, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-26T05:31:32.440Z. ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'undefined'. Current value: '[object Object]'.
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'undefined'. Current value: '[object Object]'.
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/26/2020 5:31:46 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428933293492252
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/26/2020 11:07:36 AM
+
+Message: HandlingInstanceID: 297aac21-fbea-45e9-8d53-fd974caa57b9
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/26/2020 11:07:36
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2158, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-26T05:37:22.548Z. ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'undefined'. Current value: '[object Object]'.
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'undefined'. Current value: '[object Object]'.
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/26/2020 5:37:36 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428933293492252
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/26/2020 11:09:23 AM
+
+Message: HandlingInstanceID: e03fa952-7775-4b22-812d-fd1545524aaf
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/26/2020 11:09:23
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.25.2158, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-26T05:39:22.811Z. ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'undefined'. Current value: '[object Object]'.
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'undefined'. Current value: '[object Object]'.
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/26/2020 5:39:23 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428933293492252
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/26/2020 11:19:17 AM
+
+Message: HandlingInstanceID: 2a8daea0-467d-4f1f-ad90-02246c2247c4
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/26/2020 11:19:17
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.26.1118, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-26T05:49:15.129Z. Cannot read property 'OnInit' of undefined
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Cannot read property 'OnInit' of undefined
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/26/2020 5:49:17 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428945046387621
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/26/2020 11:19:17 AM
+
+Message: HandlingInstanceID: 7606695b-b884-4e25-9831-73aac18f0e52
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/26/2020 11:19:17
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.26.1118, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-26T05:49:15.595Z. ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'undefined'. Current value: '[object Object]'.
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'undefined'. Current value: '[object Object]'.
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/26/2020 5:49:17 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428945046387621
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/26/2020 11:20:18 AM
+
+Message: HandlingInstanceID: fdbdf3e9-0a4d-426d-ba36-84b957241476
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/26/2020 11:20:18
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.26.1118, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-26T05:50:07.115Z. ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'undefined'. Current value: '[object Object]'.
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'undefined'. Current value: '[object Object]'.
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/26/2020 5:50:18 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132428945046387621
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------

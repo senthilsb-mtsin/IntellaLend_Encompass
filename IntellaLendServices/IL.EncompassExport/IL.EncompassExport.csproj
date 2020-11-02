@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{986D8CB0-5664-45B1-AA1B-46E0C29821CB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IL.EncompassExport</RootNamespace>
+    <AssemblyName>IL.EncompassExport</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\BuildFiles\Services\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\BuildFiles\Services\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.ExceptionHandling.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.Logging, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.ExceptionHandling.Logging.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EncompassExportDataAccess.cs" />
+    <Compile Include="EncompassExport.cs" />
+    <Compile Include="EncompassURLConstant.cs" />
+    <Compile Include="EncompassWrapperAPI.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RequestModel\LoanDefinedFields.cs" />
+    <Compile Include="RequestModel\PipeLineRequest.cs" />
+    <Compile Include="RequestModel\UpdateLoanField.cs" />
+    <Compile Include="ResponseModel\ErrorResponse.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\IntellaLendBlocks\ExceptionBlock\ExceptionBlock.csproj">
+      <Project>{7e93826a-4881-47eb-a61b-c1f3abf921d2}</Project>
+      <Name>ExceptionBlock</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IntellaLendBlocks\IntellaLend.AuditData\IntellaLend.AuditData.csproj">
+      <Project>{263344a0-60a6-44b8-8d6f-9907090754d0}</Project>
+      <Name>IntellaLend.AuditData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IntellaLendBlocks\IntellaLend.Audit\IntellaLend.Audit.csproj">
+      <Project>{5e3bc39d-0158-4696-a805-4d9e0e06d008}</Project>
+      <Name>IntellaLend.Audit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IntellaLendBlocks\IntellaLend.Constance\IntellaLend.Constance.csproj">
+      <Project>{a8b652a8-ea6c-4080-9f2b-ddda23e14a51}</Project>
+      <Name>IntellaLend.Constance</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IntellaLendBlocks\IntellaLend.Model\IntellaLend.Model.csproj">
+      <Project>{1153d611-e67c-4a1a-be68-ee2aeea2df8e}</Project>
+      <Name>IntellaLend.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IntellaLendBlocks\MTSEntityDataAccess\MTSEntityDataAccess.csproj">
+      <Project>{9980d561-76c0-486f-9744-5d1bf6512b9d}</Project>
+      <Name>MTSEntityDataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IntellaLendBlocks\UtilsBlock\UtilsBlock.csproj">
+      <Project>{60c51b78-d847-4463-95fd-123d2e8fe1da}</Project>
+      <Name>UtilsBlock</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MTSServiceBase\MTS.ServiceBase\MTS.ServiceBase.csproj">
+      <Project>{3656a14b-8b9b-4c44-b3a4-7964a0a27777}</Project>
+      <Name>MTS.ServiceBase</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,603 @@
+{
+	"1004D-Notice of Completion" :
+	{ 
+		"Date": ["Expiration date of certificate"] ,
+		"Amount":[],
+		"SSN":[]
+	},
+	"92900-LT" :
+	{ 
+		"Date": [] ,
+		"Amount":["Total UFMIP","Total Income","Total Mortgage Payment","Total Fixed Payment-to-Income",
+		"Mortgage Payment-to-income","Sales Price","Appraised Value","Base Income","Other Income",
+		"Net Rental Income","Total Installment deb"],
+		"SSN":["SSN"]
+	},
+	"Appraisal" :
+	{ 
+		"Date": ["Effective Date of Appraisal","Expiration date of certificate"] ,
+		"Amount":["Appraised Value"],
+		"SSN":[] 
+	},
+        "Appraisal QC Review" :
+	{ 
+		"Date": ["Effective Date","Expiration date of certificate"] ,
+		"Amount":["Property Value"],
+		"SSN":[] 
+	},
+        "AUS Desktop UW Findings Report" :
+	{ 
+		"Date": ["Submission Date"] ,
+		"Amount":["Total Loan Amount","Sales Price","Appraised Value","Amount","Total"],
+		"SSN":[] 
+	},
+	 "AUS Loan Prospector" :
+	{ 
+		"Date": [] ,
+		"Amount":["Loan Amount","PURCHASE PRICE","CASH OUT AMOUNT","SUBORDINATE AMOUNT","TOTAL ELIGIBLE ASSETS",
+		"TOTAL MONTHLY INCOME","TOTAL MONTHLY DEBT"],
+		"SSN":[] 
+	},
+      "Closing Disclosure" :
+	{ 
+		"Date": ["Date Issued","Closing Date","Disbursment Date"] ,
+		"Amount":["Estimated Total Monthly Payment"],
+		"SSN":[] 
+	},
+
+      "Closing Disclosure Seller" :
+	{ 
+		"Date": ["Date Issued","Closing Date","Disbursment Date"] ,
+		"Amount":["Sale Price","Sellers Transaction"],
+		"SSN":[] 
+	},
+
+     "Closing Instructions" :
+	{ 
+		"Date": ["Closing Date","Funding Date"] ,
+		"Amount":[],
+		"SSN":[] 
+	},
+
+      "Credit Report Lender" :
+	{ 
+		"Date": ["Document Date"] ,
+		"Amount":["Balance","Payment"],
+		"SSN":["SSN","Co-Borrower SSN","Source of Information - SSN"] 
+	},
+	  "Credit Supplements" :
+	{ 
+		"Date": [] ,
+		"Amount":["Payment","Balance"],
+		"SSN":["SSN","Co-Borrower SSN"] 
+	},
+     "DAP Income Calculator" :
+	{ 
+		"Date": [] ,
+		"Amount":["Total Annualized Income","TOTAL MONTHLY INCOME","County Income Limits"],
+		"SSN":[] 
+	},
+
+      "Deed" :
+	{ 
+		"Date": [] ,
+		"Amount":["Loan Amount"],
+		"SSN":[] 
+	},
+     "Earnings and Income Worksheet" :
+	{ 
+		"Date": [] ,
+		"Amount":["Total Income to Qualify"],
+		"SSN":[] 
+	},
+
+      "FHA Analysis of Appraisal Report 54114" :
+	{ 
+		"Date": [] ,
+		"Amount":["Appraiser Estimated Value"],
+		"SSN":[] 
+	},
+	 "FHA CAIVRS" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["Borrower SSN","Co-Borrower 1 SSN","Co-Borrower 2 SSN"] 
+	},
+	"FHA Case Number Assignment" :
+	{ 
+		"Date": ["Case No Assignment Date"] ,
+		"Amount":[],
+		"SSN":["Borrower SSN","Co-Borrower 1 SSN","Co-Borrower 2 SSN","Co-Borrower 3 SSN"] 
+	},
+	"FHA Conditional Commitment 92800-5B" :
+	{ 
+		"Date": ["Action Date"] ,
+		"Amount":[],
+		"SSN":[] 
+	},
+	"FHA Initial Addendum to Loan Application 92900A" :
+	{ 
+		"Date": ["Date Approved","Date Expires"] ,
+		"Amount":["Loan Amount"],
+		"SSN":[] 
+	},
+	"FHA Request Form" :
+	{ 
+		"Date": ["Date Approved","Date Expires"] ,
+		"Amount":["Total Payment"],
+		"SSN":["SSN"] 
+	},
+	"Flood Determination" :
+	{ 
+		"Date": ["Date of Determination"] ,
+		"Amount":[],
+		"SSN":[] 
+	},
+	 "Flood Insurance" :
+	{ 
+		"Date": [] ,
+		"Amount":["Total Premium"],
+		"SSN":[] 
+	},
+	"Form 4506-8821" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	"Form 4506-8822" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["Co-Borrower SSN"] 
+	},
+	"Form SSA 1099" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	"Gift Document" :
+	{ 
+		"Date": [] ,
+		"Amount":["Gift Amount"],
+		"SSN":[] 
+	},
+	"Good Faith Estimate" :
+	{ 
+		"Date": ["Date of GFE"] ,
+		"Amount":["Amount"],
+		"SSN":[] 
+	},
+	"Hazard Insurance" :
+	{ 
+		"Date": ["Effective Date","Expiry Date"] ,
+		"Amount":[],
+		"SSN":[] 
+	},
+	"Hazard Insurance Binder" :
+	{ 
+		"Date": ["Effective Date","Expiry Date"] ,
+		"Amount":[],
+		"SSN":[] 
+	},
+	"HECM Financial Analysis Worksheet" :
+	{ 
+		"Date": [] ,
+		"Amount":["TOTAL MONTHLY INCOME"],
+		"SSN":[] 
+	},
+	"Home Equity Conversion Mortgage Notice of Right to Cancel" :
+	{ 
+		"Date": ["Date of Account","Notice Date for Cancellation"] ,
+		"Amount":[],
+		"SSN":[] 
+	},
+	"HUD-1 from Sale of Borrowers Residence or Property" :
+	{ 
+		"Date": [] ,
+		"Amount":["Net Proceeds Amount"],
+		"SSN":[] 
+	},
+	"HUD-1 Settlement Statement" :
+	{ 
+		"Date": ["Settlement Date","Close Date","Reimbursement Date"] ,
+		"Amount":["Cash Amount"],
+		"SSN":[] 
+	},
+	"Lender Risk Analysis Report" :
+	{ 
+		"Date": ["Filing Date"] ,
+		"Amount":["Appraised Value","Purchase Price"],
+		"SSN":[] 
+	},
+	"Loan Application 1003" :
+	{ 
+		"Date": [] ,
+		"Amount":["Amount","Borrower Old Employment 1 Income","Borrower Old Employment 2 Income","Borrower Old Employment 3 Income",
+		"Co-Borrower Old Employment 1 Income","Co-Borrower Old Employment 2 Income","Co-Borrower Old Employment 3 Income",
+		"Co-Borrower Old Employment 4 Income","Borrower Base Employment Income","Borrower Bonuses","Borrower Positive Cash Flow (Net Rental Income)",
+		"Borrower Other Income","Borrower Describe Other Income","Borrower Total Monthly Income","Co-Borrower Base Employment Income",
+		"Co-Borrower Bonuses","Co-Borrower Positive Cash Flow (Net Rental Income)","Co-Borrower Other Income","Co-Borrower Describe Other Income",
+		"Co-Borrower Total Monthly Income","Total Housing Expenses","Present Market Value","Amount of Mortgage & Liens","Gross Rental Income",
+		"Mortgage Payments","Net Rental Income / (Loss)","Asset Account Cash Value 1","Asset Account Cash Value 2","Asset Account Cash Value 3",
+		"Stock Account Cash Value","Life Insurance Cash Value","Face Amount","Real Estate Owned Cash Value","Retirement fund Cash Value",
+		"Auto Cash Value 1","Auto Cash Value 2","Liability Monthly Payment 1","Liability Monthly Payment 2","Liability Monthly Payment 3",
+		"Liability Monthly Payment 4","Liability Monthly Payment 5","Liability Monthly Payment 6","Total Monthly Payments","Total Liabilities",
+		"Total Networth"," Purchase Price","Estimated Closing Costs","Total Cost","Loan Amount-wo-PMI","Loan Amount"],
+		"SSN":["SSN"] 
+	},
+	
+	"Loan Application 1003 Continuation Sheet" :
+	{ 
+		"Date": [] ,
+		"Amount":["Asset Value"],
+		"SSN":[] 
+	},
+	
+	"Loan Estimate" :
+	{ 
+		"Date": ["Date Issued"] ,
+		"Amount":["Estimated Property Value","Estimated Total Monthly Payment","Estimated Cash to Close"],
+		"SSN":[] 
+	},
+	
+	"MERS" :
+	{ 
+		"Date": ["Registered Date"] ,
+		"Amount":[],
+		"SSN":[] 
+	},
+	
+	"Note" :
+	{ 
+		"Date": ["First Payment Date","Last Payment Date"] ,
+		"Amount":["Loan Amount","Payment Amount"],
+		"SSN":[] 
+	},
+	
+	"Notice of Right to Cancel" :
+	{ 
+		"Date": ["Transaction Date","Cancellation Date"] ,
+		"Amount":[],
+		"SSN":[] 
+	},
+	
+	"Private Mortgage Insurance (PMI) Certificate" :
+	{ 
+		"Date": ["Commitment Date","Expiration Date"] ,
+		"Amount":["Monthly Premium Amount"],
+		"SSN":[] 
+	},
+	
+	"Property Detail Report Profile AVM" :
+	{ 
+		"Date": [] ,
+		"Amount":["Appraised Value"],
+		"SSN":[] 
+	},
+	
+	"Purchase Agreement" :
+	{ 
+		"Date": [] ,
+		"Amount":["Purchase Price","Contract Payment"],
+		"SSN":[] 
+	},
+	
+	"Retirement Assets" :
+	{ 
+		"Date": ["Document Date"] ,
+		"Amount":["Vested Balance","Loan Amount"],
+		"SSN":[] 
+	},
+	
+	"SSA 89" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	"SSN Verification" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	
+	"Tax Form 1040" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	
+	"Tax Form 1040EZ" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN","Co-Borrower SSN"] 
+	},
+	
+	"Tax Form 1040SCH8812" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	
+	"Tax Form 1040SCHA" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	
+	"Tax Form 1040SCHB" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	
+	"Tax Form 1040SCHC" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	"Tax Form 1040SCHCEZ" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	"Tax Form 1040SCHE" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	"Tax Form 1040SCHEIC" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+
+	"Tax Form 1040SCHF" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	"Tax Form 1040SCHSE" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	"Tax Form 1040X" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN","Co-Borrower SSN"] 
+	},
+	
+	"Tax Form 1041" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["Co-Borrower SSN"] 
+	},
+	
+	"Tax Form 1065SCHK1" :
+	{ 
+		"Date": [] ,
+		"Amount":["Ordinary business income"],
+		"SSN":[] 
+	},
+	
+	"Tax Form 2106" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	
+	"Tax Form 2106EZ" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	
+	"Tax Return Transcripts" :
+	{ 
+		"Date": [] ,
+		"Amount":["Total Income per Computer"],
+		"SSN":["SSN","Co-Borrower SSN"] 
+	},
+	
+	"Texas Disclosure Form T-64" :
+	{ 
+		"Date": ["Closing Date"] ,
+		"Amount":[],
+		"SSN":[] 
+	},
+	
+		"Texas Disclosure Form T-65" :
+	{ 
+		"Date": [] ,
+		"Amount":["Loan Amount"],
+		"SSN":[] 
+	},
+	
+	"Texas Home Equity Note (Fixed Rate - First Lien)" :
+	{ 
+		"Date": ["Document Date"] ,
+		"Amount":["Loan Amount"],
+		"SSN":[] 
+	},
+	
+	"Title Commit Prelim" :
+	{ 
+		"Date": ["Effective Date"] ,
+		"Amount":[],
+		"SSN":[] 
+	},
+	
+	"Title Policy" :
+	{ 
+		"Date": ["Date of Policy"] ,
+		"Amount":[],
+		"SSN":[] 
+	},
+	
+	"Total Annual Loan Cost (TALC)" :
+	{ 
+		"Date": [] ,
+		"Amount":["Appraised Property Value"],
+		"SSN":[] 
+	},
+	
+	"Transmittal Summary Final" :
+	{ 
+		"Date": [] ,
+		"Amount":["Appraised Property Value","Loan Amount","Borrower Base Income","Borrower Other Income","Borrower Total Monthly Income",
+		"Co-Borrower Base Income","Co-Borrower Other Income","Co-Borrower Total Monthly Income","Total Base Income",
+		"Total Other Income","Total Monthly Income","Total Obligations/Income","Total all monthly payments","All other monthly payments"],
+		"SSN":["SSN","Co-Borrower SSN"] 
+	},
+	"UCDP Submission Summary Report (SSR) - FreddieMac" :
+	{ 
+		"Date": [] ,
+		"Amount":["Appraised Value"],
+		"SSN":[] 
+	},
+	
+	"US Patriot Act" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	
+	"USDA GUS Underwriting Findings and Analysis Report" :
+	{ 
+		"Date": ["Date Issued"] ,
+		"Amount":["Loan Amount","Appraised Value","Total Household Income","Other Income","Net Rental Income","Total Repayment Income","TotalHousingExpenses"],
+		"SSN":[] 
+	},
+	
+	"USDA Lender Cerfification for SFH Guaranteed Loan" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	
+	"USDA Request for SFH Loan Guarantee 3555-21" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	"VA Addendum to Application 26-1802A" :
+	{ 
+		"Date": [] ,
+		"Amount":["Loan Amount"],
+		"SSN":[] 
+	},
+	
+	"VA DD214 and Statement of Service" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	
+	"VA Loan Analysis 26-6393" :
+	{ 
+		"Date": [] ,
+		"Amount":["Loan Amount","Debt Total Monthly Payment","Debt Total Unpaid Balance","Borrower Gross Salary","Borrower Gross Total","Total Take Home Pay",
+		"Borrower Deductions","Borrower Net Take Home Pay","Borrower Other Net Income","Total Other Net Income","Borrower Total","Total"],
+		"SSN":[] 
+	},
+	
+	"VA Loan Summary Sheet 26-0286" :
+	{ 
+		"Date": [] ,
+		"Amount":["Loan Amount","Total Monthly Gross Income","Residual Income Guideline"],
+		"SSN":["SSN"] 
+	},
+	
+	"VA Report and Cert of Loan Disbursement 26-1820" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	
+	"VA Request for COE 26-1880" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	
+	"VA Verification Benefit Related Indebtedness 26-8937" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	
+		
+	"Verification of Deposits (VOD)" :
+	{ 
+		"Date": ["Open Date"] ,
+		"Amount":[],
+		"SSN":[] 
+	},
+	
+	"Verification of Rent" :
+	{ 
+		"Date": [] ,
+		"Amount":["Number of times 30 days past due"],
+		"SSN":[] 
+	},
+	
+	
+	"VVOE" :
+	{ 
+		"Date": ["Document Date"] ,
+		"Amount":[],
+		"SSN":[] 
+	},
+	
+	"W-9(s)" :
+	{ 
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	},
+	"Wire Funding Detail" :
+	{ 
+		"Date": [] ,
+		"Amount":["Amount"],
+		"SSN":[] 
+	},	
+	"Written Verification of Employment" :
+	{ 
+		"Date": [] ,
+		"Amount":["Base Salary","Other","Total"],
+		"SSN":[] 
+	},
+	"W9" :
+	{
+		"Date": [] ,
+		"Amount":[],
+		"SSN":["SSN"] 
+	}
+
+}

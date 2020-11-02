@@ -1,0 +1,220 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Ephesoft2019IDCReportModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BATCHES">
+          <Key>
+            <PropertyRef Name="BATCH_ID" />
+          </Key>
+          <Property Name="BATCH_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BATCH_INSTANCEID" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="BATCH_NAME" Type="varchar" MaxLength="255" />
+          <Property Name="CREATEDATE" Type="datetime" />
+          <Property Name="LASTMODIFIEDDATE" Type="datetime" />
+          <Property Name="BATCHCLASS_ID" Type="nvarchar" MaxLength="255" />
+          <Property Name="BATCHCLASS_NAME" Type="nvarchar(max)" />
+          <Property Name="STATUS" Type="varchar" MaxLength="255" />
+          <Property Name="REVIEW_OPERATOR" Type="nvarchar" MaxLength="255" />
+          <Property Name="VALIDATION_OPERATOR" Type="nvarchar" MaxLength="255" />
+          <Property Name="CLASSIFICATION_TYPE" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="CONFIGURATIONS">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KEY" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="VALUE" Type="nvarchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FIELDS">
+          <Key>
+            <PropertyRef Name="PK" />
+          </Key>
+          <Property Name="PK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DOCID" Type="nvarchar" MaxLength="255" />
+          <Property Name="DOCTYPE" Type="nvarchar" MaxLength="255" />
+          <Property Name="FIELDNAME" Type="nvarchar" MaxLength="255" />
+          <Property Name="FIELDVALUE" Type="nvarchar(max)" />
+          <Property Name="BATCH_INSTANCEID" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="PATTERN" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="PAGES">
+          <Key>
+            <PropertyRef Name="PK" />
+          </Key>
+          <Property Name="PK" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PAGEID" Type="nvarchar" MaxLength="255" />
+          <Property Name="PAGE_CONFIDENCE" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="LEARNED_FILENAME" Type="nvarchar(max)" />
+          <Property Name="PAGE_POSITION" Type="nvarchar" MaxLength="10" />
+          <Property Name="DOCID" Type="nvarchar" MaxLength="255" />
+          <Property Name="DOCTYPE" Type="nvarchar" MaxLength="255" />
+          <Property Name="DOC_CONFIDENCE" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="CONFIDENCE_THRESHOLD" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="VALID" Type="bit" />
+          <Property Name="REVIEWED" Type="bit" />
+          <Property Name="BATCH_INSTANCEID" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="PATTERN" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityContainer Name="Ephesoft2019IDCReportModelStoreContainer">
+          <EntitySet Name="BATCHES" EntityType="Self.BATCHES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CONFIGURATIONS" EntityType="Self.CONFIGURATIONS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FIELDS" EntityType="Self.FIELDS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PAGES" EntityType="Self.PAGES" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Ephesoft2019IDCReportModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="BATCH">
+          <Key>
+            <PropertyRef Name="BATCH_ID" />
+          </Key>
+          <Property Name="BATCH_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BATCH_INSTANCEID" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="BATCH_NAME" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="CREATEDATE" Type="DateTime" Precision="3" />
+          <Property Name="LASTMODIFIEDDATE" Type="DateTime" Precision="3" />
+          <Property Name="BATCHCLASS_ID" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="BATCHCLASS_NAME" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="STATUS" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="REVIEW_OPERATOR" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="VALIDATION_OPERATOR" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CLASSIFICATION_TYPE" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="CONFIGURATION">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KEY" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="VALUE" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FIELD">
+          <Key>
+            <PropertyRef Name="PK" />
+          </Key>
+          <Property Name="PK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DOCID" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DOCTYPE" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="FIELDNAME" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="FIELDVALUE" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BATCH_INSTANCEID" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PATTERN" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PAGE">
+          <Key>
+            <PropertyRef Name="PK" />
+          </Key>
+          <Property Name="PK" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PAGEID" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PAGE_CONFIDENCE" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="LEARNED_FILENAME" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PAGE_POSITION" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="DOCID" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DOCTYPE" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="DOC_CONFIDENCE" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="CONFIDENCE_THRESHOLD" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="VALID" Type="Boolean" />
+          <Property Name="REVIEWED" Type="Boolean" />
+          <Property Name="BATCH_INSTANCEID" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PATTERN" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="Ephesoft2019IDCReportEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="BATCHES" EntityType="Self.BATCH" />
+          <EntitySet Name="CONFIGURATIONS" EntityType="Self.CONFIGURATION" />
+          <EntitySet Name="FIELDS" EntityType="Self.FIELD" />
+          <EntitySet Name="PAGES" EntityType="Self.PAGE" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Ephesoft2019IDCReportModelStoreContainer" CdmEntityContainer="Ephesoft2019IDCReportEntities">
+          <EntitySetMapping Name="BATCHES">
+            <EntityTypeMapping TypeName="Ephesoft2019IDCReportModel.BATCH">
+              <MappingFragment StoreEntitySet="BATCHES">
+                <ScalarProperty Name="BATCH_ID" ColumnName="BATCH_ID" />
+                <ScalarProperty Name="BATCH_INSTANCEID" ColumnName="BATCH_INSTANCEID" />
+                <ScalarProperty Name="BATCH_NAME" ColumnName="BATCH_NAME" />
+                <ScalarProperty Name="CREATEDATE" ColumnName="CREATEDATE" />
+                <ScalarProperty Name="LASTMODIFIEDDATE" ColumnName="LASTMODIFIEDDATE" />
+                <ScalarProperty Name="BATCHCLASS_ID" ColumnName="BATCHCLASS_ID" />
+                <ScalarProperty Name="BATCHCLASS_NAME" ColumnName="BATCHCLASS_NAME" />
+                <ScalarProperty Name="STATUS" ColumnName="STATUS" />
+                <ScalarProperty Name="REVIEW_OPERATOR" ColumnName="REVIEW_OPERATOR" />
+                <ScalarProperty Name="VALIDATION_OPERATOR" ColumnName="VALIDATION_OPERATOR" />
+                <ScalarProperty Name="CLASSIFICATION_TYPE" ColumnName="CLASSIFICATION_TYPE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CONFIGURATIONS">
+            <EntityTypeMapping TypeName="Ephesoft2019IDCReportModel.CONFIGURATION">
+              <MappingFragment StoreEntitySet="CONFIGURATIONS">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="KEY" ColumnName="KEY" />
+                <ScalarProperty Name="VALUE" ColumnName="VALUE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FIELDS">
+            <EntityTypeMapping TypeName="Ephesoft2019IDCReportModel.FIELD">
+              <MappingFragment StoreEntitySet="FIELDS">
+                <ScalarProperty Name="PK" ColumnName="PK" />
+                <ScalarProperty Name="DOCID" ColumnName="DOCID" />
+                <ScalarProperty Name="DOCTYPE" ColumnName="DOCTYPE" />
+                <ScalarProperty Name="FIELDNAME" ColumnName="FIELDNAME" />
+                <ScalarProperty Name="FIELDVALUE" ColumnName="FIELDVALUE" />
+                <ScalarProperty Name="BATCH_INSTANCEID" ColumnName="BATCH_INSTANCEID" />
+                <ScalarProperty Name="PATTERN" ColumnName="PATTERN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PAGES">
+            <EntityTypeMapping TypeName="Ephesoft2019IDCReportModel.PAGE">
+              <MappingFragment StoreEntitySet="PAGES">
+                <ScalarProperty Name="PK" ColumnName="PK" />
+                <ScalarProperty Name="PAGEID" ColumnName="PAGEID" />
+                <ScalarProperty Name="PAGE_CONFIDENCE" ColumnName="PAGE_CONFIDENCE" />
+                <ScalarProperty Name="LEARNED_FILENAME" ColumnName="LEARNED_FILENAME" />
+                <ScalarProperty Name="PAGE_POSITION" ColumnName="PAGE_POSITION" />
+                <ScalarProperty Name="DOCID" ColumnName="DOCID" />
+                <ScalarProperty Name="DOCTYPE" ColumnName="DOCTYPE" />
+                <ScalarProperty Name="DOC_CONFIDENCE" ColumnName="DOC_CONFIDENCE" />
+                <ScalarProperty Name="CONFIDENCE_THRESHOLD" ColumnName="CONFIDENCE_THRESHOLD" />
+                <ScalarProperty Name="VALID" ColumnName="VALID" />
+                <ScalarProperty Name="REVIEWED" ColumnName="REVIEWED" />
+                <ScalarProperty Name="BATCH_INSTANCEID" ColumnName="BATCH_INSTANCEID" />
+                <ScalarProperty Name="PATTERN" ColumnName="PATTERN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

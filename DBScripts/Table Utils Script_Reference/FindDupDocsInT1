@@ -1,0 +1,51 @@
+declare @loantypeid bigint = 1;
+declare @Customerid bigint = 1;
+
+declare @loantypetable table (
+id bigint,
+rowid bigint);
+
+declare @Customertable table (
+id bigint,
+rowid bigint);
+
+insert into @loantypetable
+select Loantypeid, ROW_NUMBER() over(order by loantypeid) from [t1].LoanTypeMasters;
+
+insert into @Customertable
+select CustomerID, ROW_NUMBER() over(order by CustomerID) from [t1].CustomerMasters;
+
+
+declare @tablelength bigint = 0;
+declare @count bigint = 1;
+select @tablelength = count(1) from @loantypetable;
+
+declare @ctablelength bigint = 0;
+declare @ccount bigint = 1;
+select @ctablelength = count(1) from @Customertable;
+
+while @ccount < @ctablelength
+begin
+
+select @Customerid = id from @Customertable where rowid = @ccount;
+
+set @count = 1;
+
+while @count < @tablelength
+begin
+
+select @loantypeid = id from @loantypetable where rowid = @count;
+
+with docs as(
+select ROW_NUMBER() over(partition by documentTypeid order by documenttypeid) id, DocumentTypeID  from [t1].CustLoanDocMapping where CustomerID = @Customerid and LoanTypeID = @loantypeid
+)
+select @loantypeid,@Customerid, * from docs where id > 1
+
+set @count = @count + 1;
+
+end
+
+set @ccount = @ccount + 1;
+
+
+end

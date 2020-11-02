@@ -1,0 +1,567 @@
+Timestamp: 8/28/2020 7:00:33 PM
+
+Message: HandlingInstanceID: 792edb10-fb04-4e48-8f72-57ce88f77687
+An exception of type 'Minio.Exceptions.UnexpectedMinioException' occurred and was caught.
+-----------------------------------------------------------------------------------------
+08/28/2020 19:00:33
+Type : Minio.Exceptions.UnexpectedMinioException, Minio, Version=3.1.13.0, Culture=neutral, PublicKeyToken=348239ebd7debb4c
+Message : MinIO API responded with message=The Access Key Id you provided does not exist in our records.
+Source : Minio
+Help link : 
+ServerMessage : The Access Key Id you provided does not exist in our records.
+ServerResponse : 
+Response : Minio.Exceptions.ErrorResponse
+XmlError : <?xml version="1.0" encoding="UTF-8"?>
+<Error><Code>InvalidAccessKeyId</Code><Message>The Access Key Id you provided does not exist in our records.</Message><BucketName>t120200226</BucketName><Resource>/t120200226</Resource><RequestId>162F71B9270402F8</RequestId><HostId>e801ef7b-c68e-4df5-a6fd-16abf4c446c2</HostId></Error>
+Data : System.Collections.ListDictionaryInternal
+TargetSite : Void ParseErrorFromContent(RestSharp.IRestResponse)
+HResult : -2146233088
+Stack Trace :    at Minio.MinioClient.ParseErrorFromContent(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 570
+   at Minio.MinioClient.ParseError(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 430
+   at Minio.MinioClient.<>c.<.ctor>b__84_0(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 81
+   at Minio.MinioClient.HandleIfErrorResponse(IRestResponse response, IEnumerable`1 handlers, DateTime startTime) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 604
+   at Minio.MinioClient.<ExecuteTaskCoreAsync>d__91.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 404
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.BucketRegionCache.<Update>d__9.MoveNext() in /q/.q/sources/minio-dotnet/Minio/BucketRegionCache.cs:line 104
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<GetRegion>d__80.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 134
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<CreateRequest>d__81.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 167
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<BucketExistsAsync>d__2.MoveNext() in /q/.q/sources/minio-dotnet/Minio/ApiEndpoints/BucketOperations.cs:line 124
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at IntellaLend.MinIOWrapper.ImageMinIOWrapper.CheckFileExists(Int64 loanID) in D:\Prakash\GitHub\ILProduct\IntellaLendBlocks\IntellaLend.MinIOWrapper\MinIOWrapper.cs:line 223
+   at IntellaLend.EntityDataHandler.LoanDataAccess.CheckLoanPDFExists(Int64 LoanID) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.LoanData\LoanDataAccess.cs:line 1168
+   at IntellaLend.CommonServices.LoanService.CheckLoanPDFExists(Int64 LoanID) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.Services\LoanService\LoanService.cs:line 103
+   at IntellaLendAPI.Controllers.LoanController.CheckLoanPDFExists(LoanRequest loan) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLendAPI\Controllers\LoanController.cs:line 708
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/28/2020 1:30:33 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132430949121932007
+ThreadIdentity : APIResponse
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------
+Timestamp: 8/28/2020 7:02:33 PM
+
+Message: HandlingInstanceID: dad6c390-7c3f-421d-8fb8-b630ea6bd3b4
+An exception of type 'Minio.Exceptions.UnexpectedMinioException' occurred and was caught.
+-----------------------------------------------------------------------------------------
+08/28/2020 19:02:33
+Type : Minio.Exceptions.UnexpectedMinioException, Minio, Version=3.1.13.0, Culture=neutral, PublicKeyToken=348239ebd7debb4c
+Message : MinIO API responded with message=The Access Key Id you provided does not exist in our records.
+Source : Minio
+Help link : 
+ServerMessage : The Access Key Id you provided does not exist in our records.
+ServerResponse : 
+Response : Minio.Exceptions.ErrorResponse
+XmlError : <?xml version="1.0" encoding="UTF-8"?>
+<Error><Code>InvalidAccessKeyId</Code><Message>The Access Key Id you provided does not exist in our records.</Message><BucketName>t120200226</BucketName><Resource>/t120200226</Resource><RequestId>162F71D5535642DC</RequestId><HostId>e801ef7b-c68e-4df5-a6fd-16abf4c446c2</HostId></Error>
+Data : System.Collections.ListDictionaryInternal
+TargetSite : Void ParseErrorFromContent(RestSharp.IRestResponse)
+HResult : -2146233088
+Stack Trace :    at Minio.MinioClient.ParseErrorFromContent(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 570
+   at Minio.MinioClient.ParseError(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 430
+   at Minio.MinioClient.<>c.<.ctor>b__84_0(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 81
+   at Minio.MinioClient.HandleIfErrorResponse(IRestResponse response, IEnumerable`1 handlers, DateTime startTime) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 604
+   at Minio.MinioClient.<ExecuteTaskCoreAsync>d__91.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 404
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.BucketRegionCache.<Update>d__9.MoveNext() in /q/.q/sources/minio-dotnet/Minio/BucketRegionCache.cs:line 104
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<GetRegion>d__80.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 134
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<CreateRequest>d__81.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 167
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<BucketExistsAsync>d__2.MoveNext() in /q/.q/sources/minio-dotnet/Minio/ApiEndpoints/BucketOperations.cs:line 124
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at IntellaLend.MinIOWrapper.ImageMinIOWrapper.CheckFileExists(Int64 loanID) in D:\Prakash\GitHub\ILProduct\IntellaLendBlocks\IntellaLend.MinIOWrapper\MinIOWrapper.cs:line 223
+   at IntellaLend.EntityDataHandler.LoanDataAccess.CheckLoanPDFExists(Int64 LoanID) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.LoanData\LoanDataAccess.cs:line 1168
+   at IntellaLend.CommonServices.LoanService.CheckLoanPDFExists(Int64 LoanID) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.Services\LoanService\LoanService.cs:line 103
+   at IntellaLendAPI.Controllers.LoanController.CheckLoanPDFExists(LoanRequest loan) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLendAPI\Controllers\LoanController.cs:line 708
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/28/2020 1:32:33 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132430949121932007
+ThreadIdentity : APIResponse
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------
+Timestamp: 8/28/2020 7:05:25 PM
+
+Message: HandlingInstanceID: 52fcae0f-d3cc-48a3-9a16-55eb0e7e1437
+An exception of type 'Minio.Exceptions.UnexpectedMinioException' occurred and was caught.
+-----------------------------------------------------------------------------------------
+08/28/2020 19:05:25
+Type : Minio.Exceptions.UnexpectedMinioException, Minio, Version=3.1.13.0, Culture=neutral, PublicKeyToken=348239ebd7debb4c
+Message : MinIO API responded with message=The Access Key Id you provided does not exist in our records.
+Source : Minio
+Help link : 
+ServerMessage : The Access Key Id you provided does not exist in our records.
+ServerResponse : 
+Response : Minio.Exceptions.ErrorResponse
+XmlError : <?xml version="1.0" encoding="UTF-8"?>
+<Error><Code>InvalidAccessKeyId</Code><Message>The Access Key Id you provided does not exist in our records.</Message><BucketName>t120200226</BucketName><Resource>/t120200226</Resource><RequestId>162F71FD34BD462C</RequestId><HostId>e801ef7b-c68e-4df5-a6fd-16abf4c446c2</HostId></Error>
+Data : System.Collections.ListDictionaryInternal
+TargetSite : Void ParseErrorFromContent(RestSharp.IRestResponse)
+HResult : -2146233088
+Stack Trace :    at Minio.MinioClient.ParseErrorFromContent(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 570
+   at Minio.MinioClient.ParseError(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 430
+   at Minio.MinioClient.<>c.<.ctor>b__84_0(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 81
+   at Minio.MinioClient.HandleIfErrorResponse(IRestResponse response, IEnumerable`1 handlers, DateTime startTime) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 604
+   at Minio.MinioClient.<ExecuteTaskCoreAsync>d__91.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 404
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.BucketRegionCache.<Update>d__9.MoveNext() in /q/.q/sources/minio-dotnet/Minio/BucketRegionCache.cs:line 104
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<GetRegion>d__80.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 134
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<CreateRequest>d__81.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 167
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<BucketExistsAsync>d__2.MoveNext() in /q/.q/sources/minio-dotnet/Minio/ApiEndpoints/BucketOperations.cs:line 124
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at IntellaLend.MinIOWrapper.ImageMinIOWrapper.CheckFileExists(Int64 loanID) in D:\Prakash\GitHub\ILProduct\IntellaLendBlocks\IntellaLend.MinIOWrapper\MinIOWrapper.cs:line 223
+   at IntellaLend.EntityDataHandler.LoanDataAccess.CheckLoanPDFExists(Int64 LoanID) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.LoanData\LoanDataAccess.cs:line 1168
+   at IntellaLend.CommonServices.LoanService.CheckLoanPDFExists(Int64 LoanID) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.Services\LoanService\LoanService.cs:line 103
+   at IntellaLendAPI.Controllers.LoanController.CheckLoanPDFExists(LoanRequest loan) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLendAPI\Controllers\LoanController.cs:line 708
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/28/2020 1:35:25 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132430952383528774
+ThreadIdentity : APIResponse
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------
+Timestamp: 8/28/2020 7:07:12 PM
+
+Message: HandlingInstanceID: c9297fe9-5ba2-47d5-b92a-6edeed5f40bc
+An exception of type 'Minio.Exceptions.UnexpectedMinioException' occurred and was caught.
+-----------------------------------------------------------------------------------------
+08/28/2020 19:07:12
+Type : Minio.Exceptions.UnexpectedMinioException, Minio, Version=3.1.13.0, Culture=neutral, PublicKeyToken=348239ebd7debb4c
+Message : MinIO API responded with message=The Access Key Id you provided does not exist in our records.
+Source : Minio
+Help link : 
+ServerMessage : The Access Key Id you provided does not exist in our records.
+ServerResponse : 
+Response : Minio.Exceptions.ErrorResponse
+XmlError : <?xml version="1.0" encoding="UTF-8"?>
+<Error><Code>InvalidAccessKeyId</Code><Message>The Access Key Id you provided does not exist in our records.</Message><BucketName>t120200226</BucketName><Resource>/t120200226</Resource><RequestId>162F721648C3FA80</RequestId><HostId>e801ef7b-c68e-4df5-a6fd-16abf4c446c2</HostId></Error>
+Data : System.Collections.ListDictionaryInternal
+TargetSite : Void ParseErrorFromContent(RestSharp.IRestResponse)
+HResult : -2146233088
+Stack Trace :    at Minio.MinioClient.ParseErrorFromContent(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 570
+   at Minio.MinioClient.ParseError(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 430
+   at Minio.MinioClient.<>c.<.ctor>b__84_0(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 81
+   at Minio.MinioClient.HandleIfErrorResponse(IRestResponse response, IEnumerable`1 handlers, DateTime startTime) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 604
+   at Minio.MinioClient.<ExecuteTaskCoreAsync>d__91.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 404
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.BucketRegionCache.<Update>d__9.MoveNext() in /q/.q/sources/minio-dotnet/Minio/BucketRegionCache.cs:line 104
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<GetRegion>d__80.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 134
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<CreateRequest>d__81.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 167
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<BucketExistsAsync>d__2.MoveNext() in /q/.q/sources/minio-dotnet/Minio/ApiEndpoints/BucketOperations.cs:line 124
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at IntellaLend.MinIOWrapper.ImageMinIOWrapper.CheckFileExists(Int64 loanID) in D:\Prakash\GitHub\ILProduct\IntellaLendBlocks\IntellaLend.MinIOWrapper\MinIOWrapper.cs:line 223
+   at IntellaLend.EntityDataHandler.LoanDataAccess.CheckLoanPDFExists(Int64 LoanID) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.LoanData\LoanDataAccess.cs:line 1168
+   at IntellaLend.CommonServices.LoanService.CheckLoanPDFExists(Int64 LoanID) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.Services\LoanService\LoanService.cs:line 103
+   at IntellaLendAPI.Controllers.LoanController.CheckLoanPDFExists(LoanRequest loan) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLendAPI\Controllers\LoanController.cs:line 708
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/28/2020 1:37:12 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132430952383528774
+ThreadIdentity : APIResponse
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------
+Timestamp: 8/28/2020 7:16:40 PM
+
+Message: HandlingInstanceID: e66fd31d-be5c-4e2f-a045-5afaf3a96180
+An exception of type 'Minio.Exceptions.UnexpectedMinioException' occurred and was caught.
+-----------------------------------------------------------------------------------------
+08/28/2020 19:16:40
+Type : Minio.Exceptions.UnexpectedMinioException, Minio, Version=3.1.13.0, Culture=neutral, PublicKeyToken=348239ebd7debb4c
+Message : MinIO API responded with message=The Access Key Id you provided does not exist in our records.
+Source : Minio
+Help link : 
+ServerMessage : The Access Key Id you provided does not exist in our records.
+ServerResponse : 
+Response : Minio.Exceptions.ErrorResponse
+XmlError : <?xml version="1.0" encoding="UTF-8"?>
+<Error><Code>InvalidAccessKeyId</Code><Message>The Access Key Id you provided does not exist in our records.</Message><BucketName>t120200226</BucketName><Resource>/t120200226</Resource><RequestId>162F729A788D974C</RequestId><HostId>e801ef7b-c68e-4df5-a6fd-16abf4c446c2</HostId></Error>
+Data : System.Collections.ListDictionaryInternal
+TargetSite : Void ParseErrorFromContent(RestSharp.IRestResponse)
+HResult : -2146233088
+Stack Trace :    at Minio.MinioClient.ParseErrorFromContent(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 570
+   at Minio.MinioClient.ParseError(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 430
+   at Minio.MinioClient.<>c.<.ctor>b__84_0(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 81
+   at Minio.MinioClient.HandleIfErrorResponse(IRestResponse response, IEnumerable`1 handlers, DateTime startTime) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 604
+   at Minio.MinioClient.<ExecuteTaskCoreAsync>d__91.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 404
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.BucketRegionCache.<Update>d__9.MoveNext() in /q/.q/sources/minio-dotnet/Minio/BucketRegionCache.cs:line 104
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<GetRegion>d__80.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 134
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<CreateRequest>d__81.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 167
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<BucketExistsAsync>d__2.MoveNext() in /q/.q/sources/minio-dotnet/Minio/ApiEndpoints/BucketOperations.cs:line 124
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at IntellaLend.MinIOWrapper.ImageMinIOWrapper.CheckFileExists(Int64 loanID) in D:\Prakash\GitHub\ILProduct\IntellaLendBlocks\IntellaLend.MinIOWrapper\MinIOWrapper.cs:line 223
+   at IntellaLend.EntityDataHandler.LoanDataAccess.CheckLoanPDFExists(Int64 LoanID) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.LoanData\LoanDataAccess.cs:line 1168
+   at IntellaLend.CommonServices.LoanService.CheckLoanPDFExists(Int64 LoanID) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.Services\LoanService\LoanService.cs:line 103
+   at IntellaLendAPI.Controllers.LoanController.CheckLoanPDFExists(LoanRequest loan) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLendAPI\Controllers\LoanController.cs:line 708
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/28/2020 1:46:40 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132430952383528774
+ThreadIdentity : APIResponse
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------
+Timestamp: 8/28/2020 7:21:36 PM
+
+Message: HandlingInstanceID: df63903f-e86c-4058-858d-794309886f7c
+An exception of type 'Minio.Exceptions.UnexpectedMinioException' occurred and was caught.
+-----------------------------------------------------------------------------------------
+08/28/2020 19:21:36
+Type : Minio.Exceptions.UnexpectedMinioException, Minio, Version=3.1.13.0, Culture=neutral, PublicKeyToken=348239ebd7debb4c
+Message : MinIO API responded with message=The Access Key Id you provided does not exist in our records.
+Source : Minio
+Help link : 
+ServerMessage : The Access Key Id you provided does not exist in our records.
+ServerResponse : 
+Response : Minio.Exceptions.ErrorResponse
+XmlError : <?xml version="1.0" encoding="UTF-8"?>
+<Error><Code>InvalidAccessKeyId</Code><Message>The Access Key Id you provided does not exist in our records.</Message><BucketName>t120200226</BucketName><Resource>/t120200226</Resource><RequestId>162F72DF4FBA04DC</RequestId><HostId>e801ef7b-c68e-4df5-a6fd-16abf4c446c2</HostId></Error>
+Data : System.Collections.ListDictionaryInternal
+TargetSite : Void ParseErrorFromContent(RestSharp.IRestResponse)
+HResult : -2146233088
+Stack Trace :    at Minio.MinioClient.ParseErrorFromContent(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 570
+   at Minio.MinioClient.ParseError(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 430
+   at Minio.MinioClient.<>c.<.ctor>b__84_0(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 81
+   at Minio.MinioClient.HandleIfErrorResponse(IRestResponse response, IEnumerable`1 handlers, DateTime startTime) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 604
+   at Minio.MinioClient.<ExecuteTaskCoreAsync>d__91.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 404
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.BucketRegionCache.<Update>d__9.MoveNext() in /q/.q/sources/minio-dotnet/Minio/BucketRegionCache.cs:line 104
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<GetRegion>d__80.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 134
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<CreateRequest>d__81.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 167
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<BucketExistsAsync>d__2.MoveNext() in /q/.q/sources/minio-dotnet/Minio/ApiEndpoints/BucketOperations.cs:line 124
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at IntellaLend.MinIOWrapper.ImageMinIOWrapper.CheckFileExists(Int64 loanID) in D:\Prakash\GitHub\ILProduct\IntellaLendBlocks\IntellaLend.MinIOWrapper\MinIOWrapper.cs:line 223
+   at IntellaLend.EntityDataHandler.LoanDataAccess.CheckLoanPDFExists(Int64 LoanID) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.LoanData\LoanDataAccess.cs:line 1168
+   at IntellaLend.CommonServices.LoanService.CheckLoanPDFExists(Int64 LoanID) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.Services\LoanService\LoanService.cs:line 103
+   at IntellaLendAPI.Controllers.LoanController.CheckLoanPDFExists(LoanRequest loan) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLendAPI\Controllers\LoanController.cs:line 708
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/28/2020 1:51:36 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132430952383528774
+ThreadIdentity : APIResponse
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------
+Timestamp: 8/28/2020 7:22:19 PM
+
+Message: HandlingInstanceID: f92811ca-2a5b-4fd0-8f9d-c28a2eb09a44
+An exception of type 'Minio.Exceptions.UnexpectedMinioException' occurred and was caught.
+-----------------------------------------------------------------------------------------
+08/28/2020 19:22:19
+Type : Minio.Exceptions.UnexpectedMinioException, Minio, Version=3.1.13.0, Culture=neutral, PublicKeyToken=348239ebd7debb4c
+Message : MinIO API responded with message=The Access Key Id you provided does not exist in our records.
+Source : Minio
+Help link : 
+ServerMessage : The Access Key Id you provided does not exist in our records.
+ServerResponse : 
+Response : Minio.Exceptions.ErrorResponse
+XmlError : <?xml version="1.0" encoding="UTF-8"?>
+<Error><Code>InvalidAccessKeyId</Code><Message>The Access Key Id you provided does not exist in our records.</Message><BucketName>t120200226</BucketName><Resource>/t120200226</Resource><RequestId>162F72E946A73C34</RequestId><HostId>e801ef7b-c68e-4df5-a6fd-16abf4c446c2</HostId></Error>
+Data : System.Collections.ListDictionaryInternal
+TargetSite : Void ParseErrorFromContent(RestSharp.IRestResponse)
+HResult : -2146233088
+Stack Trace :    at Minio.MinioClient.ParseErrorFromContent(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 570
+   at Minio.MinioClient.ParseError(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 430
+   at Minio.MinioClient.<>c.<.ctor>b__84_0(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 81
+   at Minio.MinioClient.HandleIfErrorResponse(IRestResponse response, IEnumerable`1 handlers, DateTime startTime) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 604
+   at Minio.MinioClient.<ExecuteTaskCoreAsync>d__91.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 404
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.BucketRegionCache.<Update>d__9.MoveNext() in /q/.q/sources/minio-dotnet/Minio/BucketRegionCache.cs:line 104
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<GetRegion>d__80.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 134
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<CreateRequest>d__81.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 167
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<BucketExistsAsync>d__2.MoveNext() in /q/.q/sources/minio-dotnet/Minio/ApiEndpoints/BucketOperations.cs:line 124
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at IntellaLend.MinIOWrapper.ImageMinIOWrapper.CheckFileExists(Int64 loanID) in D:\Prakash\GitHub\ILProduct\IntellaLendBlocks\IntellaLend.MinIOWrapper\MinIOWrapper.cs:line 223
+   at IntellaLend.EntityDataHandler.LoanDataAccess.CheckLoanPDFExists(Int64 LoanID) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.LoanData\LoanDataAccess.cs:line 1168
+   at IntellaLend.CommonServices.LoanService.CheckLoanPDFExists(Int64 LoanID) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.Services\LoanService\LoanService.cs:line 103
+   at IntellaLendAPI.Controllers.LoanController.CheckLoanPDFExists(LoanRequest loan) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLendAPI\Controllers\LoanController.cs:line 708
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/28/2020 1:52:19 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132430952383528774
+ThreadIdentity : APIResponse
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------
+Timestamp: 8/28/2020 7:23:25 PM
+
+Message: HandlingInstanceID: 2b826f62-d06b-4d3b-9707-fe82ba81fa95
+An exception of type 'Minio.Exceptions.UnexpectedMinioException' occurred and was caught.
+-----------------------------------------------------------------------------------------
+08/28/2020 19:23:25
+Type : Minio.Exceptions.UnexpectedMinioException, Minio, Version=3.1.13.0, Culture=neutral, PublicKeyToken=348239ebd7debb4c
+Message : MinIO API responded with message=The Access Key Id you provided does not exist in our records.
+Source : Minio
+Help link : 
+ServerMessage : The Access Key Id you provided does not exist in our records.
+ServerResponse : 
+Response : Minio.Exceptions.ErrorResponse
+XmlError : <?xml version="1.0" encoding="UTF-8"?>
+<Error><Code>InvalidAccessKeyId</Code><Message>The Access Key Id you provided does not exist in our records.</Message><BucketName>t120200226</BucketName><Resource>/t120200226</Resource><RequestId>162F72F8A56D3034</RequestId><HostId>e801ef7b-c68e-4df5-a6fd-16abf4c446c2</HostId></Error>
+Data : System.Collections.ListDictionaryInternal
+TargetSite : Void ParseErrorFromContent(RestSharp.IRestResponse)
+HResult : -2146233088
+Stack Trace :    at Minio.MinioClient.ParseErrorFromContent(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 570
+   at Minio.MinioClient.ParseError(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 430
+   at Minio.MinioClient.<>c.<.ctor>b__84_0(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 81
+   at Minio.MinioClient.HandleIfErrorResponse(IRestResponse response, IEnumerable`1 handlers, DateTime startTime) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 604
+   at Minio.MinioClient.<ExecuteTaskCoreAsync>d__91.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 404
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.BucketRegionCache.<Update>d__9.MoveNext() in /q/.q/sources/minio-dotnet/Minio/BucketRegionCache.cs:line 104
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<GetRegion>d__80.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 134
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<CreateRequest>d__81.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 167
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<BucketExistsAsync>d__2.MoveNext() in /q/.q/sources/minio-dotnet/Minio/ApiEndpoints/BucketOperations.cs:line 124
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at IntellaLend.MinIOWrapper.ImageMinIOWrapper.CheckFileExists(Int64 loanID) in D:\Prakash\GitHub\ILProduct\IntellaLendBlocks\IntellaLend.MinIOWrapper\MinIOWrapper.cs:line 223
+   at IntellaLend.EntityDataHandler.LoanDataAccess.CheckLoanPDFExists(Int64 LoanID) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.LoanData\LoanDataAccess.cs:line 1168
+   at IntellaLend.CommonServices.LoanService.CheckLoanPDFExists(Int64 LoanID) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.Services\LoanService\LoanService.cs:line 103
+   at IntellaLendAPI.Controllers.LoanController.CheckLoanPDFExists(LoanRequest loan) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLendAPI\Controllers\LoanController.cs:line 708
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/28/2020 1:53:25 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132430952383528774
+ThreadIdentity : APIResponse
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------
+Timestamp: 8/28/2020 7:25:11 PM
+
+Message: HandlingInstanceID: 6cc056e6-04ee-4e97-8274-8b5c8e85ade6
+An exception of type 'Minio.Exceptions.UnexpectedMinioException' occurred and was caught.
+-----------------------------------------------------------------------------------------
+08/28/2020 19:25:11
+Type : Minio.Exceptions.UnexpectedMinioException, Minio, Version=3.1.13.0, Culture=neutral, PublicKeyToken=348239ebd7debb4c
+Message : MinIO API responded with message=The Access Key Id you provided does not exist in our records.
+Source : Minio
+Help link : 
+ServerMessage : The Access Key Id you provided does not exist in our records.
+ServerResponse : 
+Response : Minio.Exceptions.ErrorResponse
+XmlError : <?xml version="1.0" encoding="UTF-8"?>
+<Error><Code>InvalidAccessKeyId</Code><Message>The Access Key Id you provided does not exist in our records.</Message><BucketName>t120200226</BucketName><Resource>/t120200226</Resource><RequestId>162F73114DF6F240</RequestId><HostId>e801ef7b-c68e-4df5-a6fd-16abf4c446c2</HostId></Error>
+Data : System.Collections.ListDictionaryInternal
+TargetSite : Void ParseErrorFromContent(RestSharp.IRestResponse)
+HResult : -2146233088
+Stack Trace :    at Minio.MinioClient.ParseErrorFromContent(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 570
+   at Minio.MinioClient.ParseError(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 430
+   at Minio.MinioClient.<>c.<.ctor>b__84_0(IRestResponse response) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 81
+   at Minio.MinioClient.HandleIfErrorResponse(IRestResponse response, IEnumerable`1 handlers, DateTime startTime) in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 604
+   at Minio.MinioClient.<ExecuteTaskCoreAsync>d__91.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 404
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.BucketRegionCache.<Update>d__9.MoveNext() in /q/.q/sources/minio-dotnet/Minio/BucketRegionCache.cs:line 104
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<GetRegion>d__80.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 134
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<CreateRequest>d__81.MoveNext() in /q/.q/sources/minio-dotnet/Minio/MinioClient.cs:line 167
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Minio.MinioClient.<BucketExistsAsync>d__2.MoveNext() in /q/.q/sources/minio-dotnet/Minio/ApiEndpoints/BucketOperations.cs:line 124
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at IntellaLend.MinIOWrapper.ImageMinIOWrapper.CheckFileExists(Int64 loanID) in D:\Prakash\GitHub\ILProduct\IntellaLendBlocks\IntellaLend.MinIOWrapper\MinIOWrapper.cs:line 223
+   at IntellaLend.EntityDataHandler.LoanDataAccess.CheckLoanPDFExists(Int64 LoanID) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.LoanData\LoanDataAccess.cs:line 1168
+   at IntellaLend.CommonServices.LoanService.CheckLoanPDFExists(Int64 LoanID) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.Services\LoanService\LoanService.cs:line 103
+   at IntellaLendAPI.Controllers.LoanController.CheckLoanPDFExists(LoanRequest loan) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLendAPI\Controllers\LoanController.cs:line 708
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/28/2020 1:55:11 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132430952383528774
+ThreadIdentity : APIResponse
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------

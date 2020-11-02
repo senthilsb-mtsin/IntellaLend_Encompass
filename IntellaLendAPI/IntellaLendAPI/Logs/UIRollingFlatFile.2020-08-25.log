@@ -1,0 +1,180 @@
+Timestamp: 8/16/2020 5:51:18 PM
+
+Message: HandlingInstanceID: 301ef279-c4f8-4d17-9ede-9bbd95e6dc76
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/16/2020 17:51:18
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.16.1619, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-16T12:21:16.628Z. Cannot read property 'isStock' of undefined
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Cannot read property 'isStock' of undefined
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/16/2020 12:21:18 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132420540324206033
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/16/2020 5:51:20 PM
+
+Message: HandlingInstanceID: 85b33f6d-6945-49c7-8566-5cd712a2d1ee
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/16/2020 17:51:20
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.16.1619, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-16T12:21:20.533Z. Cannot read property '0' of undefined
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Cannot read property '0' of undefined
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/16/2020 12:21:20 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132420540324206033
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/16/2020 6:01:56 PM
+
+Message: HandlingInstanceID: 71eaf0df-b3b9-49d7-bd52-83def7662cd4
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/16/2020 18:01:56
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.16.1619, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-16T12:31:56.054Z. Cannot read property 'data' of null
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Cannot read property 'data' of null
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/16/2020 12:31:56 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132420540324206033
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/16/2020 6:36:46 PM
+
+Message: HandlingInstanceID: a649a39a-d42b-44cc-95e1-16c2aa2546f7
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/16/2020 18:36:46
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.16.1805, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-16T13:06:41.920Z. Http failure response for http://localhost:56179/api/Master/GetAllReviewTypeMaster: 401 Unauthorized
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Http failure response for http://localhost:56179/api/Master/GetAllReviewTypeMaster: 401 Unauthorized
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/16/2020 1:06:46 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132420556457221161
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/17/2020 11:06:24 AM
+
+Message: HandlingInstanceID: ebad43bc-7ae8-479c-919c-cd9f394b3d6d
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/17/2020 11:06:24
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.17.1103, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-17T05:36:24.407Z. Cannot read property '0' of undefined
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Cannot read property '0' of undefined
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/17/2020 5:36:24 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132421160563778856
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 8/17/2020 3:37:00 PM
+
+Message: HandlingInstanceID: 1d3b0f29-7737-4c4d-9f4b-c6fbaec951a8
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/17/2020 15:37:00
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.8.17.1525, Culture=neutral, PublicKeyToken=null
+Message : Web TimeStamp: 2020-08-17T10:07:00.681Z. Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/17/2020 10:07:00 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132421317626446046
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------

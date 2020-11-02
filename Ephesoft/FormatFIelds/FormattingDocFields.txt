@@ -1,0 +1,281 @@
+{
+	"92900-LT":
+	{
+		"SSN": ["SSN"],
+		"DECIMAL84": ["Base Income", "Other Income", "Appraised Value", "Verified Assets", "Total Income", "Required", "Hazard Insurance", "Taxes & Special Assessments",
+		           "Total UFMIP","First Mortgage P&I","HOA Fees","Monthly MIP","Total Mortgage Payment","Mortgage w/ UFMIP","Mortgage w/o UFMIP","Total Fixed Payment"],
+		"DECIMAL74": ["Total Fixed Payment-to-Income","Mortgage Payment-to-income","LTV","CLTV (if 2nd permitted)"],
+		"DECIMAL63": [],
+		"DECIMAL64": [],
+		"INT2": [],
+		"INTUPTO2": [],
+		"INTUPTO3": [],
+		"INTUPTO4": [],
+		"MMDDYYYY": [],
+		"MMDD": []
+	},
+	
+	
+	"Appraisal": 
+	{
+		"SSN": [],
+		"DECIMAL84": ["Appraised Value"],
+		"DECIMAL74": [],
+		"DECIMAL63": [],
+		"DECIMAL64": [],
+		"INT2": [],
+		"INTUPTO2": [],
+		"INTUPTO3": [],
+		"INTUPTO4": [],
+		"MMDDYYYY": ["Expiration date of certificate","Effective Date of Appraisal"],
+		"MMDD": []
+	},
+	
+	"Appraisal QC Review": 
+	{
+		"SSN": [],
+		"DECIMAL84": ["Property Value"],
+		"DECIMAL74": [],
+		"DECIMAL63": [],
+		"DECIMAL64": [],
+		"INT2": [],
+		"INTUPTO2": [],
+		"INTUPTO3": [],
+		"INTUPTO4": [],
+		"MMDDYYYY": ["Effective Date","Expiration date of certificate"],
+		"MMDD": []
+	},
+	"AUS Findings": 
+	{
+		"SSN": [],
+		"DECIMAL84": ["Base","Other","Positive Net","Appraised Value","Total Funds to be verified","Total","Reservers Require to be verified","Sales Price",
+		            "Funds Required to Close","Hazard Insurance","Taxes","Total Expense Payments","All Other Payments","Total Housing Payment","Total Loan Amount"],
+		"DECIMAL74": ["LTV/CLTV/HCLTV"],
+		"DECIMAL63": [],
+		"DECIMAL64": [],
+		"INT2": [],
+		"INTUPTO2": [],
+		"INTUPTO3": [],
+		"INTUPTO4": [],
+		"MMDDYYYY": ["Submission Date"],
+		"MMDD": []
+	},
+	"Flood Determination": 
+	{
+		"SSN": [],
+		"DECIMAL84": [],
+		"DECIMAL74": [],
+		"DECIMAL63": [],
+		"DECIMAL64": [],
+		"INT2": [],
+		"INTUPTO2": [],
+		"INTUPTO3": [],
+		"INTUPTO4": [],
+		"MMDDYYYY": ["Date of Determination"],
+		"MMDD": []
+	},
+	
+	"Good Faith Estimate": 
+	{
+		"SSN": [],
+		"DECIMAL84": ["Amount"],
+		"DECIMAL74": [],
+		"DECIMAL63": [],
+		"DECIMAL64": [],
+		"INT2": [],
+		"INTUPTO2": [],
+		"INTUPTO3": [],
+		"INTUPTO4": [],
+		"MMDDYYYY": ["Date of GFE"],
+		"MMDD": []
+	},
+	
+	"Hazard Insurance": 
+	{
+		"SSN": [],
+		"DECIMAL84": ["Policy Premium","Amount of Coverage"],
+		"DECIMAL74": [],
+		"DECIMAL63": [],
+		"DECIMAL64": [],
+		"INT2": [],
+		"INTUPTO2": [],
+		"INTUPTO3": [],
+		"INTUPTO4": [],
+		"MMDDYYYY": ["Effective Date"],
+		"MMDD": []
+	},
+	
+	"HUD-1 Settlement Statement": 
+	{
+		"SSN": [],
+		"DECIMAL84": ["CashfromortoBorrower"],
+		"DECIMAL74": [],
+		"DECIMAL63": [],
+		"DECIMAL64": [],
+		"INT2": [],
+		"INTUPTO2": [],
+		"INTUPTO3": [],
+		"INTUPTO4": [],
+		"MMDDYYYY": ["Settlement Date","Disbursement Date"],
+		"MMDD": []
+	},
+	
+	"Loan Application 1003": 
+	{
+		"SSN": [],
+		"DECIMAL84": ["SubTotal Liquid Asset","Purchase Price","Alterations and Repairs","Estimated Closing Costs","Discount","Alterations and Repairs",
+		            "Land","PMI-MIP-Funding Fee","Estimated Prepaid Items","Refinance","Alterations and Repairs","Secondary Financing",
+					"Total Monthly Payments","Amount"],
+		
+		"DECIMAL74": [],
+		"DECIMAL63": [],
+		"DECIMAL64": [],
+		"INT2": [],
+		"INTUPTO2": [],
+		"INTUPTO3": ["Borrower Profession Duration"],
+		"INTUPTO4": ["Number of Months"],
+		"MMDDYYYY": ["Endorsement Date"],
+		"MMDD": []
+	},
+
+	"Note": 
+	{
+		"SSN": [],
+		"DECIMAL84": ["Loan Amount"],
+		"DECIMAL74": [],
+		"DECIMAL63": [],
+		"DECIMAL64": [],
+		"INT2": [],
+		"INTUPTO2": ["Grace Period"],
+		"INTUPTO3": [],
+		"INTUPTO4": [],
+		"MMDDYYYY": ["First Payment Date","Last Payment Date"],
+		"MMDD": []
+	},
+	
+	"Notice of Loan Approval": 
+	{
+		"SSN": [],
+		"DECIMAL84": ["Appraised Value","Loan Amount"],
+		"DECIMAL74": ["LTV","CLTV"],
+		"DECIMAL63": [],
+		"DECIMAL64": [],
+		"INT2": [],
+		"INTUPTO2": [],
+		"INTUPTO3": [],
+		"INTUPTO4": [],
+		"MMDDYYYY": [],
+		"MMDD": []
+	},
+	
+	
+	"Notice of Right to Cancel": 
+	{
+		"SSN": [],
+		"DECIMAL84": [],
+		"DECIMAL74": [],
+		"DECIMAL63": [],
+		"DECIMAL64": [],
+		"INT2": [],
+		"INTUPTO2": [],
+		"INTUPTO3": [],
+		"INTUPTO4": [],
+		"MMDDYYYY": ["Transaction Date","Cancellation Date"],
+		"MMDD": []
+	},
+	
+	"Private Mortgage Insurance (PMI) Certificate": 
+	{
+		"SSN": [],
+		"DECIMAL84": ["Monthly Premium Amount"],
+		"DECIMAL74": [],
+		"DECIMAL63": [],
+		"DECIMAL64": [],
+		"INT2": [],
+		"INTUPTO2": [],
+		"INTUPTO3": [],
+		"INTUPTO4": [],
+		"MMDDYYYY": ["Commitment Date"],
+		"MMDD": []
+	},
+	
+	"Purchase Agreement": 
+	{
+		"SSN": [],
+		"DECIMAL84": ["Contract Payment","Purchase Price"],
+		"DECIMAL74": [],
+		"DECIMAL63": [],
+		"DECIMAL64": [],
+		"INT2": [],
+		"INTUPTO2": [],
+		"INTUPTO3": [],
+		"INTUPTO4": [],
+		"MMDDYYYY": ["Date Signed"],
+		"MMDD": []
+	},
+	
+	"Security Instrument": 
+	{
+		"SSN": [],
+		"DECIMAL84": ["Loan Amount"],
+		"DECIMAL74": [],
+		"DECIMAL63": [],
+		"DECIMAL64": [],
+		"INT2": [],
+		"INTUPTO2": [],
+		"INTUPTO3": [],
+		"INTUPTO4": [],
+		"MMDDYYYY": ["Document Date"],
+		"MMDD": []
+	},
+	
+	"Title Commit Prelim": 
+	{
+		"SSN": [],
+		"DECIMAL84": [],
+		"DECIMAL74": [],
+		"DECIMAL63": [],
+		"DECIMAL64": [],
+		"INT2": [],
+		"INTUPTO2": [],
+		"INTUPTO3": [],
+		"INTUPTO4": [],
+		"MMDDYYYY": ["Effective Date"],
+		"MMDD": []
+	},
+	
+	"Transmittal Summary Final": 
+	{
+		"SSN": [],
+		"DECIMAL84": ["Amount of Subordinate Financing","Borrower Base Income","Co-Borrower Base Income","Co-Borrower Other Income","Borrower Other Income",
+		            "Borrower Positive Cash Flow","Co-Borrower Positive Cash Flow","Co-Borrower Total Monthly Income","Borrower Total Monthly Income",
+					"Appraised Property Value","Verified Assets","Sale Price","Total Obligations/Income","Primary Housing Expense Income","Total all monthly payments",
+					"HOA Fees","Negative Cash Flow","Present Housing Payment","All other monthly payments","Base Income","Other Income","Total Positive Cash Flow","Loan Amount","Mortgage Insurance"],
+		"DECIMAL74": ["LTV"],
+		"DECIMAL63": [],
+		"DECIMAL64": [],
+		"INT2": [],
+		"INTUPTO2": [],
+		"INTUPTO3": [],
+		"INTUPTO4": [],
+		"MMDDYYYY": [],
+		"MMDD": []
+	},
+	"VA Loan Analysis 26-6393": 
+	{
+		"SSN": [],
+		"DECIMAL84": ["Liquid Assets","Current Monthly Housing Expense","Borrower Gross Total","Total Other Net Income","Total","Borrower Gross Total",
+		           "Hazard Insurance","Taxes","Debt Total Unpaid Balance","Debt Total Monthly Payment","Mortgage Payment (P&I)","Less Estimated Monthly Shelter Expense",
+				   "Total Other Net Income","Total Take Home Pay","Total Deductions","Loan Amount"],
+		"DECIMAL74": [],
+		"DECIMAL63": [],
+		"DECIMAL64": [],
+		"INT2": [],
+		"INTUPTO2": ["Number of Years at Present Employment"],
+		"INTUPTO3": ["Applicants Age"],
+		"INTUPTO4": [],
+		"MMDDYYYY": [],
+		"MMDD": []
+	}
+	
+}

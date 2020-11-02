@@ -1,0 +1,62 @@
+Timestamp: 8/10/2020 9:02:49 PM
+
+Message: HandlingInstanceID: ac658e4d-9e39-4274-86b5-e37b45e55ba9
+An exception of type 'MTSEntBlocks.ExceptionBlock.MTSPassThruException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/10/2020 21:02:49
+Type : MTSEntBlocks.ExceptionBlock.MTSPassThruException, MTSEntBlocks.ExceptionBlock, Version=2020.8.10.2101, Culture=neutral, PublicKeyToken=null
+Message : Error Parsing Input request
+Source : EphesoftService
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : EphesoftService.Models.EphesoftRequest ProcessRequest(System.String)
+HResult : -2146233088
+Stack Trace :    at EphesoftService.Controllers.DocumentController.ProcessRequest(String requestJson) in D:\Prakash\GitHub\ILProduct\Ephesoft\EphesoftService\Controllers\DocumentController.cs:line 613
+   at EphesoftService.Controllers.DocumentController.MergeConfigDocuments() in D:\Prakash\GitHub\ILProduct\Ephesoft\EphesoftService\Controllers\DocumentController.cs:line 174
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/10/2020 3:32:49 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132415471070714407
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: General
+EventID: 8000
+Priority: 4
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------
+Timestamp: 8/10/2020 9:03:41 PM
+
+Message: HandlingInstanceID: f3e8ae79-99e6-4b69-bd9c-91c12182ee1e
+An exception of type 'MTSEntBlocks.ExceptionBlock.MTSPassThruException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+08/10/2020 21:03:41
+Type : MTSEntBlocks.ExceptionBlock.MTSPassThruException, MTSEntBlocks.ExceptionBlock, Version=2020.8.10.2101, Culture=neutral, PublicKeyToken=null
+Message : Error Parsing Input request
+Source : EphesoftService
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : EphesoftService.Models.EphesoftRequest ProcessRequest(System.String)
+HResult : -2146233088
+Stack Trace :    at EphesoftService.Controllers.DocumentController.ProcessRequest(String requestJson) in D:\Prakash\GitHub\ILProduct\Ephesoft\EphesoftService\Controllers\DocumentController.cs:line 613
+   at EphesoftService.Controllers.DocumentController.MergeConfigDocuments() in D:\Prakash\GitHub\ILProduct\Ephesoft\EphesoftService\Controllers\DocumentController.cs:line 174
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/10/2020 3:33:41 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132415471070714407
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: General
+EventID: 8000
+Priority: 4
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------

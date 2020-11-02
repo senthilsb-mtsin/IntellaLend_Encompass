@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D738E475-30A8-495A-A059-A5CD43BC4FD5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>IntellaLend.CommonServices</RootNamespace>
+    <AssemblyName>IntellaLend.CommonServices</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Interactive.Async, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Interactive.Async.3.1.1\lib\net45\System.Interactive.Async.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CheckListItemService\CheckListItemService.cs" />
+    <Compile Include="CustomerService\CustConfigService.cs" />
+    <Compile Include="CustomerService\CustomerService.cs" />
+    <Compile Include="DashboardServices\DashboardService.cs" />
+    <Compile Include="IntellaLendService\IntellaLendServices.cs" />
+    <Compile Include="IntellaLendService\RequestLoggingService.cs" />
+    <Compile Include="LoanService\FIleUploadService.cs" />
+    <Compile Include="LoanService\LoanService.cs" />
+    <Compile Include="MappingService\MappingService.cs" />
+    <Compile Include="QCIQ\QCIQService.cs" />
+    <Compile Include="StackingOrderService\StackingOrderService.cs" />
+    <Compile Include="TenantService\TenantConfigService.cs" />
+    <Compile Include="UserService\logOnService.cs" />
+    <Compile Include="MasterServices\MasterService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserService\UserService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\IntellaLendBlocks\IntellaLend.BoxWrapper\IntellaLend.BoxWrapper.csproj">
+      <Project>{921dae60-fc24-4136-935b-35b105b09e72}</Project>
+      <Name>IntellaLend.BoxWrapper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IntellaLendBlocks\IntellaLend.Model\IntellaLend.Model.csproj">
+      <Project>{1153d611-e67c-4a1a-be68-ee2aeea2df8e}</Project>
+      <Name>IntellaLend.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IntellaLendBlocks\IntellaLend.Constance\IntellaLend.Constance.csproj">
+      <Project>{A8B652A8-EA6C-4080-9F2B-DDDA23E14A51}</Project>
+      <Name>IntellaLend.Constance</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IntellaLendBlocks\IntellaLend.RuleEngine\IntellaLend.RuleEngine.csproj">
+      <Project>{9c2be0af-a3b7-4f32-95ad-ad0d2dafa257}</Project>
+      <Name>IntellaLend.RuleEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IntellaLendBlocks\IntellaLend.WFProxy\IntellaLend.WFProxy.csproj">
+      <Project>{99230248-b677-4ca6-bb99-f40f5416c14e}</Project>
+      <Name>IntellaLend.WFProxy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IntellaLendBlocks\MTSRuleEngine\MTSRuleEngine.csproj">
+      <Project>{5f014003-50d8-49e0-8afe-91d38dccc97c}</Project>
+      <Name>MTSRuleEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntellaLend.CheckListItemData\IntellaLend.CheckListItemData.csproj">
+      <Project>{184945f1-2043-473a-a152-1a70fc659c6f}</Project>
+      <Name>IntellaLend.CheckListItemData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntellaLend.CustomerData\IntellaLend.CustomerData.csproj">
+      <Project>{7b3e81e5-c4cb-471c-9982-7ebd5b34f749}</Project>
+      <Name>IntellaLend.CustomerData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntellaLend.DashboardData\IntellaLend.DashboardData.csproj">
+      <Project>{cf23edf9-17c4-4e8f-a872-f6c9d7b5d6bb}</Project>
+      <Name>IntellaLend.DashboardData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntellaLend.Hashing\IntellaLend.Hashing.csproj">
+      <Project>{1f14598f-58dd-4eae-b6c8-71b950f9ec72}</Project>
+      <Name>IntellaLend.Hashing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntellaLend.License\IntellaLend.License.csproj">
+      <Project>{46889f5e-01d3-4669-8766-8962c08d3766}</Project>
+      <Name>IntellaLend.License</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntellaLend.LoanData\IntellaLend.LoanData.csproj">
+      <Project>{4cba1aca-c36e-44b1-b5f4-d84329e9764f}</Project>
+      <Name>IntellaLend.LoanData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntellaLend.LogInData\IntellaLend.LogInData.csproj">
+      <Project>{af898d76-d4f3-4129-b3b0-90ee3ca9fb57}</Project>
+      <Name>IntellaLend.LogInData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntellaLend.MappingData\IntellaLend.MappingData.csproj">
+      <Project>{01c575e6-4747-4510-87e6-3e7fb3fbfbe5}</Project>
+      <Name>IntellaLend.MappingData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntellaLend.MasterData\IntellaLend.MasterData.csproj">
+      <Project>{86df93cf-b3f1-4d98-b9e7-cbcc9adee282}</Project>
+      <Name>IntellaLend.MasterData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntellaLend.QCIQ\IntellaLend.QCIQData.csproj">
+      <Project>{a18f23c7-52f6-42aa-b7f5-d33d8c4c9720}</Project>
+      <Name>IntellaLend.QCIQData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntellaLend.StackingOrderData\IntellaLend.StackingOrderData.csproj">
+      <Project>{e09e2177-52f0-4021-b53a-26aac45667e7}</Project>
+      <Name>IntellaLend.StackingOrderData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntellaLend.SystemData\IntellaLend.SystemData.csproj">
+      <Project>{b1e28a99-bf1a-4623-8553-d3d4442d66a6}</Project>
+      <Name>IntellaLend.SystemData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntellaLend.TenantConfigData\IntellaLend.TenantConfigData.csproj">
+      <Project>{6921de36-180b-4ae3-b780-77ee06077d48}</Project>
+      <Name>IntellaLend.TenantConfigData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntellaLend.UploadData\IntellaLend.UploadData.csproj">
+      <Project>{b8f7d7d9-f0f7-4856-adc4-cf565c83a389}</Project>
+      <Name>IntellaLend.UploadData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntellaLend.UserData\IntellaLend.UserData.csproj">
+      <Project>{78e761dc-420f-47c5-9f95-bb548a9e7448}</Project>
+      <Name>IntellaLend.UserData</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties VsiSettingsState="Initialized" VsiUseTimeUtc="UseGlobal" VsiDeltaBaseDate="7/30/2020 3:13:46 PM" VsiUseGlobalBaseDate="True" VsiConfigurationBuildAction="UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal" VsiAutoInformationalVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoFileVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiEnabled="True" BuildVersion_StartDate="2017/9/1" BuildVersion_BuildVersioningStyle="YearStamp.MonthStamp.DayStamp.TimeStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" BuildVersion_UseGlobalSettings="True" BuildVersion_UseUniversalClock="True" />
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,34 @@
+﻿@{
+    Layout = null;
+}
+<email>
+    <To>@ViewBag.userEmail</To>
+    <Subject>IntellaLend - New account created</Subject>
+    <From>no-reply@IntellaLend.com</From>
+    <Cc />
+    <BCc />
+    <Body>
+        <![CDATA[
+        <div>
+            <p>Hello @ViewBag.DISPLAYNAME, </p>
+            <p>Welcome to IntellaLend! Your account has been successfully created and your login information is below, </p>
+
+            <br />Username: @ViewBag.USERNAME
+            <br />
+            <br />Temporary Password: @ViewBag.PASSWORD
+            <br />
+            <br /><a style="color:red">[Caution: Please DO NOT copy and paste the Username or Temporary Password]</a>
+
+            <p>
+                You can login to IntellaLend by clicking this link:
+                @ViewBag.URL
+            </p>
+            <br />
+            Enjoy your new account.
+            <br /> IntellaLend Team  <br />
+
+        </div>
+        <footer> <p>Note: This is an auto generated email. Replies to this email is not monitored.</p></footer>
+        ]]>
+    </Body>
+</email>

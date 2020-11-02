@@ -1,0 +1,35 @@
+Timestamp: 8/3/2020 10:12:00 PM
+
+Message: HandlingInstanceID: 212ae5d5-5eae-449c-af2e-136e20afd115
+An exception of type 'iTextSharp.text.exceptions.InvalidPdfException' occurred and was caught.
+----------------------------------------------------------------------------------------------
+08/03/2020 22:12:00
+Type : iTextSharp.text.exceptions.InvalidPdfException, itextsharp, Version=5.5.12.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca
+Message : PDF header signature not found.
+Source : itextsharp
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : Void .ctor(iTextSharp.text.io.IRandomAccessSource, Boolean, Byte[], Org.BouncyCastle.X509.X509Certificate, Org.BouncyCastle.Crypto.ICipherParameters, Boolean)
+HResult : -2146232800
+Stack Trace :    at iTextSharp.text.pdf.PdfReader..ctor(IRandomAccessSource byteSource, Boolean partialRead, Byte[] ownerPassword, X509Certificate certificate, ICipherParameters certificateKey, Boolean closeSourceOnConstructorError)
+   at iTextSharp.text.pdf.PdfReader..ctor(Byte[] pdfIn)
+   at MTSEntBlocks.UtilsBlock.CommonUtils.CreateHeaderFooterPDF(Byte[] imageBytes, String _footerText) in D:\Prakash\GitHub\ILProduct\IntellaLendBlocks\UtilsBlock\CommonUtils.cs:line 744
+   at IntellaLend.EntityDataHandler.LoanDataAccess.GetDocumentPDF(Int64 LoanID, Int64 DocumentID, String VersionNumber) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.LoanData\LoanDataAccess.cs:line 1204
+   at IntellaLend.CommonServices.LoanService.GetDocumentPDF(Int64 LoanID, Int64 DocumentID, Int64 VersionNumber) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.Services\LoanService\LoanService.cs:line 314
+   at IntellaLendAPI.Controllers.LoanController.DownloadDocumentPDF(DocumentDownloadRequest doc) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLendAPI\Controllers\LoanController.cs:line 553
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/3/2020 4:42:00 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132409463510491330
+ThreadIdentity : APIResponse
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------

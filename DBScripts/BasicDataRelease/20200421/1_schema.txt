@@ -1,0 +1,27 @@
+CREATE TABLE t1.EUploadStaging  (
+    ID int not null,
+    UploadStagingID bigint,
+    LoanID bigint,
+    TypeOfUpload bigint not null,
+    Document varchar(255),
+	Version varchar(255),
+	Status bigint,
+	CreatedOn datetime,
+	ModifiedOn datetime,
+	ErrorMsg varchar(max),
+    EParkingSpot varchar(255)
+);
+ CREATE TABLE il.EUploadStaging  (
+    ID int not null,
+    UploadStagingID bigint,
+    LoanID bigint,
+    TypeOfUpload bigint not null,
+    Document varchar(255),
+	Version varchar(255),
+	Status bigint,
+	CreatedOn datetime,
+	ModifiedOn datetime,
+	ErrorMsg varchar(max),
+    EParkingSpot varchar(255)
+);
+ 

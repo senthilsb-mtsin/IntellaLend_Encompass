@@ -1,0 +1,53 @@
+DECLARE @DOCUMENTS VARCHAR(MAX) = 'Disclosure Of Lead Base Paint,Mailing Address Certificate,Address Certificate,Certificate Of Loan To One Borrower,30 Day Letter,Appliance Statement,Discount Point Aknowledgement,Loan Detail Report';
+DECLARE @LOAN_TYPE_NAME VARCHAR(255) = '';
+
+DECLARE @LOANTYPEID BIGINT;
+DECLARE @DOCTABLE TABLE (
+	ID BIGINT
+	,DocumentTypeName VARCHAR(max)
+	);
+
+INSERT INTO @DOCTABLE
+SELECT ROW_NUMBER() OVER (
+		ORDER BY data
+		)
+	,data
+FROM dbo.function_string_to_table(@DOCUMENTS, ',')
+
+DECLARE @DOCCOUNT BIGINT = 1;
+DECLARE @DOCROWCOUNT BIGINT;
+DECLARE @LOANROWCOUNT BIGINT;
+
+SELECT @DOCROWCOUNT = COUNT(1)
+FROM @DOCTABLE;
+
+
+SELECT @LOANTYPEID = LoanTypeID FROM [IL].LoanTypeMasters WHERE LoanTypeName = @LOAN_TYPE_NAME;
+
+DECLARE @CURRTILDOCID BIGINT;
+
+WHILE @DOCCOUNT <= @DOCROWCOUNT
+BEGIN
+	INSERT INTO [IL].DocumentTypeMasters
+	SELECT DocumentTypeName
+		,DocumentTypeName
+		,1
+		,GETDATE()
+		,GETDATE()
+		,0
+	FROM @DOCTABLE
+	WHERE ID = @DOCCOUNT
+
+	SELECT @CURRTILDOCID = MAX(DocumentTypeID)
+	FROM [IL].DocumentTypeMasters;
+
+	--INSERT INTO [IL].CustLoanDocMapping
+	--SELECT 1
+	--	,@LOANTYPEID
+	--	,@CURRTILDOCID
+	--	,GETDATE()
+	--	,GETDATE()
+	--	,1
+
+	SET @DOCCOUNT = @DOCCOUNT + 1;
+END

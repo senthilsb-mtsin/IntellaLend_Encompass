@@ -1,0 +1,4 @@
+update t1.MenuMasters set MenuOrderID=5 where MenuID=26
+update t1.MenuMasters set MenuGroupID=0 ,Accesslevel=0 where MenuID=26
+update t1.RoleMenuMappings set MenuOrder=5 where MenuID=26
+update t1.MenuMasters set Icon='cloud_queue' where MenuID=26

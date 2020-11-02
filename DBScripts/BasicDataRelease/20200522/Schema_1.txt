@@ -1,0 +1,4 @@
+ALTER TABLE  t1.CheckListDetailMasters
+ADD LosIsMatched int;
+ALTER TABLE  il.CheckListDetailMasters
+ADD LosIsMatched int;

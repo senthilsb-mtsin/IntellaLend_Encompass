@@ -1,0 +1,100 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EphesoftService", "EphesoftService\EphesoftService.csproj", "{2B10E9C5-7B43-43F6-A5B2-124F8DFE5857}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Blocks", "Blocks", "{EC1E999D-9369-4299-A3A3-9FF20400C710}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTSRuleEngine", "..\IntellaLendBlocks\MTSRuleEngine\MTSRuleEngine.csproj", "{5F014003-50D8-49E0-8AFE-91D38DCCC97C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddressParser", "AddressParser\AddressParser.csproj", "{FCEBD207-0C18-4D92-974C-C7A615AC7DEE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTSEntBlocks.DataBlock", "..\IntellaLendBlocks\MTSEntBlocks.DataBlock\MTSEntBlocks.DataBlock.csproj", "{B8FD6D7D-3700-4DAF-A7A1-9FF1D86C1ACE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTSEntBlocks.ExceptionBlock", "..\IntellaLendBlocks\MTSEntBlocks.ExceptionBlock\MTSEntBlocks.ExceptionBlock.csproj", "{BF640616-4953-47C5-8BEC-613A645CFDD1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTSEntBlocks.LoggerBlock", "..\IntellaLendBlocks\MTSEntBlocks.LoggerBlock\MTSEntBlocks.LoggerBlock.csproj", "{167D2B19-F361-4093-8E1F-61D5778F5C5D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncompassConsoleConnector", "..\IntellaLendAPI\EncompassConsoleConnector\EncompassConsoleConnector.csproj", "{D7081E3A-C197-4F8E-A30F-E330B6308FD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntellaLend.Constance", "..\IntellaLendBlocks\IntellaLend.Constance\IntellaLend.Constance.csproj", "{A8B652A8-EA6C-4080-9F2B-DDDA23E14A51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntellaLend.Model", "..\IntellaLendBlocks\IntellaLend.Model\IntellaLend.Model.csproj", "{1153D611-E67C-4A1A-BE68-EE2AEEA2DF8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncompassRequest", "..\IntellaLendServices\EncompassRequest\EncompassRequest.csproj", "{676B28B7-418B-41EA-9875-6176A92017AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTSEntityDataAccess", "..\IntellaLendBlocks\MTSEntityDataAccess\MTSEntityDataAccess.csproj", "{9980D561-76C0-486F-9744-5D1BF6512B9D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2B10E9C5-7B43-43F6-A5B2-124F8DFE5857}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B10E9C5-7B43-43F6-A5B2-124F8DFE5857}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B10E9C5-7B43-43F6-A5B2-124F8DFE5857}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B10E9C5-7B43-43F6-A5B2-124F8DFE5857}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F014003-50D8-49E0-8AFE-91D38DCCC97C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F014003-50D8-49E0-8AFE-91D38DCCC97C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F014003-50D8-49E0-8AFE-91D38DCCC97C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F014003-50D8-49E0-8AFE-91D38DCCC97C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCEBD207-0C18-4D92-974C-C7A615AC7DEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCEBD207-0C18-4D92-974C-C7A615AC7DEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCEBD207-0C18-4D92-974C-C7A615AC7DEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCEBD207-0C18-4D92-974C-C7A615AC7DEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8FD6D7D-3700-4DAF-A7A1-9FF1D86C1ACE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8FD6D7D-3700-4DAF-A7A1-9FF1D86C1ACE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8FD6D7D-3700-4DAF-A7A1-9FF1D86C1ACE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8FD6D7D-3700-4DAF-A7A1-9FF1D86C1ACE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF640616-4953-47C5-8BEC-613A645CFDD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF640616-4953-47C5-8BEC-613A645CFDD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF640616-4953-47C5-8BEC-613A645CFDD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF640616-4953-47C5-8BEC-613A645CFDD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{167D2B19-F361-4093-8E1F-61D5778F5C5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{167D2B19-F361-4093-8E1F-61D5778F5C5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{167D2B19-F361-4093-8E1F-61D5778F5C5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{167D2B19-F361-4093-8E1F-61D5778F5C5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7081E3A-C197-4F8E-A30F-E330B6308FD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7081E3A-C197-4F8E-A30F-E330B6308FD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7081E3A-C197-4F8E-A30F-E330B6308FD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7081E3A-C197-4F8E-A30F-E330B6308FD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8B652A8-EA6C-4080-9F2B-DDDA23E14A51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8B652A8-EA6C-4080-9F2B-DDDA23E14A51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8B652A8-EA6C-4080-9F2B-DDDA23E14A51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8B652A8-EA6C-4080-9F2B-DDDA23E14A51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1153D611-E67C-4A1A-BE68-EE2AEEA2DF8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1153D611-E67C-4A1A-BE68-EE2AEEA2DF8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1153D611-E67C-4A1A-BE68-EE2AEEA2DF8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1153D611-E67C-4A1A-BE68-EE2AEEA2DF8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{676B28B7-418B-41EA-9875-6176A92017AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{676B28B7-418B-41EA-9875-6176A92017AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{676B28B7-418B-41EA-9875-6176A92017AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{676B28B7-418B-41EA-9875-6176A92017AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9980D561-76C0-486F-9744-5D1BF6512B9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9980D561-76C0-486F-9744-5D1BF6512B9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9980D561-76C0-486F-9744-5D1BF6512B9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9980D561-76C0-486F-9744-5D1BF6512B9D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5F014003-50D8-49E0-8AFE-91D38DCCC97C} = {EC1E999D-9369-4299-A3A3-9FF20400C710}
+		{FCEBD207-0C18-4D92-974C-C7A615AC7DEE} = {EC1E999D-9369-4299-A3A3-9FF20400C710}
+		{B8FD6D7D-3700-4DAF-A7A1-9FF1D86C1ACE} = {EC1E999D-9369-4299-A3A3-9FF20400C710}
+		{BF640616-4953-47C5-8BEC-613A645CFDD1} = {EC1E999D-9369-4299-A3A3-9FF20400C710}
+		{167D2B19-F361-4093-8E1F-61D5778F5C5D} = {EC1E999D-9369-4299-A3A3-9FF20400C710}
+		{D7081E3A-C197-4F8E-A30F-E330B6308FD7} = {EC1E999D-9369-4299-A3A3-9FF20400C710}
+		{A8B652A8-EA6C-4080-9F2B-DDDA23E14A51} = {EC1E999D-9369-4299-A3A3-9FF20400C710}
+		{1153D611-E67C-4A1A-BE68-EE2AEEA2DF8E} = {EC1E999D-9369-4299-A3A3-9FF20400C710}
+		{676B28B7-418B-41EA-9875-6176A92017AF} = {EC1E999D-9369-4299-A3A3-9FF20400C710}
+		{9980D561-76C0-486F-9744-5D1BF6512B9D} = {EC1E999D-9369-4299-A3A3-9FF20400C710}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		BuildVersion_StartDate = 2000/1/1
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.Logging.6.0.1304.0\lib\NET45
+	EndGlobalSection
+EndGlobal

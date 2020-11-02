@@ -1,0 +1,163 @@
+Timestamp: 8/11/2020 4:03:38 PM
+
+Message: HandlingInstanceID: b490c319-5fc3-46e9-a9ad-961bf6fc47a2
+An exception of type 'System.Exception' occurred and was caught.
+----------------------------------------------------------------
+08/11/2020 16:03:38
+Type : System.Exception, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+Message : The API returned an error [BadRequest]
+Source : IntellaLend.BoxWrapper
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : Boolean GenrateToken(System.String)
+HResult : -2146233088
+Stack Trace :    at IntellaLend.BoxWrapper.BoxAPIWrapper.GenrateToken(String authCode) in D:\Prakash\GitHub\ILProduct\IntellaLendBlocks\IntellaLend.BoxWrapper\BoxAPIWrapper.cs:line 162
+   at IntellaLendAPI.Controllers.FileUploadController.GenrateUserBoxToken(BoxTokenValidateRequest request) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLendAPI\Controllers\FIleUploadController.cs:line 116
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/11/2020 10:33:38 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132416155644246931
+ThreadIdentity : APIResponse
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------
+Timestamp: 8/11/2020 4:14:44 PM
+
+Message: HandlingInstanceID: 3b6b1762-9c7a-41be-bc99-4c244a4aaa2e
+An exception of type 'System.Exception' occurred and was caught.
+----------------------------------------------------------------
+08/11/2020 16:14:44
+Type : System.Exception, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+Message : The API returned an error [BadRequest]
+Source : IntellaLend.BoxWrapper
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : Boolean GenrateToken(System.String)
+HResult : -2146233088
+Stack Trace :    at IntellaLend.BoxWrapper.BoxAPIWrapper.GenrateToken(String authCode) in D:\Prakash\GitHub\ILProduct\IntellaLendBlocks\IntellaLend.BoxWrapper\BoxAPIWrapper.cs:line 162
+   at IntellaLendAPI.Controllers.FileUploadController.GenrateUserBoxToken(BoxTokenValidateRequest request) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLendAPI\Controllers\FIleUploadController.cs:line 116
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/11/2020 10:44:44 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132416162031681928
+ThreadIdentity : APIResponse
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------
+Timestamp: 8/11/2020 4:19:02 PM
+
+Message: HandlingInstanceID: 5b076b4c-62ee-4690-8bf7-508584ee2253
+An exception of type 'System.Exception' occurred and was caught.
+----------------------------------------------------------------
+08/11/2020 16:19:02
+Type : System.Exception, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+Message : The API returned an error [BadRequest]
+Source : IntellaLend.BoxWrapper
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : Boolean GenrateToken(System.String)
+HResult : -2146233088
+Stack Trace :    at IntellaLend.BoxWrapper.BoxAPIWrapper.GenrateToken(String authCode) in D:\Prakash\GitHub\ILProduct\IntellaLendBlocks\IntellaLend.BoxWrapper\BoxAPIWrapper.cs:line 162
+   at IntellaLendAPI.Controllers.FileUploadController.GenrateUserBoxToken(BoxTokenValidateRequest request) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLendAPI\Controllers\FIleUploadController.cs:line 116
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/11/2020 10:49:02 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132416162031681928
+ThreadIdentity : APIResponse
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------
+Timestamp: 8/12/2020 1:57:34 AM
+
+Message: HandlingInstanceID: 7256a6cd-aee0-49af-acad-0c086a6698e3
+An exception of type 'System.Collections.Generic.KeyNotFoundException' occurred and was caught.
+-----------------------------------------------------------------------------------------------
+08/12/2020 01:57:34
+Type : System.Collections.Generic.KeyNotFoundException, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+Message : The given key was not present in the dictionary.
+Source : mscorlib
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : TValue get_Item(TKey)
+HResult : -2146232969
+Stack Trace :    at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at IntellaLend.MinIOWrapper.ImageMinIOWrapper..ctor(String tenantSchema) in D:\Prakash\GitHub\ILProduct\IntellaLendBlocks\IntellaLend.MinIOWrapper\MinIOWrapper.cs:line 32
+   at IntellaLend.EntityDataHandler.IntellaLendDataAccess.GetReverificationLogo(String Guid) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.SystemData\IntellaLendDataAccess.cs:line 2293
+   at IntellaLend.CommonServices.IntellaLendServices.GetReverificationLogo(String Guid) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLend.Services\IntellaLendService\IntellaLendServices.cs:line 205
+   at IntellaLendAPI.Controllers.ImageController.GetReverificationImage(String TenantSchema, String Guid) in D:\Prakash\GitHub\ILProduct\IntellaLendAPI\IntellaLendAPI\Controllers\ImageController.cs:line 78
+   at lambda_method(Closure , ControllerBase , Object[] )
+   at System.Web.Mvc.ActionMethodDispatcher.Execute(ControllerBase controller, Object[] parameters)
+   at System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   at System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<BeginInvokeSynchronousActionMethod>b__39(IAsyncResult asyncResult, ActionInvocation innerInvokeState)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`2.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethod(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3d()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.AsyncInvocationWithFilters.<>c__DisplayClass46.<InvokeActionMethodFilterAsynchronouslyRecursive>b__3f()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass33.<BeginInvokeActionMethodWithFilters>b__32(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeActionMethodWithFilters(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<>c__DisplayClass2b.<BeginInvokeAction>b__1c()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass21.<BeginInvokeAction>b__1e(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult)
+   at System.Web.Mvc.Controller.<BeginExecuteCore>b__1d(IAsyncResult asyncResult, ExecuteCoreState innerState)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   at System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   at System.Web.Mvc.Controller.<BeginExecute>b__15(IAsyncResult asyncResult, Controller controller)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   at System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   at System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.EndExecute(IAsyncResult asyncResult)
+   at System.Web.Mvc.MvcHandler.<BeginProcessRequest>b__5(IAsyncResult asyncResult, ProcessRequestState innerState)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncVoid`1.CallEndDelegate(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResultBase`1.End()
+   at System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStepImpl(IExecutionStep step)
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+
+Additional Info:
+
+MachineName : MTS0094
+TimeStamp : 8/11/2020 8:27:34 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132416507335131641
+ThreadIdentity : 
+WindowsIdentity : MTS0094\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------

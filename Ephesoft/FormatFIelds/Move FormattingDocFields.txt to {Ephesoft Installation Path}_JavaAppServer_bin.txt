@@ -1,0 +1,1 @@
+Move "FormattingDocFields.txt" to "{Ephesoft Installation Path}\JavaAppServer\bin"

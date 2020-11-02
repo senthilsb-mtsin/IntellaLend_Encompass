@@ -1,0 +1,26 @@
+GO
+
+/****** Object:  Table [IL].[ELoanAttachmentUpload]    Script Date: 4/23/2020 3:37:31 AM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [T1].[ELoanAttachmentUpload](
+	[ID] [bigint] IDENTITY(1,1) NOT NULL,
+	[LoanID] [bigint] NOT NULL,
+	[ELoanGUID] [uniqueidentifier] NOT NULL,
+	[TypeOfUpload] [bigint] NOT NULL,
+	[Documents] [nvarchar](max) NULL,
+	[Status] [bigint] NOT NULL,
+	[Error] [nvarchar](max) NULL,
+	[Createdon] [datetime] NULL,
+	[ModifiedOn] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
