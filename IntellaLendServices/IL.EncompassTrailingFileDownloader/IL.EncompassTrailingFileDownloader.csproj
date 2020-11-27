@@ -39,7 +39,7 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-   <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -76,6 +76,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\IntellaLendBlocks\EncompassRequestBody\EncompassRequestBody.csproj">
+      <Project>{29819ffe-7e45-49b9-9a60-0031c48ef9ca}</Project>
+      <Name>EncompassRequestBody</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\IntellaLendBlocks\IntellaLend.AuditData\IntellaLend.AuditData.csproj">
       <Project>{263344A0-60A6-44B8-8D6F-9907090754D0}</Project>
       <Name>IntellaLend.AuditData</Name>
@@ -112,14 +116,6 @@
       <Project>{35AADAC3-866B-4E35-AD92-D7076ADB2930}</Project>
       <Name>EncompassAPIHelper</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EncompassConstant\EncompassConstant.csproj">
-      <Project>{2f9cb5b8-d67e-4a84-86e2-176456b75d2e}</Project>
-      <Name>EncompassConstant</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EncompassRequest\EncompassRequest.csproj">
-      <Project>{676b28b7-418b-41ea-9875-6176a92017af}</Project>
-      <Name>EncompassRequest</Name>
-    </ProjectReference>
     <ProjectReference Include="..\EncompassWrapperInterseptor\EncompassWrapperInterseptor.csproj">
       <Project>{17878F61-2D09-4C75-8735-F4165BBB6D98}</Project>
       <Name>EncompassWrapperInterseptor</Name>
@@ -136,7 +132,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties VsiEnabled="True" VsiAutoVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoFileVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoInformationalVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiConfigurationBuildAction="UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal" VsiUseGlobalBaseDate="True" VsiDeltaBaseDate="7/30/2020 4:47:29 PM" VsiUseTimeUtc="UseGlobal" VsiSettingsState="Initialized" />
+      <UserProperties VsiSettingsState="Initialized" VsiUseTimeUtc="UseGlobal" VsiDeltaBaseDate="7/30/2020 4:47:29 PM" VsiUseGlobalBaseDate="True" VsiConfigurationBuildAction="UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal" VsiAutoInformationalVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoFileVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiEnabled="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

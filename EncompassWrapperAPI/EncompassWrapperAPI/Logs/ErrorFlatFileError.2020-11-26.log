@@ -1,0 +1,65 @@
+Timestamp: 11/25/2020 2:05:05 PM
+
+Message: Exception OnActionExecuting Value cannot be null.
+Parameter name: source StackTrace :    at System.Linq.Enumerable.FirstOrDefault[TSource](IEnumerable`1 source)
+   at EncompassWrapperAPI.Helpers.BaseActionFilter.ActionExecuting(HttpActionContext actionContext) in D:\Prakash\GitHub\EncompassRepo\EncompassWrapperAPI\EncompassWrapperAPI\Helpers\BaseActionFilter.cs:line 56
+   at EncompassWrapperAPI.Helpers.BaseActionFilter.<>c__DisplayClass10_0.<OnActionExecutingAsync>b__0() in D:\Prakash\GitHub\EncompassRepo\EncompassWrapperAPI\EncompassWrapperAPI\Helpers\BaseActionFilter.cs:line 178
+
+Category: General
+EventID: 9999
+Priority: 5
+Severity: ErrorTitile: 
+----------------------------------------
+Timestamp: 11/25/2020 2:05:08 PM
+
+Message: Exception : Processing of the HTTP request resulted in an exception. Please see the HTTP response returned by the 'Response' property of this exception for details. StackTrace :    at EncompassWrapperAPI.Helpers.BaseActionFilter.<>c__DisplayClass10_0.<OnActionExecutingAsync>b__0() in D:\Prakash\GitHub\EncompassRepo\EncompassWrapperAPI\EncompassWrapperAPI\Helpers\BaseActionFilter.cs:line 184
+   at System.Threading.Tasks.Task.InnerInvoke()
+   at System.Threading.Tasks.Task.Execute()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Web.Http.Filters.ActionFilterAttribute.<ExecuteActionFilterAsyncCore>d__5.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Web.Http.Controllers.ActionFilterResult.<ExecuteAsync>d__5.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Web.Http.Controllers.ExceptionFilterResult.<ExecuteAsync>d__6.MoveNext()
+
+Category: General
+EventID: 9999
+Priority: 5
+Severity: ErrorTitile: 
+----------------------------------------
+Timestamp: 11/25/2020 2:42:26 PM
+
+Message: HandlingInstanceID: 5bda1c65-0bb8-4dfd-9d10-14db9295c5a1
+An exception of type 'System.Exception' occurred and was caught.
+----------------------------------------------------------------
+11/25/2020 14:42:26
+Type : System.Exception, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+Message : grant_type is required for issuance
+Source : EncompassWrapperAPI
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : System.Web.Http.IHttpActionResult GetTokenWithUser(EncompassRequestBody.ERequestModel.ETokenUserRequest)
+HResult : -2146233088
+Stack Trace :    at EncompassWrapperAPI.Controllers.EncompassTokenController.GetTokenWithUser(ETokenUserRequest tokenRequest) in D:\Prakash\GitHub\EncompassRepo\EncompassWrapperAPI\EncompassWrapperAPI\Controllers\EncompassTokenController.cs:line 165
+
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 11/25/2020 9:12:26 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/3/ROOT-1-132507690427015033
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------

@@ -3,60 +3,45 @@ using EncompassRequestBody.ERequestModel;
 using EncompassRequestBody.EResponseModel;
 using EncompassRequestBody.WrapperReponseModel;
 using EncompassRequestBody.WrapperRequestModel;
-using EncompassWrapperAPI.Helper;
 using EncompassWrapperConstants;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using MTS.Web.Helpers;
+using MTSEntBlocks.ExceptionBlock.Handlers;
 using Newtonsoft.Json;
-using Swashbuckle.AspNetCore.Annotations;
+using RestSharp;
+using Swagger.Net.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
+using System.Web.Http;
 
 namespace EncompassWrapperAPI.Controllers
 {
-    [ApiController]
-    [EnableCors("OpenPolicy")]
-    [Route("api/[controller]")]
-    public class EncompassDocumentController : CustomControllerBase
+    ///<Summary>
+    /// Encompass Document Releated Activities
+    ///</Summary>
+    public class EncompassDocumentController : BaseController
     {
-        #region Construtor
-
-        private readonly IHttpClientFactory _clientFactory;
-
-        private HttpClient _client;
-
-        private readonly ILogger<EncompassDocumentController> _logger;
-
-        public EncompassDocumentController(ILogger<EncompassDocumentController> logger, IHttpClientFactory clientFactory)
-        {
-            _logger = logger;
-            _clientFactory = clientFactory;
-            _client = _clientFactory.CreateClient(HttpClientFactoryConstant.RequestWithValidator);
-        }
-
-        #endregion
 
         #region Get Document
 
-        [HttpGet("GetAllLoanDocuments")]
+        ///<Summary>
+        /// Get All Documents of a Loan with Attachments
+        ///</Summary>
+        [HttpGet, Route("api/GetAllLoanDocumentWithAttachments")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(List<EContainer>))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
-        public IActionResult GetAllLoanDocuments(string loanGuid)
+        public IHttpActionResult GetAllLoanDocumentWithAttachments(string loanGuid)
         {
             ErrorResponse _badRequest = new ErrorResponse();
             try
             {
                 string responseStream = string.Empty;
 
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(base.sessionHelper.TokenType, base.sessionHelper.Token);
+                var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.GET_LOAN_ALL_DOCUMENT_WITH_ATTACHMENTS, loanGuid), REQUESTTYPE = HeaderConstant.GET };
 
-                var response = _client.GetAsync(string.Format(EncompassURLConstant.GET_LOAN_ALL_DOCUMENTS, loanGuid)).Result;
+                IRestResponse response = _client.Execute(reqObj);
 
-                responseStream = response.Content.ReadAsStringAsync().Result;
+                responseStream = response.Content;
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -73,27 +58,70 @@ namespace EncompassWrapperAPI.Controllers
                 _badRequest.Summary = ResponseConstant.ERROR;
                 _badRequest.ErrorCode = HttpStatusCode.InternalServerError.ToString();
                 _badRequest.Details = ex.Message;
-                _logger.LogError(ex, ex.Message);
+                MTSExceptionHandler.HandleException(ref ex);
             }
 
-            return BadRequest(_badRequest);
+            return BadRequest(JsonConvert.SerializeObject(_badRequest));
         }
 
-        [HttpGet("GetLoanDocument")]
-        [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(EContainer))]
+        ///<Summary>
+        /// Get All Documents of a Loan with or without Attachments
+        ///</Summary>
+        [HttpGet, Route("api/GetAllLoanDocuments")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(List<EContainer>))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
-        public IActionResult GetLoanDocument(string loanGuid, string documentID)
+        public IHttpActionResult GetAllLoanDocuments(string loanGuid)
         {
             ErrorResponse _badRequest = new ErrorResponse();
             try
             {
                 string responseStream = string.Empty;
 
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(base.sessionHelper.TokenType, base.sessionHelper.Token);
+                var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.GET_LOAN_ALL_DOCUMENTS, loanGuid), REQUESTTYPE = HeaderConstant.GET };
 
-                var response = _client.GetAsync(string.Format(EncompassURLConstant.GET_LOAN_DOCUMENT, loanGuid, documentID)).Result;
+                IRestResponse response = _client.Execute(reqObj);
 
-                responseStream = response.Content.ReadAsStringAsync().Result;
+                responseStream = response.Content;
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    List<EContainer> _docs = JsonConvert.DeserializeObject<List<EContainer>>(responseStream);
+                    return Ok(_docs);
+                }
+                else
+                {
+                    _badRequest = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);
+                }
+            }
+            catch (Exception ex)
+            {
+                _badRequest.Summary = ResponseConstant.ERROR;
+                _badRequest.ErrorCode = HttpStatusCode.InternalServerError.ToString();
+                _badRequest.Details = ex.Message;
+                MTSExceptionHandler.HandleException(ref ex);
+            }
+
+            return BadRequest(JsonConvert.SerializeObject(_badRequest));
+        }
+
+        ///<Summary>
+        /// Get Particular Document of a Loan with or without Attachments
+        ///</Summary>
+        [HttpGet, Route("api/GetLoanDocument")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(EContainer))]
+        [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
+        public IHttpActionResult GetLoanDocument(string loanGuid, string documentID)
+        {
+            ErrorResponse _badRequest = new ErrorResponse();
+            try
+            {
+                string responseStream = string.Empty;
+
+                var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.GET_LOAN_DOCUMENT, loanGuid, documentID), REQUESTTYPE = HeaderConstant.GET };
+
+                IRestResponse response = _client.Execute(reqObj);
+
+                responseStream = response.Content;
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -110,10 +138,10 @@ namespace EncompassWrapperAPI.Controllers
                 _badRequest.Summary = ResponseConstant.ERROR;
                 _badRequest.ErrorCode = HttpStatusCode.InternalServerError.ToString();
                 _badRequest.Details = ex.Message;
-                _logger.LogError(ex, ex.Message);
+                MTSExceptionHandler.HandleException(ref ex);
             }
 
-            return BadRequest(_badRequest);
+            return BadRequest(JsonConvert.SerializeObject(_badRequest));
         }
 
 
@@ -121,39 +149,51 @@ namespace EncompassWrapperAPI.Controllers
 
         #region Add Document
 
-        [HttpPost("AddDocument")]
-        [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(AddContainerResponse))]
+        ///<Summary>
+        /// Add Empty Document to Encompass Loan E-Folder
+        ///</Summary>
+        [HttpPatch, Route("api/AddDocument")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(List<AddContainerResponse>))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
-        public IActionResult AddDocument(AddContainerRequest request)
+        public IHttpActionResult AddDocument(AddContainerRequest request)
         {
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(base.sessionHelper.TokenType, base.sessionHelper.Token);
-
             LockResourceModel lockResource = null;
 
             ErrorResponse _badRequest = new ErrorResponse();
             try
             {
+
+                if (request.Documents.Count == 0)
+                    throw new Exception("Request does not have Documents");
+
                 lockResource = LoanResource.LockLoan(_client, request.LoanGUID);
 
                 if (lockResource.Status)
                 {
                     string responseStream = string.Empty;
 
-                    EAddContainerRequest _addReq = new EAddContainerRequest() { Title = request.DocumentName, ApplicationId = EncompassConstant.ApplicationID };
+                    List<EAddContainerRequest> _addReq = new List<EAddContainerRequest>();
 
-                    var response = _client.PostAsJsonAsync(string.Format(EncompassURLConstant.ADD_DOCUMENT, request.LoanGUID), _addReq).Result;
+                    foreach (EAddDocument item in request.Documents)
+                        _addReq.Add(new EAddContainerRequest() { title = item.DocumentName, description = item.DocumentDescription });
 
-                    responseStream = response.Content.ReadAsStringAsync().Result;
+                    var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.ADD_DOCUMENT, request.LoanGUID, lockResource.Message), Content = _addReq, REQUESTTYPE = HeaderConstant.PATCH };
 
-                    if (response.StatusCode == HttpStatusCode.Created)
+                    IRestResponse response = _client.Execute(reqObj);
+
+                    responseStream = response.Content;
+
+                    if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        EIDResponse eID = JsonConvert.DeserializeObject<EIDResponse>(responseStream);
-                        return Ok(new AddContainerResponse() { DocumentID = eID.ID });
+                        List<EIDResponse> eIDs = JsonConvert.DeserializeObject<List<EIDResponse>>(responseStream);
+                        List<AddContainerResponse> _res = new List<AddContainerResponse>();
+                        foreach (var item in eIDs)
+                            _res.Add(new AddContainerResponse() { DocumentID = item.ID, DocumentName = item.Title });
+
+                        return Ok(_res);
                     }
                     else
-                    {
                         _badRequest = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);
-                    }
                 }
                 else
                 {
@@ -167,7 +207,7 @@ namespace EncompassWrapperAPI.Controllers
                 _badRequest.Summary = ResponseConstant.ERROR;
                 _badRequest.ErrorCode = HttpStatusCode.InternalServerError.ToString();
                 _badRequest.Details = ex.Message;
-                _logger.LogError(ex, ex.Message);
+                MTSExceptionHandler.HandleException(ref ex);
             }
             finally
             {
@@ -176,7 +216,69 @@ namespace EncompassWrapperAPI.Controllers
                     LoanResource.UnLockLoan(_client, lockResource.Message, request.LoanGUID);
                 }
             }
-            return BadRequest(_badRequest);
+            return BadRequest(JsonConvert.SerializeObject(_badRequest));
+        }
+
+        ///<Summary>
+        /// Remove Document from Encompass Loan E-Folder
+        ///</Summary>
+        [HttpPatch, Route("api/RemoveDocument")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(string))]
+        [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
+        public IHttpActionResult RemoveDocument(RemoveContainerRequest request)
+        {
+            LockResourceModel lockResource = null;
+
+            ErrorResponse _badRequest = new ErrorResponse();
+            try
+            {
+                if (request.Documents.Count == 0)
+                    throw new Exception("Request does not have Documents");
+
+                lockResource = LoanResource.LockLoan(_client, request.LoanGUID);
+
+                if (lockResource.Status)
+                {
+                    string responseStream = string.Empty;
+
+                    List<ERemoveContainerRequest> _removeReq = new List<ERemoveContainerRequest>();
+
+                    foreach (ERemoveDocument item in request.Documents)
+                        _removeReq.Add(new ERemoveContainerRequest() { id = item.DocumentID });
+
+                    var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.REMOVE_DOCUMENT, request.LoanGUID, lockResource.Message), Content = _removeReq, REQUESTTYPE = HeaderConstant.PATCH };
+
+                    IRestResponse response = _client.Execute(reqObj);
+
+                    responseStream = response.Content;
+
+                    if (response.StatusCode == HttpStatusCode.NoContent)
+                        return Ok("Documents Removed");
+                    else
+                        _badRequest = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);
+                }
+                else
+                {
+                    _badRequest.Details = lockResource.Message;
+                    _badRequest.Summary = ResponseConstant.ERROR;
+                    _badRequest.ErrorCode = HttpStatusCode.Conflict.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                _badRequest.Summary = ResponseConstant.ERROR;
+                _badRequest.ErrorCode = HttpStatusCode.InternalServerError.ToString();
+                _badRequest.Details = ex.Message;
+                MTSExceptionHandler.HandleException(ref ex);
+            }
+            finally
+            {
+                if (lockResource != null && lockResource.Status)
+                {
+                    LoanResource.UnLockLoan(_client, lockResource.Message, request.LoanGUID);
+                }
+            }
+            return BadRequest(JsonConvert.SerializeObject(_badRequest));
         }
 
         #endregion

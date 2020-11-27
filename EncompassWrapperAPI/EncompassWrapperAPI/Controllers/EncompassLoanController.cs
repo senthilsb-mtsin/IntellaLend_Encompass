@@ -2,62 +2,47 @@
 using EncompassRequestBody.ERequestModel;
 using EncompassRequestBody.WrapperReponseModel;
 using EncompassRequestBody.WrapperRequestModel;
-using EncompassWrapperAPI.Helper;
 using EncompassWrapperConstants;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using MTS.Web.Helpers;
+using MTSEntBlocks.ExceptionBlock.Handlers;
+using MTSEntBlocks.LoggerBlock;
 using Newtonsoft.Json;
-using Swashbuckle.AspNetCore.Annotations;
+using RestSharp;
+using Swagger.Net.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Formatting;
-using System.Net.Http.Headers;
+using System.Web.Http;
 
 namespace EncompassWrapperAPI.Controllers
 {
-    [ApiController]
-    [EnableCors("OpenPolicy")]
-    [Route("api/[controller]")]
-    public class EncompassLoanController : CustomControllerBase
+    ///<Summary>
+    /// Encompass Loan Releated Activities
+    ///</Summary>
+    public class EncompassLoanController : BaseController
     {
-        #region Construtor
-
-        private readonly IHttpClientFactory _clientFactory;
-
-        private HttpClient _client;
-
-        private readonly ILogger<EncompassLoanController> _logger;
-
-        public EncompassLoanController(ILogger<EncompassLoanController> logger, IHttpClientFactory clientFactory)
-        {
-            _logger = logger;
-            _clientFactory = clientFactory;
-            _client = _clientFactory.CreateClient(HttpClientFactoryConstant.RequestWithValidator);
-        }
-
-        #endregion
 
         #region Get Loan
 
-        [HttpGet("GetLoan")]
+        ///<Summary>
+        /// Get Full Encompass Loan Objects
+        ///</Summary>
+        [HttpGet, Route("api/GetLoan")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(object))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
-        public IActionResult GetLoan(string loanGuid)
+        public IHttpActionResult GetLoan(string loanGuid)
         {
             ErrorResponse _error = new ErrorResponse();
             string responseStream = string.Empty;
             try
             {
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(base.sessionHelper.TokenType, base.sessionHelper.Token);
+                var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.GET_LOAN, loanGuid), REQUESTTYPE = HeaderConstant.GET };
 
-                var response = _client.GetAsync(string.Format(EncompassURLConstant.GET_LOAN, loanGuid)).Result;
+                IRestResponse response = _client.Execute(reqObj);
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    responseStream = response.Content.ReadAsStringAsync().Result;
+                    responseStream = response.Content;
                     return Ok(responseStream);
                 }
                 else
@@ -67,31 +52,32 @@ namespace EncompassWrapperAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                MTSExceptionHandler.HandleException(ref ex);
                 _error.Summary = ResponseConstant.ERROR;
                 _error.ErrorCode = HttpStatusCode.InternalServerError.ToString();
                 _error.Details = ex.Message;
             }
 
-            return BadRequest(_error);
+            return BadRequest(JsonConvert.SerializeObject(_error));
         }
 
-        [HttpPost("GetLoans")]
+        ///<Summary>
+        /// Get List of LoanGUID's from Encompass PipeLine with a Filter
+        ///</Summary>
+        [HttpPost, Route("api/QueryPipeLine")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(List<EPipelineLoans>))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
-        public IActionResult GetLoans(LoanRequest loanRequest)
+        public IHttpActionResult QueryPipeLine(LoanRequest loanRequest)
         {
             ErrorResponse _error = new ErrorResponse();
             try
             {
-                _logger.LogError(JsonConvert.SerializeObject(loanRequest));
+                Logger.WriteTraceLog(JsonConvert.SerializeObject(loanRequest));
                 List<EPipelineLoans> _loans = new List<EPipelineLoans>();
 
                 string responseStream = string.Empty;
 
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(base.sessionHelper.TokenType, base.sessionHelper.Token);
-
-                ELoansRequest _lReq = new ELoansRequest()
+                EPipelineLoanRequest _lReq = new EPipelineLoanRequest()
                 {
                     Filter = new QueryFields()
                     {
@@ -101,11 +87,15 @@ namespace EncompassWrapperAPI.Controllers
                     Fields = loanRequest.ReturnFields
                 };
 
-                _logger.LogError(JsonConvert.SerializeObject(_lReq));
+                Logger.WriteTraceLog(JsonConvert.SerializeObject(_lReq));
 
-                var response = _client.PostAsJsonAsync(string.Format(EncompassURLConstant.GET_LOANS, loanRequest.ReturnLoanLimit), _lReq).Result;
+                var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.GET_LOAN, loanRequest.ReturnLoanLimit), Content = _lReq, REQUESTTYPE = HeaderConstant.POST };
 
-                responseStream = response.Content.ReadAsStringAsync().Result;
+                IRestResponse response = _client.Execute(reqObj);
+
+                //var response = base._client.PostAsJsonAsync(string.Format(EncompassURLConstant.GET_LOANS, loanRequest.ReturnLoanLimit), _lReq).Result;
+
+                responseStream = response.Content;
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -123,30 +113,85 @@ namespace EncompassWrapperAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                MTSExceptionHandler.HandleException(ref ex);
                 _error.Summary = ResponseConstant.ERROR;
                 _error.ErrorCode = HttpStatusCode.InternalServerError.ToString();
                 _error.Details = ex.Message;
             }
 
-            return BadRequest(_error);
+            return BadRequest(JsonConvert.SerializeObject(_error));
+        }
+
+        ///<Summary>
+        /// Get Loans with Requested Fields
+        ///</Summary>
+        [HttpPost, Route("api/GetLoans")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(List<EPipelineLoans>))]
+        [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
+        public IHttpActionResult GetLoans(GetLoanRequest loanRequest)
+        {
+            ErrorResponse _error = new ErrorResponse();
+            try
+            {
+                Logger.WriteTraceLog(JsonConvert.SerializeObject(loanRequest));
+                List<EPipelineLoans> _loans = new List<EPipelineLoans>();
+
+                string responseStream = string.Empty;
+
+                ELoansRequest _lReq = new ELoansRequest()
+                {
+                    ReturnFields = loanRequest.ReturnFields,
+                    LoanGUIDs = loanRequest.LoanGUIDs
+                };
+
+                Logger.WriteTraceLog(JsonConvert.SerializeObject(_lReq));
+
+                var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.GET_LOAN, loanRequest.ReturnLoanLimit), Content = _lReq, REQUESTTYPE = HeaderConstant.POST };
+
+                IRestResponse response = _client.Execute(reqObj);
+
+                responseStream = response.Content;
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    _loans = JsonConvert.DeserializeObject<List<EPipelineLoans>>(responseStream);
+                    return Ok(_loans);
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    _error = new ErrorResponse() { Summary = "Unauthorized", ErrorCode = HttpStatusCode.Unauthorized.ToString(), Details = "" };
+                }
+                else
+                {
+                    _error = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);
+                }
+            }
+            catch (Exception ex)
+            {
+                MTSExceptionHandler.HandleException(ref ex);
+                _error.Summary = ResponseConstant.ERROR;
+                _error.ErrorCode = HttpStatusCode.InternalServerError.ToString();
+                _error.Details = ex.Message;
+            }
+
+            return BadRequest(JsonConvert.SerializeObject(_error));
         }
 
         #endregion
 
         #region Lock Loan
 
-
-        [HttpPost("LockLoan")]
+        ///<Summary>
+        /// Lock Encompass Loan
+        ///</Summary>
+        [HttpPost, Route("api/LockLoan")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(LockLoanResponse))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
-        public IActionResult LockLoan(string loanGuid)
+        public IHttpActionResult LockLoan(string loanGuid)
         {
             ErrorResponse _badRequest = new ErrorResponse();
             try
             {
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(base.sessionHelper.TokenType, base.sessionHelper.Token);
-
                 LockResourceModel lockResource = LoanResource.LockLoan(_client, loanGuid);
 
                 if (lockResource.Status)
@@ -162,26 +207,27 @@ namespace EncompassWrapperAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                MTSExceptionHandler.HandleException(ref ex);
                 _badRequest.Details = ResponseConstant.LOCK_FAILED;
                 _badRequest.ErrorCode = HttpStatusCode.InternalServerError.ToString();
                 _badRequest.Summary = ResponseConstant.ERROR;
             }
 
-            return BadRequest(_badRequest);
+            return BadRequest(JsonConvert.SerializeObject(_badRequest));
         }
 
-        [HttpPost("UnLockLoan")]
+        ///<Summary>
+        /// UnLock Encompass Loan
+        ///</Summary>
+        [HttpPost, Route("api/UnLockLoan")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(bool))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
-        public IActionResult UnLockLoan(string LockID, string LoanGUID)
+        public IHttpActionResult UnLockLoan(string LockID, string LoanGUID)
         {
             ErrorResponse _badRequest = new ErrorResponse();
             try
             {
                 string responseStream = string.Empty;
-
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(base.sessionHelper.TokenType, base.sessionHelper.Token);
 
                 LockResourceModel lockResource = LoanResource.UnLockLoan(_client, LockID, LoanGUID);
 
@@ -198,27 +244,30 @@ namespace EncompassWrapperAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                MTSExceptionHandler.HandleException(ref ex);
                 _badRequest.Details = ResponseConstant.UNLOCKED_FAILED;
                 _badRequest.ErrorCode = HttpStatusCode.InternalServerError.ToString();
                 _badRequest.Summary = ResponseConstant.ERROR;
             }
 
-            return BadRequest(_badRequest);
+            return BadRequest(JsonConvert.SerializeObject(_badRequest));
         }
 
         #endregion
 
         #region Update Loan Custom Field
 
-        [HttpPatch("UpdateLoanCustomField")]
+        ///<Summary>
+        /// Update Loan Custom Field
+        ///</Summary>
+        [HttpPatch, Route("api/UpdateLoanCustomField")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(string))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
-        public IActionResult UpdateLoanCustomField(UpdateCustomFieldRequest req)
+        public IHttpActionResult UpdateLoanCustomField(UpdateCustomFieldRequest req)
         {
             ErrorResponse _badRes = new ErrorResponse();
 
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(base.sessionHelper.TokenType, base.sessionHelper.Token);
+
             LockResourceModel lockResource = null;
             string responseStream = string.Empty;
             try
@@ -243,12 +292,15 @@ namespace EncompassWrapperAPI.Controllers
                         CustomFields = _fields
                     };
 
-                    _logger.LogError(JsonConvert.SerializeObject(_updateCustomFieldRequest));
-                    var response = _client.PatchAsync(string.Format(EncompassURLConstant.UPDATE_CUSTOM_FIELD, req.LoanGuid), new ObjectContent(typeof(ECustomFieldUpdateRequest), _updateCustomFieldRequest, new JsonMediaTypeFormatter())).Result;
+                    Logger.WriteTraceLog(JsonConvert.SerializeObject(_updateCustomFieldRequest));
+
+                    var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.UPDATE_CUSTOM_FIELD, req.LoanGuid), Content = _updateCustomFieldRequest, REQUESTTYPE = HeaderConstant.PATCH };
+
+                    IRestResponse response = _client.Execute(reqObj);
 
                     if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NoContent || response.StatusCode == HttpStatusCode.Created)
                     {
-                        responseStream = response.Content.ReadAsStringAsync().Result;
+                        responseStream = response.Content;
                         return Ok("Success");
                     }
                     else
@@ -268,7 +320,7 @@ namespace EncompassWrapperAPI.Controllers
                 _badRes.Summary = ResponseConstant.ERROR;
                 _badRes.Details = ex.Message;
                 _badRes.ErrorCode = HttpStatusCode.InternalServerError.ToString();
-                _logger.LogError(ex, ex.Message);
+                MTSExceptionHandler.HandleException(ref ex);
             }
             finally
             {
@@ -278,7 +330,7 @@ namespace EncompassWrapperAPI.Controllers
                 }
             }
 
-            return BadRequest(_badRes);
+            return BadRequest(JsonConvert.SerializeObject(_badRes));
         }
 
         #endregion

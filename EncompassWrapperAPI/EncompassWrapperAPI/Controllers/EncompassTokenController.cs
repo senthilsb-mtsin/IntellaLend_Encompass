@@ -2,48 +2,49 @@
 using EncompassRequestBody.ERequestModel;
 using EncompassRequestBody.WrapperReponseModel;
 using EncompassRequestBody.WrapperRequestModel;
-using EncompassWrapperAPI.Helper;
 using EncompassWrapperConstants;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using MTS.Web.Helpers;
+using MTSEntBlocks.ExceptionBlock.Handlers;
 using Newtonsoft.Json;
-using Swashbuckle.AspNetCore.Annotations;
+using RestSharp;
+using Swagger.Net.Annotations;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Net;
-using System.Net.Http;
+using System.Web.Http;
 
 namespace EncompassWrapperAPI.Controllers
 {
-    [ApiController]
-    [EnableCors("OpenPolicy")]
-    [Route("api/[controller]")]
-    public class EncompassTokenController : Controller
+    ///<Summary>
+    /// Controller to Generate, Validate Encompass Token
+    ///</Summary>
+    public class EncompassTokenController : ApiController
     {
-        #region Construtor
+        #region Constructure 
 
-        private readonly IHttpClientFactory _clientFactory;
+        private readonly RestWebClient _client;
 
-        private HttpClient _client;
-
-        private readonly ILogger<EncompassTokenController> _logger;
-
-        public EncompassTokenController(ILogger<EncompassTokenController> logger, IHttpClientFactory clientFactory)
+        ///<Summary>
+        /// To Create Rest Client Instance
+        ///</Summary>
+        public EncompassTokenController()
         {
-            _logger = logger;
-            _clientFactory = clientFactory;
-            _client = _clientFactory.CreateClient(HttpClientFactoryConstant.RequestWithoutValidator);
+            _client = new RestWebClient(ConfigurationManager.AppSettings["EncompassURL"]);
         }
 
         #endregion
 
         #region Token Validate & Get New Token
 
-        [HttpPost("ValidateToken")]
+
+        ///<Summary>
+        /// To Validate Encompass Token       
+        ///</Summary>
+        [HttpPost, Route("api/Token/ValidateToken")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(ETokenValidateResponse))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
-        public IActionResult ValidateToken(TokenValidateRequest validateRequest)
+        public IHttpActionResult ValidateToken(TokenValidateRequest validateRequest)
         {
             ErrorResponse _badRes = new ErrorResponse();
             ETokenValidateResponse _eToken = new ETokenValidateResponse();
@@ -56,11 +57,13 @@ namespace EncompassWrapperAPI.Controllers
                 form.Add("client_secret", validateRequest.ClientSecret);
                 form.Add("token", validateRequest.AccessToken);
 
-                var response = _client.PostAsync(EncompassURLConstant.TOKEN_INTROSPECTION, new FormUrlEncodedContent(form)).Result;
+                var reqObj = new HttpRequestObject() { URL = EncompassURLConstant.TOKEN_INTROSPECTION, RequestContentType = RequestTypeConstant.FORMURLENCODE, Content = form, REQUESTTYPE = HeaderConstant.POST };
 
-                if (!response.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.BadRequest)
+                IRestResponse response = _client.Execute(reqObj);
+
+                if (response.StatusCode != HttpStatusCode.OK && response.StatusCode == HttpStatusCode.BadRequest)
                 {
-                    string responseStream = response.Content.ReadAsStringAsync().Result;
+                    string responseStream = response.Content;
 
                     TokenInvalidModel _invalidToken = JsonConvert.DeserializeObject<TokenInvalidModel>(responseStream);
 
@@ -73,16 +76,19 @@ namespace EncompassWrapperAPI.Controllers
             {
                 _badRes.Summary = ResponseConstant.ERROR;
                 _badRes.Details = ex.Message;
-                _logger.LogError(ex, ex.Message);
+                MTSExceptionHandler.HandleException(ref ex);
             }
 
-            return BadRequest(_badRes);
+            return BadRequest(JsonConvert.SerializeObject(_badRes));
         }
 
-        [HttpPost("GetToken")]
+        ///<Summary>
+        /// Get Encompass Token without User credentials    
+        ///</Summary>
+        [HttpPost, Route("api/Token/GetToken")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(ETokenResponse))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
-        public IActionResult GetToken(ETokenRequest tokenRequest)
+        public IHttpActionResult GetToken(ETokenRequest tokenRequest)
         {
             ErrorResponse _badRes = new ErrorResponse();
             ETokenResponse _eToken = new ETokenResponse();
@@ -95,11 +101,13 @@ namespace EncompassWrapperAPI.Controllers
                 form.Add("scope", tokenRequest.Scope);
                 form.Add("instance_id", tokenRequest.InstanceID);
 
-                var response = _client.PostAsync(EncompassURLConstant.GET_TOKEN, new FormUrlEncodedContent(form)).Result;
+                var reqObj = new HttpRequestObject() { URL = EncompassURLConstant.GET_TOKEN, RequestContentType = RequestTypeConstant.FORMURLENCODE, Content = form, REQUESTTYPE = HeaderConstant.POST };
 
-                string responseStream = response.Content.ReadAsStringAsync().Result;
+                IRestResponse response = _client.Execute(reqObj);
 
-                if (response.IsSuccessStatusCode)
+                string responseStream = response.Content;
+
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
                     _eToken = JsonConvert.DeserializeObject<ETokenResponse>(responseStream);
                     return Ok(_eToken);
@@ -114,17 +122,19 @@ namespace EncompassWrapperAPI.Controllers
             {
                 _badRes.Summary = ResponseConstant.ERROR;
                 _badRes.Details = ex.Message;
-                _logger.LogError(ex, ex.Message);
+                MTSExceptionHandler.HandleException(ref ex);
             }
 
-            return BadRequest(_badRes);
+            return BadRequest(JsonConvert.SerializeObject(_badRes));
         }
 
-
-        [HttpPost("GetTokenWithUser")]
+        ///<Summary>
+        /// Get Encompass Token with User credentials    
+        ///</Summary>
+        [HttpPost, Route("api/Token/GetTokenWithUser")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(ETokenResponse))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
-        public IActionResult GetTokenWithUser(ETokenUserRequest tokenRequest)
+        public IHttpActionResult GetTokenWithUser(ETokenUserRequest tokenRequest)
         {
             ErrorResponse _badRes = new ErrorResponse();
             ETokenResponse _eToken = new ETokenResponse();
@@ -138,11 +148,15 @@ namespace EncompassWrapperAPI.Controllers
                 form.Add("username", tokenRequest.UserName);
                 form.Add("password", tokenRequest.Password);
 
-                var response = _client.PostAsync(EncompassURLConstant.GET_TOKEN, new FormUrlEncodedContent(form)).Result;
+                var obj = new { client_id = tokenRequest.ClientID, client_secret = tokenRequest.ClientSecret, grant_type = tokenRequest.GrantType, scope = tokenRequest.Scope, username = tokenRequest.UserName, password = tokenRequest.Password };
 
-                string responseStream = response.Content.ReadAsStringAsync().Result;
+                var reqObj = new HttpRequestObject() { URL = EncompassURLConstant.GET_TOKEN, RequestContentType = RequestTypeConstant.FORMURLENCODE, Content = form, REQUESTTYPE = HeaderConstant.POST };
 
-                if (response.IsSuccessStatusCode)
+                IRestResponse response = _client.Execute(reqObj);
+
+                string responseStream = response.Content;
+
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
                     _eToken = JsonConvert.DeserializeObject<ETokenResponse>(responseStream);
                     return Ok(_eToken);
@@ -157,10 +171,10 @@ namespace EncompassWrapperAPI.Controllers
             {
                 _badRes.Summary = ResponseConstant.ERROR;
                 _badRes.Details = ex.Message;
-                _logger.LogError(ex, ex.Message);
+                MTSExceptionHandler.HandleException(ref ex);
             }
 
-            return BadRequest(_badRes);
+            return BadRequest(JsonConvert.SerializeObject(_badRes));
         }
 
         #endregion

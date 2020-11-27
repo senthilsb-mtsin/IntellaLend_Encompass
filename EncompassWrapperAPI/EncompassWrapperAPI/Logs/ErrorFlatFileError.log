@@ -1,0 +1,193 @@
+Timestamp: 11/26/2020 4:44:57 PM
+
+Message: HandlingInstanceID: 7dcbc287-5f0d-4294-bb4a-04cf8ad80071
+An exception of type 'System.Exception' occurred and was caught.
+----------------------------------------------------------------
+11/26/2020 16:44:57
+Type : System.Exception, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+Message : Invalid client or client credentials.
+Source : EncompassWrapperAPI
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : System.Web.Http.IHttpActionResult GetTokenWithUser(EncompassRequestBody.ERequestModel.ETokenUserRequest)
+HResult : -2146233088
+Stack Trace :    at EncompassWrapperAPI.Controllers.EncompassTokenController.GetTokenWithUser(ETokenUserRequest tokenRequest) in D:\Prakash\GitHub\EncompassRepo\EncompassWrapperAPI\EncompassWrapperAPI\Controllers\EncompassTokenController.cs:line 167
+
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 11/26/2020 11:14:57 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/3/ROOT-1-132508627977744980
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------
+Timestamp: 11/26/2020 5:08:34 PM
+
+Message: HandlingInstanceID: 085a51fd-61e8-43c0-991d-64605d735ab2
+An exception of type 'System.Exception' occurred and was caught.
+----------------------------------------------------------------
+11/26/2020 17:08:34
+Type : System.Exception, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+Message : Invalid client or client credentials.
+Source : EncompassWrapperAPI
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : System.Web.Http.IHttpActionResult GetTokenWithUser(EncompassRequestBody.ERequestModel.ETokenUserRequest)
+HResult : -2146233088
+Stack Trace :    at EncompassWrapperAPI.Controllers.EncompassTokenController.GetTokenWithUser(ETokenUserRequest tokenRequest) in D:\Prakash\GitHub\EncompassRepo\EncompassWrapperAPI\EncompassWrapperAPI\Controllers\EncompassTokenController.cs:line 156
+
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 11/26/2020 11:38:34 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/3/ROOT-1-132508641888699687
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------
+Timestamp: 11/26/2020 5:09:43 PM
+
+Message: HandlingInstanceID: 5f3fc8ff-59e4-4226-9982-43f507444b34
+An exception of type 'System.Exception' occurred and was caught.
+----------------------------------------------------------------
+11/26/2020 17:09:43
+Type : System.Exception, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+Message : Invalid client or client credentials.
+Source : EncompassWrapperAPI
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : System.Web.Http.IHttpActionResult GetTokenWithUser(EncompassRequestBody.ERequestModel.ETokenUserRequest)
+HResult : -2146233088
+Stack Trace :    at EncompassWrapperAPI.Controllers.EncompassTokenController.GetTokenWithUser(ETokenUserRequest tokenRequest) in D:\Prakash\GitHub\EncompassRepo\EncompassWrapperAPI\EncompassWrapperAPI\Controllers\EncompassTokenController.cs:line 156
+
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 11/26/2020 11:39:43 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/3/ROOT-1-132508641888699687
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------
+Timestamp: 11/26/2020 5:10:41 PM
+
+Message: HandlingInstanceID: f97941ff-3e39-4ad2-98d1-dae886859230
+An exception of type 'System.Exception' occurred and was caught.
+----------------------------------------------------------------
+11/26/2020 17:10:41
+Type : System.Exception, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+Message : Invalid client or client credentials.
+Source : EncompassWrapperAPI
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : System.Web.Http.IHttpActionResult GetTokenWithUser(EncompassRequestBody.ERequestModel.ETokenUserRequest)
+HResult : -2146233088
+Stack Trace :    at EncompassWrapperAPI.Controllers.EncompassTokenController.GetTokenWithUser(ETokenUserRequest tokenRequest) in D:\Prakash\GitHub\EncompassRepo\EncompassWrapperAPI\EncompassWrapperAPI\Controllers\EncompassTokenController.cs:line 156
+
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 11/26/2020 11:40:41 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/3/ROOT-1-132508641888699687
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------
+Timestamp: 11/26/2020 5:14:18 PM
+
+Message: HandlingInstanceID: 4ea69b52-b784-4725-af39-447bfa495982
+An exception of type 'System.Exception' occurred and was caught.
+----------------------------------------------------------------
+11/26/2020 17:14:18
+Type : System.Exception, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+Message : Invalid client or client credentials.
+Source : EncompassWrapperAPI
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : System.Web.Http.IHttpActionResult GetTokenWithUser(EncompassRequestBody.ERequestModel.ETokenUserRequest)
+HResult : -2146233088
+Stack Trace :    at EncompassWrapperAPI.Controllers.EncompassTokenController.GetTokenWithUser(ETokenUserRequest tokenRequest) in D:\Prakash\GitHub\EncompassRepo\EncompassWrapperAPI\EncompassWrapperAPI\Controllers\EncompassTokenController.cs:line 156
+
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 11/26/2020 11:44:18 AM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/3/ROOT-1-132508641888699687
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------
+Timestamp: 11/26/2020 6:00:36 PM
+
+Message: HandlingInstanceID: 1db755e4-89ec-4ba1-953b-257343ecbf8d
+An exception of type 'Newtonsoft.Json.JsonSerializationException' occurred and was caught.
+------------------------------------------------------------------------------------------
+11/26/2020 18:00:36
+Type : Newtonsoft.Json.JsonSerializationException, Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed
+Message : Cannot deserialize the current JSON array (e.g. [1,2,3]) into type 'EncompassRequestBody.EResponseModel.EIDResponse' because the type requires a JSON object (e.g. {"name":"value"}) to deserialize correctly.
+To fix this error either change the JSON to a JSON object (e.g. {"name":"value"}) or change the deserialized type to an array or a type that implements a collection interface (e.g. ICollection, IList) like List<T> that can be deserialized from a JSON array. JsonArrayAttribute can also be added to the type to force it to deserialize from a JSON array.
+Path '', line 1, position 1.
+Source : Newtonsoft.Json
+Help link : 
+LineNumber : 1
+LinePosition : 1
+Path : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : Newtonsoft.Json.Serialization.JsonArrayContract EnsureArrayContract(Newtonsoft.Json.JsonReader, System.Type, Newtonsoft.Json.Serialization.JsonContract)
+HResult : -2146233088
+Stack Trace :    at Newtonsoft.Json.Serialization.JsonSerializerInternalReader.EnsureArrayContract(JsonReader reader, Type objectType, JsonContract contract)
+   at Newtonsoft.Json.Serialization.JsonSerializerInternalReader.CreateList(JsonReader reader, Type objectType, JsonContract contract, JsonProperty member, Object existingValue, String id)
+   at Newtonsoft.Json.Serialization.JsonSerializerInternalReader.CreateValueInternal(JsonReader reader, Type objectType, JsonContract contract, JsonProperty member, JsonContainerContract containerContract, JsonProperty containerMember, Object existingValue)
+   at Newtonsoft.Json.Serialization.JsonSerializerInternalReader.Deserialize(JsonReader reader, Type objectType, Boolean checkAdditionalContent)
+   at Newtonsoft.Json.JsonSerializer.DeserializeInternal(JsonReader reader, Type objectType)
+   at Newtonsoft.Json.JsonConvert.DeserializeObject(String value, Type type, JsonSerializerSettings settings)
+   at Newtonsoft.Json.JsonConvert.DeserializeObject[T](String value, JsonSerializerSettings settings)
+   at Newtonsoft.Json.JsonConvert.DeserializeObject[T](String value)
+   at EncompassWrapperAPI.Controllers.EncompassDocumentController.AddDocument(AddContainerRequest request) in D:\Prakash\GitHub\EncompassRepo\EncompassWrapperAPI\EncompassWrapperAPI\Controllers\EncompassDocumentController.cs:line 171
+
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 11/26/2020 12:30:36 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/3/ROOT-1-132508673293499845
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: General
+EventID: 9000
+Priority: 0
+Severity: ErrorTitile: Enterprise Library Exception Handling
+----------------------------------------

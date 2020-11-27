@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{29819FFE-7E45-49B9-9A60-0031C48EF9CA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EncompassRequestBody</RootNamespace>
+    <AssemblyName>EncompassRequestBody</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.Http.Features, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.Http.Features.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Http.Features.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Primitives.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.1\lib\netstandard2.0\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.4.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.1\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class1.cs" />
+    <Compile Include="CustomModel\HeaderToken.cs" />
+    <Compile Include="CustomModel\LockResourceModel.cs" />
+    <Compile Include="CustomModel\TokenInvalidModel.cs" />
+    <Compile Include="ERequestModel\EAddRemoveContainerRequest.cs" />
+    <Compile Include="ERequestModel\EExportAttachmentJob.cs" />
+    <Compile Include="ERequestModel\ELoansRequest.cs" />
+    <Compile Include="ERequestModel\ERemoveAttachment.cs" />
+    <Compile Include="ERequestModel\ETokenRequest.cs" />
+    <Compile Include="ERequestModel\ETokenUserRequest.cs" />
+    <Compile Include="ERequestModel\EUploadRequest.cs" />
+    <Compile Include="EResponseModel\EAttachment.cs" />
+    <Compile Include="EResponseModel\EFieldResponse.cs" />
+    <Compile Include="EResponseModel\EIDResponse.cs" />
+    <Compile Include="EResponseModel\EncompassAttachmentUploadURL.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WrapperReponseModel\AddContainerResponse.cs" />
+    <Compile Include="WrapperReponseModel\BadRequestResult.cs" />
+    <Compile Include="WrapperReponseModel\EAddRemoveAttachmentResponse.cs" />
+    <Compile Include="WrapperReponseModel\EContainer.cs" />
+    <Compile Include="WrapperReponseModel\EFieldUpdateRequest.cs" />
+    <Compile Include="WrapperReponseModel\EJobResponse.cs" />
+    <Compile Include="WrapperReponseModel\EPipelineLoans.cs" />
+    <Compile Include="WrapperReponseModel\ETokenResponse.cs" />
+    <Compile Include="WrapperReponseModel\ETokenValidateResponse.cs" />
+    <Compile Include="WrapperReponseModel\EUploadResponse.cs" />
+    <Compile Include="WrapperReponseModel\LockRequest.cs" />
+    <Compile Include="WrapperReponseModel\LockResponse.cs" />
+    <Compile Include="WrapperRequestModel\AddRemoveContainerRequest.cs" />
+    <Compile Include="WrapperRequestModel\AssignAttachmentRequest.cs" />
+    <Compile Include="WrapperRequestModel\EFieldUpdateRequest.cs" />
+    <Compile Include="WrapperRequestModel\TokenValidateRequest.cs" />
+    <Compile Include="WrapperRequestModel\UpdateCustomFieldRequest.cs" />
+    <Compile Include="WrapperRequestModel\UploadRequest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

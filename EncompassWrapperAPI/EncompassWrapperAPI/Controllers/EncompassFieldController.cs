@@ -2,56 +2,39 @@
 using EncompassRequestBody.EResponseModel;
 using EncompassRequestBody.WrapperReponseModel;
 using EncompassRequestBody.WrapperRequestModel;
-using EncompassWrapperAPI.Helper;
 using EncompassWrapperConstants;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using MTS.Web.Helpers;
+using MTSEntBlocks.ExceptionBlock.Handlers;
 using Newtonsoft.Json;
-using Swashbuckle.AspNetCore.Annotations;
+using RestSharp;
+using Swagger.Net.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Formatting;
-using System.Net.Http.Headers;
+using System.Web.Http;
 
 namespace EncompassWrapperAPI.Controllers
 {
-    [ApiController]
-    [EnableCors("OpenPolicy")]
-    [Route("api/[controller]")]
-    public class EncompassFieldController : CustomControllerBase
+    ///<Summary>
+    /// Encompass Field Releated Activities
+    ///</Summary>
+    public class EncompassFieldController : BaseController
     {
-        #region Construtor
-
-        private readonly IHttpClientFactory _clientFactory;
-
-        private HttpClient _client;
-
-        private readonly ILogger<EncompassFieldController> _logger;
-
-        public EncompassFieldController(ILogger<EncompassFieldController> logger, IHttpClientFactory clientFactory)
-        {
-            _logger = logger;
-            _clientFactory = clientFactory;
-            _client = _clientFactory.CreateClient(HttpClientFactoryConstant.RequestWithValidator);
-        }
-
-        #endregion
 
         #region Get Field 
 
-        [HttpPost("GetFieldSchema")]
+        ///<Summary>
+        /// Get Encompass Field Schema
+        ///</Summary>
+        [HttpPost, Route("api/GetFieldSchema")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(object))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
-        public IActionResult GetFieldSchema(string[] FieldIDs)
+        public IHttpActionResult GetFieldSchema(string[] FieldIDs)
         {
             ErrorResponse _error = new ErrorResponse();
             string responseStream = string.Empty;
             try
             {
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(base.sessionHelper.TokenType, base.sessionHelper.Token);
 
                 Dictionary<string, string> fields = new Dictionary<string, string>();
 
@@ -60,11 +43,13 @@ namespace EncompassWrapperAPI.Controllers
                     fields[item] = "";
                 }
 
-                var response = _client.PostAsJsonAsync(string.Format(EncompassURLConstant.GET_FIELD_SCHEMA), fields).Result;
+                var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.GET_FIELD_SCHEMA), Content = fields, REQUESTTYPE = HeaderConstant.POST };
+
+                IRestResponse response = _client.Execute(reqObj);
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    responseStream = response.Content.ReadAsStringAsync().Result;
+                    responseStream = response.Content;
                     return Ok(responseStream);
                 }
                 else
@@ -74,31 +59,35 @@ namespace EncompassWrapperAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                MTSExceptionHandler.HandleException(ref ex);
                 _error.Summary = ResponseConstant.ERROR;
                 _error.ErrorCode = HttpStatusCode.InternalServerError.ToString();
                 _error.Details = ex.Message;
             }
 
-            return BadRequest(_error);
+            return BadRequest(JsonConvert.SerializeObject(_error));
         }
 
-        [HttpPost("GetPreDefinedFieldValues")]
+        ///<Summary>
+        /// Get Encompass PreDefined Field Values
+        ///</Summary>
+        [HttpPost, Route("api/GetPreDefinedFieldValues")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(List<EFieldResponse>))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
-        public IActionResult GetPreDefinedFieldValues(FieldGetRequest _res)
+        public IHttpActionResult GetPreDefinedFieldValues(FieldGetRequest _res)
         {
             ErrorResponse _error = new ErrorResponse();
             string responseStream = string.Empty;
             try
             {
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(base.sessionHelper.TokenType, base.sessionHelper.Token);
 
-                var response = _client.PostAsJsonAsync(string.Format(EncompassURLConstant.GET_PREDEFINED_FIELD_VALUE, _res.LoanGUID), _res.FieldIDs).Result;
+                var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.GET_PREDEFINED_FIELD_VALUE, _res.LoanGUID), Content = _res.FieldIDs, REQUESTTYPE = HeaderConstant.POST };
+
+                IRestResponse response = _client.Execute(reqObj);
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    responseStream = response.Content.ReadAsStringAsync().Result;
+                    responseStream = response.Content;
                     return Ok(JsonConvert.DeserializeObject<List<EFieldResponse>>(responseStream));
                 }
                 else
@@ -108,27 +97,30 @@ namespace EncompassWrapperAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                MTSExceptionHandler.HandleException(ref ex);
                 _error.Summary = ResponseConstant.ERROR;
                 _error.ErrorCode = HttpStatusCode.InternalServerError.ToString();
                 _error.Details = ex.Message;
             }
 
-            return BadRequest(_error);
+            return BadRequest(JsonConvert.SerializeObject(_error));
         }
 
         #endregion
 
         #region Update Loan Field
 
-        [HttpPatch("UpdatePredefinedFields")]
+        ///<Summary>
+        /// Update Encompass PreDefined Field Values
+        ///</Summary>
+        [HttpPatch, Route("api/UpdatePredefinedFields")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(EIDResponse))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
-        public IActionResult UpdatePredefinedFields(FieldUpdateRequest req)
+        public IHttpActionResult UpdatePredefinedFields(FieldUpdateRequest req)
         {
             ErrorResponse _badRes = new ErrorResponse();
 
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(base.sessionHelper.TokenType, base.sessionHelper.Token);
+
 
             LockResourceModel lockResource = null;
 
@@ -139,9 +131,11 @@ namespace EncompassWrapperAPI.Controllers
 
                 if (lockResource.Status)
                 {
-                    var response = _client.PatchAsync(string.Format(EncompassURLConstant.UPDATE_LOAN_FIELD, req.LoanGUID), new ObjectContent(typeof(object), req.FieldSchemas, new JsonMediaTypeFormatter())).Result;
+                    var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.UPDATE_LOAN_FIELD, req.LoanGUID), Content = req.FieldSchemas, REQUESTTYPE = HeaderConstant.PATCH };
 
-                    responseStream = response.Content.ReadAsStringAsync().Result;
+                    IRestResponse response = _client.Execute(reqObj);
+
+                    responseStream = response.Content;
 
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
@@ -165,7 +159,7 @@ namespace EncompassWrapperAPI.Controllers
                 _badRes.Summary = ResponseConstant.ERROR;
                 _badRes.Details = ex.Message;
                 _badRes.ErrorCode = HttpStatusCode.InternalServerError.ToString();
-                _logger.LogError(ex, ex.Message);
+                MTSExceptionHandler.HandleException(ref ex);
             }
             finally
             {
@@ -175,7 +169,7 @@ namespace EncompassWrapperAPI.Controllers
                 }
             }
 
-            return BadRequest(_badRes);
+            return BadRequest(JsonConvert.SerializeObject(_badRes));
         }
 
         #endregion

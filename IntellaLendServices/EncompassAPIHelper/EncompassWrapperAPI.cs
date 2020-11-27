@@ -36,19 +36,19 @@ namespace EncompassAPIHelper
             foreach (Dictionary<string, string> item in _eFields)
             {
                 field = new Fields();
-                field.fieldID = item.Keys.FirstOrDefault();
-                field.fieldValue = item.Values.FirstOrDefault();
-                field.matchType = "exact";
+                field.FieldID = item.Keys.FirstOrDefault();
+                field.FieldValue = item.Values.FirstOrDefault();
+                field.MatchType = "exact";
                 fieldList.Add(field);
             }
 
             LoanRequest _res = new LoanRequest()
             {
-                queryFields = fieldList,
-                returnFields = new List<string>() {
+                QueryFields = fieldList,
+                ReturnFields = new List<string>() {
                        "Loan.GUID"
                     },
-                returnLoanLimit = "100"
+                ReturnLoanLimit = "100"
             };
 
 
@@ -213,8 +213,9 @@ namespace EncompassAPIHelper
             AddContainerRequest _req = new AddContainerRequest()
             {
                 LoanGUID = loanGUID,
-                DocumentName = documentName
+                Documents = new List<EAddDocument>() { new EAddDocument() { DocumentName = documentName, DocumentDescription = documentName } }
             };
+
 
             var method = new HttpMethod("POST");
 
