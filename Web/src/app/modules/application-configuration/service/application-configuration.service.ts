@@ -4,6 +4,7 @@ import { ApplicationConfigDataAccess } from './../application-configuration.data
 import { Injectable } from '@angular/core';
 import { ConfigTypeModel } from '../models/config-type.model';
 import { ConfigAllRequestModel } from '../models/get-all-configtype-request.model';
+import { CheckWebHookEventTypeExistModal } from '../models/webhook-subscription';
 const jwtHelper = new JwtHelperService();
 @Injectable()
 export class ApplicationConfigService {
@@ -16,6 +17,7 @@ export class ApplicationConfigService {
   addStipluation$ = new Subject();
   addCategory$ = new Subject();
   addReport$ = new Subject();
+  WebHookSubscriptionEventTypeExist$ = new Subject();
   constructor(private _appconfigdata: ApplicationConfigDataAccess) { }
   private GetAllTenantConfig: ConfigAllRequestModel;
   SetConfigType(inputs: ConfigTypeModel) {
@@ -65,5 +67,15 @@ export class ApplicationConfigService {
         }
       }
     );
+  }
+  CheckWebHookSubscriptionEventTypeExist(req: CheckWebHookEventTypeExistModal){
+    return this._appconfigdata.CheckWebHookSubscriptionEventTypeExist(req).subscribe(
+      (res)=>{
+        if(res !== null){
+          const Result = jwtHelper.decodeToken(res.Data)['data'];
+          this.WebHookSubscriptionEventTypeExist$.next(Result.EventTypeExist);
+        }
+      }
+    )
   }
 }

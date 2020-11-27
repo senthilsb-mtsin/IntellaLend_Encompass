@@ -32,19 +32,53 @@
                         <div *ngIf="isconfigsettings">
                             <mts-config-settings></mts-config-settings>
                         </div>
-                        <div *ngIf="!isconfigsettings" class="col-md-2 p-t-25 text-center" [ngSwitch]="belowcomponent">
-                            <button *ngSwitchCase="'List'" class="btn btn-info waves-effect waves-light" (click)="AddCategoryLists()">
-                                <span class="material-icons">add_circle_outline</span>
-                                &nbsp;&nbsp;Add
-                            </button>
-                            <button *ngSwitchCase="'Stipulation'" class="btn btn-info waves-effect waves-light" (click)="AddInvestor()">
-                                <span class="material-icons">add_circle_outline</span>
-                                &nbsp;&nbsp;Add
-                            </button>
-                            <button *ngSwitchCase="'Report'" class="btn btn-info waves-effect waves-light" (click)="AddReportMaster()">
-                                <span class="material-icons">add_circle_outline</span>
-                                &nbsp;&nbsp;Add
-                            </button>
+                        <div *ngIf="!isconfigsettings" class="col-md-7 text-center" [ngSwitch]="belowcomponent">
+                            <div *ngSwitchCase="'List'" class="p-t-25">
+                                <button class="btn btn-info waves-effect waves-light" (click)="AddCategoryLists()">
+                                    <span class="material-icons">add_circle_outline</span>
+                                    &nbsp;&nbsp;Add
+                                </button>
+                            </div>
+                            <div *ngSwitchCase="'Stipulation'" class="p-t-25">
+                                <button class="btn btn-info waves-effect waves-light" (click)="AddInvestor()">
+                                    <span class="material-icons">add_circle_outline</span>
+                                    &nbsp;&nbsp;Add
+                                </button>
+                            </div>
+                            <div *ngSwitchCase="'Report'" class="p-t-25">
+                                <button class="btn btn-info waves-effect waves-light" (click)="AddReportMaster()">
+                                    <span class="material-icons">add_circle_outline</span>
+                                    &nbsp;&nbsp;Add
+                                </button>
+                            </div>
+                            <div *ngSwitchCase="'WebHook'">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <select [(ngModel)]="SelectedEventType" (change)="onChangeEventType()">
+                                            <option *ngFor="let EventType of WebHookSubscriptionEventTypes"
+                                                [ngValue]="EventType.Value">{{EventType.Text}}</option>
+                                        </select>
+                                        <label class="control-label" for="select">
+                                            Event Type
+                                        </label>
+                                        <i class="bar"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 p-t-25" *ngIf="!SelectedEventTypeExist">
+                                    <button class="btn btn-info waves-effect waves-light"
+                                        (click)="createWebHookSubscription()">
+                                        <span class="material-icons">add_circle_outline</span>
+                                        &nbsp;&nbsp;Create
+                                    </button>
+                                </div>
+                                <div class="col-md-2 p-t-25" *ngIf="SelectedEventTypeExist">
+                                    <button class="btn btn-info waves-effect waves-light"
+                                        (click)="deleteWebHookSubscription()">
+                                        <span class="material-icons">remove_circle_outline</span>
+                                        &nbsp;&nbsp;Delete
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -350,6 +350,7 @@ namespace MTSEntityDataAccess
         public DbSet<LOSExportFileStaging> LOSExportFileStaging { get { return this.Set<LOSExportFileStaging>(); } }
 
         public DbSet<LOSExportFileStagingDetail> LOSExportFileStagingDetail { get { return this.Set<LOSExportFileStagingDetail>(); } }
+        public DbSet<EWebhookSubscription> EWebhookSubscription { get { return this.Set<EWebhookSubscription>(); } }
 
         #endregion
 
@@ -760,6 +761,9 @@ namespace MTSEntityDataAccess
 
                 modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<AuditDescriptionConfig>()
                        .ToTable("AuditDescriptionConfig");
+
+                modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<EWebhookSubscription>()
+                             .ToTable("EWebhookSubscriptions");
 
                 #endregion
 

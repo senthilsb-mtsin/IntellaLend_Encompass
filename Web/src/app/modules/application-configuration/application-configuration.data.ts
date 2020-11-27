@@ -17,6 +17,7 @@ import {
 } from './models/box-setting.model';
 import { ConfigAllRequestModel } from './models/get-all-configtype-request.model';
 import { SaveCategorymodel, UpdateCategorymodel } from './models/category-list.model';
+import { CheckWebHookEventTypeExistModal } from './models/webhook-subscription';
 @Injectable()
 export class ApplicationConfigDataAccess {
   constructor(private _apiService: APIService) { }
@@ -202,5 +203,10 @@ export class ApplicationConfigDataAccess {
     return this._apiService.authHttpGet(
       AppConfigApiUrlConstant.GET_SMTP_DETAILS
     );
+  }
+  CheckWebHookSubscriptionEventTypeExist(req: CheckWebHookEventTypeExistModal){
+    return this._apiService.authHttpPost(
+      AppConfigApiUrlConstant.CHECK_WEBHOOK_SUBSCRIPTION_EVENTTYPE_EXIST, req
+      );
   }
 }

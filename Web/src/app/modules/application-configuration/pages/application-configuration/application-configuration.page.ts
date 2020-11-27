@@ -6,9 +6,10 @@ import {
   OnInit,
   OnDestroy,
 } from '@angular/core';
-import { AppSettings } from '@mts-app-setting';
+import { AppSettings, WebHookSubscriptionEventTypesConstants } from '@mts-app-setting';
 
 import { ConfigTypeModel } from '../../models/config-type.model';
+import { CheckWebHookEventTypeExistModal } from '../../models/webhook-subscription';
 @Component({
   selector: 'mts-application-configuration',
   templateUrl: './application-configuration.page.html',
@@ -23,12 +24,18 @@ export class ApplicationConfigurationComponent
   belowcomponent = 'configtable';
   isconfigsettings = false;
   configvaluess: any;
+  WebHookSubscriptionEventTypes: any = []
+  SelectedEventTypeExist: boolean = false;
+  SelectedEventType: number;
   constructor(private _appconfigservice: ApplicationConfigService,
   ) { }
   private subscription: Subscription[] = [];
   ngOnInit() {
     AppSettings.TenantConfigType.forEach((element: ConfigTypeModel) => {
       this.configTypeItems.push(element);
+    });
+    WebHookSubscriptionEventTypesConstants.EventTypesDropdown.forEach((element) => {
+      this.WebHookSubscriptionEventTypes.push({Value: element, Text: WebHookSubscriptionEventTypesConstants.EventTypesDescription[element]});
     });
     this.subscription.push(
       this._appconfigservice.refresh$.subscribe(
@@ -38,6 +45,15 @@ export class ApplicationConfigurationComponent
         }
       )
     );
+    this.subscription.push(
+      this._appconfigservice.WebHookSubscriptionEventTypeExist$.subscribe(
+        (result: boolean) => {
+          this.SelectedEventTypeExist = result;
+        }
+      )
+    );
+    this.SelectedEventType = WebHookSubscriptionEventTypesConstants.DocumentLog;
+    this.onChangeEventType();
   }
 
   onConfigTypeChange(value: any) {
@@ -81,6 +97,9 @@ export class ApplicationConfigurationComponent
     } else if (value.ConfigType === 'password') {
 
       this.belowcomponent = 'password';
+    } else if (value.ConfigType === 'WebHook') {
+
+      this.belowcomponent = 'WebHook';
     } else {
       this.belowcomponent = 'configtable';
     }
@@ -96,6 +115,16 @@ export class ApplicationConfigurationComponent
 
   AddReportMaster() {
     this._appconfigservice.addReport$.next(true);
+  }
+  onChangeEventType(){
+    const req: CheckWebHookEventTypeExistModal = new CheckWebHookEventTypeExistModal(AppSettings.TenantSchema, this.SelectedEventType);
+    this._appconfigservice.CheckWebHookSubscriptionEventTypeExist(req);
+  }
+  createWebHookSubscription(){
+
+  }
+  deleteWebHookSubscription(){
+
   }
   ngOnDestroy() {
     this.subscription.forEach((element) => {

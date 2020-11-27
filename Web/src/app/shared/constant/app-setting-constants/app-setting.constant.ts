@@ -81,6 +81,11 @@ export class AppSettings {
       ConfigValue: 'Password Policy',
       ConfigType: 'password',
     },
+    {
+      ConfigKey: 'WebHook_Subscription',
+      ConfigValue: 'WebHook Subscription',
+      ConfigType: 'WebHook',
+    },
   ];
   static customerAuthorityLevel = 91;
   static DocumentCriticalStatus = {
@@ -158,3 +163,17 @@ export class EncompassUploadStagingConstant {
     '-1': 'label label-danger',
   };
 }// tslint:disable-next-line: max-classes-per-file
+export class WebHookSubscriptionEventTypesConstants{
+  static MilestoneLog = 1;
+  static DocumentLog = 2;
+  
+  static EventTypesDescription = {
+    '1': 'Milestone Log',
+    '2': 'Document Log'
+  }
+
+  static EventTypesDropdown = [
+    WebHookSubscriptionEventTypesConstants.MilestoneLog,
+    WebHookSubscriptionEventTypesConstants.DocumentLog
+  ]
+}

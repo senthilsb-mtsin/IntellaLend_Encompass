@@ -501,6 +501,16 @@ namespace IntellaLend.EntityDataHandler
                 }
             }
         }
+
+        public object CheckWebHookSubscriptionEventTypeExist(int eventType)
+        {
+            bool EventTypeExist = false;
+            using (var db = new DBConnect(TableSchema))
+            {
+                EventTypeExist = db.EWebhookSubscription.AsNoTracking().Any(x => x.EventType == eventType);
+            }
+            return new { EventTypeExist };
+        }
         #endregion
 
 
