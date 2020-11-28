@@ -14,6 +14,19 @@ namespace EncompassWrapperAPI
                 operation.parameters = new List<Parameter>();
             }
 
+            if (operation.operationId == "EncompassAttachment_UploadAttachment") // controller and action name
+            {
+                operation.consumes.Add("multipart/form-data");
+                operation.parameters.Add(new Parameter
+                {
+                    name = "file",
+                    required = true,
+                    type = "file",
+                    @in = "formData"
+                }
+           );
+            }
+
             if (!apiDescription.RelativePath.Contains("api/Token/"))
             {
                 operation.parameters.Add(new Parameter

@@ -88,6 +88,13 @@ namespace MTS.Web.Helpers
                         List<string> param = ((Dictionary<string, string>)httpRequestObject.Content).Select(item => $"{item.Key}={item.Value}").ToList();
                         restRequest.AddOrUpdateParameter(httpRequestObject.RequestContentType, string.Join("&", param), ParameterType.RequestBody);
                     }
+                    else if (httpRequestObject.RequestContentType == "multipart/form-data")
+                    {
+                        if (httpRequestObject.Content != null)
+                            restRequest.AddFileBytes(httpRequestObject.Content.FileName, httpRequestObject.FileStream, httpRequestObject.Content.FileName);
+                        else
+                            restRequest.AddFileBytes("", httpRequestObject.FileStream, "");
+                    }
                     break;
                 case "PUT":
                     restRequest.Method = Method.PUT;
@@ -100,6 +107,13 @@ namespace MTS.Web.Helpers
                         List<string> param = ((Dictionary<string, string>)httpRequestObject.Content).Select(item => $"{item.Key}={item.Value}").ToList();
                         restRequest.AddOrUpdateParameter(httpRequestObject.RequestContentType, string.Join("&", param), ParameterType.RequestBody);
                     }
+                    else if (httpRequestObject.RequestContentType == "multipart/form-data")
+                    {
+                        if (httpRequestObject.Content != null)
+                            restRequest.AddFileBytes(httpRequestObject.Content.FileName, httpRequestObject.FileStream, httpRequestObject.Content.FileName);
+                        else
+                            restRequest.AddFileBytes("", httpRequestObject.FileStream, "");
+                    }
                     break;
                 case "PATCH":
                     restRequest.Method = Method.PATCH;
@@ -111,6 +125,13 @@ namespace MTS.Web.Helpers
                     {
                         List<string> param = ((Dictionary<string, string>)httpRequestObject.Content).Select(item => $"{item.Key}={item.Value}").ToList();
                         restRequest.AddOrUpdateParameter(httpRequestObject.RequestContentType, string.Join("&", param), ParameterType.RequestBody);
+                    }
+                    else if (httpRequestObject.RequestContentType == "multipart/form-data")
+                    {
+                        if (httpRequestObject.Content != null)
+                            restRequest.AddFileBytes(httpRequestObject.Content.FileName, httpRequestObject.FileStream, httpRequestObject.Content.FileName);
+                        else
+                            restRequest.AddFileBytes("", httpRequestObject.FileStream, "");
                     }
                     break;
                 case "DELETE":
