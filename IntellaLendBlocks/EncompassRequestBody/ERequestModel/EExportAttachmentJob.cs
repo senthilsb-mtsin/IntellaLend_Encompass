@@ -4,6 +4,13 @@ using System.Collections.Generic;
 
 namespace EncompassRequestBody.ERequestModel
 {
+
+    public class EAttachmentDownloadRequest
+    {
+        [JsonProperty(PropertyName = "attachments")]
+        public List<string> Attachments { get; set; }
+    }
+
     public class EExportAttachmentJob
     {
         [JsonProperty(PropertyName = "annotationSettings")]

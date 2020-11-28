@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using MTS.Web.Helpers;
 using MTSEntBlocks.ExceptionBlock.Handlers;
 using MTSEntBlocks.LoggerBlock;
+using MTSEntBlocks.UtilsBlock;
 using Newtonsoft.Json;
 using RestSharp;
 using Swagger.Net.Annotations;
@@ -295,71 +296,53 @@ namespace EncompassWrapperAPI.Controllers
         /// Download Encompass Loan Attachment
         ///</Summary>
         [HttpPost, Route("api/DownloadAttachment")]
-        [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(System.Web.Mvc.FileContentResult))]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(ByteArrayContent))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
-        public IHttpActionResult DownloadAttachment(DownloadAttachment _request)
+        public HttpResponseMessage DownloadAttachment(DownloadAttachment _request)
         {
-            string responseStream = string.Empty;
+            var result = new HttpResponseMessage(HttpStatusCode.BadRequest);
             ErrorResponse _badRequest = new ErrorResponse();
             try
             {
+                string _fileNameGUID = _request.attachmentID;
 
-                EExportAttachmentJob _exportJobReq = new EExportAttachmentJob()
+                EAttachmentDownloadRequest _exportJobReq = new EAttachmentDownloadRequest()
                 {
-                    AnnotationSettings = new VisibilitySettings()
-                    {
-                        Visibility = new List<string>() { EncompassAccessLevel.PUBLIC, EncompassAccessLevel.PRIVATE, EncompassAccessLevel.INTERNAL }
-                    },
-                    Entities = new List<Entity>() {
-                         new Entity()
-                         {
-                             EntityId = _request.attachmentID,
-                             EntityType = EncompassEntityType.ATTACHMENT
-                         }
-                     },
-                    Source = new Entity()
-                    {
-                        EntityId = _request.loanGuid,
-                        EntityType = EncompassEntityType.LOAN
-                    }
+                    Attachments = new List<string>() { _fileNameGUID }
                 };
 
-                Logger.WriteTraceLog(JsonConvert.SerializeObject(_exportJobReq));
-
-                var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.EXPORT_JOB_REQUEST), REQUESTTYPE = HeaderConstant.POST };
+                var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.GET_DOWNLOAD_URL, _request.loanGuid), Content = _exportJobReq, REQUESTTYPE = HeaderConstant.POST };
 
                 IRestResponse response = _client.Execute(reqObj);
 
-                //var response = base._client.PostAsJsonAsync(EncompassURLConstant.EXPORT_JOB_REQUEST, _exportJobReq).Result;
+                string responseStream = response.Content;
 
-                responseStream = response.Content;
-
-                if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Created || response.StatusCode == HttpStatusCode.NoContent)
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    EJobResponse _res = JsonConvert.DeserializeObject<EJobResponse>(responseStream);
+                    EDownloadURLResponse _res = JsonConvert.DeserializeObject<EDownloadURLResponse>(responseStream);
 
-                    if (_res != null && _res.JobId != string.Empty)
+                    if (_res != null)
                     {
-                        byte[] file = ExportQueuedJob(_client, _res);
+                        byte[] file = ExportQueuedJob(_res);
 
                         if (file != null)
                         {
-                            var result = new HttpResponseMessage(HttpStatusCode.OK)
+                            result = new HttpResponseMessage(HttpStatusCode.OK)
                             {
                                 Content = new ByteArrayContent(file)
                             };
                             result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                             {
-                                FileName = $"{_request.attachmentID}.pdf"
+                                FileName = $"Attachment-{_request.attachmentID}.pdf"
                             };
-                            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                            result.Content.Headers.ContentType = new MediaTypeHeaderValue(ContentTypeConstant.BYTE);
 
-                            return Ok(result);
+                            return result;
                         }
                         else
                         {
                             _badRequest.Summary = "Empty File";
-                            _badRequest.Details = "Error while querying Encompass for Attachment Job";
+                            _badRequest.Details = "Error while querying Encompass for Attachment";
                             _badRequest.ErrorCode = ResponseConstant.ERROR;
                         }
                     }
@@ -376,8 +359,9 @@ namespace EncompassWrapperAPI.Controllers
                 _badRequest.Summary = ResponseConstant.ERROR;
                 _badRequest.ErrorCode = HttpStatusCode.InternalServerError.ToString();
             }
+            result.Content = new StringContent(JsonConvert.SerializeObject(_badRequest));
 
-            return BadRequest(JsonConvert.SerializeObject(_badRequest));
+            return result;
         }
 
         #endregion
@@ -618,48 +602,25 @@ namespace EncompassWrapperAPI.Controllers
 
         #region Private Methods
 
-        private byte[] ExportQueuedJob(RestWebClient _client, EJobResponse _job)
+        private byte[] ExportQueuedJob(EDownloadURLResponse _job)
         {
-
-            GetFile:
-
-            var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.EXPORT_JOB_REQUEST_STATUS, _job.JobId), REQUESTTYPE = HeaderConstant.GET };
-
-            IRestResponse response = _client.Execute(reqObj);
-
-            //var response = base._client.GetAsync(string.Format(EncompassURLConstant.EXPORT_JOB_REQUEST_STATUS, _job.JobId)).Result;
-
-            string responseStream = response.Content;
-
-            if (response.StatusCode == HttpStatusCode.OK)
+            List<byte[]> _pages = new List<byte[]>();
+            foreach (var item in _job.Attachments[0].Pages)
             {
-                EJobResponse _res = JsonConvert.DeserializeObject<EJobResponse>(responseStream);
+                RestWebClient _newClient = new RestWebClient(item.URL);
 
-                if (_res.Status.ToLower().Equals(EncompassExportStatus.SUCCESS))
+                var reqObj = new HttpRequestObject() { REQUESTTYPE = HeaderConstant.GET };
+
+                IRestResponse response = _newClient.Execute(reqObj);
+
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    RestWebClient _newClient = new RestWebClient(_res.File.EntityUri);
-                    var reqObjNew = new HttpRequestObject() { Headers = new Dictionary<string, string>() { { "Authorization", $"{_res.File.AuthorizationHeader.Split(' ')[0]} {_res.File.AuthorizationHeader.Split(' ')[1]}" } }, REQUESTTYPE = HeaderConstant.GET };
-
-                    dynamic result = _newClient.RequestAsync<dynamic>(reqObjNew).Result;
-                    //base._client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(_res.File.AuthorizationHeader.Split(" ")[0], _res.File.AuthorizationHeader.Split(" ")[1]);
-
-                    //var result = base._client.GetAsync(_res.File.EntityUri).Result;
-
-                    Stream resStream = result.Content.ReadAsStreamAsync().Result;
-
-                    MemoryStream ms = new MemoryStream();
-
-                    resStream.CopyTo(ms);
-
-                    return ms.ToArray();
-                }
-                else if (_res.Status.ToLower().Equals(EncompassExportStatus.RUNNING))
-                {
-                    goto GetFile;
+                    if (response.RawBytes != null)
+                        _pages.Add(response.RawBytes);
                 }
             }
 
-            return null;
+            return ImageUtilities.ConvertImageToPdf(_pages);
         }
 
         private bool UploadAttachment(RestWebClient _client, EncompassAttachmentUploadURL _res, UploadRequest request)
@@ -671,7 +632,7 @@ namespace EncompassWrapperAPI.Controllers
 
                 RestWebClient _newClient = new RestWebClient(_res.MediaUrl);
 
-                var reqObjNew = new HttpRequestObject() { FileStream = _file, REQUESTTYPE = HeaderConstant.PUT, RequestContentType = RequestTypeConstant.FILE };
+                var reqObjNew = new HttpRequestObject() { FileStream = _file, REQUESTTYPE = HeaderConstant.PUT, RequestContentType = ContentTypeConstant.FILE };
 
                 dynamic rs = _newClient.RequestAsync<dynamic>(reqObjNew).Result;
 

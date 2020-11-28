@@ -41,6 +41,8 @@
 
         public const string REMOVE_LOAN_ATTACHMENT = "encompass/v3/loans/{0}/attachments";
 
+        public const string GET_DOWNLOAD_URL = "encompass/v3/loans/{0}/attachmentDownloadUrl";
+
         public const string EXPORT_JOB_REQUEST = "efolder/v1/exportjobs";
         public const string EXPORT_JOB_REQUEST_STATUS = "efolder/v1/exportjobs/{0}";
 

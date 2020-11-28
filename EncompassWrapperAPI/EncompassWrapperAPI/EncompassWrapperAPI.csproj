@@ -509,6 +509,10 @@
       <Project>{b673ca30-c64d-4093-adfe-012750e70678}</Project>
       <Name>MTS.Web.Helpers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\IntellaLendBlocks\UtilsBlock\UtilsBlock.csproj">
+      <Project>{60C51B78-D847-4463-95FD-123D2E8FE1DA}</Project>
+      <Name>UtilsBlock</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EncompassWrapperHelper\EncompassWrapperHelper.csproj">
       <Project>{2116a83d-1c2d-4842-8354-1dd54742d1ac}</Project>
       <Name>EncompassWrapperHelper</Name>
