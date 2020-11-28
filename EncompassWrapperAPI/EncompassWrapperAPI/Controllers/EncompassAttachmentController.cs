@@ -648,17 +648,30 @@ namespace EncompassWrapperAPI.Controllers
                 {
                     _newClient = new RestWebClient(item.UploadUrl);
 
-                    var reqObjNew = new HttpRequestObject() { FileStream = GetSplitArray(_file, lastIndex, item.Size), Content = new { FileName = fileName }, REQUESTTYPE = HeaderConstant.PUT, RequestContentType = ContentTypeConstant.FILE };
+                    var reqObjNewItem = new HttpRequestObject() { FileStream = GetSplitArray(_file, lastIndex, item.Size), Content = new { FileName = fileName }, REQUESTTYPE = HeaderConstant.PUT, RequestContentType = ContentTypeConstant.FILE };
 
-                    var res = _newClient.Execute(reqObjNew);
+                    var resItem = _newClient.Execute(reqObjNewItem);
 
-                    string responseStream = res.Content;
+                    string responseStreamItem = res.Content;
 
-                    if (res.StatusCode == HttpStatusCode.OK || res.StatusCode == HttpStatusCode.Created || res.StatusCode == HttpStatusCode.NoContent)
+                    if (resItem.StatusCode == HttpStatusCode.OK || resItem.StatusCode == HttpStatusCode.Created || resItem.StatusCode == HttpStatusCode.NoContent)
                     {
                         lastIndex = item.Size;
                         //return true;
                     }
+                }
+
+                _newClient = new RestWebClient(_res.MultiChunk.CommitUrl);
+
+                var reqObjNew = new HttpRequestObject() { REQUESTTYPE = HeaderConstant.POST };
+
+                var res = _newClient.Execute(reqObjNew);
+
+                string responseStream = res.Content;
+
+                if (res.StatusCode == HttpStatusCode.OK || res.StatusCode == HttpStatusCode.Created || res.StatusCode == HttpStatusCode.NoContent)
+                {
+                    return true;
                 }
             }
             else
