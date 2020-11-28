@@ -636,38 +636,19 @@ namespace EncompassWrapperAPI.Controllers
 
         private bool UploadAttachment(EAttachmentUploadResponse _res, byte[] request, string fileName)
         {
-            using (MemoryStream ms = new MemoryStream())
+            byte[] _file = request;
+
+            RestWebClient _newClient = null;
+
+            if (_res.MultiChunkRequired)
             {
-                byte[] _file = request;
+                Int32 lastIndex = 0;
 
-                RestWebClient _newClient = null;
-
-                if (_res.MultiChunkRequired)
+                foreach (EUploadChunkEntites item in _res.MultiChunk.ChunkList)
                 {
-                    Int32 lastIndex = 0;
+                    _newClient = new RestWebClient(item.UploadUrl);
 
-                    foreach (EUploadChunkEntites item in _res.MultiChunk.ChunkList)
-                    {
-                        _newClient = new RestWebClient(item.UploadUrl);
-
-                        var reqObjNew = new HttpRequestObject() { FileStream = GetSplitArray(_file, lastIndex, item.Size), Content = new { FileName = fileName }, REQUESTTYPE = HeaderConstant.PUT, RequestContentType = ContentTypeConstant.FILE };
-
-                        var res = _newClient.Execute(reqObjNew);
-
-                        string responseStream = res.Content;
-
-                        if (res.StatusCode == HttpStatusCode.OK || res.StatusCode == HttpStatusCode.Created || res.StatusCode == HttpStatusCode.NoContent)
-                        {
-                            lastIndex = item.Size;
-                            //return true;
-                        }
-                    }
-                }
-                else
-                {
-                    _newClient = new RestWebClient(_res.UploadUrl);
-
-                    var reqObjNew = new HttpRequestObject() { FileStream = _file, REQUESTTYPE = HeaderConstant.PUT, Content = new { FileName = fileName }, RequestContentType = ContentTypeConstant.FILE };
+                    var reqObjNew = new HttpRequestObject() { FileStream = GetSplitArray(_file, lastIndex, item.Size), Content = new { FileName = fileName }, REQUESTTYPE = HeaderConstant.PUT, RequestContentType = ContentTypeConstant.FILE };
 
                     var res = _newClient.Execute(reqObjNew);
 
@@ -675,8 +656,24 @@ namespace EncompassWrapperAPI.Controllers
 
                     if (res.StatusCode == HttpStatusCode.OK || res.StatusCode == HttpStatusCode.Created || res.StatusCode == HttpStatusCode.NoContent)
                     {
-                        return true;
+                        lastIndex = item.Size;
+                        //return true;
                     }
+                }
+            }
+            else
+            {
+                _newClient = new RestWebClient(_res.UploadUrl);
+
+                var reqObjNew = new HttpRequestObject() { FileStream = _file, REQUESTTYPE = HeaderConstant.PUT, Content = new { FileName = fileName }, RequestContentType = ContentTypeConstant.FILE };
+
+                var res = _newClient.Execute(reqObjNew);
+
+                string responseStream = res.Content;
+
+                if (res.StatusCode == HttpStatusCode.OK || res.StatusCode == HttpStatusCode.Created || res.StatusCode == HttpStatusCode.NoContent)
+                {
+                    return true;
                 }
             }
 
