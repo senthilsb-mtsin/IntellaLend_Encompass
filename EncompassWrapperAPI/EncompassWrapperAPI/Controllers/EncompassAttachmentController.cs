@@ -19,10 +19,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
-using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
-using HttpPatchAttribute = System.Web.Http.HttpPatchAttribute;
-using HttpPostAttribute = System.Web.Http.HttpPostAttribute;
-using RouteAttribute = System.Web.Http.RouteAttribute;
 
 namespace EncompassConnectorAPI.Controllers
 {
