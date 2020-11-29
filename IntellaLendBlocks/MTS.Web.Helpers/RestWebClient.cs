@@ -25,11 +25,18 @@ namespace MTS.Web.Helpers
                 {
                     WebClientArgs args = new WebClientArgs();
                     item.Invoke(this, args);
-                    restRequest.AddHeader(args.HeaderData.Key, args.HeaderData.Value);
+                    if (!(args.HeaderData.Equals(new KeyValuePair<string, string>())))
+                        restRequest.AddHeader(args.HeaderData.Key, args.HeaderData.Value);
+
+                    if (args.HeaderDataList != null && args.HeaderDataList.Count > 0)
+                    {
+                        foreach (KeyValuePair<string, string> itemDic in args.HeaderDataList)
+                        {
+                            restRequest.AddHeader(itemDic.Key, itemDic.Value);
+                        }
+                    }
                 }
-
             }
-
         }
 
 

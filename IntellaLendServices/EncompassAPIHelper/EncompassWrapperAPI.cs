@@ -3,8 +3,10 @@ using EncompassRequestBody.EResponseModel;
 using EncompassRequestBody.WrapperReponseModel;
 using EncompassRequestBody.WrapperRequestModel;
 using EncompassWrapperInterseptor;
+using MTS.Web.Helpers;
 using MTSEntBlocks.LoggerBlock;
 using Newtonsoft.Json;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,19 +19,22 @@ namespace EncompassAPIHelper
     {
         private string API_URL = string.Empty;
         private string HEADER = string.Empty;
-        private HttpClient client;
+        private TokenAppendHandler _token = null;
+        private RestWebClient client;
 
         public EncompassWrapperAPI(string _apiURL, string _header)
         {
             API_URL = _apiURL;
             HEADER = _header;
-            client = new HttpClient(new TokenAppendHandler(HEADER, API_URL));
-            client.BaseAddress = new Uri(API_URL);
-
+            client = new RestWebClient(API_URL);
+            _token = new TokenAppendHandler(HEADER, API_URL);
+            client.RefreshValidationHeaders += _token.GetTokenFromDB;
         }
 
         public List<string> GetLoans(List<Dictionary<string, string>> _eFields)
         {
+            RequestAgain:
+
             List<Fields> fieldList = new List<Fields>();
             Fields field = null;
 
@@ -51,14 +56,21 @@ namespace EncompassAPIHelper
                 ReturnLoanLimit = "100"
             };
 
+            var req = new HttpRequestObject() { REQUESTTYPE = "POST", Content = _res, URL = EncompassURLConstant.GET_LOAN };
 
-            var result = client.PostAsync(EncompassURLConstant.GET_LOAN, GetByteArrayContent(_res)).Result;
+            IRestResponse result = client.Execute(req);
 
-            string res = result.Content.ReadAsStringAsync().Result;
+            string res = result.Content;
 
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 return (JsonConvert.DeserializeObject<List<EPipelineLoans>>(res)).Select(x => x.LoanGuid).ToList();
+            }
+
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                _token.SetToken();
+                goto RequestAgain;
             }
 
             ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(res);
@@ -71,16 +83,24 @@ namespace EncompassAPIHelper
 
         public List<EAttachment> GetUnassignedAttachments(string loanGUID)
         {
+            RequestAgain:
             LogMessage($"GetUnassignedAttachments : {loanGUID}");
 
-            var result = client.GetAsync(string.Format(EncompassURLConstant.GET_UNATTACHMENTS, loanGUID)).Result;
+            var req = new HttpRequestObject() { REQUESTTYPE = "GET", URL = string.Format(EncompassURLConstant.GET_UNATTACHMENTS, loanGUID) };
 
-            string res = result.Content.ReadAsStringAsync().Result;
+            IRestResponse result = client.Execute(req);
+
+            string res = result.Content;
+
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 return JsonConvert.DeserializeObject<List<EAttachment>>(res);
             }
-
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                _token.SetToken();
+                goto RequestAgain;
+            }
             ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(res);
 
             if (_error.Details.Contains("read-only mode"))
@@ -91,7 +111,7 @@ namespace EncompassAPIHelper
 
         public void UploadProcessFlag(string loanGUID, string fieldID, string fieldValue)
         {
-
+            RequestAgain:
             UpdateCustomFieldRequest _req = new UpdateCustomFieldRequest()
             {
                 LoanGuid = loanGUID,
@@ -101,18 +121,21 @@ namespace EncompassAPIHelper
                     }
             };
 
-            var method = new HttpMethod("PATCH");
+            var req = new HttpRequestObject() { REQUESTTYPE = "PATCH", URL = string.Format(EncompassURLConstant.UPDATE_CUSTOM_FIELD), Content = _req };
 
-            var request = new HttpRequestMessage(method, EncompassURLConstant.UPDATE_CUSTOM_FIELD)
-            {
-                Content = GetByteArrayContent(_req)
-            };
+            IRestResponse result = client.Execute(req);
 
-            var result = client.SendAsync(request).Result;
+            string res = result.Content;
 
             if (result.StatusCode != System.Net.HttpStatusCode.OK)
             {
-                ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(result.Content.ReadAsStringAsync().Result);
+                if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    _token.SetToken();
+                    goto RequestAgain;
+                }
+
+                ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(res);
 
                 if (_error.Details.Contains("read-only mode"))
                     throw new EncompassWrapperLoanLockException(_error.Details);
@@ -124,15 +147,23 @@ namespace EncompassAPIHelper
 
         public byte[] DownloadAttachment(string loanGUID, string attachmentGUID, string AttachmentName)
         {
+            RequestAgain:
             LogMessage($"DownloadAttachment : {loanGUID}, {attachmentGUID}");
 
-            var result = client.GetAsync(string.Format(EncompassURLConstant.GET_DOWNLOAD_ATTACHMENT, loanGUID, attachmentGUID)).Result;
+            var req = new HttpRequestObject() { REQUESTTYPE = "GET", URL = string.Format(EncompassURLConstant.GET_DOWNLOAD_ATTACHMENT, loanGUID, attachmentGUID) };
+
+            IRestResponse result = client.Execute(req);
 
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return result.Content.ReadAsByteArrayAsync().Result;
+                return result.RawBytes;
             }
-            ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(result.Content.ReadAsStringAsync().Result);
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                _token.SetToken();
+                goto RequestAgain;
+            }
+            ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(result.Content);
 
             if (_error.Details.Contains("read-only mode"))
                 throw new EncompassWrapperLoanLockException(_error.Details);
@@ -159,13 +190,23 @@ namespace EncompassAPIHelper
         //added by mani
         public List<EContainer> GetAllLoanDocuments(string loanGUID)
         {
+            RequestAgain:
             LogMessage($"GetAllLoanDocuments : {loanGUID}");
-            var result = client.GetAsync(string.Format(EncompassURLConstant.GET_ALLLOANDOCUMENTS, loanGUID)).Result;
 
-            string res = result.Content.ReadAsStringAsync().Result;
+            var req = new HttpRequestObject() { REQUESTTYPE = "GET", URL = string.Format(EncompassURLConstant.GET_ALLLOANDOCUMENTS, loanGUID) };
+
+            IRestResponse result = client.Execute(req);
+
+            string res = result.Content;
+
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 return JsonConvert.DeserializeObject<List<EContainer>>(res);
+            }
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                _token.SetToken();
+                goto RequestAgain;
             }
             ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(res);
 
@@ -177,15 +218,20 @@ namespace EncompassAPIHelper
 
         public EUploadResponse UploadAttachment(string loanGUID, string fileName, string fileNameWithExtension, byte[] file)
         {
-            MultipartFormDataContent form = new MultipartFormDataContent();
+            RequestAgain:
+            //MultipartFormDataContent form = new MultipartFormDataContent();
             LogMessage($"UploadAttachment : {loanGUID}, Filename : {fileName}, FileLength : {file.Length}");
-            form.Add(new StringContent(loanGUID), "loanGUID");
-            form.Add(new StringContent(fileName), "fileName");
-            form.Add(new StringContent(fileNameWithExtension), "fileNameWithExtension");
-            form.Add(new ByteArrayContent(file, 0, file.Length), "file", fileNameWithExtension);
+            //form.Add(new StringContent(loanGUID), "loanGUID");
+            //form.Add(new StringContent(fileName), "fileName");
+            //form.Add(new StringContent(fileNameWithExtension), "fileNameWithExtension");
+            //form.Add(new ByteArrayContent(file, 0, file.Length), "file", fileNameWithExtension);
 
-            var result = client.PostAsync(EncompassURLConstant.UPLOAD_ATTACHMENT, form).Result;
-            string res = result.Content.ReadAsStringAsync().Result;
+            var req = new HttpRequestObject() { Content = new { FileName = fileName }, FileStream = file, REQUESTTYPE = "POST", URL = string.Format(EncompassURLConstant.UPLOAD_ATTACHMENT, loanGUID, fileName), RequestContentType = "multipart/form-data" };
+
+            IRestResponse result = client.Execute(req);
+
+            string res = result.Content;
+
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 EUploadResponse _upload_res = JsonConvert.DeserializeObject<EUploadResponse>(res);
@@ -199,6 +245,11 @@ namespace EncompassAPIHelper
                     throw new EncompassWrapperException($"Unable to upload the attachment ('{fileName}'). Message : {_upload_res.Message}");
                 }
             }
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                _token.SetToken();
+                goto RequestAgain;
+            }
             ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(res);
 
             if (_error.Details.Contains("read-only mode"))
@@ -210,26 +261,27 @@ namespace EncompassAPIHelper
 
         public AddContainerResponse AddDocument(string loanGUID, string documentName)
         {
+            RequestAgain:
             AddContainerRequest _req = new AddContainerRequest()
             {
                 LoanGUID = loanGUID,
                 Documents = new List<EAddDocument>() { new EAddDocument() { DocumentName = documentName, DocumentDescription = documentName } }
             };
 
+            var req = new HttpRequestObject() { REQUESTTYPE = "POST", URL = string.Format(EncompassURLConstant.ADD_DOCUMENT), Content = _req };
 
-            var method = new HttpMethod("POST");
+            IRestResponse result = client.Execute(req);
 
-            var request = new HttpRequestMessage(method, EncompassURLConstant.ADD_DOCUMENT)
-            {
-                Content = GetByteArrayContent(_req)
-            };
+            string res = result.Content;
 
-            var result = client.SendAsync(request).Result;
-
-            string res = result.Content.ReadAsStringAsync().Result;
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 return JsonConvert.DeserializeObject<AddContainerResponse>(res);
+            }
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                _token.SetToken();
+                goto RequestAgain;
             }
             ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(res);
 
@@ -241,6 +293,7 @@ namespace EncompassAPIHelper
 
         public bool AssignDocumentAttachments(string loanGUID, string documentGuid, List<string> attachmentGUIDs, string FolderName)
         {
+            RequestAgain:
             AssignAttachmentRequest _req = new AssignAttachmentRequest()
             {
                 LoanGUID = loanGUID,
@@ -249,22 +302,22 @@ namespace EncompassAPIHelper
 
             };
 
-            var method = new HttpMethod("PATCH");
+            var req = new HttpRequestObject() { REQUESTTYPE = "PATCH", URL = string.Format(EncompassURLConstant.ASSIGN_DOCUMENT_ATTACHMENT), Content = _req };
 
-            var request = new HttpRequestMessage(method, EncompassURLConstant.ASSIGN_DOCUMENT_ATTACHMENT)
-            {
-                Content = GetByteArrayContent(_req)
-            };
+            IRestResponse result = client.Execute(req);
 
-            var result = client.SendAsync(request).Result;
-            //check result and throw error
-            string res = result.Content.ReadAsStringAsync().Result;
+            string res = result.Content;
 
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 EAddRemoveAttachmentResponse _res = JsonConvert.DeserializeObject<EAddRemoveAttachmentResponse>(res);
                 if (_res.Status)
                     return _res.Status;
+            }
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                _token.SetToken();
+                goto RequestAgain;
             }
             ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(res);
 
@@ -276,26 +329,27 @@ namespace EncompassAPIHelper
 
         public List<EFieldResponse> GetPredefinedFieldValues(string loanGUID, string[] fieldIds)
         {
+            RequestAgain:
             FieldGetRequest _req = new FieldGetRequest()
             {
                 LoanGUID = loanGUID,
                 FieldIDs = fieldIds
             };
 
-            var method = new HttpMethod("POST");
+            var req = new HttpRequestObject() { REQUESTTYPE = "POST", URL = string.Format(EncompassURLConstant.GET_PREDEFINED_FIELDVALUES), Content = _req };
 
-            var request = new HttpRequestMessage(method, EncompassURLConstant.GET_PREDEFINED_FIELDVALUES)
-            {
-                Content = GetByteArrayContent(_req)
-            };
+            IRestResponse result = client.Execute(req);
 
-            var result = client.SendAsync(request).Result;
-
-            string res = result.Content.ReadAsStringAsync().Result;
+            string res = result.Content;
 
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 return JsonConvert.DeserializeObject<List<EFieldResponse>>(res);
+            }
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                _token.SetToken();
+                goto RequestAgain;
             }
             ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(res);
 
