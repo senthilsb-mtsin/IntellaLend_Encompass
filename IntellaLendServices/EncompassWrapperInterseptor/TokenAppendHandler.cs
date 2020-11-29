@@ -193,7 +193,6 @@ namespace EncompassWrapperInterseptor
             Logger.WriteTraceLog(result.StatusCode.ToString());
         }
 
-
         private ByteArrayContent GetByteArrayContent(object data)
         {
             var myContent = JsonConvert.SerializeObject(data);
