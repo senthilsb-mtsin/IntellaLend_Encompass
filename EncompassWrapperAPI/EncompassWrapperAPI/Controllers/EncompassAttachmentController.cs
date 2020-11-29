@@ -638,30 +638,18 @@ namespace EncompassWrapperAPI.Controllers
         {
             byte[] _file = request;
 
-            RestWebClient _newClient = null;
-
             if (_res.MultiChunkRequired)
             {
                 Int32 lastIndex = 0;
 
                 foreach (EUploadChunkEntites item in _res.MultiChunk.ChunkList)
                 {
-                    _newClient = new RestWebClient(item.UploadUrl);
-
-                    var reqObjNewItem = new HttpRequestObject() { FileStream = GetSplitArray(_file, lastIndex, item.Size), Content = new { FileName = fileName }, REQUESTTYPE = HeaderConstant.PUT, RequestContentType = ContentTypeConstant.FILE };
-
-                    var resItem = _newClient.Execute(reqObjNewItem);
-
-                    string responseStreamItem = res.Content;
-
-                    if (resItem.StatusCode == HttpStatusCode.OK || resItem.StatusCode == HttpStatusCode.Created || resItem.StatusCode == HttpStatusCode.NoContent)
-                    {
+                    bool result = UploadFileRequest(item.UploadUrl, GetSplitArray(_file, lastIndex, item.Size), fileName, ContentTypeConstant.FILE);
+                    if (result)
                         lastIndex = item.Size;
-                        //return true;
-                    }
                 }
 
-                _newClient = new RestWebClient(_res.MultiChunk.CommitUrl);
+                RestWebClient _newClient = new RestWebClient(_res.MultiChunk.CommitUrl);
 
                 var reqObjNew = new HttpRequestObject() { REQUESTTYPE = HeaderConstant.POST };
 
@@ -676,23 +664,29 @@ namespace EncompassWrapperAPI.Controllers
             }
             else
             {
-                _newClient = new RestWebClient(_res.UploadUrl);
-
-                var reqObjNew = new HttpRequestObject() { FileStream = _file, REQUESTTYPE = HeaderConstant.PUT, Content = new { FileName = fileName }, RequestContentType = ContentTypeConstant.FILE };
-
-                var res = _newClient.Execute(reqObjNew);
-
-                string responseStream = res.Content;
-
-                if (res.StatusCode == HttpStatusCode.OK || res.StatusCode == HttpStatusCode.Created || res.StatusCode == HttpStatusCode.NoContent)
-                {
-                    return true;
-                }
+                return UploadFileRequest(_res.UploadUrl, _file, fileName, ContentTypeConstant.FILE);
             }
 
             return false;
         }
 
+        private bool UploadFileRequest(string URL, byte[] _file, string fileName, string requestType)
+        {
+            RestWebClient _newClient = new RestWebClient(URL);
+
+            var reqObjNew = new HttpRequestObject() { FileStream = _file, REQUESTTYPE = HeaderConstant.PUT, Content = new { FileName = fileName }, RequestContentType = requestType };
+
+            var res = _newClient.Execute(reqObjNew);
+
+            string responseStream = res.Content;
+
+            if (res.StatusCode == HttpStatusCode.OK || res.StatusCode == HttpStatusCode.Created || res.StatusCode == HttpStatusCode.NoContent)
+            {
+                return true;
+            }
+
+            return false;
+        }
 
         #endregion
 
