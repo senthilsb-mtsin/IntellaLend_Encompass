@@ -3,7 +3,7 @@ using Swagger.Net;
 using System.Collections.Generic;
 using System.Web.Http.Description;
 
-namespace EncompassWrapperAPI
+namespace EncompassConnectorAPI
 {
     public class HeaderFilter : IOperationFilter
     {

@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace EncompassWrapperAPI.Controllers
+namespace EncompassConnectorAPI.Controllers
 {
     public class HomeController : Controller
     {

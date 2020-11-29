@@ -1,4 +1,4 @@
-namespace EncompassWrapperAPI.Areas.HelpPage
+namespace EncompassConnectorAPI.Areas.HelpPage
 {
     /// <summary>
     /// Indicates whether the sample is used for request or response

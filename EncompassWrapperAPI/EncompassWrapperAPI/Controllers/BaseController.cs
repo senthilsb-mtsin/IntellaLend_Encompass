@@ -2,7 +2,7 @@
 using MTS.Web.Helpers;
 using System.Web.Http;
 
-namespace EncompassWrapperAPI.Controllers
+namespace EncompassConnectorAPI.Controllers
 {
     [Helpers.BaseActionFilter]
     public class BaseController : ApiController

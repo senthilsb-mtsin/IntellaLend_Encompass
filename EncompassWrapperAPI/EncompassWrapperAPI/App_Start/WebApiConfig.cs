@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using System.Web.Http;
 
-namespace EncompassWrapperAPI
+namespace EncompassConnectorAPI
 {
     public static class WebApiConfig
     {

@@ -14,7 +14,7 @@ using System.Configuration;
 using System.Net;
 using System.Web.Http;
 
-namespace EncompassWrapperAPI.Controllers
+namespace EncompassConnectorAPI.Controllers
 {
     ///<Summary>
     /// Controller to Generate, Validate Encompass Token

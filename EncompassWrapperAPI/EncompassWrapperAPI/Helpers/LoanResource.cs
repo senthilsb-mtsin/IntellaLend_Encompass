@@ -7,7 +7,7 @@ using RestSharp;
 using System;
 using System.Net;
 
-namespace EncompassWrapperAPI
+namespace EncompassConnectorAPI
 {
     public class LoanResource
     {

@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Web.Http;
 
-namespace EncompassWrapperAPI.Controllers
+namespace EncompassConnectorAPI.Controllers
 {
     ///<Summary>
     /// Encompass Field Releated Activities

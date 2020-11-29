@@ -1,4 +1,4 @@
-using EncompassWrapperAPI;
+using EncompassConnectorAPI;
 using Swagger.Net;
 using Swagger.Net.Application;
 using System;
@@ -10,7 +10,7 @@ using System.Web.Http.Description;
 
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
-namespace EncompassWrapperAPI
+namespace EncompassConnectorAPI
 {
     public class SwaggerConfig
     {
@@ -171,7 +171,7 @@ namespace EncompassWrapperAPI
                         // to execute the operation
                         //
                         //c.OperationFilter<AssignOAuth2SecurityRequirements>();
-                        
+
                         c.OperationFilter<HeaderFilter>();
 
                         // Post-modify the entire Swagger document by wiring up one or more Document filters.

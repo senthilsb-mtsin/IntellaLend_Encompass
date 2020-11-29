@@ -24,7 +24,7 @@ using HttpPatchAttribute = System.Web.Http.HttpPatchAttribute;
 using HttpPostAttribute = System.Web.Http.HttpPostAttribute;
 using RouteAttribute = System.Web.Http.RouteAttribute;
 
-namespace EncompassWrapperAPI.Controllers
+namespace EncompassConnectorAPI.Controllers
 {
     ///<Summary>
     /// Encompass Loan Attachment Releated Activities

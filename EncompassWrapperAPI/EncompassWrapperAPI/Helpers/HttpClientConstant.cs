@@ -1,4 +1,4 @@
-﻿namespace EncompassWrapperAPI.Helper
+﻿namespace EncompassConnectorAPI.Helper
 {
     public class HttpClientFactoryConstant
     {
