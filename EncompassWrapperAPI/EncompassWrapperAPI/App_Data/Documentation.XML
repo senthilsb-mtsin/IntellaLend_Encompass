@@ -521,7 +521,7 @@
              Download Encompass Loan Attachment
             </Summary>
         </member>
-        <member name="M:EncompassWrapperAPI.Controllers.EncompassAttachmentController.UploadAttachment(EncompassRequestBody.WrapperRequestModel.UploadRequest)">
+        <member name="M:EncompassWrapperAPI.Controllers.EncompassAttachmentController.UploadAttachment(System.String,System.String)">
             <Summary>
              Upload Encompass Loan Attachment
             </Summary>
