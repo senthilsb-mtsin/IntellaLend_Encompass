@@ -1,10 +1,10 @@
-using EncompassWrapperAPI.Areas.HelpPage.ModelDescriptions;
-using EncompassWrapperAPI.Areas.HelpPage.Models;
+using EncompassConnectorAPI.Areas.HelpPage.ModelDescriptions;
+using EncompassConnectorAPI.Areas.HelpPage.Models;
 using System;
 using System.Web.Http;
 using System.Web.Mvc;
 
-namespace EncompassWrapperAPI.Areas.HelpPage.Controllers
+namespace EncompassConnectorAPI.Areas.HelpPage.Controllers
 {
     /// <summary>
     /// The controller that will handle requests for the help page.

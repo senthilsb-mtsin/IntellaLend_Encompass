@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace EncompassWrapperAPI
+namespace EncompassConnectorAPI
 {
     public class FilterConfig
     {

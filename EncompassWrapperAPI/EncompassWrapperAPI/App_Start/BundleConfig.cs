@@ -1,6 +1,6 @@
 ﻿using System.Web.Optimization;
 
-namespace EncompassWrapperAPI
+namespace EncompassConnectorAPI
 {
     public class BundleConfig
     {

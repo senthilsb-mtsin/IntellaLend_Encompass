@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System.Web;
 
 namespace EncompassRequestBody.WrapperRequestModel
 {
@@ -15,6 +15,6 @@ namespace EncompassRequestBody.WrapperRequestModel
         public string FileNameWithExtension { get; set; }
 
         [JsonProperty(PropertyName = "file")]
-        public IFormFile File { get; set; }
+        public HttpPostedFile File { get; set; }
     }
 }

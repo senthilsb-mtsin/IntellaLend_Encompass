@@ -4,10 +4,10 @@ using EncompassRequestBody.EResponseModel;
 using EncompassRequestBody.WrapperReponseModel;
 using EncompassRequestBody.WrapperRequestModel;
 using EncompassWrapperConstants;
-using Microsoft.AspNetCore.Mvc;
 using MTS.Web.Helpers;
 using MTSEntBlocks.ExceptionBlock.Handlers;
 using MTSEntBlocks.LoggerBlock;
+using MTSEntBlocks.UtilsBlock;
 using Newtonsoft.Json;
 using RestSharp;
 using Swagger.Net.Annotations;
@@ -19,12 +19,8 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
-using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
-using HttpPatchAttribute = System.Web.Http.HttpPatchAttribute;
-using HttpPostAttribute = System.Web.Http.HttpPostAttribute;
-using RouteAttribute = System.Web.Http.RouteAttribute;
 
-namespace EncompassWrapperAPI.Controllers
+namespace EncompassConnectorAPI.Controllers
 {
     ///<Summary>
     /// Encompass Loan Attachment Releated Activities
@@ -295,71 +291,53 @@ namespace EncompassWrapperAPI.Controllers
         /// Download Encompass Loan Attachment
         ///</Summary>
         [HttpPost, Route("api/DownloadAttachment")]
-        [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(System.Web.Mvc.FileContentResult))]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(ByteArrayContent))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
-        public IHttpActionResult DownloadAttachment(DownloadAttachment _request)
+        public HttpResponseMessage DownloadAttachment(DownloadAttachment _request)
         {
-            string responseStream = string.Empty;
+            var result = new HttpResponseMessage(HttpStatusCode.BadRequest);
             ErrorResponse _badRequest = new ErrorResponse();
             try
             {
+                string _fileNameGUID = _request.attachmentID;
 
-                EExportAttachmentJob _exportJobReq = new EExportAttachmentJob()
+                EAttachmentDownloadRequest _exportJobReq = new EAttachmentDownloadRequest()
                 {
-                    AnnotationSettings = new VisibilitySettings()
-                    {
-                        Visibility = new List<string>() { EncompassAccessLevel.PUBLIC, EncompassAccessLevel.PRIVATE, EncompassAccessLevel.INTERNAL }
-                    },
-                    Entities = new List<Entity>() {
-                         new Entity()
-                         {
-                             EntityId = _request.attachmentID,
-                             EntityType = EncompassEntityType.ATTACHMENT
-                         }
-                     },
-                    Source = new Entity()
-                    {
-                        EntityId = _request.loanGuid,
-                        EntityType = EncompassEntityType.LOAN
-                    }
+                    Attachments = new List<string>() { _fileNameGUID }
                 };
 
-                Logger.WriteTraceLog(JsonConvert.SerializeObject(_exportJobReq));
-
-                var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.EXPORT_JOB_REQUEST), REQUESTTYPE = HeaderConstant.POST };
+                var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.GET_DOWNLOAD_URL, _request.loanGuid), Content = _exportJobReq, REQUESTTYPE = HeaderConstant.POST };
 
                 IRestResponse response = _client.Execute(reqObj);
 
-                //var response = base._client.PostAsJsonAsync(EncompassURLConstant.EXPORT_JOB_REQUEST, _exportJobReq).Result;
+                string responseStream = response.Content;
 
-                responseStream = response.Content;
-
-                if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Created || response.StatusCode == HttpStatusCode.NoContent)
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    EJobResponse _res = JsonConvert.DeserializeObject<EJobResponse>(responseStream);
+                    EDownloadURLResponse _res = JsonConvert.DeserializeObject<EDownloadURLResponse>(responseStream);
 
-                    if (_res != null && _res.JobId != string.Empty)
+                    if (_res != null)
                     {
-                        byte[] file = ExportQueuedJob(_client, _res);
+                        byte[] file = ExportQueuedJob(_res);
 
                         if (file != null)
                         {
-                            var result = new HttpResponseMessage(HttpStatusCode.OK)
+                            result = new HttpResponseMessage(HttpStatusCode.OK)
                             {
                                 Content = new ByteArrayContent(file)
                             };
                             result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                             {
-                                FileName = $"{_request.attachmentID}.pdf"
+                                FileName = $"Attachment-{_request.attachmentID}.pdf"
                             };
-                            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                            result.Content.Headers.ContentType = new MediaTypeHeaderValue(ContentTypeConstant.BYTE);
 
-                            return Ok(result);
+                            return result;
                         }
                         else
                         {
                             _badRequest.Summary = "Empty File";
-                            _badRequest.Details = "Error while querying Encompass for Attachment Job";
+                            _badRequest.Details = "Error while querying Encompass for Attachment";
                             _badRequest.ErrorCode = ResponseConstant.ERROR;
                         }
                     }
@@ -376,8 +354,9 @@ namespace EncompassWrapperAPI.Controllers
                 _badRequest.Summary = ResponseConstant.ERROR;
                 _badRequest.ErrorCode = HttpStatusCode.InternalServerError.ToString();
             }
+            result.Content = new StringContent(JsonConvert.SerializeObject(_badRequest));
 
-            return BadRequest(JsonConvert.SerializeObject(_badRequest));
+            return result;
         }
 
         #endregion
@@ -387,26 +366,30 @@ namespace EncompassWrapperAPI.Controllers
         ///<Summary>
         /// Upload Encompass Loan Attachment
         ///</Summary>
-        [HttpPost, Route("api/UploadAttachment")]
-        [Consumes("application/x-www-form-urlencoded")]
+        [HttpPost, Route("api/UploadAttachment/{loanGUID}/{fileName}")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(EUploadResponse))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
-        public IHttpActionResult UploadAttachment([FromForm] UploadRequest request)
+        public IHttpActionResult UploadAttachment(string loanGUID, string fileName)
         {
-
-
             LockResourceModel lockResource = null;
             ErrorResponse _badRequest = new ErrorResponse();
             try
             {
+                var provider = new MultipartMemoryStreamProvider();
+                Request.Content.ReadAsMultipartAsync(provider);
+                byte[] fileStream = null;
+                foreach (var file in provider.Contents)
+                {
+                    fileStream = file.ReadAsByteArrayAsync().Result;
+                }
 
-                lockResource = LoanResource.LockLoan(_client, request.LoanGUID);
+                lockResource = LoanResource.LockLoan(_client, loanGUID);
 
                 if (lockResource.Status)
                 {
-                    EUploadRequest _uploadReq = new EUploadRequest() { Title = request.FileName, FileWithExtension = request.FileNameWithExtension, CreateReason = 1 };
+                    EUploadRequest _uploadReq = new EUploadRequest() { File = new EFileEntities() { Name = fileName, ContentType = ContentTypeConstant.PDF, Size = fileStream.Length }, Title = Path.GetFileNameWithoutExtension(fileName) };
 
-                    var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.UPLOAD_ATTACHMENT_REQUEST, request.LoanGUID), Content = _uploadReq, REQUESTTYPE = HeaderConstant.POST };
+                    var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.GET_UPLOAD_URL, loanGUID), Content = _uploadReq, REQUESTTYPE = HeaderConstant.POST };
 
                     IRestResponse response = _client.Execute(reqObj);
 
@@ -416,16 +399,17 @@ namespace EncompassWrapperAPI.Controllers
 
                     if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Created || response.StatusCode == HttpStatusCode.NoContent)
                     {
-                        EncompassAttachmentUploadURL _res = JsonConvert.DeserializeObject<EncompassAttachmentUploadURL>(responseStream);
+                        EAttachmentUploadResponse _res = JsonConvert.DeserializeObject<EAttachmentUploadResponse>(responseStream);
 
                         if (_res != null)
                         {
-                            if (request.File.Length > 0)
+                            if (fileStream.Length > 0)
                             {
+
                                 EUploadResponse eUpload = new EUploadResponse();
-                                eUpload.Status = UploadAttachment(_client, _res, request);
+                                eUpload.Status = UploadAttachment(_res, fileStream, fileName);
                                 eUpload.Message = eUpload.Status ? ResponseConstant.UPLOAD_SUCCESSFULLY : ResponseConstant.UPLOAD_FAILED;
-                                eUpload.AttachmentGUID = _res.MediaUrl.Split('?')[0].Split(new string[] { "attachment-" }, StringSplitOptions.RemoveEmptyEntries)[1].Split('.')[0];
+                                eUpload.AttachmentGUID = _res.AttachmentID; // _res.MediaUrl.Split('?')[0].Split(new string[] { "attachment-" }, StringSplitOptions.RemoveEmptyEntries)[1].Split('.')[0];
                                 return Ok(eUpload);
                             }
                             else
@@ -465,7 +449,7 @@ namespace EncompassWrapperAPI.Controllers
             {
                 if (lockResource != null && lockResource.Status)
                 {
-                    LoanResource.UnLockLoan(_client, lockResource.Message, request.LoanGUID);
+                    LoanResource.UnLockLoan(_client, lockResource.Message, loanGUID);
                 }
             }
 
@@ -618,74 +602,87 @@ namespace EncompassWrapperAPI.Controllers
 
         #region Private Methods
 
-        private byte[] ExportQueuedJob(RestWebClient _client, EJobResponse _job)
+        private byte[] ExportQueuedJob(EDownloadURLResponse _job)
         {
-
-            GetFile:
-
-            var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.EXPORT_JOB_REQUEST_STATUS, _job.JobId), REQUESTTYPE = HeaderConstant.GET };
-
-            IRestResponse response = _client.Execute(reqObj);
-
-            //var response = base._client.GetAsync(string.Format(EncompassURLConstant.EXPORT_JOB_REQUEST_STATUS, _job.JobId)).Result;
-
-            string responseStream = response.Content;
-
-            if (response.StatusCode == HttpStatusCode.OK)
+            List<byte[]> _pages = new List<byte[]>();
+            foreach (var item in _job.Attachments[0].Pages)
             {
-                EJobResponse _res = JsonConvert.DeserializeObject<EJobResponse>(responseStream);
+                RestWebClient _newClient = new RestWebClient(item.URL);
 
-                if (_res.Status.ToLower().Equals(EncompassExportStatus.SUCCESS))
+                var reqObj = new HttpRequestObject() { REQUESTTYPE = HeaderConstant.GET };
+
+                IRestResponse response = _newClient.Execute(reqObj);
+
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    RestWebClient _newClient = new RestWebClient(_res.File.EntityUri);
-                    var reqObjNew = new HttpRequestObject() { Headers = new Dictionary<string, string>() { { "Authorization", $"{_res.File.AuthorizationHeader.Split(' ')[0]} {_res.File.AuthorizationHeader.Split(' ')[1]}" } }, REQUESTTYPE = HeaderConstant.GET };
-
-                    dynamic result = _newClient.RequestAsync<dynamic>(reqObjNew).Result;
-                    //base._client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(_res.File.AuthorizationHeader.Split(" ")[0], _res.File.AuthorizationHeader.Split(" ")[1]);
-
-                    //var result = base._client.GetAsync(_res.File.EntityUri).Result;
-
-                    Stream resStream = result.Content.ReadAsStreamAsync().Result;
-
-                    MemoryStream ms = new MemoryStream();
-
-                    resStream.CopyTo(ms);
-
-                    return ms.ToArray();
-                }
-                else if (_res.Status.ToLower().Equals(EncompassExportStatus.RUNNING))
-                {
-                    goto GetFile;
+                    if (response.RawBytes != null)
+                        _pages.Add(response.RawBytes);
                 }
             }
 
-            return null;
+            return ImageUtilities.ConvertImageToPdf(_pages);
         }
 
-        private bool UploadAttachment(RestWebClient _client, EncompassAttachmentUploadURL _res, UploadRequest request)
+        private byte[] GetSplitArray(byte[] srcArray, Int32 index, Int32 length)
         {
-            using (MemoryStream ms = new MemoryStream())
+            byte[] destArray = new byte[length];
+            Buffer.BlockCopy(srcArray, 16, destArray, 0, length);
+            return destArray;
+        }
+
+        private bool UploadAttachment(EAttachmentUploadResponse _res, byte[] request, string fileName)
+        {
+            byte[] _file = request;
+
+            if (_res.MultiChunkRequired)
             {
-                request.File.CopyTo(ms);
-                byte[] _file = ms.ToArray();
+                Int32 lastIndex = 0;
 
-                RestWebClient _newClient = new RestWebClient(_res.MediaUrl);
+                foreach (EUploadChunkEntites item in _res.MultiChunk.ChunkList)
+                {
+                    bool result = UploadFileRequest(item.UploadUrl, GetSplitArray(_file, lastIndex, item.Size), fileName, ContentTypeConstant.FILE);
+                    if (result)
+                        lastIndex = item.Size;
+                }
 
-                var reqObjNew = new HttpRequestObject() { FileStream = _file, REQUESTTYPE = HeaderConstant.PUT, RequestContentType = RequestTypeConstant.FILE };
+                RestWebClient _newClient = new RestWebClient(_res.MultiChunk.CommitUrl);
 
-                dynamic rs = _newClient.RequestAsync<dynamic>(reqObjNew).Result;
+                var reqObjNew = new HttpRequestObject() { REQUESTTYPE = HeaderConstant.POST };
 
-                string responseStream = rs.Content;
+                var res = _newClient.Execute(reqObjNew);
 
-                if (rs.StatusCode == HttpStatusCode.OK || rs.StatusCode == HttpStatusCode.Created || rs.StatusCode == HttpStatusCode.NoContent)
+                string responseStream = res.Content;
+
+                if (res.StatusCode == HttpStatusCode.OK || res.StatusCode == HttpStatusCode.Created || res.StatusCode == HttpStatusCode.NoContent)
                 {
                     return true;
                 }
+            }
+            else
+            {
+                return UploadFileRequest(_res.UploadUrl, _file, fileName, ContentTypeConstant.FILE);
             }
 
             return false;
         }
 
+        private bool UploadFileRequest(string URL, byte[] _file, string fileName, string requestType)
+        {
+            RestWebClient _newClient = new RestWebClient(URL);
+
+            var reqObjNew = new HttpRequestObject() { FileStream = _file, REQUESTTYPE = HeaderConstant.PUT, Content = new { FileName = fileName }, RequestContentType = requestType };
+
+            var res = _newClient.Execute(reqObjNew);
+
+            string responseStream = res.Content;
+
+            if (res.StatusCode == HttpStatusCode.OK || res.StatusCode == HttpStatusCode.Created || res.StatusCode == HttpStatusCode.NoContent)
+            {
+                return true;
+            }
+
+            return false;
+        }
 
         #endregion
 

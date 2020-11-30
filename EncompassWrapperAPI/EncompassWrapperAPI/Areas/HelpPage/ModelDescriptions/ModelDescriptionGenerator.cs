@@ -11,7 +11,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using System.Xml.Serialization;
 
-namespace EncompassWrapperAPI.Areas.HelpPage.ModelDescriptions
+namespace EncompassConnectorAPI.Areas.HelpPage.ModelDescriptions
 {
     /// <summary>
     /// Generates model descriptions for given types.

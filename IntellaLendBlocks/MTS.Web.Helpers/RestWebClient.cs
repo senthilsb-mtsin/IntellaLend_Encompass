@@ -25,11 +25,18 @@ namespace MTS.Web.Helpers
                 {
                     WebClientArgs args = new WebClientArgs();
                     item.Invoke(this, args);
-                    restRequest.AddHeader(args.HeaderData.Key, args.HeaderData.Value);
+                    if (!(args.HeaderData.Equals(new KeyValuePair<string, string>())))
+                        restRequest.AddHeader(args.HeaderData.Key, args.HeaderData.Value);
+
+                    if (args.HeaderDataList != null && args.HeaderDataList.Count > 0)
+                    {
+                        foreach (KeyValuePair<string, string> itemDic in args.HeaderDataList)
+                        {
+                            restRequest.AddHeader(itemDic.Key, itemDic.Value);
+                        }
+                    }
                 }
-
             }
-
         }
 
 
@@ -79,39 +86,15 @@ namespace MTS.Web.Helpers
             {
                 case "POST":
                     restRequest.Method = Method.POST;
-                    if (httpRequestObject.Content != null && httpRequestObject.RequestContentType == "application/json")
-                    {
-                        restRequest.AddJsonBody(httpRequestObject.Content);
-                    }
-                    else if (httpRequestObject.Content != null && httpRequestObject.RequestContentType == "application/x-www-form-urlencoded")
-                    {
-                        List<string> param = ((Dictionary<string, string>)httpRequestObject.Content).Select(item => $"{item.Key}={item.Value}").ToList();
-                        restRequest.AddOrUpdateParameter(httpRequestObject.RequestContentType, string.Join("&", param), ParameterType.RequestBody);
-                    }
+                    SetRequestBody(httpRequestObject, restRequest);
                     break;
                 case "PUT":
                     restRequest.Method = Method.PUT;
-                    if (httpRequestObject.Content != null && httpRequestObject.RequestContentType == "application/json")
-                    {
-                        restRequest.AddJsonBody(httpRequestObject.Content);
-                    }
-                    else if (httpRequestObject.Content != null && httpRequestObject.RequestContentType == "application/x-www-form-urlencoded")
-                    {
-                        List<string> param = ((Dictionary<string, string>)httpRequestObject.Content).Select(item => $"{item.Key}={item.Value}").ToList();
-                        restRequest.AddOrUpdateParameter(httpRequestObject.RequestContentType, string.Join("&", param), ParameterType.RequestBody);
-                    }
+                    SetRequestBody(httpRequestObject, restRequest);
                     break;
                 case "PATCH":
                     restRequest.Method = Method.PATCH;
-                    if (httpRequestObject.Content != null && httpRequestObject.RequestContentType == "application/json")
-                    {
-                        restRequest.AddJsonBody(httpRequestObject.Content);
-                    }
-                    else if (httpRequestObject.Content != null && httpRequestObject.RequestContentType == "application/x-www-form-urlencoded")
-                    {
-                        List<string> param = ((Dictionary<string, string>)httpRequestObject.Content).Select(item => $"{item.Key}={item.Value}").ToList();
-                        restRequest.AddOrUpdateParameter(httpRequestObject.RequestContentType, string.Join("&", param), ParameterType.RequestBody);
-                    }
+                    SetRequestBody(httpRequestObject, restRequest);
                     break;
                 case "DELETE":
                     restRequest.Method = Method.DELETE;
@@ -123,6 +106,22 @@ namespace MTS.Web.Helpers
 
             return restRequest;
 
+        }
+
+        private void SetRequestBody(HttpRequestObject httpRequestObject, RestRequest restRequest)
+        {
+            if (httpRequestObject.Content != null)
+            {
+                if (httpRequestObject.RequestContentType == "application/json")
+                    restRequest.AddJsonBody(httpRequestObject.Content);
+                else if (httpRequestObject.RequestContentType == "application/x-www-form-urlencoded")
+                {
+                    List<string> param = ((Dictionary<string, string>)httpRequestObject.Content).Select(item => $"{item.Key}={item.Value}").ToList();
+                    restRequest.AddOrUpdateParameter(httpRequestObject.RequestContentType, string.Join("&", param), ParameterType.RequestBody);
+                }
+                else if (httpRequestObject.RequestContentType == "multipart/form-data")
+                    restRequest.AddFileBytes(httpRequestObject.Content.FileName, httpRequestObject.FileStream, httpRequestObject.Content.FileName);
+            }
         }
 
         public RestSharp.IRestResponse<T> Execute<T>(HttpRequestObject requestObject)

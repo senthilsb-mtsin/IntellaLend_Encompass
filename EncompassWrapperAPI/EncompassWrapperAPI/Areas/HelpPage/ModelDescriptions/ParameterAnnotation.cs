@@ -1,6 +1,6 @@
 using System;
 
-namespace EncompassWrapperAPI.Areas.HelpPage.ModelDescriptions
+namespace EncompassConnectorAPI.Areas.HelpPage.ModelDescriptions
 {
     public class ParameterAnnotation
     {

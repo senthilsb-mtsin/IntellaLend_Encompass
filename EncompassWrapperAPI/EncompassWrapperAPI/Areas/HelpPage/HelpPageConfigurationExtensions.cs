@@ -1,5 +1,5 @@
-using EncompassWrapperAPI.Areas.HelpPage.ModelDescriptions;
-using EncompassWrapperAPI.Areas.HelpPage.Models;
+using EncompassConnectorAPI.Areas.HelpPage.ModelDescriptions;
+using EncompassConnectorAPI.Areas.HelpPage.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,7 +14,7 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Description;
 
-namespace EncompassWrapperAPI.Areas.HelpPage
+namespace EncompassConnectorAPI.Areas.HelpPage
 {
     public static class HelpPageConfigurationExtensions
     {

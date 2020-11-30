@@ -1,7 +1,37 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace EncompassRequestBody.WrapperReponseModel
 {
+
+    public class EDownloadURLResponse
+    {
+        [JsonProperty(PropertyName = "attachments")]
+        public List<EDownloadFile> Attachments { get; set; }
+    }
+
+    public class EDownloadFile
+    {
+        [JsonProperty(PropertyName = "id")]
+        public string ID { get; set; }
+
+        [JsonProperty(PropertyName = "pages")]
+        public List<EAttachmentPages> Pages { get; set; }
+    }
+
+    public class EAttachmentPageURL
+    {
+        [JsonProperty(PropertyName = "url")]
+        public string URL { get; set; }
+
+    }
+
+    public class EAttachmentPages : EAttachmentPageURL
+    {
+        [JsonProperty(PropertyName = "thumbnail")]
+        public EAttachmentPageURL Thumbnail { get; set; }
+    }
+
     public class EJobResponse
     {
         [JsonProperty(PropertyName = "jobId")]

@@ -1,5 +1,5 @@
 ﻿using Encompass.WebConnector.Models;
-using EncompassWrapperAPI.Controllers;
+using EncompassConnectorAPI.Controllers;
 using EncompassWrapperConstants;
 using MTS.Web.Helpers;
 using MTSEntBlocks.LoggerBlock;
@@ -16,7 +16,7 @@ using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 
-namespace EncompassWrapperAPI.Helpers
+namespace EncompassConnectorAPI.Helpers
 {
     /// <summary>
     /// 

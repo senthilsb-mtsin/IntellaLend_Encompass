@@ -1,7 +1,7 @@
 using System.Web.Http;
 using System.Web.Mvc;
 
-namespace EncompassWrapperAPI.Areas.HelpPage
+namespace EncompassConnectorAPI.Areas.HelpPage
 {
     public class HelpPageAreaRegistration : AreaRegistration
     {

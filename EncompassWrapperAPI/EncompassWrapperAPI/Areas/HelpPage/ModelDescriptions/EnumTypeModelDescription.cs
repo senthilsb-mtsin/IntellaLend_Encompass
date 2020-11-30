@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 
-namespace EncompassWrapperAPI.Areas.HelpPage.ModelDescriptions
+namespace EncompassConnectorAPI.Areas.HelpPage.ModelDescriptions
 {
     public class EnumTypeModelDescription : ModelDescription
     {

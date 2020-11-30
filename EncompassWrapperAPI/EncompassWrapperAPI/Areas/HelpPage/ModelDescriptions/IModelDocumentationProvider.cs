@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace EncompassWrapperAPI.Areas.HelpPage.ModelDescriptions
+namespace EncompassConnectorAPI.Areas.HelpPage.ModelDescriptions
 {
     public interface IModelDocumentationProvider
     {

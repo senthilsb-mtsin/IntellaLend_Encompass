@@ -14,7 +14,7 @@ using System.Configuration;
 using System.Net;
 using System.Web.Http;
 
-namespace EncompassWrapperAPI.Controllers
+namespace EncompassConnectorAPI.Controllers
 {
     ///<Summary>
     /// Controller to Generate, Validate Encompass Token
@@ -57,7 +57,7 @@ namespace EncompassWrapperAPI.Controllers
                 form.Add("client_secret", validateRequest.ClientSecret);
                 form.Add("token", validateRequest.AccessToken);
 
-                var reqObj = new HttpRequestObject() { URL = EncompassURLConstant.TOKEN_INTROSPECTION, RequestContentType = RequestTypeConstant.FORMURLENCODE, Content = form, REQUESTTYPE = HeaderConstant.POST };
+                var reqObj = new HttpRequestObject() { URL = EncompassURLConstant.TOKEN_INTROSPECTION, RequestContentType = ContentTypeConstant.FORMURLENCODE, Content = form, REQUESTTYPE = HeaderConstant.POST };
 
                 IRestResponse response = _client.Execute(reqObj);
 
@@ -101,7 +101,7 @@ namespace EncompassWrapperAPI.Controllers
                 form.Add("scope", tokenRequest.Scope);
                 form.Add("instance_id", tokenRequest.InstanceID);
 
-                var reqObj = new HttpRequestObject() { URL = EncompassURLConstant.GET_TOKEN, RequestContentType = RequestTypeConstant.FORMURLENCODE, Content = form, REQUESTTYPE = HeaderConstant.POST };
+                var reqObj = new HttpRequestObject() { URL = EncompassURLConstant.GET_TOKEN, RequestContentType = ContentTypeConstant.FORMURLENCODE, Content = form, REQUESTTYPE = HeaderConstant.POST };
 
                 IRestResponse response = _client.Execute(reqObj);
 
@@ -150,7 +150,7 @@ namespace EncompassWrapperAPI.Controllers
 
                 var obj = new { client_id = tokenRequest.ClientID, client_secret = tokenRequest.ClientSecret, grant_type = tokenRequest.GrantType, scope = tokenRequest.Scope, username = tokenRequest.UserName, password = tokenRequest.Password };
 
-                var reqObj = new HttpRequestObject() { URL = EncompassURLConstant.GET_TOKEN, RequestContentType = RequestTypeConstant.FORMURLENCODE, Content = form, REQUESTTYPE = HeaderConstant.POST };
+                var reqObj = new HttpRequestObject() { URL = EncompassURLConstant.GET_TOKEN, RequestContentType = ContentTypeConstant.FORMURLENCODE, Content = form, REQUESTTYPE = HeaderConstant.POST };
 
                 IRestResponse response = _client.Execute(reqObj);
 

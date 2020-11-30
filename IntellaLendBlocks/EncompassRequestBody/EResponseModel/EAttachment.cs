@@ -20,7 +20,7 @@ namespace EncompassRequestBody.EResponseModel
         public EAttachmentCreatedBy CreatedBy { get; set; }
 
         [JsonProperty(PropertyName = "type")]
-        public long AttachmentType { get; set; }
+        public string AttachmentType { get; set; }
 
         [JsonProperty(PropertyName = "fileSize")]
         public long FileSize { get; set; }

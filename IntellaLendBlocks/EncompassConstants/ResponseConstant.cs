@@ -3,7 +3,7 @@
     public class ResponseConstant
     {
         public const string ASSIGNED_SUCCESSFULLY = "Assigned Successfully";
-        public const string REMOVED_SUCCESSFULLY = "Assigned Successfully";
+        public const string REMOVED_SUCCESSFULLY = "UnAssigned Successfully";
         public const string ERROR = "Error";
         public const string UPLOAD_SUCCESSFULLY = "Uploaded Successfully";
         public const string UPLOAD_FAILED = "Uploaded Failed";
