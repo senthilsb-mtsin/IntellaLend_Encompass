@@ -1,4 +1,5 @@
 ﻿using EncompassRequestBody.EResponseModel;
+using EncompassRequestBody.WrapperReponseModel;
 using IntellaLend.Audit;
 using IntellaLend.AuditData;
 using IntellaLend.Constance;
@@ -137,6 +138,60 @@ namespace IL.EncompassTrailingFileDownloader
                     db.Entry(_staging).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
+            }
+        }
+        public void UpdateStatusEwebHookEvents(Int64 _id, Int32 status)
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
+                EWebhookEvents _loan = db.EWebhookEvents.AsNoTracking().Where(x => x.ID == _id).FirstOrDefault();
+                if (_loan != null)
+                {
+                    _loan.Status = status;
+                    _loan.ModifiedOn = DateTime.Now;
+                    db.Entry(_loan).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+
+            }
+        }
+
+
+
+        public void DeleteStaginDetails(Guid? eLoanGuid)
+        {
+
+            using (var db = new DBConnect(TenantSchema))
+            {
+                EDownloadStaging _stage = db.EDownloadStaging.AsNoTracking().Where(x => x.ELoanGUID == eLoanGuid).FirstOrDefault();
+                if (_stage != null)
+                {
+                    db.Entry(_stage).State = System.Data.Entity.EntityState.Deleted;
+
+                }
+                ELoanAttachmentDownload _eloans = db.ELoanAttachmentDownload.AsNoTracking().Where(l => l.ELoanGUID == eLoanGuid).FirstOrDefault();
+                if (_eloans != null)
+                {
+                    db.Entry(_eloans).State = System.Data.Entity.EntityState.Deleted;
+
+                }
+                db.SaveChanges();
+
+
+            }
+        }
+        public void DeleteWebHookEvents(Int64 ID)
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
+                EWebhookEvents _eWebevents = db.EWebhookEvents.AsNoTracking().Where(x => x.ID == ID).FirstOrDefault();
+                if (_eWebevents != null)
+                {
+                    db.Entry(_eWebevents).State = System.Data.Entity.EntityState.Deleted;
+
+                }
+
+                db.SaveChanges();
             }
         }
         public List<EDownloadStaging> SetDownloadSteps(List<EAttachment> _eAttachments, Int64 _downloadID, string _eLoanGUID)
@@ -286,8 +341,28 @@ namespace IL.EncompassTrailingFileDownloader
                 }
             }
         }
+        public List<EWebhookEvents> GetEncompassWebHookLoans()
+        {
 
-        public List<LoanDownload> GetDBLoans()
+            try
+            {
+                List<EWebhookEvents> _lsLoans = new List<EWebhookEvents>();
+                using (var db = new DBConnect(TenantSchema))
+                {
+                    _lsLoans = db.EWebhookEvents.AsNoTracking().Where(x => x.EventType == EWebHookEventsLogConstant.DOCUMENT_LOG && x.Status == EWebHookStatusConstant.EWEB_HOOK_STAGED).ToList();
+
+                }
+                return _lsLoans;
+            }
+            catch (Exception ex)
+            {
+                MTSExceptionHandler.HandleException(ref ex);
+                throw ex;
+            }
+
+
+        }
+        public List<LoanDownload> GetDBLoans(Guid? EnCompassLoanGUID)
         {
             try
             {
@@ -296,13 +371,13 @@ namespace IL.EncompassTrailingFileDownloader
                 {
                     //use left join 
                     _lsLoans = (from l in db.Loan.AsNoTracking()
-                                where (l.UploadType == UploadConstant.ENCOMPASS) && (
+                                where ((l.UploadType == UploadConstant.ENCOMPASS) && (
                                 l.Status == StatusConstant.PENDING_IDC ||
                                 l.Status == StatusConstant.IDC_COMPLETE ||
                                 l.Status == StatusConstant.READY_FOR_IDC ||
                                 l.Status == StatusConstant.IDC_ERROR ||
                                 l.Status == StatusConstant.MOVE_TO_PROCESSING_QUEUE ||
-                                l.Status == StatusConstant.PENDING_AUDIT)
+                                l.Status == StatusConstant.PENDING_AUDIT) && l.LoanGUID == EnCompassLoanGUID)
                                 select new LoanDownload()
                                 {
                                     LoanID = l.LoanID,
@@ -319,6 +394,7 @@ namespace IL.EncompassTrailingFileDownloader
                 throw ex;
             }
         }
+
 
         public List<LoanDownload> GetRetryTrailingLoans()
         {
