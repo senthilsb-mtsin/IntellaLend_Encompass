@@ -25,9 +25,64 @@ namespace EncompassConnectorAPI.Controllers
         #region Get Loan
 
         ///<Summary>
+        /// Get Loans with Requested Fields
+        ///</Summary>
+        [HttpPost, Route("api/v1/loans")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(List<EPipelineLoans>))]
+        [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
+        public IHttpActionResult GetLoans(GetLoanRequest loanRequest)
+        {
+            ErrorResponse _error = new ErrorResponse();
+            try
+            {
+                Logger.WriteTraceLog(JsonConvert.SerializeObject(loanRequest));
+                List<EPipelineLoans> _loans = new List<EPipelineLoans>();
+
+                string responseStream = string.Empty;
+
+                ELoansRequest _lReq = new ELoansRequest()
+                {
+                    ReturnFields = loanRequest.ReturnFields,
+                    LoanGUIDs = loanRequest.LoanGUIDs
+                };
+
+                Logger.WriteTraceLog(JsonConvert.SerializeObject(_lReq));
+
+                var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.GET_LOAN, loanRequest.ReturnLoanLimit), Content = _lReq, REQUESTTYPE = HeaderConstant.POST };
+
+                IRestResponse response = _client.Execute(reqObj);
+
+                responseStream = response.Content;
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    _loans = JsonConvert.DeserializeObject<List<EPipelineLoans>>(responseStream);
+                    return Ok(_loans);
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    _error = new ErrorResponse() { Summary = "Unauthorized", ErrorCode = HttpStatusCode.Unauthorized.ToString(), Details = "" };
+                }
+                else
+                {
+                    _error = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);
+                }
+            }
+            catch (Exception ex)
+            {
+                MTSExceptionHandler.HandleException(ref ex);
+                _error.Summary = ResponseConstant.ERROR;
+                _error.ErrorCode = HttpStatusCode.InternalServerError.ToString();
+                _error.Details = ex.Message;
+            }
+
+            return BadRequest(JsonConvert.SerializeObject(_error));
+        }
+
+        ///<Summary>
         /// Get Full Encompass Loan Objects
         ///</Summary>
-        [HttpGet, Route("api/GetLoan")]
+        [HttpGet, Route("api/v1/loan")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(object))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
         public IHttpActionResult GetLoan(string loanGuid)
@@ -64,7 +119,7 @@ namespace EncompassConnectorAPI.Controllers
         ///<Summary>
         /// Get List of LoanGUID's from Encompass PipeLine with a Filter
         ///</Summary>
-        [HttpPost, Route("api/QueryPipeLine")]
+        [HttpPost, Route("api/v1/loan/pipeline")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(List<EPipelineLoans>))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
         public IHttpActionResult QueryPipeLine(LoanRequest loanRequest)
@@ -122,61 +177,6 @@ namespace EncompassConnectorAPI.Controllers
             return BadRequest(JsonConvert.SerializeObject(_error));
         }
 
-        ///<Summary>
-        /// Get Loans with Requested Fields
-        ///</Summary>
-        [HttpPost, Route("api/GetLoans")]
-        [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(List<EPipelineLoans>))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
-        public IHttpActionResult GetLoans(GetLoanRequest loanRequest)
-        {
-            ErrorResponse _error = new ErrorResponse();
-            try
-            {
-                Logger.WriteTraceLog(JsonConvert.SerializeObject(loanRequest));
-                List<EPipelineLoans> _loans = new List<EPipelineLoans>();
-
-                string responseStream = string.Empty;
-
-                ELoansRequest _lReq = new ELoansRequest()
-                {
-                    ReturnFields = loanRequest.ReturnFields,
-                    LoanGUIDs = loanRequest.LoanGUIDs
-                };
-
-                Logger.WriteTraceLog(JsonConvert.SerializeObject(_lReq));
-
-                var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.GET_LOAN, loanRequest.ReturnLoanLimit), Content = _lReq, REQUESTTYPE = HeaderConstant.POST };
-
-                IRestResponse response = _client.Execute(reqObj);
-
-                responseStream = response.Content;
-
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    _loans = JsonConvert.DeserializeObject<List<EPipelineLoans>>(responseStream);
-                    return Ok(_loans);
-                }
-                else if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    _error = new ErrorResponse() { Summary = "Unauthorized", ErrorCode = HttpStatusCode.Unauthorized.ToString(), Details = "" };
-                }
-                else
-                {
-                    _error = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);
-                }
-            }
-            catch (Exception ex)
-            {
-                MTSExceptionHandler.HandleException(ref ex);
-                _error.Summary = ResponseConstant.ERROR;
-                _error.ErrorCode = HttpStatusCode.InternalServerError.ToString();
-                _error.Details = ex.Message;
-            }
-
-            return BadRequest(JsonConvert.SerializeObject(_error));
-        }
-
         #endregion
 
         #region Lock Loan
@@ -184,7 +184,7 @@ namespace EncompassConnectorAPI.Controllers
         ///<Summary>
         /// Lock Encompass Loan
         ///</Summary>
-        [HttpPost, Route("api/LockLoan")]
+        [HttpPost, Route("api/v1/loan/lock")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(LockLoanResponse))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
         public IHttpActionResult LockLoan(string loanGuid)
@@ -219,7 +219,7 @@ namespace EncompassConnectorAPI.Controllers
         ///<Summary>
         /// UnLock Encompass Loan
         ///</Summary>
-        [HttpPost, Route("api/UnLockLoan")]
+        [HttpPost, Route("api/v1/loan/unlock")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(bool))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
         public IHttpActionResult UnLockLoan(string LockID, string LoanGUID)
@@ -260,7 +260,7 @@ namespace EncompassConnectorAPI.Controllers
         ///<Summary>
         /// Update Loan Custom Field
         ///</Summary>
-        [HttpPatch, Route("api/UpdateLoanCustomField")]
+        [HttpPatch, Route("api/v1/loan/customfield/update")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(string))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
         public IHttpActionResult UpdateLoanCustomField(UpdateCustomFieldRequest req)

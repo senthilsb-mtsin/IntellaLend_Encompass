@@ -26,7 +26,7 @@ namespace EncompassConnectorAPI.Controllers
         ///<Summary>
         /// Get Encompass Field Schema
         ///</Summary>
-        [HttpPost, Route("api/GetFieldSchema")]
+        [HttpPost, Route("api/v1/field/schema")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(object))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
         public IHttpActionResult GetFieldSchema(string[] FieldIDs)
@@ -71,7 +71,7 @@ namespace EncompassConnectorAPI.Controllers
         ///<Summary>
         /// Get Encompass PreDefined Field Values
         ///</Summary>
-        [HttpPost, Route("api/GetPreDefinedFieldValues")]
+        [HttpPost, Route("api/v1/field/predefined")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(List<EFieldResponse>))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
         public IHttpActionResult GetPreDefinedFieldValues(FieldGetRequest _res)
@@ -113,7 +113,7 @@ namespace EncompassConnectorAPI.Controllers
         ///<Summary>
         /// Update Encompass PreDefined Field Values
         ///</Summary>
-        [HttpPatch, Route("api/UpdatePredefinedFields")]
+        [HttpPatch, Route("api/v1/field/predefined/update")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(EIDResponse))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
         public IHttpActionResult UpdatePredefinedFields(FieldUpdateRequest req)
