@@ -3,19 +3,19 @@
     public class EncompassURLConstant
     {
 
-        public const string GET_ASSIGNED_LOAN_ATTACHMENTS = "/api/GetAssignedLoanAttachment?loanGuid={0}";
-        public const string GET_UNASSIGNED_LOAN_ATTACHMENTS = "/api/GetUnassignedLoanAttachments?loanGuid={0}";
-        public const string GET_ALL_LOAN_ATTACHMENT = "/api/GetAllLoanAttachment?loanGuid={0}";
-        public const string GET_DOCUMENT_ATTACHMENT = "/api/GetDocumentAttachment?loanGuid={0}&documentID={1}";
+        public const string GET_ASSIGNED_LOAN_ATTACHMENTS = "/api/v1/attachment?loanGuid={0}";
+        public const string GET_UNASSIGNED_LOAN_ATTACHMENTS = "/api/v1/attachments?loanGuid={0}";
+        public const string GET_ALL_LOAN_ATTACHMENT = "/api/v1/attachment/assigned?loanGuid={0}";
+        public const string GET_DOCUMENT_ATTACHMENT = "/api/v1/attachment/unassgined?loanGuid={0}&documentID={1}";
         public const string GET_ATTACHMENT = "/api/GetAttachment?loanGuid={0}&attachmentId={1}";
-        public const string REMOVE_ATTACHMENT = "/api/RemoveAttachment";
-        public const string DOWNLOAD_ATTACHMENT = "/api/DownloadAttachment";
-        public const string UPLOAD_ATTACHMENT = "/api/UploadAttachment/{0}/{1}";
+        public const string REMOVE_ATTACHMENT = "/api/v1/attachment/remove";
+        public const string DOWNLOAD_ATTACHMENT = "/api/v1/attachment/download";
+        public const string UPLOAD_ATTACHMENT = "/api/v1/attachment/upload/{0}/{1}";
         public const string REMOVE_DOCUMENT_ATTACHMENT = "/api/RemoveDocumentAttachment";
         public const string ASSIGN_DOCUMENT_ATTACHMENT = "/api/AssignDocumentAttachment";
 
-        public const string GET_ALL_LOAN_DOCUMENT_WITH_ATTACHMENTS = "/api/GetAllLoanDocumentWithAttachments?loanGuid={0}";
-        public const string GET_ALL_LOAN_DOCUMENTS = "/api/GetAllLoanDocuments?loanGuid={0}";
+        public const string GET_ALL_LOAN_DOCUMENT_WITH_ATTACHMENTS = "/api/v1/documents?loanGuid={0}";
+        public const string GET_ALL_LOAN_DOCUMENTS = "/api/v1/document?loanGuid={0}";
         public const string GET_LOAN_DOCUMENT = "/api/GetLoanDocument?loanGuid={0}&documentID={1}";
         public const string ADD_DOCUMENT = "/api/AddDocument";
         public const string REMOVE_DOCUMENT = "/api/RemoveDocument";
