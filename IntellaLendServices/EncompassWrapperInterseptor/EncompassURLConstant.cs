@@ -20,20 +20,20 @@
         public const string ADD_DOCUMENT = "/api/AddDocument";
         public const string REMOVE_DOCUMENT = "/api/RemoveDocument";
 
-        public const string GET_FIELD_SCHEMA = "/api/GetFieldSchema";
-        public const string GET_PREDEFINED_FIELDVALUES = "/api/GetPreDefinedFieldValues";
-        public const string UPDATE_PREDEFINED_FIELDS = "/api/UpdatePredefinedFields";
+        public const string GET_FIELD_SCHEMA = "/api/v1/field/schema";
+        public const string GET_PREDEFINED_FIELDVALUES = "/api/v1/field/predefined";
+        public const string UPDATE_PREDEFINED_FIELDS = "/api/v1/field/predefined/update";
 
-        public const string GET_LOAN = "/api/GetLoan?loanGuid={0}";
-        public const string QUERY_PIPELINE = "/api/QueryPipeLine";
-        public const string GET_LOANS = "/api/GetLoans";
-        public const string LOCK_LOAN = "/api/LockLoan";
-        public const string UNLOCK_LOAN = "/api/UnLockLoan";
-        public const string UPDATE_CUSTOM_FIELD = "/api/UpdateLoanCustomField";
+        public const string GET_LOAN = "/api/v1/loans?loanGuid={0}";
+        public const string QUERY_PIPELINE = "/api/v1/loan";
+        public const string GET_LOANS = "/api/v1/loan/pipeline";
+        public const string LOCK_LOAN = "/api/v1/loan/lock";
+        public const string UNLOCK_LOAN = "/api/v1/loan/unlock";
+        public const string UPDATE_CUSTOM_FIELD = "/api/v1/loan/customfield/update";
 
         public const string VALIDATE_TOKEN = "/api/Token/ValidateToken";
-        public const string GET_TOKEN = "/api/Token/GetToken";
-        public const string GET_TOKEN_WITH_USER = "/api/Token/GetTokenWithUser";
+        public const string GET_TOKEN = "/api/v1/token";
+        public const string GET_TOKEN_WITH_USER = "/api/v1/token/credentials";
 
     }
 }
