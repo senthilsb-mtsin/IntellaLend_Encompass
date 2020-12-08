@@ -486,6 +486,16 @@
              Encompass Loan Attachment Releated Activities
             </Summary>
         </member>
+        <member name="M:EncompassConnectorAPI.Controllers.EncompassAttachmentController.GetAttachment(System.String,System.String)">
+            <Summary>
+             Get Single Encompass Loan Attachment Properties
+            </Summary>
+        </member>
+        <member name="M:EncompassConnectorAPI.Controllers.EncompassAttachmentController.GetAllLoanAttachment(System.String)">
+            <Summary>
+             Get Encompass Loan Attachments
+            </Summary>
+        </member>
         <member name="M:EncompassConnectorAPI.Controllers.EncompassAttachmentController.GetAssignedLoanAttachment(System.String)">
             <Summary>
              Get Encompass Loan Attachment which has Document assigned to it
@@ -494,21 +504,6 @@
         <member name="M:EncompassConnectorAPI.Controllers.EncompassAttachmentController.GetUnassginedLoanAttachments(System.String)">
             <Summary>
              Get Encompass Loan Attachment which do not have Document assigned
-            </Summary>
-        </member>
-        <member name="M:EncompassConnectorAPI.Controllers.EncompassAttachmentController.GetAllLoanAttachment(System.String)">
-            <Summary>
-             Get Encompass Loan Attachments
-            </Summary>
-        </member>
-        <member name="M:EncompassConnectorAPI.Controllers.EncompassAttachmentController.GetDocumentAttachment(System.String,System.String)">
-            <Summary>
-             Get Encompass Loan Attachments of a Document
-            </Summary>
-        </member>
-        <member name="M:EncompassConnectorAPI.Controllers.EncompassAttachmentController.GetAttachment(System.String,System.String)">
-            <Summary>
-             Get Single Encompass Loan Attachment Properties
             </Summary>
         </member>
         <member name="M:EncompassConnectorAPI.Controllers.EncompassAttachmentController.RemoveAttachment(EncompassRequestBody.WrapperRequestModel.RemoveContainerRequest)">
@@ -526,24 +521,9 @@
              Upload Encompass Loan Attachment
             </Summary>
         </member>
-        <member name="M:EncompassConnectorAPI.Controllers.EncompassAttachmentController.RemoveDocumentAttachment(EncompassRequestBody.WrapperRequestModel.AssignAttachmentRequest)">
-            <Summary>
-             Remove Attachment from a Document
-            </Summary>
-        </member>
-        <member name="M:EncompassConnectorAPI.Controllers.EncompassAttachmentController.AssignDocumentAttachment(EncompassRequestBody.WrapperRequestModel.AssignAttachmentRequest)">
-            <Summary>
-             Assign Attachment to a Document
-            </Summary>
-        </member>
         <member name="T:EncompassConnectorAPI.Controllers.EncompassDocumentController">
             <Summary>
              Encompass Document Releated Activities
-            </Summary>
-        </member>
-        <member name="M:EncompassConnectorAPI.Controllers.EncompassDocumentController.GetAllLoanDocumentWithAttachments(System.String)">
-            <Summary>
-             Get All Documents of a Loan with Attachments
             </Summary>
         </member>
         <member name="M:EncompassConnectorAPI.Controllers.EncompassDocumentController.GetAllLoanDocuments(System.String)">
@@ -556,6 +536,16 @@
              Get Particular Document of a Loan with or without Attachments
             </Summary>
         </member>
+        <member name="M:EncompassConnectorAPI.Controllers.EncompassDocumentController.GetAllLoanDocumentWithAttachments(System.String)">
+            <Summary>
+             Get All Documents of a Loan with Attachments
+            </Summary>
+        </member>
+        <member name="M:EncompassConnectorAPI.Controllers.EncompassDocumentController.GetDocumentAttachment(System.String,System.String)">
+            <Summary>
+             Get Encompass Loan Attachments of a Document
+            </Summary>
+        </member>
         <member name="M:EncompassConnectorAPI.Controllers.EncompassDocumentController.AddDocument(EncompassRequestBody.WrapperRequestModel.AddContainerRequest)">
             <Summary>
              Add Empty Document to Encompass Loan E-Folder
@@ -564,6 +554,16 @@
         <member name="M:EncompassConnectorAPI.Controllers.EncompassDocumentController.RemoveDocument(EncompassRequestBody.WrapperRequestModel.RemoveContainerRequest)">
             <Summary>
              Remove Document from Encompass Loan E-Folder
+            </Summary>
+        </member>
+        <member name="M:EncompassConnectorAPI.Controllers.EncompassDocumentController.RemoveDocumentAttachment(EncompassRequestBody.WrapperRequestModel.AssignAttachmentRequest)">
+            <Summary>
+             Remove Attachment from a Document
+            </Summary>
+        </member>
+        <member name="M:EncompassConnectorAPI.Controllers.EncompassDocumentController.AssignDocumentAttachment(EncompassRequestBody.WrapperRequestModel.AssignAttachmentRequest)">
+            <Summary>
+             Assign Attachment to a Document
             </Summary>
         </member>
         <member name="T:EncompassConnectorAPI.Controllers.EncompassFieldController">
@@ -591,6 +591,11 @@
              Encompass Loan Releated Activities
             </Summary>
         </member>
+        <member name="M:EncompassConnectorAPI.Controllers.EncompassLoanController.GetLoans(EncompassRequestBody.ERequestModel.GetLoanRequest)">
+            <Summary>
+             Get Loans with Requested Fields
+            </Summary>
+        </member>
         <member name="M:EncompassConnectorAPI.Controllers.EncompassLoanController.GetLoan(System.String)">
             <Summary>
              Get Full Encompass Loan Objects
@@ -599,11 +604,6 @@
         <member name="M:EncompassConnectorAPI.Controllers.EncompassLoanController.QueryPipeLine(EncompassRequestBody.ERequestModel.LoanRequest)">
             <Summary>
              Get List of LoanGUID's from Encompass PipeLine with a Filter
-            </Summary>
-        </member>
-        <member name="M:EncompassConnectorAPI.Controllers.EncompassLoanController.GetLoans(EncompassRequestBody.ERequestModel.GetLoanRequest)">
-            <Summary>
-             Get Loans with Requested Fields
             </Summary>
         </member>
         <member name="M:EncompassConnectorAPI.Controllers.EncompassLoanController.LockLoan(System.String)">
@@ -631,11 +631,6 @@
              To Create Rest Client Instance
             </Summary>
         </member>
-        <member name="M:EncompassConnectorAPI.Controllers.EncompassTokenController.ValidateToken(EncompassRequestBody.WrapperRequestModel.TokenValidateRequest)">
-            <Summary>
-             To Validate Encompass Token       
-            </Summary>
-        </member>
         <member name="M:EncompassConnectorAPI.Controllers.EncompassTokenController.GetToken(EncompassRequestBody.ERequestModel.ETokenRequest)">
             <Summary>
              Get Encompass Token without User credentials    
@@ -644,6 +639,11 @@
         <member name="M:EncompassConnectorAPI.Controllers.EncompassTokenController.GetTokenWithUser(EncompassRequestBody.ERequestModel.ETokenUserRequest)">
             <Summary>
              Get Encompass Token with User credentials    
+            </Summary>
+        </member>
+        <member name="M:EncompassConnectorAPI.Controllers.EncompassTokenController.ValidateToken(EncompassRequestBody.WrapperRequestModel.TokenValidateRequest)">
+            <Summary>
+             To Validate Encompass Token       
             </Summary>
         </member>
         <member name="T:EncompassConnectorAPI.Helpers.BaseActionFilter">
