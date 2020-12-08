@@ -33,7 +33,7 @@ namespace EncompassAPIHelper
 
         public List<string> GetLoans(List<Dictionary<string, string>> _eFields)
         {
-            RequestAgain:
+        RequestAgain:
 
             List<Fields> fieldList = new List<Fields>();
             Fields field = null;
@@ -83,10 +83,10 @@ namespace EncompassAPIHelper
 
         public List<EAttachment> GetUnassignedAttachments(string loanGUID)
         {
-            RequestAgain:
+        RequestAgain:
             LogMessage($"GetUnassignedAttachments : {loanGUID}");
 
-            var req = new HttpRequestObject() { REQUESTTYPE = "GET", URL = string.Format(EncompassURLConstant.GET_UNATTACHMENTS, loanGUID) };
+            var req = new HttpRequestObject() { REQUESTTYPE = "GET", URL = string.Format(EncompassURLConstant.GET_UNASSIGNED_LOAN_ATTACHMENTS, loanGUID) };
 
             IRestResponse result = client.Execute(req);
 
@@ -111,7 +111,7 @@ namespace EncompassAPIHelper
 
         public void UploadProcessFlag(string loanGUID, string fieldID, string fieldValue)
         {
-            RequestAgain:
+        RequestAgain:
             UpdateCustomFieldRequest _req = new UpdateCustomFieldRequest()
             {
                 LoanGuid = loanGUID,
@@ -147,10 +147,10 @@ namespace EncompassAPIHelper
 
         public byte[] DownloadAttachment(string loanGUID, string attachmentGUID, string AttachmentName)
         {
-            RequestAgain:
+        RequestAgain:
             LogMessage($"DownloadAttachment : {loanGUID}, {attachmentGUID}");
 
-            var req = new HttpRequestObject() { REQUESTTYPE = "GET", URL = string.Format(EncompassURLConstant.GET_DOWNLOAD_ATTACHMENT, loanGUID, attachmentGUID) };
+            var req = new HttpRequestObject() { REQUESTTYPE = "GET", URL = string.Format(EncompassURLConstant.DOWNLOAD_ATTACHMENT, loanGUID, attachmentGUID) };
 
             IRestResponse result = client.Execute(req);
 
@@ -190,10 +190,10 @@ namespace EncompassAPIHelper
         //added by mani
         public List<EContainer> GetAllLoanDocuments(string loanGUID)
         {
-            RequestAgain:
+        RequestAgain:
             LogMessage($"GetAllLoanDocuments : {loanGUID}");
 
-            var req = new HttpRequestObject() { REQUESTTYPE = "GET", URL = string.Format(EncompassURLConstant.GET_ALLLOANDOCUMENTS, loanGUID) };
+            var req = new HttpRequestObject() { REQUESTTYPE = "GET", URL = string.Format(EncompassURLConstant.GET_ALL_LOAN_DOCUMENTS, loanGUID) };
 
             IRestResponse result = client.Execute(req);
 
@@ -216,9 +216,37 @@ namespace EncompassAPIHelper
             throw new EncompassWrapperException($"Error while fetching EFolder(s) in Encompass. Message : {_error.Details}");
         }
 
+        public List<EAttachment> GetAttachments(string loanGUID, string attachmentID)
+        {
+        RequestAgain:
+            LogMessage($"GetAttachments : {loanGUID},{attachmentID}");
+
+            var req = new HttpRequestObject() { REQUESTTYPE = "GET", URL = string.Format(EncompassURLConstant.GET_ATTACHMENT, loanGUID, attachmentID) };
+
+            IRestResponse result = client.Execute(req);
+
+            string res = result.Content;
+
+            if (result.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return JsonConvert.DeserializeObject<List<EAttachment>>(res);
+            }
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                _token.SetToken();
+                goto RequestAgain;
+            }
+            ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(res);
+
+            if (_error.Details.Contains("read-only mode"))
+                throw new EncompassWrapperLoanLockException(_error.Details);
+
+            throw new EncompassWrapperException($"Error while fetching Attachment(s) in Encompass. Message : {_error.Details}");
+        }
+
         public EUploadResponse UploadAttachment(string loanGUID, string fileName, string fileNameWithExtension, byte[] file)
         {
-            RequestAgain:
+        RequestAgain:
             //MultipartFormDataContent form = new MultipartFormDataContent();
             LogMessage($"UploadAttachment : {loanGUID}, Filename : {fileName}, FileLength : {file.Length}");
             //form.Add(new StringContent(loanGUID), "loanGUID");
@@ -261,7 +289,7 @@ namespace EncompassAPIHelper
 
         public AddContainerResponse AddDocument(string loanGUID, string documentName)
         {
-            RequestAgain:
+        RequestAgain:
             AddContainerRequest _req = new AddContainerRequest()
             {
                 LoanGUID = loanGUID,
@@ -293,7 +321,7 @@ namespace EncompassAPIHelper
 
         public bool AssignDocumentAttachments(string loanGUID, string documentGuid, List<string> attachmentGUIDs, string FolderName)
         {
-            RequestAgain:
+        RequestAgain:
             AssignAttachmentRequest _req = new AssignAttachmentRequest()
             {
                 LoanGUID = loanGUID,
@@ -329,7 +357,7 @@ namespace EncompassAPIHelper
 
         public List<EFieldResponse> GetPredefinedFieldValues(string loanGUID, string[] fieldIds)
         {
-            RequestAgain:
+        RequestAgain:
             FieldGetRequest _req = new FieldGetRequest()
             {
                 LoanGUID = loanGUID,
