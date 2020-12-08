@@ -37,55 +37,10 @@ namespace EncompassConnectorAPI.Controllers
 
         #region Token Validate & Get New Token
 
-
-        ///<Summary>
-        /// To Validate Encompass Token       
-        ///</Summary>
-        [HttpPost, Route("api/Token/ValidateToken")]
-        [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(ETokenValidateResponse))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
-        public IHttpActionResult ValidateToken(TokenValidateRequest validateRequest)
-        {
-            ErrorResponse _badRes = new ErrorResponse();
-            ETokenValidateResponse _eToken = new ETokenValidateResponse();
-            try
-            {
-                _eToken.ValidToken = true;
-
-                Dictionary<string, string> form = new Dictionary<string, string>();
-                form.Add("client_id", validateRequest.ClientID);
-                form.Add("client_secret", validateRequest.ClientSecret);
-                form.Add("token", validateRequest.AccessToken);
-
-                var reqObj = new HttpRequestObject() { URL = EncompassURLConstant.TOKEN_INTROSPECTION, RequestContentType = ContentTypeConstant.FORMURLENCODE, Content = form, REQUESTTYPE = HeaderConstant.POST };
-
-                IRestResponse response = _client.Execute(reqObj);
-
-                if (response.StatusCode != HttpStatusCode.OK && response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    string responseStream = response.Content;
-
-                    TokenInvalidModel _invalidToken = JsonConvert.DeserializeObject<TokenInvalidModel>(responseStream);
-
-                    _eToken.ValidToken = false;
-                }
-
-                return Ok(_eToken);
-            }
-            catch (Exception ex)
-            {
-                _badRes.Summary = ResponseConstant.ERROR;
-                _badRes.Details = ex.Message;
-                MTSExceptionHandler.HandleException(ref ex);
-            }
-
-            return BadRequest(JsonConvert.SerializeObject(_badRes));
-        }
-
         ///<Summary>
         /// Get Encompass Token without User credentials    
         ///</Summary>
-        [HttpPost, Route("api/Token/GetToken")]
+        [HttpPost, Route("api/v1/token")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(ETokenResponse))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
         public IHttpActionResult GetToken(ETokenRequest tokenRequest)
@@ -131,7 +86,7 @@ namespace EncompassConnectorAPI.Controllers
         ///<Summary>
         /// Get Encompass Token with User credentials    
         ///</Summary>
-        [HttpPost, Route("api/Token/GetTokenWithUser")]
+        [HttpPost, Route("api/v1/token/credentials")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(ETokenResponse))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
         public IHttpActionResult GetTokenWithUser(ETokenUserRequest tokenRequest)
@@ -166,6 +121,50 @@ namespace EncompassConnectorAPI.Controllers
                     TokenInvalidModel res = JsonConvert.DeserializeObject<TokenInvalidModel>(responseStream);
                     throw new Exception(res.ErrorDescription);
                 }
+            }
+            catch (Exception ex)
+            {
+                _badRes.Summary = ResponseConstant.ERROR;
+                _badRes.Details = ex.Message;
+                MTSExceptionHandler.HandleException(ref ex);
+            }
+
+            return BadRequest(JsonConvert.SerializeObject(_badRes));
+        }
+
+        ///<Summary>
+        /// To Validate Encompass Token       
+        ///</Summary>
+        [HttpPost, Route("api/v1/token/validate")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(ETokenValidateResponse))]
+        [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
+        public IHttpActionResult ValidateToken(TokenValidateRequest validateRequest)
+        {
+            ErrorResponse _badRes = new ErrorResponse();
+            ETokenValidateResponse _eToken = new ETokenValidateResponse();
+            try
+            {
+                _eToken.ValidToken = true;
+
+                Dictionary<string, string> form = new Dictionary<string, string>();
+                form.Add("client_id", validateRequest.ClientID);
+                form.Add("client_secret", validateRequest.ClientSecret);
+                form.Add("token", validateRequest.AccessToken);
+
+                var reqObj = new HttpRequestObject() { URL = EncompassURLConstant.TOKEN_INTROSPECTION, RequestContentType = ContentTypeConstant.FORMURLENCODE, Content = form, REQUESTTYPE = HeaderConstant.POST };
+
+                IRestResponse response = _client.Execute(reqObj);
+
+                if (response.StatusCode != HttpStatusCode.OK && response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    string responseStream = response.Content;
+
+                    TokenInvalidModel _invalidToken = JsonConvert.DeserializeObject<TokenInvalidModel>(responseStream);
+
+                    _eToken.ValidToken = false;
+                }
+
+                return Ok(_eToken);
             }
             catch (Exception ex)
             {
