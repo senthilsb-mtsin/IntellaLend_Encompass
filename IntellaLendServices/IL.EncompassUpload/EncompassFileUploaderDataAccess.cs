@@ -170,6 +170,45 @@ namespace IL.EncompassUpload
 
         }
 
+        public void RemoveUploadedStagingDetail(Int64 uploadStagID)
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
+                EUploadStaging _staging = db.EUploadStaging.AsNoTracking().Where(k => k.ID == uploadStagID).FirstOrDefault();
+                if (_staging != null)
+                {
+                    db.EUploadStaging.RemoveRange(db.EUploadStaging.Where(x => x.ID == uploadStagID));
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        public bool IsSuccessfullUpload(Int64 uploadStagID)
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
+                EUploadStaging _staging = db.EUploadStaging.AsNoTracking().Where(k => k.UploadStagingID == uploadStagID).FirstOrDefault();
+                if (_staging != null)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
+
+        public void RemoveUploadStaging(Int64 uploadStagID)
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
+                ELoanAttachmentUpload _eLoanAttachmentDownload = db.ELoanAttachmentUpload.AsNoTracking().Where(x => x.ID == uploadStagID).FirstOrDefault();
+
+                if (_eLoanAttachmentDownload != null)
+                {
+                    db.ELoanAttachmentUpload.RemoveRange(db.ELoanAttachmentUpload.Where(x => x.ID == uploadStagID));
+                    db.SaveChanges();
+                }
+            }
+        }
 
         public string GetRuleEvaluateResult(Int64 loanID)
         {

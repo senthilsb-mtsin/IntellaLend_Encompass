@@ -127,6 +127,7 @@ namespace IL.EncompassUpload
                                                 {
                                                     uploadFailed.Add(true);
                                                     dataAccess.UpdateUploadStaging(_doctype.ID, EncompassUploadStagingConstant.UPLOAD_STAGING_COMPLETE, EParkingSpot.Title);
+                                                    dataAccess.RemoveUploadedStagingDetail(_doctype.ID);
                                                 }
                                                 else
                                                     dataAccess.UpdateUploadStaging(_doctype.ID, EncompassUploadStagingConstant.UPLOAD_STAGING_FAILED, EParkingSpot.Title, $"Could not move the attachment '{Filename}' to the Efolder folder '{dbParkingSpot}'");
@@ -181,6 +182,9 @@ namespace IL.EncompassUpload
                                         {
                                             ruleResultUploadFailed = false;
                                             dataAccess.UpdateUploadStaging(ruleStagingID, EncompassUploadStagingConstant.UPLOAD_STAGING_COMPLETE, EvaluatedResultParkingSpotName);
+                                            dataAccess.RemoveUploadedStagingDetail(ruleStagingID);
+
+
                                         }
                                         else
                                             dataAccess.UpdateUploadStaging(ruleStagingID, EncompassUploadStagingConstant.UPLOAD_STAGING_FAILED, EvaluatedResultParkingSpotName, $"Could not move the attachment '{ruleFileName}' to the Efolder folder '{EvaluatedResultParkingSpotName}'");
@@ -212,6 +216,7 @@ namespace IL.EncompassUpload
                                             LogMessage($"else res  2: {EvaluatedResultParkingSpotName}");
                                             ruleResultUploadFailed = false;
                                             dataAccess.UpdateUploadStaging(ruleStagingID, EncompassUploadStagingConstant.UPLOAD_STAGING_COMPLETE, EvaluatedResultParkingSpotName);
+                                            dataAccess.RemoveUploadedStagingDetail(ruleStagingID);
                                         }
                                         else
                                         {
@@ -236,6 +241,12 @@ namespace IL.EncompassUpload
                                 dataAccess.UpdateEncompassUploadStatus(_eLoan.ID, EncompassUploadConstant.UPLOAD_FAILED, $"Rule Evaluated result upload failed");
                             else
                                 dataAccess.UpdateEncompassUploadStatus(_eLoan.ID, EncompassUploadConstant.UPLOAD_COMPLETE);
+
+                            //remove ELoanAttachmentUpload (header table) data if all details records are successfull
+                            if(dataAccess.IsSuccessfullUpload(_eLoan.ID))
+                            {
+                                dataAccess.RemoveUploadStaging(_eLoan.ID);
+                            }
                         }
                         catch (EncompassWrapperLoanLockException ex)
                         {
