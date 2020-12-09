@@ -347,8 +347,6 @@ namespace MTSEntityDataAccess
         public DbSet<EUploadStaging> EUploadStaging { get { return this.Set<EUploadStaging>(); } }
 
         public DbSet<EDownloadStaging> EDownloadStaging { get { return this.Set<EDownloadStaging>(); } }
-        public DbSet<EWebhookEvents> EWebhookEvents { get { return this.Set<EWebhookEvents>(); } }
-
         public DbSet<LOSExportFileStaging> LOSExportFileStaging { get { return this.Set<LOSExportFileStaging>(); } }
 
         public DbSet<LOSExportFileStagingDetail> LOSExportFileStagingDetail { get { return this.Set<LOSExportFileStagingDetail>(); } }
@@ -759,9 +757,6 @@ namespace MTSEntityDataAccess
 
                 modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<EDownloadStaging>()
                              .ToTable("EDownloadStaging");
-
-                modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<EWebhookEvents>()
-                             .ToTable("EWebhookEvents");
 
                 modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<AuditDescriptionConfig>()
                        .ToTable("AuditDescriptionConfig");
