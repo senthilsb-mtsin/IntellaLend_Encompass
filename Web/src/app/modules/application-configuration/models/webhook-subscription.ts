@@ -1,8 +1,13 @@
-export class CheckWebHookEventTypeExistModal{
-    TableSchema: string;
-    EventType: number;
-    constructor(TableSchema: string, EventType: number){
-        this.TableSchema = TableSchema;
-        this.EventType = EventType;
+/**
+ * Api parameter Model to check `WebHook Subscription Event type` Exists
+ */
+export class CheckWebHookEventTypeExistModel{
+    /**
+     * Create new `CheckWebHookEventTypeExistModel` object
+     * @param TableSchema TableSchema
+     * @param EventType Event type number
+     */
+    constructor(public TableSchema: string,
+        public EventType: number){
     }
 }

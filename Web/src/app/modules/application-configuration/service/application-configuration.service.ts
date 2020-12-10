@@ -4,7 +4,7 @@ import { ApplicationConfigDataAccess } from './../application-configuration.data
 import { Injectable } from '@angular/core';
 import { ConfigTypeModel } from '../models/config-type.model';
 import { ConfigAllRequestModel } from '../models/get-all-configtype-request.model';
-import { CheckWebHookEventTypeExistModal } from '../models/webhook-subscription';
+import { CheckWebHookEventTypeExistModel } from '../models/webhook-subscription';
 const jwtHelper = new JwtHelperService();
 @Injectable()
 export class ApplicationConfigService {
@@ -68,7 +68,11 @@ export class ApplicationConfigService {
       }
     );
   }
-  CheckWebHookSubscriptionEventTypeExist(req: CheckWebHookEventTypeExistModal){
+  /**
+   * Function to check the selected Event type exists or not
+   * @param req Parameter of type `CheckWebHookEventTypeExistModal`
+   */
+  CheckWebHookSubscriptionEventTypeExist(req: CheckWebHookEventTypeExistModel){
     return this._appconfigdata.CheckWebHookSubscriptionEventTypeExist(req).subscribe(
       (res)=>{
         if(res !== null){

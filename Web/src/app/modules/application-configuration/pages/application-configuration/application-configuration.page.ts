@@ -9,7 +9,7 @@ import {
 import { AppSettings, WebHookSubscriptionEventTypesConstants } from '@mts-app-setting';
 
 import { ConfigTypeModel } from '../../models/config-type.model';
-import { CheckWebHookEventTypeExistModal } from '../../models/webhook-subscription';
+import { CheckWebHookEventTypeExistModel } from '../../models/webhook-subscription';
 @Component({
   selector: 'mts-application-configuration',
   templateUrl: './application-configuration.page.html',
@@ -24,9 +24,14 @@ export class ApplicationConfigurationComponent
   belowcomponent = 'configtable';
   isconfigsettings = false;
   configvaluess: any;
+  //#region WebHook Subscription variables
+  /**WebHook Subscription Event types to show in dropdown */
   WebHookSubscriptionEventTypes: any = []
+  /**Selected WebHook Event type exists or not -- boolean */
   SelectedEventTypeExist: boolean = false;
+  /**Selected Event type -- number */
   SelectedEventType: number;
+  //#endregion
   constructor(private _appconfigservice: ApplicationConfigService,
   ) { }
   private subscription: Subscription[] = [];
@@ -52,7 +57,7 @@ export class ApplicationConfigurationComponent
         }
       )
     );
-    this.SelectedEventType = WebHookSubscriptionEventTypesConstants.DocumentLog;
+    this.SelectedEventType = WebHookSubscriptionEventTypesConstants.MilestoneLog;
     this.onChangeEventType();
   }
 
@@ -112,20 +117,30 @@ export class ApplicationConfigurationComponent
   AddInvestor() {
     this._appconfigservice.addStipluation$.next(true);
   }
-
   AddReportMaster() {
     this._appconfigservice.addReport$.next(true);
   }
+  //#region WebHook Subscription methods
+  /**
+   * Function called when selected value in Event type dropdown is changed
+   */
   onChangeEventType(){
-    const req: CheckWebHookEventTypeExistModal = new CheckWebHookEventTypeExistModal(AppSettings.TenantSchema, this.SelectedEventType);
+    const req: CheckWebHookEventTypeExistModel = new CheckWebHookEventTypeExistModel(AppSettings.TenantSchema, this.SelectedEventType);
     this._appconfigservice.CheckWebHookSubscriptionEventTypeExist(req);
   }
+  /**
+   * Function to create WebHook subscription for selected Event type
+   */
   createWebHookSubscription(){
 
   }
+  /**
+   * Function to delete WebHook Subscription for selected Event type
+   */
   deleteWebHookSubscription(){
 
   }
+  //#endregion
   ngOnDestroy() {
     this.subscription.forEach((element) => {
       element.unsubscribe();
