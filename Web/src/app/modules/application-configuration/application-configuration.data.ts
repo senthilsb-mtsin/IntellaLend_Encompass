@@ -208,7 +208,7 @@ export class ApplicationConfigDataAccess {
    * Function to check the selected Event type exists or not
    * @param req Parameter of type `CheckWebHookEventTypeExistModal`
    */
-  CheckWebHookSubscriptionEventTypeExist(req: CheckWebHookEventTypeExistModel){
+  CheckWebHookSubscriptionEventTypeExist(req: CheckWebHookEventTypeExistModel) {
     return this._apiService.authHttpPost(
       AppConfigApiUrlConstant.CHECK_WEBHOOK_SUBSCRIPTION_EVENTTYPE_EXIST, req
       );

@@ -26,9 +26,9 @@ export class ApplicationConfigurationComponent
   configvaluess: any;
   //#region WebHook Subscription variables
   /**WebHook Subscription Event types to show in dropdown */
-  WebHookSubscriptionEventTypes: any = []
+  WebHookSubscriptionEventTypes: any = [];
   /**Selected WebHook Event type exists or not -- boolean */
-  SelectedEventTypeExist: boolean = false;
+  SelectedEventTypeExist = false;
   /**Selected Event type -- number */
   SelectedEventType: number;
   //#endregion
@@ -124,20 +124,20 @@ export class ApplicationConfigurationComponent
   /**
    * Function called when selected value in Event type dropdown is changed
    */
-  onChangeEventType(){
+  onChangeEventType() {
     const req: CheckWebHookEventTypeExistModel = new CheckWebHookEventTypeExistModel(AppSettings.TenantSchema, this.SelectedEventType);
     this._appconfigservice.CheckWebHookSubscriptionEventTypeExist(req);
   }
   /**
    * Function to create WebHook subscription for selected Event type
    */
-  createWebHookSubscription(){
+  createWebHookSubscription() {
 
   }
   /**
    * Function to delete WebHook Subscription for selected Event type
    */
-  deleteWebHookSubscription(){
+  deleteWebHookSubscription() {
 
   }
   //#endregion

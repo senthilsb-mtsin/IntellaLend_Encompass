@@ -72,14 +72,14 @@ export class ApplicationConfigService {
    * Function to check the selected Event type exists or not
    * @param req Parameter of type `CheckWebHookEventTypeExistModal`
    */
-  CheckWebHookSubscriptionEventTypeExist(req: CheckWebHookEventTypeExistModel){
+  CheckWebHookSubscriptionEventTypeExist(req: CheckWebHookEventTypeExistModel) {
     return this._appconfigdata.CheckWebHookSubscriptionEventTypeExist(req).subscribe(
-      (res)=>{
-        if(res !== null){
+      (res) => {
+        if (res !== null) {
           const Result = jwtHelper.decodeToken(res.Data)['data'];
           this.WebHookSubscriptionEventTypeExist$.next(Result.EventTypeExist);
         }
       }
-    )
+    );
   }
 }

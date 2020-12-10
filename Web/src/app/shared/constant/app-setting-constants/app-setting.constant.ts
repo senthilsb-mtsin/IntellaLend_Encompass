@@ -163,17 +163,17 @@ export class EncompassUploadStagingConstant {
     '-1': 'label label-danger',
   };
 }// tslint:disable-next-line: max-classes-per-file
-export class WebHookSubscriptionEventTypesConstants{
+export class WebHookSubscriptionEventTypesConstants {
   static MilestoneLog = 1;
   static DocumentLog = 2;
-  
+
   static EventTypesDescription = {
     '1': 'Milestone Log',
     '2': 'Document Log'
-  }
+  };
 
   static EventTypesDropdown = [
     WebHookSubscriptionEventTypesConstants.MilestoneLog,
     WebHookSubscriptionEventTypesConstants.DocumentLog
-  ]
+  ];
 }
