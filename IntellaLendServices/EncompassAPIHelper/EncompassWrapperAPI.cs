@@ -33,7 +33,7 @@ namespace EncompassAPIHelper
 
         public List<string> GetLoans(List<Dictionary<string, string>> _eFields)
         {
-            RequestAgain:
+        RequestAgain:
 
             List<Fields> fieldList = new List<Fields>();
             Fields field = null;
@@ -83,7 +83,7 @@ namespace EncompassAPIHelper
 
         public List<EAttachment> GetUnassignedAttachments(string loanGUID)
         {
-            RequestAgain:
+        RequestAgain:
             LogMessage($"GetUnassignedAttachments : {loanGUID}");
 
             var req = new HttpRequestObject() { REQUESTTYPE = "GET", URL = string.Format(EncompassURLConstant.GET_UNATTACHMENTS, loanGUID) };
@@ -111,7 +111,7 @@ namespace EncompassAPIHelper
 
         public void UploadProcessFlag(string loanGUID, string fieldID, string fieldValue)
         {
-            RequestAgain:
+        RequestAgain:
             UpdateCustomFieldRequest _req = new UpdateCustomFieldRequest()
             {
                 LoanGuid = loanGUID,
@@ -147,10 +147,16 @@ namespace EncompassAPIHelper
 
         public byte[] DownloadAttachment(string loanGUID, string attachmentGUID, string AttachmentName)
         {
-            RequestAgain:
+        RequestAgain:
             LogMessage($"DownloadAttachment : {loanGUID}, {attachmentGUID}");
 
-            var req = new HttpRequestObject() { REQUESTTYPE = "GET", URL = string.Format(EncompassURLConstant.GET_DOWNLOAD_ATTACHMENT, loanGUID, attachmentGUID) };
+            DownloadAttachment _req = new DownloadAttachment
+            {
+                loanGuid = loanGUID,
+                attachmentID = attachmentGUID
+            };
+
+            var req = new HttpRequestObject() { REQUESTTYPE = "POST", URL = string.Format(EncompassURLConstant.GET_DOWNLOAD_ATTACHMENT), Content = _req };
 
             IRestResponse result = client.Execute(req);
 
@@ -190,7 +196,7 @@ namespace EncompassAPIHelper
         //added by mani
         public List<EContainer> GetAllLoanDocuments(string loanGUID)
         {
-            RequestAgain:
+        RequestAgain:
             LogMessage($"GetAllLoanDocuments : {loanGUID}");
 
             var req = new HttpRequestObject() { REQUESTTYPE = "GET", URL = string.Format(EncompassURLConstant.GET_ALLLOANDOCUMENTS, loanGUID) };
@@ -216,9 +222,37 @@ namespace EncompassAPIHelper
             throw new EncompassWrapperException($"Error while fetching EFolder(s) in Encompass. Message : {_error.Details}");
         }
 
+        public EAttachment GetAttachment(string loanGUID, string attachmentID)
+        {
+        RequestAgain:
+            LogMessage($"GetAttachments : {loanGUID},{attachmentID}");
+
+            var req = new HttpRequestObject() { REQUESTTYPE = "GET", URL = string.Format(EncompassURLConstant.GET_ATTACHMENT, loanGUID, attachmentID) };
+
+            IRestResponse result = client.Execute(req);
+
+            string res = result.Content;
+
+            if (result.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return JsonConvert.DeserializeObject<EAttachment>(res);
+            }
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                _token.SetToken();
+                goto RequestAgain;
+            }
+            ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(res);
+
+            if (_error.Details.Contains("read-only mode"))
+                throw new EncompassWrapperLoanLockException(_error.Details);
+
+            throw new EncompassWrapperException($"Error while fetching Attachment(s) in Encompass. Message : {_error.Details}");
+        }
+
         public EUploadResponse UploadAttachment(string loanGUID, string fileName, string fileNameWithExtension, byte[] file)
         {
-            RequestAgain:
+        RequestAgain:
             //MultipartFormDataContent form = new MultipartFormDataContent();
             LogMessage($"UploadAttachment : {loanGUID}, Filename : {fileName}, FileLength : {file.Length}");
             //form.Add(new StringContent(loanGUID), "loanGUID");
@@ -261,14 +295,14 @@ namespace EncompassAPIHelper
 
         public AddContainerResponse AddDocument(string loanGUID, string documentName)
         {
-            RequestAgain:
+        RequestAgain:
             AddContainerRequest _req = new AddContainerRequest()
             {
                 LoanGUID = loanGUID,
                 Documents = new List<EAddDocument>() { new EAddDocument() { DocumentName = documentName, DocumentDescription = documentName } }
             };
 
-            var req = new HttpRequestObject() { REQUESTTYPE = "POST", URL = string.Format(EncompassURLConstant.ADD_DOCUMENT), Content = _req };
+            var req = new HttpRequestObject() { REQUESTTYPE = "PATCH", URL = string.Format(EncompassURLConstant.ADD_DOCUMENT), Content = _req };
 
             IRestResponse result = client.Execute(req);
 
@@ -293,7 +327,7 @@ namespace EncompassAPIHelper
 
         public bool AssignDocumentAttachments(string loanGUID, string documentGuid, List<string> attachmentGUIDs, string FolderName)
         {
-            RequestAgain:
+        RequestAgain:
             AssignAttachmentRequest _req = new AssignAttachmentRequest()
             {
                 LoanGUID = loanGUID,
@@ -327,9 +361,45 @@ namespace EncompassAPIHelper
             throw new EncompassWrapperException($"Could not move the attachment(s) from Unassigned folder to processed folder '{FolderName}'. Message : {_error.Details}");
         }
 
+        public bool RemoveDocumentAttachments(string loanGUID, string documentGuid, List<string> attachmentGUIDs, string FolderName)
+        {
+        RequestAgain:
+            AssignAttachmentRequest _req = new AssignAttachmentRequest()
+            {
+                LoanGUID = loanGUID,
+                DocumentGUID = documentGuid,
+                AttachmentGUIDs = attachmentGUIDs
+
+            };
+
+            var req = new HttpRequestObject() { REQUESTTYPE = "PATCH", URL = string.Format(EncompassURLConstant.REMOVE_DOCUMENT_ATTACHMENT), Content = _req };
+
+            IRestResponse result = client.Execute(req);
+
+            string res = result.Content;
+
+            if (result.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                EAddRemoveAttachmentResponse _res = JsonConvert.DeserializeObject<EAddRemoveAttachmentResponse>(res);
+                if (_res.Status)
+                    return _res.Status;
+            }
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                _token.SetToken();
+                goto RequestAgain;
+            }
+            ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(res);
+
+            if (_error.Details.Contains("read-only mode"))
+                throw new EncompassWrapperLoanLockException(_error.Details);
+
+            throw new EncompassWrapperException($"Could not remove the attachment(s) from Upload folder '{FolderName}'. Message : {_error.Details}");
+        }
+
         public List<EFieldResponse> GetPredefinedFieldValues(string loanGUID, string[] fieldIds)
         {
-            RequestAgain:
+        RequestAgain:
             FieldGetRequest _req = new FieldGetRequest()
             {
                 LoanGUID = loanGUID,

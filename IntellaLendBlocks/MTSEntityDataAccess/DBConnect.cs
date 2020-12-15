@@ -1,4 +1,5 @@
 ﻿using IntellaLend.Model;
+using IntellaLend.Model.Encompass;
 using System;
 using System.Configuration;
 using System.Data.Entity;
@@ -377,6 +378,8 @@ namespace MTSEntityDataAccess
         public DbSet<CategoryLists> CategoryLists { get { return this.Set<CategoryLists>(); } }
         public DbSet<LoanEvaluatedResult> LoanEvaluatedResult { get { return this.Set<LoanEvaluatedResult>(); } }
 
+        public DbSet<EWebhookEvents> EWebhookEvents { get { return this.Set<EWebhookEvents>(); } }
+
         #endregion
 
         #region Mapping Tables
@@ -713,6 +716,9 @@ namespace MTSEntityDataAccess
 
                 modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<PasswordPolicy>()
                   .ToTable("PasswordPolicy");
+
+                modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<EWebhookEvents>()
+                    .ToTable("EWebhookEvents");
 
 
                 #endregion

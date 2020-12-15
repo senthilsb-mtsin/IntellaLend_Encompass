@@ -1,8 +1,10 @@
 ﻿using EncompassRequestBody.EResponseModel;
+using EncompassRequestBody.WrapperReponseModel;
 using IntellaLend.Audit;
 using IntellaLend.AuditData;
 using IntellaLend.Constance;
 using IntellaLend.Model;
+using IntellaLend.Model.Encompass;
 using MTSEntityDataAccess;
 using System;
 using System.Collections.Generic;
@@ -405,6 +407,60 @@ namespace IL.EncompassFileDownloader
             }
         }
 
+        public void UpdateStatusEwebHookEvents(Int64 _id, Int32 status)
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
+                EWebhookEvents _loan = db.EWebhookEvents.AsNoTracking().Where(x => x.ID == _id).FirstOrDefault();
+                if (_loan != null)
+                {
+                    _loan.Status = status;
+                    //_loan.ModifiedOn = DateTime.Now;
+                    db.Entry(_loan).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+
+            }
+        }
+
+
+
+        public void DeleteStaginDetails(Guid? eLoanGuid)
+        {
+
+            using (var db = new DBConnect(TenantSchema))
+            {
+                EDownloadStaging _stage = db.EDownloadStaging.AsNoTracking().Where(x => x.ELoanGUID == eLoanGuid).FirstOrDefault();
+                if (_stage != null)
+                {
+                    db.Entry(_stage).State = System.Data.Entity.EntityState.Deleted;
+
+                }
+                ELoanAttachmentDownload _eloans = db.ELoanAttachmentDownload.AsNoTracking().Where(l => l.ELoanGUID == eLoanGuid).FirstOrDefault();
+                if (_eloans != null)
+                {
+                    db.Entry(_eloans).State = System.Data.Entity.EntityState.Deleted;
+
+                }
+                db.SaveChanges();
+
+
+            }
+        }
+        public void DeleteWebHookEvents(Int64 ID)
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
+                EWebhookEvents _eWebevents = db.EWebhookEvents.AsNoTracking().Where(x => x.ID == ID).FirstOrDefault();
+                if (_eWebevents != null)
+                {
+                    db.Entry(_eWebevents).State = System.Data.Entity.EntityState.Deleted;
+
+                }
+
+                db.SaveChanges();
+            }
+        }
 
         //code added by mani
         public List<IntellaAndEncompassFetchFields> GetEncompassImportFields()
@@ -517,6 +573,12 @@ namespace IL.EncompassFileDownloader
             }
         }
 
-
+        public List<EWebhookEvents> GetWebHooksEvent()
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
+                return db.EWebhookEvents.AsNoTracking().Where(r => r.EventType == EWebHookEventsLogConstant.DOCUMENT_LOG && r.Status == EWebHookStatusConstant.EWEB_HOOK_STAGED).ToList();
+            }
+        }
     }
 }
