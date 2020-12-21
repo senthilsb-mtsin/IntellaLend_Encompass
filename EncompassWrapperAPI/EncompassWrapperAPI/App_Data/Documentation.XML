@@ -481,6 +481,26 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="T:EncompassConnectorAPI.Controllers.EncompassCallbackController">
+            <Summary>
+             Encompass WebHook Callback Releated Activities
+            </Summary>
+        </member>
+        <member name="M:EncompassConnectorAPI.Controllers.EncompassCallbackController.#ctor">
+            <Summary>
+             To Create Rest Client Instance
+            </Summary>
+        </member>
+        <member name="M:EncompassConnectorAPI.Controllers.EncompassCallbackController.DocumentCallBack(EncompassRequestBody.ECallbackModel.ECallBack)">
+            <Summary>
+             Get Document Resource WebHook Callback Event
+            </Summary>
+        </member>
+        <member name="M:EncompassConnectorAPI.Controllers.EncompassCallbackController.MileStoneCallBack(EncompassRequestBody.ECallbackModel.ECallBack)">
+            <Summary>
+             Get Milestone Resource WebHook Callback Event
+            </Summary>
+        </member>
         <member name="T:EncompassConnectorAPI.Controllers.EncompassAttachmentController">
             <Summary>
              Encompass Loan Attachment Releated Activities

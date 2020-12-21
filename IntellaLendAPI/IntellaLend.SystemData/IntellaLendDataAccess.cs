@@ -1,9 +1,14 @@
 ﻿using IntellaLend.Constance;
 using IntellaLend.MinIOWrapper;
 using IntellaLend.Model;
+using IntellaLend.Model.Encompass;
+using MTS.Web.Helpers;
 using MTSEntityDataAccess;
+using Newtonsoft.Json;
+using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
 
@@ -569,11 +574,11 @@ namespace IntellaLend.EntityDataHandler
                                             Name = lt.Name,
                                             DisplayName = lt.DisplayName,
                                             DocFieldList = (from f in db.DocumentFieldMaster
-                                             where f.DocumentTypeID == map.DocumentTypeID
-                                              select f).ToList(),
+                                                            where f.DocumentTypeID == map.DocumentTypeID
+                                                            select f).ToList(),
                                             OrderByFieldID = (from f in db.DocumentFieldMaster
-                                           where f.DocumentTypeID == map.DocumentTypeID && f.DocOrderByField == null
-                                               select f.FieldID).FirstOrDefault()
+                                                              where f.DocumentTypeID == map.DocumentTypeID && f.DocOrderByField == null
+                                                              select f.FieldID).FirstOrDefault()
                                         }).ToList();
 
                 var lsUnMappedDocTypes = lsDocumentTypeMaster
@@ -631,7 +636,7 @@ namespace IntellaLend.EntityDataHandler
                                         {
                                             DocumentTypeID = map.DocumentTypeID,
                                             Name = lt.Name,
-                                            DocumentLevel=map.DocumentLevel,
+                                            DocumentLevel = map.DocumentLevel,
                                             DocumentFieldMasters = db.DocumentFieldMaster.AsNoTracking().Where(ld => ld.DocumentTypeID == lt.DocumentTypeID && ld.Active == true).ToList(),
                                             DocumetTypeTables = db.DocumetTypeTables.AsNoTracking().Where(ld => ld.DocumentTypeID == lt.DocumentTypeID).ToList(),
                                             RuleDocumentTables = db.RuleDocumentTables.AsNoTracking().Where(rd => rd.DocumentID == lt.DocumentTypeID).ToList(),
@@ -644,7 +649,7 @@ namespace IntellaLend.EntityDataHandler
                                         {
                                             DocumentTypeID = a.DocumentTypeID,
                                             Name = a.Name,
-                                            DocumentLevel =DocumentLevelConstant.CRITICAL,
+                                            DocumentLevel = DocumentLevelConstant.CRITICAL,
                                             DocumentFieldMasters = db.DocumentFieldMaster.AsNoTracking().Where(ld => ld.DocumentTypeID == a.DocumentTypeID && ld.Active == true).ToList(),
                                             DocumetTypeTables = db.DocumetTypeTables.AsNoTracking().Where(ld => ld.DocumentTypeID == a.DocumentTypeID).ToList(),
                                             RuleDocumentTables = db.RuleDocumentTables.AsNoTracking().Where(rd => rd.DocumentID == a.DocumentTypeID).ToList(),
@@ -679,16 +684,16 @@ namespace IntellaLend.EntityDataHandler
         //                      DocumentLevelDesc = dms.DocumentLevelDesc,
         //                      RuleDocumentTables = db.RuleDocumentTables.AsNoTracking().Where(rd => rd.DocumentID == dms.DocumentTypeID).ToList()
         //                  }).OrderBy(x => x.Name).ToList();
-     
-        public bool  SaveConditionGeneralRule(Int64 DocumentID, string RuleValues, Int64 LoanTypeID)
-         {
+
+        public bool SaveConditionGeneralRule(Int64 DocumentID, string RuleValues, Int64 LoanTypeID)
+        {
             using (var db = new DBConnect(SystemSchema))
             {
                 using (var trans = db.Database.BeginTransaction())
                 {
                     CustLoanDocMapping mappedDocTypes = db.CustLoanDocMapping.AsNoTracking().Where(c => c.LoanTypeID == LoanTypeID && c.DocumentTypeID == DocumentID).FirstOrDefault();
 
-                    if(mappedDocTypes!=null)
+                    if (mappedDocTypes != null)
                     {
                         mappedDocTypes.Condition = RuleValues;
                         mappedDocTypes.ModifiedOn = DateTime.Now;
@@ -723,8 +728,8 @@ namespace IntellaLend.EntityDataHandler
                 return false;
 
             }
-            
-         }
+
+        }
         public List<DocumentTypeMaster> GetSystemDocumentTypesWithFields(Int64 loanTypeID)
         {
             List<DocumentTypeMaster> dm = null;
@@ -2004,8 +2009,8 @@ namespace IntellaLend.EntityDataHandler
                             CustomerID = 1, //Default for IL Schema                            
                             LoanTypeID = LoanTypeID,
                             DocumentTypeID = _docMappingDetails.DocumentTypeID,
-                            DocumentLevel= _docMappingDetails.DocumentLevel,
-                            Condition=_docMappingDetails.Condition,
+                            DocumentLevel = _docMappingDetails.DocumentLevel,
+                            Condition = _docMappingDetails.Condition,
                             Active = true,
                             CreatedOn = DateTime.Now,
                             ModifiedOn = DateTime.Now
@@ -3027,6 +3032,261 @@ namespace IntellaLend.EntityDataHandler
 
 
         #endregion
+
+        #endregion
+
+        #region EncompassToken
+
+        private List<List<Dictionary<string, string>>> _queryCombinations = new List<List<Dictionary<string, string>>>();
+
+        public void SetMileStoneEvent(string _loanGUID, string _instanceID)
+        {
+            object tokenObject = null;
+            List<IntellaAndEncompassFetchFields> _enImportFields = new List<IntellaAndEncompassFetchFields>();
+            bool loanExists = false;
+            using (var db = new DBConnect(SystemSchema))
+            {
+                List<TenantMaster> _tenants = db.TenantMaster.AsNoTracking().ToList();
+
+                Guid loanGUIDValue = new Guid(_loanGUID);
+
+                foreach (var tenant in _tenants)
+                {
+                    loanExists = db.Loan.AsNoTracking().Any(x => x.EnCompassLoanGUID == loanGUIDValue);
+
+                    if (loanExists)
+                    {
+                        tokenObject = GetEncompassTokenFromTenant(tenant);
+
+                        _enImportFields = db.IntellaAndEncompassFetchFields.AsNoTracking().Where(m => m.Active && m.TenantSchema == tenant.TenantSchema).ToList();
+
+                        if (tokenObject != null)
+                            break;
+                    }
+                }
+
+
+                if (loanExists)
+                {
+                    string[] FieldIDs = _enImportFields.Select(x => x.EncompassFieldID).ToArray();
+
+                    RestWebClient client = new RestWebClient(ConfigurationManager.AppSettings["EncompassConnectorURL"]);
+
+                    HttpRequestObject req = new HttpRequestObject() { Content = new { loanGUID = _loanGUID, fieldIDs = FieldIDs }, REQUESTTYPE = "POST", URL = string.Format(EncompassURLILConstant.GET_PREDEFINED_FIELDVALUES) };
+
+                    IRestResponse result = client.Execute(req);
+
+                    if (result.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        string res = result.Content;
+                        List<EFieldResponse> _eResponse = JsonConvert.DeserializeObject<List<EFieldResponse>>(res);
+
+                        IntellaAndEncompassFetchFields _serviceType = _enImportFields.Where(x => x.FieldType.Contains(LOSFieldType.SERVICETYPE)).FirstOrDefault();
+
+                        EFieldResponse _eServiceType = _eResponse.Where(x => x.FieldId == _serviceType.EncompassFieldID).FirstOrDefault();
+
+                        if (loanExists && !(_serviceType.EncompassFieldValue.Split(',').Contains(_eServiceType.Value)))
+                        {
+                            db.EWebhookEvents.Add(new EWebhookEvents()
+                            {
+                                CreatedOn = DateTime.Now,
+                                EventType = EWebHookEventsLogConstant.MILESTONELOG,
+                                Status = EWebHookStatusConstant.EWEB_HOOK_STAGED,
+                                Response = JsonConvert.SerializeObject(new { loanGUID = loanGUIDValue })
+                            });
+                            db.SaveChanges();
+                        }
+                    }
+                }
+            }
+        }
+
+
+        public void SetDocumentEvent(string _loanGUID, string _instanceID)
+        {
+            object tokenObject = null;
+            List<IntellaAndEncompassFetchFields> _enImportFields = new List<IntellaAndEncompassFetchFields>();
+            bool loanExists = false;
+            using (var db = new DBConnect(SystemSchema))
+            {
+                List<TenantMaster> _tenants = db.TenantMaster.AsNoTracking().ToList();
+
+                Guid loanGUIDValue = new Guid(_loanGUID);
+
+                foreach (var tenant in _tenants)
+                {
+                    tokenObject = GetEncompassTokenFromTenant(tenant);
+
+                    _enImportFields = db.IntellaAndEncompassFetchFields.AsNoTracking().Where(m => m.Active && m.TenantSchema == tenant.TenantSchema).ToList();
+
+
+                    loanExists = db.Loan.AsNoTracking().Any(x => x.EnCompassLoanGUID == loanGUIDValue);
+
+                    if (tokenObject != null)
+                        break;
+                }
+
+
+                string[] FieldIDs = _enImportFields.Select(x => x.EncompassFieldID).ToArray();
+
+                RestWebClient client = new RestWebClient(ConfigurationManager.AppSettings["EncompassConnectorURL"]);
+
+                HttpRequestObject req = new HttpRequestObject() { Content = new { loanGUID = _loanGUID, fieldIDs = FieldIDs }, REQUESTTYPE = "POST", URL = string.Format(EncompassURLILConstant.GET_PREDEFINED_FIELDVALUES) };
+
+                IRestResponse result = client.Execute(req);
+
+                if (result.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    string res = result.Content;
+                    List<EFieldResponse> _eResponse = JsonConvert.DeserializeObject<List<EFieldResponse>>(res);
+
+                    IntellaAndEncompassFetchFields _serviceType = _enImportFields.Where(x => x.FieldType.Contains(LOSFieldType.SERVICETYPE)).FirstOrDefault();
+
+                    EFieldResponse _eServiceType = _eResponse.Where(x => x.FieldId == _serviceType.EncompassFieldID).FirstOrDefault();
+
+                    if (_serviceType.EncompassFieldValue.Split(',').Contains(_eServiceType.Value))
+                    {
+                        db.EWebhookEvents.Add(new EWebhookEvents()
+                        {
+                            CreatedOn = DateTime.Now,
+                            EventType = EWebHookEventsLogConstant.DOCUMENT_LOG,
+                            Status = EWebHookStatusConstant.EWEB_HOOK_STAGED,
+                            Response = JsonConvert.SerializeObject(new { loanGUID = loanGUIDValue })
+                        });
+                        db.SaveChanges();
+                    }
+                }
+            }
+        }
+
+        public object GetEncompassToken(string _instanceID)
+        {
+            using (var db = new DBConnect(SystemSchema))
+            {
+                List<TenantMaster> _tenants = db.TenantMaster.AsNoTracking().ToList();
+
+                foreach (var tenant in _tenants)
+                {
+                    object tokenObject = GetEncompassTokenFromTenant(tenant);
+
+                    if (tokenObject != null)
+                        return tokenObject;
+                }
+
+                return null;
+            }
+        }
+
+        public object GetEncompassTokenFromTenant(TenantMaster tenant)
+        {
+            using (var db = new DBConnect(tenant.TenantSchema))
+            {
+                EncompassConfig _encompassConfig = db.EncompassConfig.AsNoTracking().Where(x => x.ConfigKey == EncompassConfigConstant.INSTANCE_ID).FirstOrDefault();
+
+                if (_encompassConfig != null)
+                {
+                    EncompassAccessToken token = db.EncompassAccessToken.AsNoTracking().FirstOrDefault();
+
+                    if (token != null)
+                    {
+                        return new { accessToken = token.AccessToken, tokenType = token.TokenType };
+                    }
+                    else
+                    {
+                        dynamic newToken = GetToken(db.EncompassConfig.AsNoTracking().ToList());
+                        if (newToken != null)
+                        {
+                            UpdateNewToken(db, newToken.TokenType, newToken.Token);
+                            return new { accessToken = newToken.Token, tokenType = newToken.TokenType };
+                        }
+                    }
+                }
+
+                return null;
+            }
+        }
+
+        public void UpdateNewToken(DBConnect db, string tokenType, string token)
+        {
+            EncompassAccessToken _accessToken = db.EncompassAccessToken.AsNoTracking().Where(m => m.Active == true).FirstOrDefault();
+            if (_accessToken != null)
+            {
+                _accessToken.AccessToken = token;
+                _accessToken.TokenType = tokenType;
+                _accessToken.ModifiedOn = DateTime.Now;
+
+                db.Entry(_accessToken).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            else
+            {
+                _accessToken = new EncompassAccessToken()
+                {
+                    AccessToken = token,
+                    Active = true,
+                    TokenType = tokenType,
+                    CreatedOn = DateTime.Now,
+                    ModifiedOn = DateTime.Now
+                };
+                db.EncompassAccessToken.Add(_accessToken);
+                db.SaveChanges();
+            }
+        }
+
+        private object GetToken(List<EncompassConfig> _config)
+        {
+            string grantType = _config.Where(c => c.Type.Contains(EncompassConstant.RequestToken) && c.ConfigKey == EncompassConfigConstant.GRANT_TYPE).FirstOrDefault().ConfigValue;
+            string scope = _config.Where(c => c.Type.Contains(EncompassConstant.RequestToken) && c.ConfigKey == EncompassConfigConstant.SCOPE).FirstOrDefault().ConfigValue;
+            EncompassConfig instanctID = _config.Where(c => c.Type.Contains(EncompassConstant.RequestToken) && c.ConfigKey == EncompassConfigConstant.INSTANCE_ID).FirstOrDefault();
+            EncompassConfig userName = _config.Where(c => c.Type.Contains(EncompassConstant.RequestToken) && c.ConfigKey == EncompassConfigConstant.USERNAME).FirstOrDefault();
+            EncompassConfig password = _config.Where(c => c.Type.Contains(EncompassConstant.RequestToken) && c.ConfigKey == EncompassConfigConstant.PASSWORD).FirstOrDefault();
+            EncompassConfig _clientID = _config.Where(c => c.Type.Contains(EncompassConstant.RequestToken) && c.ConfigKey == EncompassConfigConstant.CLIENT_ID).FirstOrDefault();
+            EncompassConfig _clientSecret = _config.Where(c => c.Type.Contains(EncompassConstant.RequestToken) && c.ConfigKey == EncompassConfigConstant.CLIENT_SECRET).FirstOrDefault();
+
+            RestWebClient client = new RestWebClient(ConfigurationManager.AppSettings["EncompassConnectorURL"]);
+
+            HttpRequestObject req = null;
+            if (grantType == "password")
+            {
+                object _res = new
+                {
+                    ClientID = _clientID.ConfigValue,
+                    ClientSecret = _clientSecret.ConfigValue,
+                    GrantType = grantType,
+                    Scope = scope,
+                    InstanceID = instanctID != null ? instanctID.ConfigValue : string.Empty,
+                    UserName = userName != null ? userName.ConfigValue : string.Empty,
+                    Password = password != null ? password.ConfigValue : string.Empty
+                };
+
+                req = new HttpRequestObject() { Content = _res, REQUESTTYPE = "POST", URL = string.Format(EncompassURLILConstant.GET_TOKEN_WITH_USER) };
+            }
+            else
+            {
+                object _res = new
+                {
+                    ClientID = _clientID,
+                    ClientSecret = _clientSecret,
+                    GrantType = grantType,
+                    Scope = scope,
+                    InstanceID = instanctID != null ? instanctID.ConfigValue : string.Empty
+                };
+                req = new HttpRequestObject() { Content = _res, REQUESTTYPE = "POST", URL = string.Format(EncompassURLILConstant.GET_TOKEN) };
+            }
+
+            IRestResponse result = client.Execute(req);
+
+            if (result.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                string res = result.Content;
+                dynamic resObject = JsonConvert.DeserializeObject<dynamic>(res);
+                return new { Token = resObject.accessToken, TokenType = resObject.tokenType };
+            }
+
+            return null;
+
+        }
+
 
         #endregion
 
@@ -4654,6 +4914,17 @@ namespace IntellaLend.EntityDataHandler
         public string LastName { get; set; }
         public string LoanType { get; set; }
     }
+
+    public class EFieldResponse
+    {
+        [JsonProperty(PropertyName = "fieldId")]
+        public string FieldId { get; set; }
+
+        [JsonProperty(PropertyName = "value")]
+        public string Value { get; set; }
+
+    }
+
     public class DocumentTypeMasterList
     {
         public Int64 DocumentTypeID { get; set; }

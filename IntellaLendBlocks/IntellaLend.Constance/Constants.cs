@@ -16,6 +16,14 @@ namespace IntellaLend.Constance
 
 
     }
+
+
+    public class EncompassURLILConstant
+    {
+        public const string GET_TOKEN_WITH_USER = "/api/Token/GetTokenWithUser";
+        public const string GET_TOKEN = "/api/Token/GetToken";
+        public const string GET_PREDEFINED_FIELDVALUES = "/api/v1/field/predefined";
+    }
     // For Encompass Upload service
     public class EncompassUploadConstant
     {

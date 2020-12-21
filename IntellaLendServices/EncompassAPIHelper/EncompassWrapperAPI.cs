@@ -408,7 +408,7 @@ namespace EncompassAPIHelper
 
             var req = new HttpRequestObject() { REQUESTTYPE = "POST", URL = string.Format(EncompassURLConstant.GET_PREDEFINED_FIELDVALUES), Content = _req };
 
-            IRestResponse result = client.Execute(req);
+            var result = client.Execute(req);
 
             string res = result.Content;
 

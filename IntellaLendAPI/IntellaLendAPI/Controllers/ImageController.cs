@@ -119,7 +119,7 @@ namespace IntellaLendAPI.Controllers
         }
 
 
-        private ActionResult AuditReport(string TenantSchema, Int64 LoanID)
+        public ActionResult AuditReport(string TenantSchema, Int64 LoanID)
         {
             Logger.WriteTraceLog($"Start AuditReport()");
             LoanService _loanService = new LoanService(TenantSchema);

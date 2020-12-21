@@ -6,7 +6,6 @@ using EncompassRequestBody.WrapperRequestModel;
 using EncompassWrapperConstants;
 using MTS.Web.Helpers;
 using MTSEntBlocks.ExceptionBlock.Handlers;
-using MTSEntBlocks.UtilsBlock;
 using Newtonsoft.Json;
 using RestSharp;
 using Swagger.Net.Annotations;
@@ -414,9 +413,9 @@ namespace EncompassConnectorAPI.Controllers
         private byte[] ExportQueuedJob(EDownloadURLResponse _job)
         {
             List<byte[]> _pages = new List<byte[]>();
-            foreach (var item in _job.Attachments[0].Pages)
+            foreach (var item in _job.Attachments[0].OriginalUrls)
             {
-                RestWebClient _newClient = new RestWebClient(item.URL);
+                RestWebClient _newClient = new RestWebClient(item);
 
                 var reqObj = new HttpRequestObject() { REQUESTTYPE = HeaderConstant.GET };
 
@@ -425,11 +424,11 @@ namespace EncompassConnectorAPI.Controllers
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     if (response.RawBytes != null)
-                        _pages.Add(response.RawBytes);
+                        return response.RawBytes;
                 }
             }
 
-            return ImageUtilities.ConvertImageToPdf(_pages);
+            return null;
         }
 
         private byte[] GetSplitArray(byte[] srcArray, Int32 index, Int32 length)

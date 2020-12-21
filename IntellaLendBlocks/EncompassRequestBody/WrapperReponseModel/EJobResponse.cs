@@ -17,6 +17,9 @@ namespace EncompassRequestBody.WrapperReponseModel
 
         [JsonProperty(PropertyName = "pages")]
         public List<EAttachmentPages> Pages { get; set; }
+
+        [JsonProperty(PropertyName = "originalUrls")]
+        public List<string> OriginalUrls { get; set; }
     }
 
     public class EAttachmentPageURL

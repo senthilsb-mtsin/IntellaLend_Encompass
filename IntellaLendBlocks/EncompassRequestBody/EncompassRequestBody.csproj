@@ -68,6 +68,7 @@
     <Compile Include="CustomModel\HeaderToken.cs" />
     <Compile Include="CustomModel\LockResourceModel.cs" />
     <Compile Include="CustomModel\TokenInvalidModel.cs" />
+    <Compile Include="ECallbackModel\ECallBack.cs" />
     <Compile Include="ERequestModel\EAddRemoveContainerRequest.cs" />
     <Compile Include="ERequestModel\EExportAttachmentJob.cs" />
     <Compile Include="ERequestModel\ELoansRequest.cs" />

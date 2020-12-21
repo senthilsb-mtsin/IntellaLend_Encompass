@@ -441,6 +441,35 @@ namespace IntellaLendAPI.Models
         public string UserName { get; set; }
 
     }
+
+    public class GetTokenRequest : IntellaLendRequest
+    {
+        public string InstanceID { get; set; }
+    }
+
+    public class ECallBack : IntellaLendRequest
+    {
+        public string eventId { get; set; }
+
+        public string eventTime { get; set; }
+
+        public string eventType { get; set; }
+
+        public EventMetaData meta { get; set; }
+    }
+
+    public class EventMetaData
+    {
+        public string resourceType { get; set; }
+
+        public string resourceId { get; set; }
+
+        public string instanceId { get; set; }
+
+        public string resourceRef { get; set; }
+    }
+
+
     public class LoanRequest : IntellaLendRequest
     {
         public string TableSchema { get; set; }

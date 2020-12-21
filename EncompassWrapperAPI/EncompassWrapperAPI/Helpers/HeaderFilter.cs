@@ -27,7 +27,7 @@ namespace EncompassConnectorAPI
            );
             }
 
-            if (!apiDescription.RelativePath.Contains("api/Token/"))
+            if (!apiDescription.RelativePath.Contains("api/v1/token") && !apiDescription.RelativePath.Contains("api/v1/callback/"))
             {
                 operation.parameters.Add(new Parameter
                 {
