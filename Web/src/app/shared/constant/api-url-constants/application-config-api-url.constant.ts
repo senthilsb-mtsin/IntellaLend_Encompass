@@ -35,4 +35,7 @@ export class AppConfigApiUrlConstant {
   // SMTP -SETTINGS
   static SAVE_SMTP_DETAILS = 'IntellaLend/SaveAllSMTPDetails';
   static GET_SMTP_DETAILS = 'IntellaLend/GetAllSMPTDetails';
+
+  // WebHook Subscription
+  static CHECK_WEBHOOK_SUBSCRIPTION_EVENTTYPE_EXIST = 'TenantConfig/CheckWebHookSubscriptionEventTypeExist';
 }

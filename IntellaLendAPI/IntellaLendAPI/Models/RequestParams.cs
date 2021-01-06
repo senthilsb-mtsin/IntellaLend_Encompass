@@ -994,6 +994,12 @@ namespace IntellaLendAPI.Models
         public PasswordPolicy passwordPolicy { get; set; }
     }
 
+    public class CheckWebHookSubscriptionEventTypeExistRequest : IntellaLendRequest
+    {
+        public string TableSchema { get; set; }
+        public Int32 EventType { get; set; }
+    }
+
     #endregion
 
     #region Document Fields Request

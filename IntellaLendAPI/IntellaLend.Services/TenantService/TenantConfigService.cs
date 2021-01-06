@@ -152,6 +152,11 @@ namespace IntellaLend.CommonServices
         {
             return new TenantConfigDataAccess(TableSchema).UpdateLoanSearchFilterConfig(configID, status);
         }
+
+        public object CheckWebHookSubscriptionEventTypeExist(Int32 eventType)
+        {
+            return new TenantConfigDataAccess(TableSchema).CheckWebHookSubscriptionEventTypeExist(eventType);
+        }
         #endregion
     }
 }

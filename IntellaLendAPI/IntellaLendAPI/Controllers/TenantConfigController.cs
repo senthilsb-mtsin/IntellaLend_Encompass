@@ -524,5 +524,27 @@ namespace IntellaLendAPI.Controllers
             return response;
         }
 
+        [HttpPost]
+        public TokenResponse CheckWebHookSubscriptionEventTypeExist(CheckWebHookSubscriptionEventTypeExistRequest req)
+        {
+            Logger.WriteTraceLog($"Start CheckWebHookSubscriptionEventTypeExist()");
+            Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(req)}");
+            TokenResponse response = new TokenResponse();
+            response.ResponseMessage = new ResponseMessage();
+            try
+            {
+                response.token = new JWTToken().CreateJWTToken();
+                response.data = new JWTToken().CreateJWTToken(new TenantConfigService(req.TableSchema).CheckWebHookSubscriptionEventTypeExist(req.EventType));
+            }
+            catch (Exception exc)
+            {
+                response.token = null;
+                response.ResponseMessage.MessageDesc = exc.Message;
+                MTSExceptionHandler.HandleException(ref exc);
+            }
+            Logger.WriteTraceLog($"End CheckWebHookSubscriptionEventTypeExist()");
+            return response;
+        }
+
     }
 }

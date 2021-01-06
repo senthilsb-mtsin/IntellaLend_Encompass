@@ -80,6 +80,7 @@
     <Compile Include="Encompass\EncompassAccessToken.cs" />
     <Compile Include="Encompass\EncompassConfig.cs" />
     <Compile Include="Encompass\EUploadStaging.cs" />
+    <Compile Include="Encompass\EWebhookSubscription.cs" />
     <Compile Include="Encompass\EWebhookEvents.cs" />
     <Compile Include="ExportMonitorTables\LoanBatchExport.cs" />
     <Compile Include="ExportMonitorTables\LoanBatchExportDetail.cs" />

@@ -17,6 +17,7 @@ import {
 } from './models/box-setting.model';
 import { ConfigAllRequestModel } from './models/get-all-configtype-request.model';
 import { SaveCategorymodel, UpdateCategorymodel } from './models/category-list.model';
+import { CheckWebHookEventTypeExistModel } from './models/webhook-subscription';
 @Injectable()
 export class ApplicationConfigDataAccess {
   constructor(private _apiService: APIService) { }
@@ -202,5 +203,14 @@ export class ApplicationConfigDataAccess {
     return this._apiService.authHttpGet(
       AppConfigApiUrlConstant.GET_SMTP_DETAILS
     );
+  }
+  /**
+   * Function to check the selected Event type exists or not
+   * @param req Parameter of type `CheckWebHookEventTypeExistModal`
+   */
+  CheckWebHookSubscriptionEventTypeExist(req: CheckWebHookEventTypeExistModel) {
+    return this._apiService.authHttpPost(
+      AppConfigApiUrlConstant.CHECK_WEBHOOK_SUBSCRIPTION_EVENTTYPE_EXIST, req
+      );
   }
 }
