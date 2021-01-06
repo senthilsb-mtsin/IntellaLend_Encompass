@@ -91,6 +91,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTSEntBlocks.ExceptionBlock
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTSEntBlocks.LoggerBlock", "..\IntellaLendBlocks\MTSEntBlocks.LoggerBlock\MTSEntBlocks.LoggerBlock.csproj", "{167D2B19-F361-4093-8E1F-61D5778F5C5D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTS.Web.Helpers", "..\IntellaLendBlocks\MTS.Web.Helpers\MTS.Web.Helpers.csproj", "{B673CA30-C64D-4093-ADFE-012750E70678}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -249,6 +251,10 @@ Global
 		{167D2B19-F361-4093-8E1F-61D5778F5C5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{167D2B19-F361-4093-8E1F-61D5778F5C5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{167D2B19-F361-4093-8E1F-61D5778F5C5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B673CA30-C64D-4093-ADFE-012750E70678}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B673CA30-C64D-4093-ADFE-012750E70678}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B673CA30-C64D-4093-ADFE-012750E70678}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B673CA30-C64D-4093-ADFE-012750E70678}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -291,15 +297,16 @@ Global
 		{B8FD6D7D-3700-4DAF-A7A1-9FF1D86C1ACE} = {EA6385BB-ADB8-4CAF-8E9B-90E75A5104B0}
 		{BF640616-4953-47C5-8BEC-613A645CFDD1} = {EA6385BB-ADB8-4CAF-8E9B-90E75A5104B0}
 		{167D2B19-F361-4093-8E1F-61D5778F5C5D} = {EA6385BB-ADB8-4CAF-8E9B-90E75A5104B0}
+		{B673CA30-C64D-4093-ADFE-012750E70678} = {2F500CC8-A109-44C5-A5C1-F130BC60F61A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.Logging.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45
-		BuildVersion_BuildVersioningStyle = YearStamp.MonthStamp.DayStamp.TimeStamp
-		BuildVersion_UpdateAssemblyVersion = True
-		BuildVersion_UpdateFileVersion = True
-		BuildVersion_StartDate = 2017/9/1
-		BuildVersion_UseGlobalSettings = True
-		BuildVersion_UseUniversalClock = True
 		BuildVersion_AssemblyInfoFilename = IntellaLendAPI\Properties\AssemblyInfo.cs
+		BuildVersion_UseUniversalClock = True
+		BuildVersion_UseGlobalSettings = True
+		BuildVersion_StartDate = 2017/9/1
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_BuildVersioningStyle = YearStamp.MonthStamp.DayStamp.TimeStamp
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.Logging.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45
 	EndGlobalSection
 EndGlobal

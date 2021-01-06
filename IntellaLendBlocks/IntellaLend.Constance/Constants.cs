@@ -16,6 +16,14 @@ namespace IntellaLend.Constance
 
 
     }
+
+
+    public class EncompassURLILConstant
+    {
+        public const string GET_TOKEN_WITH_USER = "/api/Token/GetTokenWithUser";
+        public const string GET_TOKEN = "/api/Token/GetToken";
+        public const string GET_PREDEFINED_FIELDVALUES = "/api/v1/field/predefined";
+    }
     // For Encompass Upload service
     public class EncompassUploadConstant
     {
@@ -926,4 +934,42 @@ namespace IntellaLend.Constance
         public const Int64 Error = -1;
     }
 
+    public class EWebHookStatusConstant
+    {
+        public static int EWEB_HOOK_STAGED = 0;
+        public static int EWEB_HOOK_PROCESSING = 1;
+        public static int EWEB_HOOK_PROCESSED = 2;
+        public static int EWEB_HOOK_ERROR = -1;
+        protected static readonly Dictionary<Int64, string> Status = new Dictionary<long, string>()
+        {
+            { EWEB_HOOK_STAGED, "Staged" },
+            { EWEB_HOOK_PROCESSING, "Processing" },
+            { EWEB_HOOK_PROCESSED, "Completed" },
+            { EWEB_HOOK_ERROR, "Failed" }
+        };
+
+        public static string GetStatusDescription(Int64 StatusID)
+        {
+            return Status[StatusID];
+        }
+
+    }
+
+    public class EWebHookEventsLogConstant
+    {
+        public static int DOCUMENT_LOG = 1;
+        public static int MILESTONELOG = 2;
+
+        protected static readonly Dictionary<Int64, string> Status = new Dictionary<long, string>()
+        {
+            { DOCUMENT_LOG, "Document Log" },
+            { MILESTONELOG, "Milestone Log" },
+
+        };
+
+        public static string GetStatusDescription(Int64 StatusID)
+        {
+            return Status[StatusID];
+        }
+    }
 }
