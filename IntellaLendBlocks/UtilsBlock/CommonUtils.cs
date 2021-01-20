@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -46,6 +47,204 @@ namespace MTSEntBlocks.UtilsBlock
             }
             return returnDic;
         }
+        public static string EnDecryptwithCDV(string input, bool decrypt = false)
+        {
+            string _alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ984023";
+
+            if (decrypt)
+            {
+                Dictionary<string, uint> _index = null;
+                Dictionary<string, Dictionary<string, uint>> _indexes = new Dictionary<string, Dictionary<string, uint>>(2, StringComparer.InvariantCulture);
+
+                if (_index == null)
+                {
+                    Dictionary<string, uint> cidx;
+
+                    string indexKey = "I" + _alphabet;
+
+                    if (!_indexes.TryGetValue(indexKey, out cidx))
+                    {
+                        lock (_indexes)
+                        {
+                            if (!_indexes.TryGetValue(indexKey, out cidx))
+                            {
+                                cidx = new Dictionary<string, uint>(_alphabet.Length, StringComparer.InvariantCulture);
+                                for (int i = 0; i < _alphabet.Length; i++)
+                                {
+                                    cidx[_alphabet.Substring(i, 1)] = (uint)i;
+                                }
+                                _indexes.Add(indexKey, cidx);
+                            }
+                        }
+                    }
+
+                    _index = cidx;
+                }
+
+                MemoryStream ms = new MemoryStream(Math.Max((int)Math.Ceiling(input.Length * 5 / 8.0), 1));
+
+                for (int i = 0; i < input.Length; i += 8)
+                {
+                    int chars = Math.Min(input.Length - i, 8);
+
+                    ulong val = 0;
+
+                    int bytes = (int)Math.Floor(chars * (5 / 8.0));
+
+                    for (int charOffset = 0; charOffset < chars; charOffset++)
+                    {
+                        uint cbyte;
+                        if (!_index.TryGetValue(input.Substring(i + charOffset, 1), out cbyte))
+                        {
+                            throw new ArgumentException(string.Format("Invalid character {0} valid characters are: {1}", input.Substring(i + charOffset, 1), _alphabet));
+                        }
+
+                        val |= (((ulong)cbyte) << ((((bytes + 1) * 8) - (charOffset * 5)) - 5));
+                    }
+
+                    byte[] buff = BitConverter.GetBytes(val);
+                    Array.Reverse(buff);
+                    ms.Write(buff, buff.Length - (bytes + 1), bytes);
+                }
+
+                string invoiceindex = string.Empty;
+                if (CheckSumDigit.CheckCDV(System.Text.ASCIIEncoding.ASCII.GetString(ms.ToArray()), out invoiceindex))
+                {
+                    return invoiceindex;
+                }
+                else
+                {
+                    throw new ArgumentException("Invalid URL");
+                }
+            }
+            else
+            {
+
+                string encryptedinput = CheckSumDigit.AppendCDV(input);
+                byte[] data = System.Text.ASCIIEncoding.ASCII.GetBytes(encryptedinput);
+
+                StringBuilder result = new StringBuilder(Math.Max((int)Math.Ceiling(data.Length * 8 / 5.0), 1));
+
+                byte[] emptyBuff = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+                byte[] buff = new byte[8];
+
+                for (int i = 0; i < data.Length; i += 5)
+                {
+                    int bytes = Math.Min(data.Length - i, 5);
+
+                    Array.Copy(emptyBuff, buff, emptyBuff.Length);
+                    Array.Copy(data, i, buff, buff.Length - (bytes + 1), bytes);
+                    Array.Reverse(buff);
+                    ulong val = BitConverter.ToUInt64(buff, 0);
+
+                    for (int bitOffset = ((bytes + 1) * 8) - 5; bitOffset > 3; bitOffset -= 5)
+                    {
+                        result.Append(_alphabet[(int)((val >> bitOffset) & 0x1f)]);
+                    }
+                }
+
+
+                return result.ToString();
+            }
+        }
+
+        #region [  ToDataTable  ]
+        public static System.Data.DataTable ToDataTable<T>(List<T> items)
+        {
+            System.Data.DataTable dataTable = new System.Data.DataTable(typeof(T).Name);
+            //Get all the properties
+            PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (PropertyInfo prop in Props)
+            {
+                //Setting column names as Property names
+                dataTable.Columns.Add(prop.Name);
+            }
+            foreach (T item in items)
+            {
+                var values = new object[Props.Length];
+                for (int i = 0; i < Props.Length; i++)
+                {
+                    //inserting property values to datatable rows
+                    values[i] = Props[i].GetValue(item, null);
+                }
+                dataTable.Rows.Add(values);
+            }
+            //put a breakpoint here and check datatable
+            return dataTable;
+        }
+        #endregion [  ToDataTable  ]
+
+        #region CheckSumDigit
+        public class CheckSumDigit
+        {
+            static readonly int[][] op = new int[10][];
+            static readonly int[][] F = new int[8][];
+            static readonly int[] inv = { 0, 4, 3, 2, 1, 5, 6, 7, 8, 9 };
+
+            static CheckSumDigit()
+            {
+
+                op[0] = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+                op[1] = new int[] { 1, 2, 3, 4, 0, 6, 7, 8, 9, 5 };
+                op[2] = new int[] { 2, 3, 4, 0, 1, 7, 8, 9, 5, 6 };
+                op[3] = new int[] { 3, 4, 0, 1, 2, 8, 9, 5, 6, 7 };
+                op[4] = new int[] { 4, 0, 1, 2, 3, 9, 5, 6, 7, 8 };
+                op[5] = new int[] { 5, 9, 8, 7, 6, 0, 4, 3, 2, 1 };
+                op[6] = new int[] { 6, 5, 9, 8, 7, 1, 0, 4, 3, 2 };
+                op[7] = new int[] { 7, 6, 5, 9, 8, 2, 1, 0, 4, 3 };
+                op[8] = new int[] { 8, 7, 6, 5, 9, 3, 2, 1, 0, 4 };
+                op[9] = new int[] { 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
+
+                F[0] = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+                F[1] = new int[] { 1, 5, 7, 6, 2, 8, 3, 0, 9, 4 };
+                for (int i = 2; i < 8; i++)
+                {
+                    F[i] = new int[10];
+                    for (int j = 0; j < 10; j++)
+                        F[i][j] = F[i - 1][F[1][j]];
+                }
+            }
+
+            public static int GetCDV(string digits)
+            {
+                int[] reversedInput = digits.Select(n => Convert.ToInt32(int.Parse(n.ToString()))).ToArray().Reverse().ToArray();
+                int check = 0;
+                for (int i = 0; i < reversedInput.Length; i++)
+                {
+                    check = op[check][F[(i + 1) % 8][reversedInput[i]]];
+                }
+                int checkDigit = inv[check];
+
+                return checkDigit;
+            }
+
+            public static string AppendCDV(string digits)
+            {
+                return $"{digits}{GetCDV(digits)}";
+            }
+
+            public static bool CheckCDV(string digits, out string value)
+            {
+                value = string.Empty;
+                int[] reversedInput = digits.Select(n => Convert.ToInt32(int.Parse(n.ToString()))).ToArray().Reverse().ToArray();
+                int check = 0;
+                for (int i = 0; i < reversedInput.Length; i++)
+                {
+                    check = op[check][F[i % 8][reversedInput[i]]];
+                }
+
+                if (check == 0)
+                {
+                    value = digits.Remove(digits.Length - 1);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+        #endregion
 
         public static Dictionary<string, string> ExtractDataFromString(string inputString, string[] regexPattern)
         {

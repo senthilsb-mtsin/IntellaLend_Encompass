@@ -7,14 +7,14 @@ namespace IntellaLend.Model
 {
     public class User
     {
-      
+
         //public User()
         //{
         //  //  this.CustomAddressDetails = new HashSet<CustomAddressDetail>();
         //    this.UserAddressDetails = new HashSet<UserAddressDetail>();
         //    this.UserRoleMappings = new HashSet<UserRoleMapping>();
         //}
-    
+
         [Key]
         public Int64 UserID { get; set; }
         public bool Active { get; set; }
@@ -31,6 +31,7 @@ namespace IntellaLend.Model
         public Int64 CustomerID { get; set; }
         public DateTime PasswordCreatedDate { get; set; }
         public Int64 NoOfAttempts { get; set; }
+        public int UserType { get; set; }
         public DateTime LastPwdModifiedDate { get; set; }
         [NotMapped]
         public List<CustomAddressDetail> CustomAddressDetails { get; set; }

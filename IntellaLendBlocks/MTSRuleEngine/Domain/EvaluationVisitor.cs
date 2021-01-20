@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NCalc.Domain
 {
@@ -28,7 +29,7 @@ namespace NCalc.Domain
             throw new Exception("The method or operation is not implemented.");
         }
 
-        private static readonly Type[] CommonTypes = { typeof(Int64), typeof(Double), typeof(Boolean), typeof(String), typeof(Decimal), typeof(DateTime) };
+        private static readonly Type[] CommonTypes = { typeof(String), typeof(Double), typeof(Decimal), typeof(Int64), typeof(Boolean), typeof(DateTime) };
 
         /// <summary>
         /// Gets the the most precise type.
@@ -61,7 +62,7 @@ namespace NCalc.Domain
             {
                 throw new CustomFormatException("Different formats cannot be compared.", ex);
             }
-            
+
         }
 
         public override void Visit(TernaryExpression expression)
@@ -124,9 +125,9 @@ namespace NCalc.Domain
                     break;
 
                 case BinaryExpressionType.Div:
-                     Result = Convert.ToDecimal(IsReal(left()) || IsReal(right())
-                                ? Numbers.Divide(left(), right())
-                                : Numbers.Divide(Convert.ToDouble(left()), right())).ToString("n2");
+                    Result = Convert.ToDecimal(IsReal(left()) || IsReal(right())
+                               ? Numbers.Divide(left(), right())
+                               : Numbers.Divide(Convert.ToDouble(left()), right())).ToString("n2");
                     break;
 
                 case BinaryExpressionType.Equal:
@@ -234,9 +235,9 @@ namespace NCalc.Domain
         public override void Visit(Function function)
         {
             var args = new FunctionArgs
-                           {
-                               Parameters = new Expression[function.Expressions.Length]
-                           };
+            {
+                Parameters = new Expression[function.Expressions.Length]
+            };
 
             // Don't call parameters right now, instead let the function do it as needed.
             // Some parameters shouldn't be called, for instance, in a if(), the "not" value might be a division by zero
@@ -599,27 +600,43 @@ namespace NCalc.Domain
 
                     object parameter = Evaluate(function.Expressions[0]);
 
-                    bool evaluation = false;
+                    List<LogicalExpression> newCollection = function.Expressions.ToList().Skip(1).ToList();
 
-                    // Goes through any values, and stop whe one is found
-                    for (int i = 1; i < function.Expressions.Length; i++)
-                    {
-                        try
-                        {
-                            object argument = Evaluate(function.Expressions[i]);
-                            if (CompareUsingMostPreciseType(parameter, argument) == 0)
-                            {
-                                evaluation = true;
-                                break;
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            continue;
-                        }
-                    }
+                    List<string> inputParams = newCollection.Select(x => Evaluate(x).ToString()).ToList();
 
-                    Result = evaluation;
+                    Result = parameter.ToString().Split(',').Any(x => inputParams.Any(d => d.ToLower().Equals(x.ToLower())));
+
+                    //if (parameter.ToString().IndexOf(',') > 0)
+                    //{
+                    //    List<LogicalExpression> newCollection = function.Expressions.ToList().Skip(1).ToList();
+
+                    //    List<string> inputParams = newCollection.Select(x => Evaluate(x).ToString()).ToList();
+
+                    //    evaluation = parameter.ToString().Split(',').Any(x => inputParams.Any(d => d.ToLower().Equals(x.ToLower())));
+                    //}
+                    //else
+                    //{
+                    //    //Goes through any values, and stop whe one is found
+                    //    for (int i = 1; i < function.Expressions.Length; i++)
+                    //    {
+                    //        try
+                    //        {
+                    //            object argument = Evaluate(function.Expressions[i]);
+
+                    //            if (CompareUsingMostPreciseType(parameter, argument) == 0)
+                    //            {
+                    //                evaluation = true;
+                    //                break;
+                    //            }
+                    //        }
+                    //        catch (Exception ex)
+                    //        {
+                    //            continue;
+                    //        }
+                    //    }
+                    //}
+
+                    //Result = evaluation;
                     break;
 
                 #endregion in

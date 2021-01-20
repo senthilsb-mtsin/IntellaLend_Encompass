@@ -106,43 +106,7 @@ namespace MTSEntBlocks.UtilsBlock
                 return compressedFileStream.ToArray();
             }
 
-
-        }
-
-        public static byte[] ConvertImageToPdf(List<byte[]> jpgByteContent)
-        {
-            using (var ms = new MemoryStream())
-            {
-                if (jpgByteContent.Count > 0)
-                {
-                    Document document = null;
-                    for (int i = 0; i < jpgByteContent.Count; i++)
-                    {
-                        if (i == 0)
-                        {
-                            iTextSharp.text.Rectangle pageSize = null;
-                            using (var imageStream = new MemoryStream(jpgByteContent[i]))
-                            {
-                                using (var srcImage = new Bitmap(imageStream))
-                                {
-                                    pageSize = new iTextSharp.text.Rectangle(0, 0, srcImage.Width, srcImage.Height);
-                                }
-                            }
-                            document = new iTextSharp.text.Document(pageSize, 0, 0, 0, 0);
-                            iTextSharp.text.pdf.PdfWriter.GetInstance(document, ms).SetFullCompression();
-                            document.Open();
-                        }
-                        var image = iTextSharp.text.Image.GetInstance(jpgByteContent[i]);
-                        document.Add(image);
-                    }
-
-                    document.Close();
-
-                    return ms.ToArray();
-                }
-                else
-                    return null;
-            }
+           
         }
 
         public static byte[] ConcatPDFByteArray(List<byte[]> pdfByteContent)

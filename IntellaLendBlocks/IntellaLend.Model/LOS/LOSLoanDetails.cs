@@ -13,4 +13,10 @@ namespace IntellaLend.Model
         public DateTime Createdon { get; set; }
         public DateTime ModifiedOn { get; set; }
     }
+     public class FannieMaeFields
+    {
+        public string FieldID { get; set; }
+        public string FieldValue { get; set; }
+
+    }
 }

@@ -189,17 +189,19 @@ namespace MTS.Web.Helpers
 
             switch (requestObject.REQUESTTYPE)
             {
-                case "POST":
-                    return this.PostAsync<T>(restRequest);
-                case "PUT":
-                    return this.PutAsync<T>(restRequest);
-                case "PATCH":
-                    return this.PatchAsync<T>(restRequest);
-                case "DELETE":
-                    return this.DeleteAsync<T>(restRequest);
-                default:
-                    return this.GetAsync<T>(restRequest);
+                //case "POST":
+                //    return this.PostAsync<T>(restRequest);
+                //case "PUT":
+                //    return this.PutAsync<T>(restRequest);
+                //case "PATCH":
+                //    return this.PatchAsync<T>(restRequest);
+                //case "DELETE":
+                //    return this.DeleteAsync<T>(restRequest);
+                //default:
+                //    return this.GetAsync<T>(restRequest);
             }
+
+            return null;
         }
 
         protected virtual void Dispose(bool disposing)

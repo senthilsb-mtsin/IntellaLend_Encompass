@@ -10,10 +10,10 @@ namespace EncompassRequestBody.WrapperReponseModel
 
     public class EToken
     {
-        [JsonProperty(PropertyName = "accessToken")]
+        [JsonProperty(PropertyName = "access_token")]
         public string AccessToken { get; set; }
 
-        [JsonProperty(PropertyName = "tokenType")]
+        [JsonProperty(PropertyName = "token_type")]
         public string TokenType { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using EncompassConsoleConnector;
+using IntellaLend.Constance;
 using IntellaLend.Model;
 using MTSEntBlocks.ExceptionBlock.Handlers;
 using MTSRuleEngine;
@@ -538,6 +539,17 @@ namespace IntellaLend.RuleEngine
                 }
             }
 
+
+            if (loan.UploadType == UploadConstant.LOS)
+            {
+                List<FannieMaeFields> fannieMaeResults = ruleEngineDataAccess.GetFannieMaeFields(loan.LoanID);
+
+                foreach (var item in fannieMaeResults)
+                {
+                    batchDocFields[item.FieldID] = item.FieldValue;
+                }
+            }
+
             if (CheckListRules.Any(x => x.Value.Contains("groupby")))
             {
                 //Log("Inside GroupBy");
@@ -774,6 +786,7 @@ namespace IntellaLend.RuleEngine
 
             }
         }
+
 
         public void Log(string _msg)
         {

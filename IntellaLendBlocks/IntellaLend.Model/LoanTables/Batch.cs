@@ -46,6 +46,7 @@ namespace IntellaLend.Model
         public int VersionNumber { get; set; }
         public Int64 DocumentTypeID { get; set; }
         public string Description { get; set; }
+        public string BatchInstanceIdentifier { get; set; }
         public string Confidence { get; set; }
         public bool Reviewed { get; set; }
         public string MultiPagePdfFile { get; set; }

@@ -20,7 +20,7 @@ namespace IntellaLend.Model
         public bool Active { get; set; }
         public Boolean IncludeKpi { get; set; }
         public Boolean ExternalRole { get; set; }
-        public Int64 ADGroupID { get; set; }
+        public Int64? ADGroupID { get; set; }
 
         //public virtual ICollection<RoleMenuMapping> RoleMenuMappings { get; set; }    
         //public virtual ICollection<AccessURL> AccessURLs { get; set; }    
@@ -36,7 +36,7 @@ namespace IntellaLend.Model
         public bool Active { get; set; }
         public Boolean IncludeKpi { get; set; }
         public Boolean ExternalRole { get; set; }
-        public Int64 ADGroupID { get; set; }
+        public Int64? ADGroupID { get; set; }
         public string ADGroupName { get; set; }
     }
 }

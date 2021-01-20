@@ -9,5 +9,10 @@ namespace MTS.Web.Helpers
         private Dictionary<string, string> _headerList;
         public KeyValuePair<string, string> HeaderData { get { return _headers; } set { _headers = value; } }
         public Dictionary<string, string> HeaderDataList { get { return _headerList; } set { _headerList = value; } }
+
+        public WebClientArgs()
+        {
+            HeaderDataList = new Dictionary<string, string>();
+        }
     }
 }

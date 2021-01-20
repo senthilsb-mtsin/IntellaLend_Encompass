@@ -378,7 +378,8 @@ namespace MTSEntityDataAccess
         public DbSet<LoanChecklistAudit> LoanChecklistAudit { get { return this.Set<LoanChecklistAudit>(); } }
         public DbSet<CategoryLists> CategoryLists { get { return this.Set<CategoryLists>(); } }
         public DbSet<LoanEvaluatedResult> LoanEvaluatedResult { get { return this.Set<LoanEvaluatedResult>(); } }
-
+        public DbSet<CustomerImportStaging> CustomerImportStaging { get { return this.Set<CustomerImportStaging>(); } }
+        public DbSet<CustomerImportStagingDetail> CustomerImportStagingDetail { get { return this.Set<CustomerImportStagingDetail>(); } }
         public DbSet<EWebhookEvents> EWebhookEvents { get { return this.Set<EWebhookEvents>(); } }
 
         #endregion
@@ -397,6 +398,8 @@ namespace MTSEntityDataAccess
         public DbSet<RetainUpdateStaging> RetainUpdateStaging { get { return this.Set<RetainUpdateStaging>(); } }
         public DbSet<RetainUpdateStagingDetails> RetainUpdateStagingDetails { get { return this.Set<RetainUpdateStagingDetails>(); } }
         public DbSet<CustReviewLoanUploadPath> CustReviewLoanUploadPath { get { return this.Set<CustReviewLoanUploadPath>(); } }
+        public DbSet<CustLoantypeMapping> CustLoantypeMapping { get { return this.Set<CustLoantypeMapping>(); } }
+        
         #endregion
 
         #region IntellaLend Tables
@@ -649,6 +652,12 @@ namespace MTSEntityDataAccess
                 modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<RuleDocumentTables>()
                  .ToTable("RuleDocumentTables");
 
+                modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<CustomerImportStaging>()
+                 .ToTable("CustomerImportStaging");
+
+                modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<CustomerImportStagingDetail>()
+                 .ToTable("CustomerImportStagingDetail");
+
                 #endregion
 
                 #region Mapping Tables
@@ -672,6 +681,10 @@ namespace MTSEntityDataAccess
 
                 modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<CustReviewLoanUploadPath>()
                   .ToTable("CustReviewLoanUploadPath");
+
+                modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<CustLoantypeMapping>()
+                  .ToTable("CustLoantypeMapping");
+                
 
                 #endregion
 
@@ -721,7 +734,6 @@ namespace MTSEntityDataAccess
                 modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<EWebhookEvents>()
                     .ToTable("EWebhookEvents");
 
-
                 #endregion
 
                 #region Master Tables
@@ -767,7 +779,6 @@ namespace MTSEntityDataAccess
 
                 modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<AuditDescriptionConfig>()
                        .ToTable("AuditDescriptionConfig");
-
                 modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<EWebhookSubscription>()
                              .ToTable("EWebhookSubscriptions");
 

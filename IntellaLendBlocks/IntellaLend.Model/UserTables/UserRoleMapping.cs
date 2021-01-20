@@ -16,4 +16,13 @@ namespace IntellaLend.Model
         [NotMapped]
         public RoleMaster RoleMaster { get; set; }
     }
+
+    public class UserRoleMappingTemp
+    {
+        public Int64 RoleID { get; set; }
+        public Int64 UserID { get; set; }
+        public string RoleName { get; set; }
+
+    }
+
 }

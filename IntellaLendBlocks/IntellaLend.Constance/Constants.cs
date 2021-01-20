@@ -8,7 +8,7 @@ namespace IntellaLend.Constance
         public static Int64 NewUserTemplate = 1;
         public static Int64 ResetPasswordEmail = 2;
         public static Int64 ChangePasswordEmail = 3;
-
+        public static Int64 MASJsonEmail = 5;
     }
     public class CustomEmailTemplateConstants
     {
@@ -16,13 +16,22 @@ namespace IntellaLend.Constance
 
 
     }
-
-
     public class EncompassURLILConstant
     {
         public const string GET_TOKEN_WITH_USER = "/api/Token/GetTokenWithUser";
         public const string GET_TOKEN = "/api/Token/GetToken";
         public const string GET_PREDEFINED_FIELDVALUES = "/api/v1/field/predefined";
+    }
+    public class UserLoginType
+    {
+        public const int CredentialLogin = 0;
+        public const int ADLogin = 1;
+    }
+
+    public class FannieMaeFieldTypeConstant
+    {
+        public static string MType = "M";
+        public static String SType = "S";
     }
     // For Encompass Upload service
     public class EncompassUploadConstant
@@ -89,6 +98,28 @@ namespace IntellaLend.Constance
             return Status[StatusID];
         }
 
+
+    }
+    public class LenderImportStatusConstant
+    {
+        public static int LENDER_IMPORT_STAGED = 0;
+        public static int LENDER_IMPORT_PROCESSING = 1;
+        public static int LENDER_IMPORT_PARTILLY_PROCESSED = 2;
+        public static int LENDER_IMPORT_PROCESSED = 3;
+        public static int LENDER_IMPORT_FAILED = -1;
+        protected static readonly Dictionary<Int64, string> Status = new Dictionary<long, string>()
+        {
+            { LENDER_IMPORT_STAGED, "Lender Import Staged" },
+            { LENDER_IMPORT_PROCESSING, "Lender Import Processing" },
+            { LENDER_IMPORT_PARTILLY_PROCESSED, "Upload  Partialy Completed" },
+            { LENDER_IMPORT_PROCESSED, "Upload Completed" },
+            { LENDER_IMPORT_FAILED, "Lender Import Failed" }
+        };
+
+        public static string GetStatusDescription(Int64 StatusID)
+        {
+            return Status[StatusID];
+        }
 
     }
     public class EncompassTypeConstant
@@ -384,6 +415,13 @@ namespace IntellaLend.Constance
             {LOS_LOAN_EXPORT,LOSExportStagingStatusConstant.LOS_EXPORT_PROCEESED },
 
         };
+        protected static readonly Dictionary<Int32, string> FileNameWord = new Dictionary<Int32, string>()
+        {
+            {LOS_CLASSIFICATION_EXCEPTION, "_OCR_Review_" },
+            {LOS_CLASSIFICATION_RESULTS, "_OCR_Review_Results_" },
+            {LOS_VALIDATION_EXCEPTION, "_OCR_Validation_" },
+            {LOS_LOAN_EXPORT, "_IL_Export_" }
+        };
         public static Int32 GetFileTypeProcessedStatus(Int32 FileTypeID)
         {
             if (FileTypeProcessedStatus.ContainsKey(FileTypeID))
@@ -406,6 +444,13 @@ namespace IntellaLend.Constance
                 return FileType[FileTypeID];
             else
                 return "FileType Unavailable";
+        }
+        public static string GetFileNameWord(Int32 FileTypeID)
+        {
+            if (FileNameWord.ContainsKey(FileTypeID))
+                return FileNameWord[FileTypeID];
+            else
+                return "";
         }
     }
 
@@ -493,8 +538,8 @@ namespace IntellaLend.Constance
         protected static readonly Dictionary<Int64, string> Status = new Dictionary<long, string>()
         {
             //{ COMPLETE, "Complete Audit" },
-            { COMPLETE, "Complete Audit" },
-            { LOS_LOAN_STAGED, "LOS Export Staged" },
+            { COMPLETE, "Export Complete" },
+            { LOS_LOAN_STAGED, "Export Waiting" },
             { READY_FOR_IDC,"Ready for IDC" },
             { PENDING_IDC, "Pending IDC Processing" },
             { IDC_COMPLETE, "IDC Completed" },
@@ -841,6 +886,8 @@ namespace IntellaLend.Constance
         public static string NOOFATTEMPTSPWD = "NoofAttempt_Password";
         public static string QCIQSTARTDATEENABLED = "QCIQ_STARTDATE_ENABLED";
         public static string PDFFOOTER = "PDF_Footer";
+        public static string ADDOMAIN = "AD_Domain";
+        public static string LDAPURL = "LDAP_url";
     }
 
     public class ReportConstant
@@ -867,7 +914,12 @@ namespace IntellaLend.Constance
         }
     }
 
+    public class LenderAssignTypeStatusConstant
+    {
+        public static Int64 SERVICE_LENDER_IMPORT = 1;
+        public static Int64 LENDER_IMPORT = 0;
 
+    }
 
     public class UploadConstant
     {

@@ -2,6 +2,7 @@
 using IntellaLend.Model;
 using MTSEntityDataAccess;
 using MTSRuleEngine;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -38,6 +39,50 @@ namespace IntellaLend.RuleEngine
 
             return loan;
         }
+
+        public List<FannieMaeFields> GetFannieMaeFields(Int64 LoanID)
+        {
+            List<FannieMaeFields> _FannieMaefields = new List<FannieMaeFields>();
+            using (var db = new DBConnect(TenantSchema))
+            {
+                LOSLoanDetails _losTableFields = db.LOSLoanDetails.AsNoTracking().Where(l => l.LoanID == LoanID).FirstOrDefault();
+
+                if (_losTableFields != null && !string.IsNullOrEmpty(_losTableFields.LOSDetailJSON))
+                {
+                    string docName = db.LOSDocument.AsNoTracking().Where(l => l.LOSDocumentID == _losTableFields.LOSDocumentID).FirstOrDefault().DocumentName;
+                    docName = docName.Replace(".", "-");
+                    var _losFields = JsonConvert.DeserializeObject<Dictionary<String, dynamic>>(_losTableFields.LOSDetailJSON);
+
+                    string FieldName = string.Empty;
+
+                    foreach (string _field in _losFields.Keys)
+                    {
+                        LOSDocumentFields _tableField = db.LOSDocumentFields.AsNoTracking().Where(los => los.FieldID == _field).FirstOrDefault();
+                        if (_tableField != null)
+                            FieldName = _tableField.FieldName;
+
+                        if (_losFields[_field].Type == FannieMaeFieldTypeConstant.SType)
+                        {
+                            _FannieMaefields.Add(new FannieMaeFields() { FieldID = $"{docName}.#{_field}#{FieldName}", FieldValue = _losFields[_field].Value });
+                        }
+                        else if (_losFields[_field].Type == FannieMaeFieldTypeConstant.MType)
+                        {
+                            List<string> values = new List<string>();
+
+                            foreach (var item in _losFields[_field].Value)
+                                values.Add(Convert.ToString(item));
+
+                            _FannieMaefields.Add(new FannieMaeFields() { FieldID = $"{docName}.#{_field}#{FieldName}", FieldValue = values.Count > 0 ? values.Last() : "" });
+                        }
+
+                    }
+                }
+                return _FannieMaefields;
+            }
+        }
+
+
+
 
         public Loan GetLoanMetaData(Int64 LoanID, LoanDetail _loanDetail)
         {
