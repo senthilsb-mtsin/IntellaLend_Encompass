@@ -191,7 +191,7 @@ export class ADConfigurationConstant {
   static LDAPURL = 'LDAP_url';
 }
 
-export class CustomerImportAssignTypeConstant{
+export class CustomerImportAssignTypeConstant {
   static LENDER_IMPORT = 0;
   static SERVICE_LENDER_IMPORT = 1;
 }

@@ -78,6 +78,7 @@ const layoutRoutes: Routes = [
         loadChildren: () =>
           import('../documenttype/documenttype.module').then((m) => m.DocumentTypeModule)
       },
+
       {
         path: 'reverification',
         data: { routeURL: 'View\\Reverification' },
@@ -114,21 +115,21 @@ const layoutRoutes: Routes = [
         canActivate: [ConnectionAuthGuard],
         loadChildren: () =>
 
-        import('../mreverification/mreverification.module').then(
-          (m) => m.ManagerReverificationModule
-        ),
-    },
-    {
-      path: 'mdocumenttype',
-      data: { routeURL: 'View\\ManagerDocumentType' },
-      canActivate: [ConnectionAuthGuard],
-      loadChildren: () =>
+          import('../mreverification/mreverification.module').then(
+            (m) => m.ManagerReverificationModule
+          ),
+      },
+      {
+        path: 'mdocumenttype',
+        data: { routeURL: 'View\\ManagerDocumentType' },
+        canActivate: [ConnectionAuthGuard],
+        loadChildren: () =>
 
-      import('../managedoctype/managedoctype.module').then(
-        (m) => m.ManagerDocumentTypeModule
-      ),
-  },
-   {
+          import('../managedoctype/managedoctype.module').then(
+            (m) => m.ManagerDocumentTypeModule
+          ),
+      },
+      {
         path: 'customer',
         data: { routeURL: 'View\\Customer' },
         canActivate: [ConnectionAuthGuard],
@@ -166,13 +167,23 @@ const layoutRoutes: Routes = [
         loadChildren: () =>
           import('../loan/loan.module').then((m) => m.LoanModule),
       },
+
       {
         path: 'export',
         data: { routeURL: 'View\\ExportMonitor' },
         canActivate: [ConnectionAuthGuard],
         loadChildren: () =>
           import('../export/export.module').then((m) => m.ExportModule),
-       }
+      },
+      {
+        path: 'encompassexception',
+        data: { routeURL: 'View\\EncompassException' },
+        canActivate: [ConnectionAuthGuard],
+        loadChildren: () =>
+          import('../encompassexception/encompass-exception.module').then(
+            (m) => m.EncompassDownloadModule
+          ),
+      },
     ],
   }
 ];
