@@ -1,0 +1,68 @@
+<div class="row-centered">
+    <div id="review_detail" class="review_detail fadeIn">
+        <div class="col-md-5 col-centered">
+            <div class="form-group icon m0">
+                <input type="text" placeholder="All Lenders" (ngModelChange)="UnassignedLenderFilterSearch($event)"
+                    required="" [(ngModel)]="allLenderSearchval">
+                <i class="bar"></i>
+                <span class="material-icons">search</span>
+            </div>
+            <div class="card-spc slimScrollCustom sto_list" id="document" malihu-scrollbar >
+                <div [dragula]='"draglender"' class="dragScroll" DivType="UnAssigned" [(dragulaModel)]='AllLenders'>
+                    <div #allLoans title="{{ lender.CustomerName }}" class="draganddrop" (click)="setLenderSelected(i)"
+                        [attr.data-loanid]="lender.CustomerID" *ngFor="let lender of AllLenders; let i = index;">
+                        <span>{{ lender.CustomerName }}</span>
+                        <i class="fa fa-plus-circle fa-lg pull-right text-col-green"
+                            (click)="AddLender(lender.CustomerID)"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1 col-centered">
+            <div class="text-center movbtn">
+                <button class="btn btn-secondary waves-effect btn-rounded waves-light bg-white"
+                    (click)="MoveFromAllLender()" id="addDocType" title="Add"><span
+                        class="material-icons">arrow_forward</span></button>
+            </div>
+            <div class="text-center p-t-15 movbtn">
+                <button class="btn btn-secondary waves-effect btn-rounded waves-light bg-white"
+                    (click)="MoveToAllLender()" id="removeDocType" title="Remove"><span
+                        class="material-icons">arrow_back</span></button>
+            </div>
+            <div class="text-center p-t-15">
+                <button class="btn btn-secondary waves-effect btn-rounded waves-light bg-white"
+                    (click)="resetPageData()" id="reset" title="Reset"><span
+                        class="material-icons">settings_backup_restore</span></button>
+            </div>
+            <div class="text-center p-t-15">
+                <button class="btn btn-secondary waves-effect btn-rounded waves-light bg-white"
+                    (click)="MoveAllLenderToAssignedLender()" id="movetoright" title="MoveAllToRight">
+                    <i class="fa fa-angle-double-right iconpad" aria-hidden="true"></i></button>
+            </div>
+            <div class="text-center p-t-15">
+                <button class="btn btn-secondary waves-effect btn-rounded waves-light bg-white"
+                    (click)="MoveAssignedLenderToAllLender()" id="movetoleft" title="MoveAllToLeft">
+                    <i class="fa fa-angle-double-left iconpad" aria-hidden="true"></i></button>
+            </div>
+        </div>
+        <div class="col-md-5 col-centered">
+            <div class="form-group icon m0">
+                <input type="text" placeholder="Assigned Lenders" required="" [(ngModel)]="assignedLenderSearchval">
+                <i class="bar"></i>
+                <span class="material-icons">search</span>
+            </div>
+            <div class="card-spc slimScrollCustom sto_list" malihu-scrollbar>
+                <div [dragula]='"draglender"' class="dragScroll" DivType="Assigned"
+                    [(dragulaModel)]='AssignedLenders'>
+                    <div #assignedLoan title="{{asnlender.CustomerName}}" class="draganddrop"
+                        (click)="setLenderAssignSelected(i)" [attr.data-loanid]="asnlender.CustomerID"
+                        *ngFor='let asnlender of AssignedLenders|lendersearch: assignedLenderSearchval; let i = index;'>
+                        <span>{{asnlender.CustomerName}}</span>
+                        <i class="fa fa-minus-circle fa-lg pull-right text-col"
+                            (click)="RemoveLender(asnlender.CustomerID)"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

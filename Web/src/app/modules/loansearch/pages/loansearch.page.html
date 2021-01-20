@@ -162,7 +162,7 @@
                     <div class="row">
                         <div class="col-md-12 text-right p0" id="downloadButton"></div>
                         <div class="col-md-12">
-                            <table datatable [dtOptions]="dtOptions" class="table table-bordered table-striped table-borderless table-responsive" style="width: 100%;">
+                            <table #LoanSearchTable datatable [dtOptions]="dtOptions" class="table table-bordered table-striped table-borderless table-responsive" style="width: 100%;">
                             </table>
                         </div>
                     </div>
@@ -188,6 +188,26 @@
           <i class="material-icons">check_circle</i>&nbsp;Yes</button>
                 <button type="button" id="ls_yes" class="btn btn-danger waves-effect waves-light" (click)="confirmDeleteModal.hide()">
           <i class="material-icons">cancel</i>&nbsp;No</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div bsModal #FannieMaeFieldsModal="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-lg" style="width:80%;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="box-action">
+                    <button (click)="FannieMaeFieldsModal.hide()" title="Close" class="btn btn-danger p-l-2 p-r-2 btn-sm waves-effect waves-light" type="button">
+                    <i class="material-icons">close</i>
+                  </button>
+                </div>
+            </div>
+            <div class="modal-body" style="overflow-y:auto">
+                <div class="col-lg-12">
+                    <mts-fanniemae-fields></mts-fanniemae-fields>
+                </div>
+            </div>
+            <div class="modal-footer">
             </div>
         </div>
     </div>

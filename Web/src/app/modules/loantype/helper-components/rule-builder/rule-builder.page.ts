@@ -18,7 +18,7 @@ import { CommonRuleBuilderService } from 'src/app/shared/common/common-rule-buil
 export class RuleBuilderComponent implements OnInit, OnDestroy {
     @ViewChild('EncompassValuesModal') EncompassValuesModal: ModalDirective;
     CategoryGroups: any[] = [];
-    headerFieldID = '';
+    headerFieldID: any = '';
     losEncompassFields: any[] = [];
 
     Headervalue = '';
@@ -60,9 +60,19 @@ export class RuleBuilderComponent implements OnInit, OnDestroy {
             this.EditSteps = res;
         }));
 
+        if (isTruthy(this.rowData.LOSValueToEvalRule)) {
+            this.headerFieldID = this.rowData.LOSFieldDescription;
+            this.tagItems = this.rowData.LOSValueToEvalRule.split('|');
+            this.headerFieldValue = this.tagItems.join('|');
+            this.EncompassHeaderValues = this.tagItems.join(' or ');
+            this.OnChangeLOSHeaderFieldValue();
+        }
     }
 
     wizStep1() {
+        this.rowData.LOSFieldToEvalRule = this.losEncompassFields.findIndex(x => x.FieldIDDescription === this.headerFieldID) >= 0 ? this.losEncompassFields.find(x => x.FieldIDDescription === this.headerFieldID).ID : 0;
+        this.rowData.LOSFieldDescription = this.headerFieldID;
+        this.rowData.LOSValueToEvalRule = this.headerFieldValue;
         this._commonRuleBuilderService.SetRuleStep.next({ Step1: false, Step2: true, Step3: false });
         this._commonRuleBuilderService.setEditChecklistItem(this.rowData);
         this._addLoanTypeService.setEditChecklistItem(this.rowData);
@@ -73,7 +83,7 @@ export class RuleBuilderComponent implements OnInit, OnDestroy {
     }
 
     addEncompassValues() {
-        if (isTruthy(this.Headervalue)) {
+        if (isTruthy(this.Headervalue) && isTruthy(this.headerFieldID)) {
             this.tagItems.push(this.Headervalue);
             this.headerFieldValue = this.tagItems.join('|');
             this.rowData.LOSValueToEvalRule = this.headerFieldValue;
@@ -83,10 +93,12 @@ export class RuleBuilderComponent implements OnInit, OnDestroy {
     }
 
     ShowConfirmModal() {
-        if (isTruthy(this.Headervalue)) {
+        if (isTruthy(this.Headervalue) && isTruthy(this.headerFieldID) && this.losEncompassFields.findIndex(x => x.FieldIDDescription === this.headerFieldID) >= 0) {
             this.EncompassValuesModal.show();
-        } else {
+        } else if (!(isTruthy(this.Headervalue) && isTruthy(this.headerFieldID))) {
             this._notificationService.showError('Enter Encompass Field Value');
+        } else {
+            this._notificationService.showError('Select available Encompass field only');
         }
     }
 
@@ -107,11 +119,6 @@ export class RuleBuilderComponent implements OnInit, OnDestroy {
 
     OnchangeLosField() {
         this.rowData.LosIsMatched = this.rowData.LosMatched ? 1 : 2;
-    }
-
-    EncompassHeaderFieldsChange(event) {
-        this.rowData.LOSFieldToEvalRule = Number.parseInt(this.headerFieldID, 10);
-        this.Headervalue = '';
     }
 
     OnChangeLOSHeaderFieldValue() {

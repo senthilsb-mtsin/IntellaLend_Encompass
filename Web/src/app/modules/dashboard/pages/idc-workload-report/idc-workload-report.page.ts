@@ -7,6 +7,7 @@ import { NotificationService } from '@mts-notification';
 import { AppSettings } from '@mts-app-setting';
 import { DatePipe } from '@angular/common';
 import { MonthYearPickerComponent } from '@mts-month-year-picker/component/MonthYearPicker/MonthYearPicker.component';
+import { verifyHostBindings } from '@angular/compiler';
 
 @Component({
     selector: 'mts-idc-workload-report',
@@ -22,7 +23,8 @@ export class IdcWorkloadReportComponent implements OnInit, AfterViewInit, AfterC
     ocrSelectedvalue: any = -1;
     ocrSelect = [{ id: 1, fieldvalue: 'Review Completion Date' }, { id: 2, fieldvalue: 'Validation Completion Date' }, { id: 3, fieldvalue: 'Audit Completion Date' }];
     FromDate: any;
-    _classificationTable: any;
+    ToDate: any;
+   _classificationTable: any;
     tableAligned = false;
     @ViewChild(DataTableDirective) datatableEl: DataTableDirective;
     @ViewChild('_idcMonthYear')
@@ -39,6 +41,7 @@ export class IdcWorkloadReportComponent implements OnInit, AfterViewInit, AfterC
     //#endregion Constructor
 
     ngOnInit(): void {
+        this.selectThisMonth(this.TempSelectedYearDate);
         this.daterangeoptions = {
             theme: 'default',
             previousIsDisable: false,
@@ -169,7 +172,7 @@ export class IdcWorkloadReportComponent implements OnInit, AfterViewInit, AfterC
     ngAfterViewInit() {
         this.datatableEl.dtInstance.then((dtInstance: DataTables.Api) => {
             this._classificationTable = dtInstance;
-            //this.GetOCRClassification(-1, this.daterange.dateFrom, this.daterange.dateTo);
+            // this.GetOCRClassification(-1, this.daterange.dateFrom, this.daterange.dateTo);
         });
     }
     getMonthYear(event: any) {
@@ -180,29 +183,19 @@ export class IdcWorkloadReportComponent implements OnInit, AfterViewInit, AfterC
         this.FromDate = this.TempSelectedYearDate;
         this.selectThisMonth(this.FromDate);
     }
-    public ToDate: any;
     getDate(year, month, day) {
         return new Date(year, month, day, 0, 0, 0, 0);
     }
     selectThisMonth(_idcMonth) {
-        let date = _idcMonth.split('/');
-        let _idcMonthYear = {
-            year: date[2],
-            month: date[0],
-            day: date[1]
-        };
-        let year = _idcMonthYear.year;
-        let month = _idcMonthYear.month;
-        if (month === 12) month = 0;
-        let toDate = { year: year, month: month, day: 1 };
-        this.FromDate = this.getDate(_idcMonthYear.year, _idcMonthYear.month - 1, _idcMonthYear.day);
-        this.ToDate = this.getDate(toDate.year, toDate.month, toDate.day);
-
+        const _idcMonthDate = new Date(_idcMonth);
+        this.FromDate =
+            new Date(_idcMonthDate.getFullYear(), _idcMonthDate.getMonth(), 1);
+        this.ToDate = new Date(_idcMonthDate.getFullYear(), _idcMonthDate.getMonth() + 1, 0);
     }
 
     GetOCRClassification(ocrSelecteddata: any, TempDate: any) {
-        let dateFrom = this.FromDate;
-        let dateTo = this.ToDate;
+        const dateFrom = this.FromDate;
+        const dateTo = this.ToDate;
         this.promise = this._dashboardService.GetOCRClassification(ocrSelecteddata, dateFrom, dateTo, this._classificationTable);
 
     }

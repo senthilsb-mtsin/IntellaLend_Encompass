@@ -27,13 +27,21 @@
                                 <i class="bar"></i>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" *ngIf="compareall.controls.ComapreAllDocumentTypes.value !== FannieMaeDocName">
                             <div class="form-group  m-t-25 m-b-10">
                                 <select formControlName="CompareAllDocField">
                                     <option value=""  selected disabled>--Select--</option>
                                     <option *ngFor="let dtype of currtDocFields[0]" [ngValue]="dtype">{{dtype}}</option>
                                 </select>
                                 <label class="control-label selected">Doc Fields</label><i class="bar"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-6" *ngIf="compareall.controls.ComapreAllDocumentTypes.value === FannieMaeDocName">
+                            <div class="form-group  m-t-25 m-b-10">
+                                <input formControlName="CompareAllLosdocField" [typeahead]="LosDocumentFields" (typeaheadLoading)="OnChangeFieldValue(i, 'CompareAllLosdocField', 'ComapreAllDocumentTypes')" [typeaheadOptionsLimit]="7" [typeaheadMinLength]="1"
+                                    placeholder="Search Fields" class="form-control">
+                                <label class="control-label selected">Doc Field</label>
+                                <i class="bar"></i>
                             </div>
                         </div>
                     </div>
@@ -70,12 +78,20 @@
                                 <i class="bar"></i>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" *ngIf="compareall.controls.CompareAllLookUpDocumentTypes.value !== FannieMaeDocName">
                             <div class="form-group  m-t-25 m-b-10">
                                 <select formControlName="CompareAllValuesField">
                                    <option value="" disabled selected>--Select--</option>
                                     <option *ngFor="let CompareAllEditvFieldtype of currtDocFields[1]" [ngValue]="CompareAllEditvFieldtype">{{CompareAllEditvFieldtype}}</option>
                                 </select>
+                                <label class="control-label selected">Find Field</label>
+                                <i class="bar"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-6" *ngIf="compareall.controls.CompareAllLookUpDocumentTypes.value === FannieMaeDocName">
+                            <div class="form-group  m-t-25 m-b-10">
+                                <input formControlName="CompareAllLookUpLosdocField" [typeahead]="LosDocumentFields" (typeaheadLoading)="OnChangeFieldValue(i, 'CompareAllLookUpLosdocField', 'CompareAllLookUpDocumentTypes')" [typeaheadOptionsLimit]="7" [typeaheadMinLength]="1"
+                                    placeholder="Search Fields" class="form-control">
                                 <label class="control-label selected">Find Field</label>
                                 <i class="bar"></i>
                             </div>

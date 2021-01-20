@@ -14,4 +14,5 @@ export class CommonApiUrlConstant {
     static GET_ACTIVE_CUSTOMERLIST = 'Customer/GetActiveCustomerList';
     static GET_AllLOANTYPE_MASTERS = 'Master/GetLoanTypeMaster';
     static GET_ALL_REVIEWTYPE_MASTER = 'Master/GetAllReviewTypeMaster';
+    static GET_LOSDOCUMENT_FIELDS = 'IntellaLend/GetLosDocumentFields';
 }

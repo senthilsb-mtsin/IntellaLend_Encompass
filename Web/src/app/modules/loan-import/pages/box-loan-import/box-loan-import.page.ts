@@ -503,9 +503,8 @@ export class BoxLoanImportComponent implements OnInit, AfterViewInit, OnDestroy 
       const ptype = this.priorityList.filter(x => x.id === rows[i].Priority)[0];
       if (ptype !== undefined) {
         pri = ptype.priority;
-      }
-      else{
-        pri= rows[i].Priority
+      } else {
+        pri = rows[i].Priority;
       }
       uploadItems.push({ BoxID: rows[i].Id, ItemType: rows[i].Type, Priority: pri });
     }

@@ -7,7 +7,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { NotificationService } from '@mts-notification';
 import { SaveChecklistItem, SaveRuleMasters } from '../models/save-checklist-item-request.model';
 import { isTruthy } from '@mts-functions/is-truthy.function';
-import { FormulaBuilderTypesConstant } from '@mts-app-setting';
+import { AppSettings, FormulaBuilderTypesConstant } from '@mts-app-setting';
 import { SessionHelper } from '@mts-app-session';
 import { JsonPipe } from '@angular/common';
 import { RemoveDuplicateValues } from '../pipes/RemoveDuplicateValue.pipe';
@@ -28,6 +28,7 @@ export class RuleBuilderService {
         TestResultExp: string,
         ErrorMsg: string
     }>();
+    LosDocumentFields = new Subject();
 
     constructor(
         private _addLoanTypeService: AddLoanTypeService,
@@ -62,6 +63,7 @@ export class RuleBuilderService {
     }
 
     docFieldsInitChange(control: any, currtDocFields: any[], vals: any, field: string, index: number) {
+
         const tempGeneralEditDocFieldMasters = [];
         control.get(field).setValue('');
         let newVals = '';
@@ -69,18 +71,18 @@ export class RuleBuilderService {
         if (typeof (vals) !== 'string') {
             if (vals.currentTarget.value !== '' && vals.currentTarget.value !== 'Select') {
                 newValNotEmpty = true;
-                newVals = vals.target.selectedOptions[0].innerText.replace(/[\s]/g, '');
+                newVals = vals.target.selectedOptions[0].innerText.replace('/[\s]/g', '');
             }
         } else {
             if (vals !== '' && vals !== 'Select') {
                 newValNotEmpty = true;
-                newVals = vals.replace(/[\s]/g, '');
+                newVals = vals.replace('/[\s]/g', '');
             }
         }
 
         if (newValNotEmpty) {
             for (let i = 0; i < this._loanTypeDocumentFields.slice().length; i++) {
-                const trmmiedSpaceDocName = this._loanTypeDocumentFields.slice()[i].DocName.replace(/[\s]/g, '');
+                const trmmiedSpaceDocName = this._loanTypeDocumentFields.slice()[i].DocName.replace('/[\s]/g', '');
                 if (newVals === trmmiedSpaceDocName) {
                     tempGeneralEditDocFieldMasters.push(this._loanTypeDocumentFields.slice()[i].Name);
                 }
@@ -90,7 +92,7 @@ export class RuleBuilderService {
             control.get(field).setValue('');
             currtDocFields[index] = tempGeneralEditDocFieldMasters;
         }
-        if (tempGeneralEditDocFieldMasters.length === 0) {
+        if (tempGeneralEditDocFieldMasters.length === 0 && newVals !== AppSettings.FannieMaeDocName) {
             this._notificationService.showError('Fields Unavailable');
         }
     }
@@ -234,6 +236,7 @@ export class RuleBuilderService {
     }
 
     SaveChecklistItem() {
+
         const rowData = this._commonRuleBuilderService.getEditChecklistItem();
         const ruleType = FormulaBuilderTypesConstant.FormulaTypes.slice().filter(x => x.Name === rowData.RuleJsonObject.mainOperator)[0];
         const checklistdetailsmasters = new SaveChecklistItem();
@@ -280,6 +283,20 @@ export class RuleBuilderService {
             this._notificationService.showError('Error Contact Administrator');
         }
     }
+
+    GetLosDocFields(LosDocId: number, searchValue: string) {
+        const req = { TableSchema: AppSettings.TenantSchema, LOSDocumentId: LosDocId , FieldSearchWord: searchValue};
+        this._loanTypeData.GetLosDocFields(req).subscribe(
+          res => {
+            const data = jwtHelper.decodeToken(res.Data)['data'];
+            const fields: any[] = [];
+            data.forEach(element => {
+                fields.push('#' + element.FieldID + '#' + element.FieldName);
+            });
+            this.LosDocumentFields.next(fields);
+          }
+        );
+      }
 
     private GetDocsMapped(jsonData: any, ruleType: any) {
         const genDocIDS = [];

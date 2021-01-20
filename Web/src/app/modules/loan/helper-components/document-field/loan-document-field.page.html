@@ -29,8 +29,8 @@
                     <span class="material-icons">search</span>
                 </div>
                 <div class="form-group m-b-10">
-                    <select [(ngModel)]="newDocTypeID" (change)="confirmModal.show()" [disabled]="showHide[0]">
-                        <option *ngFor="let loan of loanDocuments" [value]="loan.DocID">
+                    <select [(ngModel)]="newDocType" (change)="confirmModal.show()" [disabled]="showHide[0]">
+                        <option *ngFor="let loan of loanDocuments" [ngValue]="loan">
                             {{loan.DocName}}
                         </option>
                     </select>

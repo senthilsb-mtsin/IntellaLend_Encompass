@@ -4,6 +4,10 @@ export class AppSettings {
   static AuthorityLabelSingular = 'Lender';
   static AuthorityLabelPlural = 'Lenders';
   static dateFormat = 'MM/dd/yyyy';
+  static FannieMaeDocName = 'Fannie Mae - 3-2';
+  static RuleFannieMaeDocName = 'Fannie Mae - 3.2';
+  static FannieMaeDocDisplayName = 'Fannie Mae - 3-2';
+  static SessionErrorMsg = false;
   static TenantConfigType = [
     {
       ConfigKey: 'Delete_Loan_Source',
@@ -86,6 +90,11 @@ export class AppSettings {
       ConfigValue: 'WebHook Subscription',
       ConfigType: 'WebHook',
     },
+    {
+      ConfigKey: 'AD_Configuration',
+      ConfigValue: 'AD Configuration',
+      ConfigType: 'AD',
+    }
   ];
   static customerAuthorityLevel = 91;
   static DocumentCriticalStatus = {
@@ -176,4 +185,13 @@ export class WebHookSubscriptionEventTypesConstants {
     WebHookSubscriptionEventTypesConstants.MilestoneLog,
     WebHookSubscriptionEventTypesConstants.DocumentLog
   ];
+}
+export class ADConfigurationConstant {
+  static ADDOMAIN = 'AD_Domain';
+  static LDAPURL = 'LDAP_url';
+}
+
+export class CustomerImportAssignTypeConstant{
+  static LENDER_IMPORT = 0;
+  static SERVICE_LENDER_IMPORT = 1;
 }

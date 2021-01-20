@@ -6,7 +6,8 @@ import { Subscription } from 'rxjs';
 import { AddRoleTypeRequestModel } from '../../models/roletype-request.model';
 import { Roletypemodel } from '../../models/roletype-datatable.model';
 import { environment } from 'src/environments/environment';
-import { ADGroupMasterModel } from '../../models/adgroupmaster.model';
+import { ADGroupMasterModel, CheckADGroupAssignedForRoleRequestModel } from '../../models/adgroupmaster.model';
+import { NotificationService } from '@mts-notification';
 @Component({
   selector: 'mts-add-roletype',
   templateUrl: './add-roletype.page.html',
@@ -23,7 +24,8 @@ export class AddRoleTypeComponent implements OnInit, OnDestroy {
   AD_login: boolean = environment.ADAuthentication;
   ADGroupMasterList: ADGroupMasterModel[] = [];
 
-  constructor(private _roleTypeService: RoleTypeService
+  constructor(private _roleTypeService: RoleTypeService,
+    private _notificationService: NotificationService
   ) { }
   private subscription: Subscription[] = [];
   ngOnInit() {
@@ -44,6 +46,12 @@ export class AddRoleTypeComponent implements OnInit, OnDestroy {
     this.subscription.push(this._roleTypeService.ADGroupMasterList$.subscribe((res: ADGroupMasterModel[]) => {
       this.ADGroupMasterList = [...res];
     }));
+    this.subscription.push(this._roleTypeService.ADGroupAssignedForRole$.subscribe(res => {
+      if (res) {
+        this._notificationService.showError('ADGroup already assigned');
+        this.roletypedata.ADGroupID = 0;
+      }
+    }));
   }
 
   AddRoleSubmit() {
@@ -52,6 +60,15 @@ export class AddRoleTypeComponent implements OnInit, OnDestroy {
       const req = new AddRoleTypeRequestModel(AppSettings.TenantSchema, this.roletypedata, this._menuarr);
       this._roleTypeService.GetAddRoleSubmit(req);
     }
+  }
+  ADGroupChange() {
+    const req: CheckADGroupAssignedForRoleRequestModel = new CheckADGroupAssignedForRoleRequestModel(AppSettings.TenantSchema,
+        this.roletypedata.ADGroupID,
+        0
+      );
+      if (this.roletypedata.ADGroupID !== 0) {
+        this._roleTypeService.CheckADGroupAssignedForRole(req);
+      }
   }
 
   ngOnDestroy() {

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
-import { FormulaBuilderTypesConstant } from '@mts-app-setting';
+import { AppSettings, FormulaBuilderTypesConstant } from '@mts-app-setting';
 import { ChecklistItemRowData } from 'src/app/modules/loantype/models/checklist-items-table.model';
 import { RuleBuilderService } from 'src/app/modules/loantype/service/rule-builder.service';
 import { AddLoanTypeService } from 'src/app/modules/loantype/service/add-loantype.service';
@@ -8,6 +8,7 @@ import { RuleCheckValidation, SingleOperatorExistforRule } from 'src/app/modules
 import { Subscription } from 'rxjs';
 import { isTruthy } from '@mts-functions/is-truthy.function';
 import { CommonRuleBuilderService } from 'src/app/shared/common/common-rule-builder.service';
+import { element } from 'protractor';
 
 @Component({
     selector: 'mts-groupby-formula-builder',
@@ -29,6 +30,9 @@ export class GroupByFormulaBuilderComponent implements OnInit, OnDestroy {
     currtOrderByField: any[] = [];
     currtGroupField: any[] = [];
     groupByRuleOperator: any = [{ id: 'sum', value: 'sum' }, { id: 'avg', value: 'avg' }];
+
+    LosDocumentFields: any[] = [];
+    FannieMaeDocName: string = AppSettings.RuleFannieMaeDocName;
 
     rowData: ChecklistItemRowData = new ChecklistItemRowData();
     waitingForData = true;
@@ -72,15 +76,19 @@ export class GroupByFormulaBuilderComponent implements OnInit, OnDestroy {
             let docTypeFieldFlag = false;
             let groupByOperatorCheck;
             form.groupby.forEach(elements => {
-                if (elements.generalDocumentTypes !== '' && typeof (elements.docField) === 'string' && elements.docField !== '') {
+                if (elements.generalDocumentTypes !== '' && typeof (elements.docField) === 'string' && elements.docField !== '' && elements.generalDocumentTypes !== AppSettings.RuleFannieMaeDocName) {
                     str += elements.openBrace + '[' + elements.generalDocumentTypes + '.' + elements.docField + ']' + elements.closeBrace + elements.docFieldOperator;
-                } else if (elements.generalDocumentTypes !== '' && Array.isArray(elements.docField) && elements.docField.length > 0) {
+                } else if (elements.generalDocumentTypes !== '' && Array.isArray(elements.docField) && elements.docField.length > 0 && elements.generalDocumentTypes !== AppSettings.RuleFannieMaeDocName) {
                     str += elements.openBrace + '[' + elements.generalDocumentTypes + '.' + elements.docField[0].text + ']' + elements.closeBrace + elements.docFieldOperator;
+                } else if (elements.generalDocumentTypes !== '' && typeof (elements.LosdocField) === 'string' && elements.LosdocField !== '' && elements.generalDocumentTypes === AppSettings.RuleFannieMaeDocName) {
+                    str += elements.openBrace + '[' + AppSettings.FannieMaeDocDisplayName + '.' + elements.LosdocField + ']' + elements.closeBrace + elements.docFieldOperator;
+                } else if (elements.generalDocumentTypes !== '' && Array.isArray(elements.LosdocField) && elements.LosdocField.length > 0 && elements.generalDocumentTypes === AppSettings.RuleFannieMaeDocName) {
+                    str += elements.openBrace + '[' + AppSettings.FannieMaeDocDisplayName + '.' + elements.LosdocField[0].text + ']' + elements.closeBrace + elements.docFieldOperator;
                 } else if (elements.valueDocField !== '') {
                     str += elements.openBrace + elements.valueDocField + elements.closeBrace + elements.docFieldOperator;
                 } else if (elements.fieldOrGroupSelect === 'Group' && elements.groupByField !== '' && elements.orderByField !== '' && elements.groupField !== '') {
                     str += elements.openBrace + '{' + elements.groupByMainOperator + '([' + elements.generalDocumentTypes + ']' + '|' + 'groupby' + '([' + elements.groupByField + '])' + '|' + 'orderby' + '([' + elements.orderByField + '])' + '|' + 'field' + '([' + elements.groupField + '])' + ')}' + elements.closeBrace + elements.docFieldOperator;
-                } else if (elements.generalDocumentTypes === '' || elements.docField === '' || elements.docFieldOperator === '') {
+                } else if (elements.generalDocumentTypes === '' || (elements.docField === '' && elements.LosdocField === '') || elements.docFieldOperator === '') {
                     this._commonRuleBuilderService.ruleBuilderNext.next(true);
                     docTypeFieldFlag = true;
                 }
@@ -122,41 +130,54 @@ export class GroupByFormulaBuilderComponent implements OnInit, OnDestroy {
             }
             this._commonRuleBuilderService.ruleExpression.next(ruleFormationValues);
         }));
+        this._subscriptions.push(this._ruleBuilderService.LosDocumentFields.subscribe((elements: any[]) => {
+
+            this.LosDocumentFields = [];
+            elements.forEach((ele) => {
+                this.LosDocumentFields.push(ele);
+            });
+        }));
     }
 
     GenerateFormValues() {
         let i = 0;
-        this.rowData.RuleJsonObject.groupby.forEach(element => {
+        this.rowData.RuleJsonObject.groupby.forEach(ele => {
             this.addRules();
-            if (element.fieldOrGroupSelect === 'Field') {
-                this.formData.controls[i].get('fieldOrGroupSelect').setValue(element.fieldOrGroupSelect);
-                this.formData.controls[i].get('openBrace').setValue(element.openBrace);
-                this.GroupByAllInitEditDocTypesChanged(element.generalDocumentTypes, i);
-                this.formData.controls[i].get('generalDocumentTypes').setValue(element.generalDocumentTypes);
-                this.formData.controls[i].get('docField').setValue(element.docField[0].id);
-                this.formData.controls[i].get('closeBrace').setValue(element.closeBrace);
-                this.formData.controls[i].get('docFieldOperator').setValue(element.docFieldOperator);
+            if (ele.fieldOrGroupSelect === 'Field') {
+                this.formData.controls[i].get('fieldOrGroupSelect').setValue(ele.fieldOrGroupSelect);
+                this.formData.controls[i].get('openBrace').setValue(ele.openBrace);
+                this.GroupByAllInitEditDocTypesChanged(ele.generalDocumentTypes, i);
+                this.formData.controls[i].get('generalDocumentTypes').setValue(ele.generalDocumentTypes);
+
+                if (isTruthy(ele.docField)) {
+                    this.formData.controls[i].get('docField').setValue(ele.docField[0].id);
+                }
+                if (isTruthy(ele.LosdocField)) {
+                    this.formData.controls[i].get('LosdocField').setValue(ele.LosdocField);
+                }
+                this.formData.controls[i].get('closeBrace').setValue(ele.closeBrace);
+                this.formData.controls[i].get('docFieldOperator').setValue(ele.docFieldOperator);
             }
-            if (element.fieldOrGroupSelect === 'Value') {
+            if (ele.fieldOrGroupSelect === 'Value') {
                 this.isErrMsgs = true;
-                this.formData.controls[i].get('openBrace').setValue(element.openBrace);
-                this.formData.controls[i].get('fieldOrGroupSelect').setValue(element.fieldOrGroupSelect);
-                this.formData.controls[i].get('valueDocField').setValue(element.valueDocField);
-                this.formData.controls[i].get('closeBrace').setValue(element.closeBrace);
-                this.formData.controls[i].get('docFieldOperator').setValue(element.docFieldOperator);
+                this.formData.controls[i].get('openBrace').setValue(ele.openBrace);
+                this.formData.controls[i].get('fieldOrGroupSelect').setValue(ele.fieldOrGroupSelect);
+                this.formData.controls[i].get('valueDocField').setValue(ele.valueDocField);
+                this.formData.controls[i].get('closeBrace').setValue(ele.closeBrace);
+                this.formData.controls[i].get('docFieldOperator').setValue(ele.docFieldOperator);
             }
 
-            if (element.fieldOrGroupSelect === 'Group') {
-                this.formData.controls[i].get('openBrace').setValue(element.openBrace);
-                this.formData.controls[i].get('fieldOrGroupSelect').setValue(element.fieldOrGroupSelect);
-                this.formData.controls[i].get('groupByMainOperator').setValue(element.groupByMainOperator);
-                this.GroupByAllInitEditDocTypesChanged(element.generalDocumentTypes, i);
-                this.formData.controls[i].get('generalDocumentTypes').setValue(element.generalDocumentTypes);
-                this.formData.controls[i].get('groupByField').setValue(element.groupByField[0].id);
-                this.formData.controls[i].get('orderByField').setValue(element.orderByField[0].id);
-                this.formData.controls[i].get('groupField').setValue(element.groupField[0].id);
-                this.formData.controls[i].get('closeBrace').setValue(element.closeBrace);
-                this.formData.controls[i].get('docFieldOperator').setValue(element.docFieldOperator);
+            if (ele.fieldOrGroupSelect === 'Group') {
+                this.formData.controls[i].get('openBrace').setValue(ele.openBrace);
+                this.formData.controls[i].get('fieldOrGroupSelect').setValue(ele.fieldOrGroupSelect);
+                this.formData.controls[i].get('groupByMainOperator').setValue(ele.groupByMainOperator);
+                this.GroupByAllInitEditDocTypesChanged(ele.generalDocumentTypes, i);
+                this.formData.controls[i].get('generalDocumentTypes').setValue(ele.generalDocumentTypes);
+                this.formData.controls[i].get('groupByField').setValue(ele.groupByField[0].id);
+                this.formData.controls[i].get('orderByField').setValue(ele.orderByField[0].id);
+                this.formData.controls[i].get('groupField').setValue(ele.groupField[0].id);
+                this.formData.controls[i].get('closeBrace').setValue(ele.closeBrace);
+                this.formData.controls[i].get('docFieldOperator').setValue(ele.docFieldOperator);
             }
             i++;
         });
@@ -194,6 +215,7 @@ export class GroupByFormulaBuilderComponent implements OnInit, OnDestroy {
             this.isErrMsgs = true;
             this.formData.controls[index].get('fieldOrGroupSelect').setValue('Value');
             this.formData.controls[index].get('docField').setValue('');
+            this.formData.controls[index].get('LosdocField').setValue('');
             this.formData.controls[index].get('generalDocumentTypes').setValue('');
             this.formData.controls[index].get('fieldsCustomValues').setValue(true);
             this.formData.controls[index].get('docFieldOperator').setValue('');
@@ -216,9 +238,9 @@ export class GroupByFormulaBuilderComponent implements OnInit, OnDestroy {
 
     checkOperatorFunction(formData: any) {
         const operatorArray = [];
-        formData.forEach(element => {
-            if (element.docFieldOperator !== '') {
-                operatorArray.push(element.docFieldOperator);
+        formData.forEach(ele => {
+            if (ele.docFieldOperator !== '') {
+                operatorArray.push(ele.docFieldOperator);
             }
         });
         return (operatorArray.length > 0 && operatorArray.length === formData.length - 1);
@@ -259,7 +281,8 @@ export class GroupByFormulaBuilderComponent implements OnInit, OnDestroy {
             orderByField: [''],
             groupField: [''],
             fieldOrGroupSelect: ['Field'],
-            groupByMainOperator: ['']
+            groupByMainOperator: [''],
+            LosdocField: ['']
         }));
         this.currtDocFields.push([]);
         this.currtGroupByField.push([]);
@@ -271,9 +294,21 @@ export class GroupByFormulaBuilderComponent implements OnInit, OnDestroy {
         this.formData.removeAt(i);
     }
 
+    OnChangeFieldValue(index: number) {
+        const SearchValue = this.formData.controls[index].get('LosdocField').value;
+        const LosDocumentName = this.formData.controls[index].get('generalDocumentTypes').value;
+        let LosDocumentId;
+        this.genDocTypes.forEach((a) => {
+            if (a.text === LosDocumentName) {
+                LosDocumentId = a.id;
+            }
+        });
+        this._ruleBuilderService.GetLosDocFields(LosDocumentId, SearchValue);
+    }
+
     ngOnDestroy(): void {
-        this._subscriptions.forEach(element => {
-            element.unsubscribe();
+        this._subscriptions.forEach(ele => {
+            ele.unsubscribe();
         });
     }
 }

@@ -9,6 +9,7 @@ import { SearchExportModel, EncompassExportModel, EncompassSearchExportModel } f
 import { SaveBatchModel } from './models/save-batch.model';
 import { LoanSearchRequestModel } from '../loansearch/models/loan-search-request.model';
 import { LosExportdateModel } from './models/los.export.date.model';
+import { ReExportLOSModel } from './models/retry.los.export.model';
 @Injectable()
 export class ExportDataAccess {
   constructor(private _apiService: APIService) { }
@@ -47,6 +48,12 @@ export class ExportDataAccess {
     return this._apiService.authHttpPost(
       ExportApiUrlConstant.RETRY_LOS_EXPORT_DETAILS,
       pmInputReq
+    );
+  }
+  ReExportLOSDetails(req: ReExportLOSModel): Observable<MTSAPIResponse> {
+    return this._apiService.authHttpPost(
+      ExportApiUrlConstant.RE_EXPORT_LOS_DETAILS,
+      req
     );
   }
   GetCurrentLosExportDetails(pmInputReq: any): Observable<MTSAPIResponse> {

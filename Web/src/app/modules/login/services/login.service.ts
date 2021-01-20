@@ -96,7 +96,7 @@ export class LoginService {
               this.validationMsg.next('License Expired');
             } else if (data.Message === 'Login success but no roles assigned') {
               this.validationMsg.next('');
-              this._notificationService.showError('No Role(s) Available')
+              this._notificationService.showError('No Role(s) Available');
             } else {
               this.validationMsg.next(data.Message);
             }

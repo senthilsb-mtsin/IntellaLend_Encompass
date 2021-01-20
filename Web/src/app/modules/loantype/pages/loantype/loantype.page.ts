@@ -187,7 +187,7 @@ export class LoanTypeComponent implements OnInit, OnDestroy, AfterViewInit {
           { sTitle: 'ID', mData: 'ID', sClass: 'text-center', bVisible: false },
           { sTitle: AppSettings.AuthorityLabelSingular + ' Name', mData: 'CustomerName', sClass: 'text-left', sWidth: '10%' },
           { sTitle: 'Service Type Name', mData: 'ReviewTypeName', sClass: 'text-left' },
-          { sTitle: 'Deal Type Name', mData: 'LoanTypeName', sClass: 'text-left' },
+          { sTitle: 'Loan Type Name', mData: 'LoanTypeName', sClass: 'text-left' },
           { sTitle: 'Status', mData: 'Status', sClass: 'text-center' },
           { sTitle: 'Synced Date', mData: 'ModifiedOn', sClass: 'text-center' },
           { sTitle: 'ErrorMsg', mData: 'ErrorMsg', sClass: 'text-center' },

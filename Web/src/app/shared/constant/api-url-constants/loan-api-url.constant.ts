@@ -16,6 +16,7 @@ export class LoanApiUrlConstant {
     static DOWNLOAD_DOCUMENT_PDF = 'Loan/DownloadDocumentPDF';
     static DOCUMENT_OBESOLETE = 'Loan/DocumentObsolete';
 
+    static GET_LOAN = 'Loan/GetLoan';
     static GET_LOAN_NOTES = 'Loan/GetLoanNotesDetails';
     static GET_USER_MASTER = 'Master/GetUserMasters';
     static UPDATE_LOAN_NOTES = 'Loan/UpdateLoanNotesDetails';

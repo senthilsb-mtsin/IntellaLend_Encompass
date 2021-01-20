@@ -66,12 +66,12 @@ export class WorkQueueComponent implements OnInit, OnDestroy, AfterViewInit {
         { sTitle: AppSettings.AuthorityLabelSingular + '', mData: 'Customer' },
         { sTitle: 'Received Date', type: 'date', mData: 'ReceivedDate', sClass: 'text-center' },
         { sTitle: 'Borrower Name', mData: 'BorrowerName' },
-        { sTitle: 'Borrower Loan #', mData: 'LoanNumber', sClass: 'text-left' },
         { sTitle: 'IDC Batch', mData: 'EphesoftBatchInstanceID' },
         { sTitle: 'Loan Type', mData: 'LoanTypeName' },
         { sTitle: 'Loan Amount($)', mData: 'LoanAmount', sClass: 'text-right' },
         { sTitle: 'Loan Status', mData: 'StatusDescription', sClass: 'text-center' },
-        { sTitle: 'View', mData: 'LoanID', sClass: 'text-center' },
+        { sTitle: 'Borrower Loan #', mData: 'LoanNumber', sClass: 'text-left' },
+       // { sTitle: 'View', mData: 'LoanID', sClass: 'text-center' },
         { mData: 'Status', bVisible: false },
         { mData: 'CurrentUserID', bVisible: false },
         { mData: 'ServiceTypeName', bVisible: false, sTitle: 'Service Type' },
@@ -98,14 +98,14 @@ export class WorkQueueComponent implements OnInit, OnDestroy, AfterViewInit {
           },
         },
         {
-          aTargets: [7],
+          aTargets: [6],
           orderable: false,
           mRender: function (data) {
             return data.toLocaleString();
           },
         },
         {
-          aTargets: [8],
+          aTargets: [7],
           mRender: function (data, type, row) {
             return (
               '<label class=\'label bcEllipsis ' +
@@ -119,24 +119,26 @@ export class WorkQueueComponent implements OnInit, OnDestroy, AfterViewInit {
           },
         },
         {
-          aTargets: [6],
+          aTargets: [5],
           mRender: function (data, type, row) {
             return row['LoanID'] === 50 ? 'Post-Close Conventional Purchase' : data;
           }
         },
         {
-          aTargets: [9],
-          mRender: function (data, type, row) {
+          'aTargets': [8],
+          'mRender': function (data, type, row) {
             if (
               row['Status'] === StatusConstant.COMPLETE ||
               row['Status'] === StatusConstant.PENDING_AUDIT
             ) {
-              return '<span style=\'cursor: pointer;\' class=\'viewLoan material-icons txt-info\'>pageview</span>';
+              return '<div style="text-decoration: underline;" class="viewLoan">' + data + '</div>';
             } else {
               return '';
             }
-          },
+
+          }
         },
+
       ],
       rowCallback: (row: Node, data: any[] | Object, index: number) => {
         const self = this;

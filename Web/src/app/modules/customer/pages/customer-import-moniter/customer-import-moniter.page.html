@@ -1,0 +1,80 @@
+<div class="row m-t-15">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-title">
+                <div class="box-caption">
+                    <span>{{AuthorityLabelSingular}} Import Moniter</span>
+                </div>
+                <button (click)="GotoPrevious()" title="Close" class="btn btn-danger p-l-2 p-r-2 btn-sm waves-effect waves-light pull-right" type="button">
+                    <i class="material-icons">close</i>
+                </button>
+            </div>
+            <div class="box-body" [cgBusy]="promise">
+                <div class="col-md-12">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <select [(ngModel)]="SelectedCustomerImportStatus">
+                                <option [ngValue]="0">All</option>
+                                <option *ngFor="let Status of CustomerImportStatusDropdown" [ngValue]="Status.Value">{{Status.Text}}</option>
+                            </select>
+                            <label class="control-label" for="input">Status</label>
+                                <i class="bar"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label selected" for="input">
+                                                  Import  Date</label>
+                            <ng-daterangepicker id="ImportDate_Id" #ImportDate [options]="Dateoptions">
+                            </ng-daterangepicker>
+                            <i class="bar"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-6 p-t-25">
+                        <button id="bu_btnSearch" #searchBtn class="btn btn-info waves-effect waves-light m-r-10" (click)="SearchCustomerImportStaging()" type="button">
+                            <span class="material-icons">search</span>&nbsp;Search</button>
+                        <button id="bu_btnReset" class="btn btn-secondary bg-white waves-effect waves-light m-r-10" (click)="ResetSearch()" type="button" tabindex="8">
+                            <span class="material-icons">settings_backup_restore</span>&nbsp;Reset</button>
+                                <button (click)="upload.click()" style="cursor: pointer" class="btn btn-info waves-effect waves-light">
+                                    <i class="material-icons">cloud_upload</i>&nbsp;
+                                        <label style="font-size: 14px;font-weight: 500;margin-bottom: 0px;cursor: pointer;">
+                                            Upload
+                                        </label>
+                                </button>
+                                <input #upload type="file" accept=".csv" style="display: none;" id="upload" ng2FileSelect [uploader]="uploader"  (change)="UploadCustomerFile($event)" />
+                    </div>
+                </div>
+                <div class="table-panel">
+                    <table datatable [dtOptions]="dtOptionsStaging" id="CustomerImportStagingTable" class="table table-bordered table-striped table-hover" style="width: 100%;">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Customer Import Staging Details - modal -->
+<div bsModal #CustomerImportStagingDetailsModal="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-lg" style="width:90%;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="box-action">
+                    <button (click)="CustomerImportStagingDetailsModal.hide()" title="Close" class="btn btn-danger p-l-2 p-r-2 btn-sm waves-effect waves-light" type="button">
+                    <i class="material-icons">close</i>
+                  </button>
+                </div>
+                <h4 class="modal-title"> Import {{AuthorityLabelSingular}}</h4>
+     
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12 table-panel">
+                    <table id="CustomerImportStagingDetailsTable" datatable [dtOptions]="dtOptionsStagingDetails" class="table table-bordered table-striped table-hover" style="width: 100%;">
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>

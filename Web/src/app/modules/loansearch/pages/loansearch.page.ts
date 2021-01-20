@@ -5,6 +5,8 @@ import {
   ViewChild,
   AfterContentChecked,
   AfterViewInit,
+  ViewChildren,
+  QueryList,
 } from '@angular/core';
 import { LoanSearchService } from '../service/loansearch.service';
 import { AppSettings } from '@mts-app-setting';
@@ -28,15 +30,17 @@ import { SessionHelper } from '@mts-app-session';
 import { NotificationService } from '@mts-notification';
 import { DeleteLoanRequestModel } from '../models/loan-delete-request.model';
 import { convertDateTime } from '@mts-functions/convert-datetime.function';
-import { LoanSearchTableModel } from '../models/loan-search-table.model';
+import { FannieMaeFields, LoanSearchTableModel } from '../models/loan-search-table.model';
 import { Router } from '@angular/router';
 import { LoanInfoService } from '../../loan/services/loan-info.service';
 import { EmailCheckPipe } from '@mts-pipe';
+import { FannieMaeFieldsService } from '../../fanniemaeFields/services/fanniemaeFields.service';
 
 @Component({
   selector: 'mts-loan-search',
   templateUrl: 'loansearch.page.html',
-  styleUrls: ['loansearch.page.css']
+  styleUrls: ['loansearch.page.css'],
+  // providers: [FannieMaeFieldsService]
 })
 export class LoanSearchComponent
   implements OnInit, OnDestroy, AfterContentChecked, AfterViewInit {
@@ -57,6 +61,7 @@ export class LoanSearchComponent
   @ViewChild('missingAuditMonthYear')
   _missingAuditMonthYear: MonthYearPickerComponent;
   @ViewChild('confirmDeleteModal') _confirmDeleteModal: ModalDirective;
+  @ViewChild('FannieMaeFieldsModal') FannieMaeFieldsModal: ModalDirective;
   @ViewChild('auditPDFModal') auditPDFModal: ModalDirective;
   dtOptions: any = {};
   dTable: any;
@@ -85,12 +90,14 @@ export class LoanSearchComponent
       day: new Date().getDate(),
     },
   };
-
+  FannieMaeFieldsdtOptions: any = {};
+  FannieMaeFieldsTable: any;
   constructor(
     private _loanSearchService: LoanSearchService,
     private datePipe: DatePipe,
     private _notificationService: NotificationService,
     private _loanService: LoanInfoService,
+    private _fannieMaeFieldsService: FannieMaeFieldsService,
     private _emailPipe: EmailCheckPipe,
     private _route: Router
   ) { }
@@ -115,6 +122,7 @@ export class LoanSearchComponent
     this.datatableEl.dtInstance.then((dtInstance: DataTables.Api) => {
       this.dTable = dtInstance;
       this.createTableInstance = true;
+      this._loanSearchService.GetFannieMaeCustomerConfig();
     });
   }
 
@@ -207,6 +215,8 @@ export class LoanSearchComponent
           mData: 'AssignedUserID',
           bVisible: false,
         },
+        { sTitle: 'Fannie Mae', mData: 'LoanID', sClass: 'text-center', bVisible: false },
+
         { sTitle: 'View', mData: 'LoanID', sClass: 'text-center' },
         { mData: 'Status', bVisible: false },
         { mData: 'CurrentUserID', bVisible: false },
@@ -216,6 +226,7 @@ export class LoanSearchComponent
           bVisible: false,
           sTitle: 'Audit Month & Year',
         },
+        { mData: 'UploadType', bVisible: false }
       ],
       aoColumnDefs: [
         {
@@ -269,6 +280,16 @@ export class LoanSearchComponent
         {
           aTargets: [11],
           mRender: function (data, type, row) {
+            if (row['UploadType'] === 4) {
+              return '<i  class="viewFannieMae fa fa-file-text-o  txt-info" ></i>';
+            } else {
+              return '';
+            }
+          },
+        },
+        {
+          aTargets: [12],
+          mRender: function (data, type, row) {
             if (
               row['Status'] === StatusConstant.COMPLETE ||
               row['Status'] === StatusConstant.PENDING_AUDIT
@@ -287,6 +308,10 @@ export class LoanSearchComponent
         $('td .viewLoan', row).bind('click', () => {
           self.viewLoan(row, data);
         });
+        $('td .viewFannieMae', row).unbind('click');
+        $('td .viewFannieMae', row).bind('click', () => {
+          self.viewFannieMae(row, data);
+        });
         $('td:first-child', row).unbind('click');
         $('td:first-child', row).bind('click', () => {
           self.RowSelect(row, data);
@@ -295,7 +320,29 @@ export class LoanSearchComponent
         return row;
       },
     };
+    this.FannieMaeFieldsdtOptions = {
+      aaData: [],
+      'select': {
+        style: 'single',
+        info: false
+      },
+      'iDisplayLength': 10,
+      'aLengthMenu': [[5, 10, 25, 50, -1], [5, 10, 25, 50, 'All']],
+      aoColumns: [
+        { sTitle: 'Field ID', mData: 'FieldID' },
+        { sTitle: 'Field Value', mData: 'FieldValue' },
 
+      ],
+      aoColumnDefs: [
+
+      ],
+      rowCallback: (row: Node, data: object, index: number) => {
+
+        const self = this;
+
+        return row;
+      }
+    };
     this.subscribtion.push(this._loanSearchService.loanFilterResult.subscribe((res) => {
       this.loanFilterResult = res;
       if (this.loanFilterResult.ReceivedDate) {
@@ -304,8 +351,9 @@ export class LoanSearchComponent
         this.isReceivedDate = 'none';
       }
 
-      if (!this._subscriptionCreated)
+      if (!this._subscriptionCreated) {
         this.createSubscription();
+      }
     }));
 
     this.subscribtion.push(this._loanSearchService.loanTypeMaster.subscribe((res: { id: any, text: any }[]) => {
@@ -350,6 +398,14 @@ export class LoanSearchComponent
     this.subscribtion.push(this._loanSearchService.confimModelHide.subscribe((res: boolean) => {
       this._confirmDeleteModal.hide();
     }));
+    this.subscribtion.push(this._fannieMaeFieldsService.showModal$.subscribe((res: boolean) => {
+      this.FannieMaeFieldsModal.show();
+    }));
+
+    this.subscribtion.push(this._loanSearchService.FannieMaeCustomerConfig$.subscribe((res) => {
+      const FanniMaeColumnIndex = this.dtOptions.aoColumns.findIndex(x => x.sTitle === 'Fannie Mae');
+      this.dTable.column(FanniMaeColumnIndex).visible(FanniMaeColumnIndex !== -1 && res);
+    }));
 
     this.SearchValidate('', '');
   }
@@ -370,7 +426,13 @@ export class LoanSearchComponent
       this._notificationService.showError('Row Not Fetched');
     }
   }
-
+  viewFannieMae(row: Node, rowData: any): void {
+    if (isTruthy(rowData)) {
+      this._fannieMaeFieldsService.GetFannieMaeFields(rowData.LoanID);
+    } else {
+      this._notificationService.showError('Row Not Fetched');
+    }
+  }
   RowSelect(rowIndex: Node, rowData: any) {
     if (rowData.Status !== StatusConstant.DELETE_LOAN) {
       this.isDeleteLoan = $(rowIndex).hasClass('selected');

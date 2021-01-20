@@ -17,6 +17,10 @@ import { NgDateRangePickerModule } from '@mts-daterangepicker/ng-daterangepicker
 import { NgBusyModule } from '@mts-busy/ng-busy.module';
 import { LoanService } from '../loan/services/loan.service';
 import { MonthYearPickerModule } from '@mts-month-year-picker/month-year-picker.module';
+import { FannieMaeFieldsService } from '../fanniemaeFields/services/fanniemaeFields.service';
+import { FannieMaeFieldsDataAccess } from '../fanniemaeFields/fanniemaeFields.data';
+import { FannieMaeFieldsComponent } from '../fanniemaeFields/pages/fanniemaeFields.page';
+import { FannieMaeFieldsModule } from '../fanniemaeFields/fanniemaeFields.module';
 
 const loantypeRoutes: Routes = [
   {
@@ -39,9 +43,11 @@ const loantypeRoutes: Routes = [
     NgDateRangePickerModule,
     NgBusyModule,
     SharedPipeModule,
-    MonthYearPickerModule
+    MonthYearPickerModule,
+    FannieMaeFieldsModule
   ],
-  providers: [LoanSearchService, LoanSearchDataAccess, LoanService, DatePipe, OrderByPipe, EmailCheckPipe],
+
+  providers: [LoanSearchService, LoanSearchDataAccess, LoanService, DatePipe, OrderByPipe, FannieMaeFieldsDataAccess, FannieMaeFieldsService, EmailCheckPipe],
   declarations: [LoanSearchComponent],
   exports: [LoanSearchComponent],
 })

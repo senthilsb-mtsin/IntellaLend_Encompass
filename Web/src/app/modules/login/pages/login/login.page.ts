@@ -127,7 +127,12 @@ export class LoginComponent implements OnInit {
     }));
 
     this.subscription.push(this._loginService.defaultRoute.subscribe((res: string) => {
-      this._route.navigate(['view/' + res]);
+      if (localStorage.getItem('loanURL') !== null) {
+        this._route.navigate([localStorage.getItem('loanURL')]);
+      } else {
+        this._route.navigate(['view/' + res]);
+      }
+      localStorage.removeItem('loanURL');
     }));
     this.subscription.push(this._loginService.isExpired.subscribe((res: boolean) => {
       this.isExipry = res;
@@ -142,7 +147,8 @@ export class LoginComponent implements OnInit {
     const input = new GetMenuListRequest(
       AppSettings.TenantSchema,
       roleID,
-      this.userId
+      this.userId,
+      environment.ADAuthentication
     );
     this._loginService.setDefaultRoute(input);
   }
@@ -158,7 +164,8 @@ export class LoginComponent implements OnInit {
         const input = new GetMenuListRequest(
           AppSettings.TenantSchema,
           selectedID,
-          this.userId
+          this.userId,
+          environment.ADAuthentication
         );
         this._loginService.setDefaultRoute(input);
       } else {
@@ -176,7 +183,8 @@ export class LoginComponent implements OnInit {
       const _reqBody = new LoginRequest(
         AppSettings.TenantSchema,
         value['userName'],
-        CryptoJS.MD5(value['passWord']).toString()
+        environment.ADAuthentication ? value['passWord'] : CryptoJS.MD5(value['passWord']).toString(),
+        environment.ADAuthentication
       );
       this._loginService.showLoading.next(true);
       this._loginService.loginSubmit(_reqBody);
@@ -202,7 +210,7 @@ export class LoginComponent implements OnInit {
             TableSchema: AppSettings.TenantSchema,
             UserID: SessionHelper.UserDetails.UserID,
             CurrentPassword: CryptoJS.MD5(this.currentPwd).toString(),
-            NewPassword: CryptoJS.MD5(this.newPwd).toString()
+            NewPassword: CryptoJS.MD5(this.newPwd).toString(),
           };
           this._loginService.updateNewPassword(_reqBody);
         } else {

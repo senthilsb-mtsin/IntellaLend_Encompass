@@ -20,3 +20,4 @@ export * from './document-field-api-url.constant';
 export * from './dashboard-api-url.constant';
 export * from './manager-reverification-api-url.constant';
 export * from './manager-doctype-api-url.constant';
+export * from './fanniemae-api-url.constant';

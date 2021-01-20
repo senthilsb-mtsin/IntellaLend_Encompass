@@ -196,7 +196,7 @@ export class LoanStackingOrderComponent implements OnInit, OnDestroy {
     this._loanInfoService.SetLoanViewDocument(doc);
     this._loanInfoService.ShowDocumentDetailView$.next(true);
     setTimeout(() => {
-      this._loanInfoService.newDocTypeID$.next(doc.DocID);
+      this._loanInfoService.newDocType$.next({DocID: doc.DocID, DocName: doc.DocName, DocNameVersion: doc.DocNameVersion});
       this._loanInfoService.ShowDocumentDetailView$.next(true);
     }, 300);
   }

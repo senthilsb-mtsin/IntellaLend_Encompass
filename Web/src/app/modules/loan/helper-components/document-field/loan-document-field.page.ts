@@ -19,8 +19,8 @@ export class LoanDocumentFieldComponent implements OnInit, OnDestroy {
     FIELD_sub_icon: any = '';
     fieldSearchVal: any = '';
     showHide: boolean[] = [false, false, false];
-    loanDocuments: { DocID: any, DocName: any }[] = [];
-    newDocTypeID: any;
+    loanDocuments: { DocID: number, DocName: string }[] = [];
+    newDocType: { DocID: number, DocName: string };
     fieldFrmGrp: FormGroup;
     CardHeight = 'full_height_field';
 
@@ -39,7 +39,7 @@ export class LoanDocumentFieldComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
-        this.newDocTypeID = this._loanInfoService.GetLoanViewDocument().DocID;
+        this.newDocType = { DocID: this._loanInfoService.GetLoanViewDocument().DocID, DocName: this._loanInfoService.GetLoanViewDocument().DocNameVersion };
 
         this._subscriptions.push(this._loanInfoService.confirmChangeDocModal$.subscribe((res: boolean) => {
             res ? this.confirmModal.show() : this.confirmModal.hide();
@@ -49,8 +49,8 @@ export class LoanDocumentFieldComponent implements OnInit, OnDestroy {
                 this.setFormFields(res.DocLevelFields);
             }
         }));
-        this._subscriptions.push(this._loanInfoService.newDocTypeID$.subscribe((res: any) => {
-            this.newDocTypeID = res;
+        this._subscriptions.push(this._loanInfoService.newDocType$.subscribe((res: {DocID: number, DocName: string, DocNameVersion: string}) => {
+            this.newDocType = this.loanDocuments.findIndex(x => x.DocID === res.DocID && x.DocName === res.DocNameVersion) >= 0 ? this.loanDocuments.find(x => x.DocID === res.DocID && x.DocName === res.DocNameVersion) : { DocID: res.DocID, DocName: res.DocNameVersion };
         }));
         this._subscriptions.push(this._loanInfoService.LoanPopOutFieldHeight$.subscribe((res: string) => {
             this.CardHeight = res;
@@ -96,15 +96,16 @@ export class LoanDocumentFieldComponent implements OnInit, OnDestroy {
     }
 
     ChangeDocType() {
-        this._loanInfoService.ChangeDocumentType$.next(this.newDocTypeID);
+        this._loanInfoService.ChangeDocumentType$.next(this.newDocType.DocID);
     }
 
     GetLoanDocuments() {
         let docName = '';
         this._loanInfoService.GetLoan().loanDocuments.forEach(element => {
-            docName = this._loanInfoService.CheckMoreThanOnce(element.DocName) ? element.DocName + ' -V' + (element.FieldOrderBy === '' ? (element.VersionNumber).toString() : this._loanInfoService.GetFieldVersionNumber(element.DocName, element.FieldOrderVersion)) : element.DocName;
+            docName = this._loanInfoService.CheckMoreThanOnce(element.DocName) ? element.DocName + '-V' + (element.FieldOrderBy === '' ? (element.VersionNumber).toString() : this._loanInfoService.GetFieldVersionNumber(element.DocName, element.FieldOrderVersion)) : element.DocName;
             this.loanDocuments.push({ DocID: element.DocID, DocName: docName });
         });
+        this.newDocType = this.loanDocuments.find(x => x.DocID === this.newDocType.DocID && x.DocName === this.newDocType.DocName);
     }
 
     checkPermission(component: string, index: number): void {

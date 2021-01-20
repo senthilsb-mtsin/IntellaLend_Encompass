@@ -21,6 +21,7 @@ export class LoanSearchService {
   reviewTypeMaster = new Subject<{ ReviewTypeID: any, ReviewTypeName: any }[]>();
   customerMaster = new Subject<{ id: any, text: any }[]>();
   workFlowMaster = new Subject<{ id: any, text: any }[]>();
+  FannieMaeCustomerConfig$ = new Subject<boolean>();
 
   constructor(
     private _loanSearchData: LoanSearchDataAccess,
@@ -117,6 +118,15 @@ export class LoanSearchService {
         this.searchSubmit(this._searchValues);
       } else {
         this._notificationService.showError('Loan Not Deleted');
+      }
+    });
+  }
+
+  GetFannieMaeCustomerConfig() {
+    this._loanSearchData.GetFannieMaeCustomerConfig({TableSchema: AppSettings.TenantSchema}).subscribe((res) => {
+      const Result = jwtHelper.decodeToken(res.Data)['data'];
+      if (Result !== null) {
+        this.FannieMaeCustomerConfig$.next(Result.FannieMaeCustomerConfig);
       }
     });
   }

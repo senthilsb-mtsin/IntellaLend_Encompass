@@ -56,7 +56,7 @@ export class UserprofileComponent implements OnInit {
 
   setMenuRouteChangeRole(roleID) {
     if (isTruthy(roleID)) {
-      const input = { TableSchema: AppSettings.TenantSchema, RoleID: roleID, UserID: SessionHelper.UserDetails.UserID };
+      const input = { TableSchema: AppSettings.TenantSchema, RoleID: roleID, UserID: SessionHelper.UserDetails.UserID, ADLogin : environment.ADAuthentication };
       this._layoutService.setDefaultRoute(input);
     }
   }
@@ -67,7 +67,7 @@ export class UserprofileComponent implements OnInit {
   }
 
   signOut() {
-    this._commonService.UnLock();
+    this._commonService.UnLock('');
   }
 
   ngDestroy() {

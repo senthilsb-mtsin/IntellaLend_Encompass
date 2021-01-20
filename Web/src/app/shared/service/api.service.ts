@@ -4,21 +4,25 @@ import {
   MTSAPIExceptionResponse,
 } from '@mts-api-response-model';
 import { environment } from './../../../environments/environment';
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 
 import { BlackListApiUrlConstant } from '@mts-api-url';
 import { isTruthy } from '@mts-functions/is-truthy.function';
+import { ToastrService } from 'ngx-toastr';
+import { AppSettings } from '../constant/app-setting-constants/app-setting.constant';
 
 const jwtHelper = new JwtHelperService();
 const headers = new HttpHeaders().set('Content-Type', 'application/json');
 @Injectable()
 export class APIService {
-  constructor(private http: HttpClient, private _route: Router) { }
+
+  constructor(private http: HttpClient, private injector: Injector, private _route: Router) { }
   private tokenExpirationTimer: any;
+  private _toastService?: ToastrService;
 
   Post(URL: string, input: any): Observable<MTSAPIResponse> {
     return this.http
@@ -69,14 +73,22 @@ export class APIService {
 
   authHttpPost(URL: string, input: any) {
     if (jwtHelper.isTokenExpired(localStorage.getItem('id_token'))) {
-      this._route.navigate(['/login']);
+      this._route.navigate(['']);
+      AppSettings.SessionErrorMsg = false;
     } else {
       return this.http
         .post<MTSAPIResponse>(environment.apiURL + URL, input, { headers, observe: 'response' })
         .pipe(
           map((response) => {
-            if (response.status === 401) {
-              this._route.navigate(['/login']);
+            if (response.status === 401 || response.status === 0) {
+              if (!isTruthy(this._toastService)) {
+                this._toastService = this.injector.get(ToastrService);
+              }
+              if (AppSettings.SessionErrorMsg) {
+                this._toastService.error('Session is no longer active', null, { onActivateTick: true });
+              }
+              this._route.navigate(['']);
+              AppSettings.SessionErrorMsg = false;
             }
             if (response.body['token'] === null) {
               throw new Error('Token is NULL for the request(' + URL + '). Check API for further logs.');
@@ -88,6 +100,19 @@ export class APIService {
                 response.body['response-message[\'message-desc\']']
               );
             }
+          }),
+          catchError((err) => {
+            if (err.status === 401 || err.status === 0) {
+              if (!isTruthy(this._toastService)) {
+                this._toastService = this.injector.get(ToastrService);
+              }
+              if (AppSettings.SessionErrorMsg) {
+                this._toastService.error('Session is no longer active', null, { onActivateTick: true });
+              }
+              this._route.navigate(['']);
+              AppSettings.SessionErrorMsg = false;
+            }
+            return throwError(err);
           }),
           tap((resData) => {
             this.handleAuthentication(resData);
@@ -99,13 +124,21 @@ export class APIService {
   authHttpGet(URL: string) {
     if (jwtHelper.isTokenExpired(localStorage.getItem('id_token'))) {
       this._route.navigate(['']);
+      AppSettings.SessionErrorMsg = false;
     } else {
       return this.http
         .get<MTSAPIResponse>(environment.apiURL + URL, { headers, observe: 'response' })
         .pipe(
           map((response) => {
-            if (response.status === 401) {
-              this._route.navigate(['/login']);
+            if (response.status === 401 || response.status === 0) {
+              if (!isTruthy(this._toastService)) {
+                this._toastService = this.injector.get(ToastrService);
+              }
+              if (AppSettings.SessionErrorMsg) {
+                this._toastService.error('Session is no longer active', null, { onActivateTick: true });
+              }
+              this._route.navigate(['']);
+              AppSettings.SessionErrorMsg = false;
             }
             if (response.body['token'] === null) {
               throw new Error('Token is NULL for the request(' + URL + '). Check API for further logs.');
@@ -118,6 +151,19 @@ export class APIService {
               );
             }
           }),
+          catchError((err) => {
+            if (err.status === 401 || err.status === 0) {
+              if (!isTruthy(this._toastService)) {
+                this._toastService = this.injector.get(ToastrService);
+              }
+              if (AppSettings.SessionErrorMsg) {
+                this._toastService.error('Session is no longer active', null, { onActivateTick: true });
+              }
+              this._route.navigate(['']);
+              AppSettings.SessionErrorMsg = false;
+            }
+            return throwError(err);
+          }),
           tap((resData) => {
             this.handleAuthentication(resData);
           })
@@ -128,6 +174,7 @@ export class APIService {
   authHttpPostWithoutParse(URL: string, input: any): Observable<any> {
     if (jwtHelper.isTokenExpired(localStorage.getItem('id_token'))) {
       this._route.navigate(['']);
+      AppSettings.SessionErrorMsg = false;
     } else {
       return this.http.post(environment.apiURL + URL, input, {
         headers,
@@ -139,6 +186,7 @@ export class APIService {
   authHttpGetWithoutParse(URL: string): Observable<any> {
     if (jwtHelper.isTokenExpired(localStorage.getItem('id_token'))) {
       this._route.navigate(['']);
+      AppSettings.SessionErrorMsg = false;
     } else {
       return this.http.get(environment.apiURL + URL, {
         headers,
@@ -158,6 +206,7 @@ export class APIService {
 
   logout() {
     this._route.navigate(['']);
+    AppSettings.SessionErrorMsg = false;
     if (this.tokenExpirationTimer) {
       clearTimeout(this.tokenExpirationTimer);
     }

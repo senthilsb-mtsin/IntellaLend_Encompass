@@ -1,6 +1,21 @@
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { AppSettings } from '@mts-app-setting';
+import { Subject } from 'rxjs';
+import { LoanTypeMappingModel } from '../models/loan-type-mapping.model';
+import { ServiceTypeDataAccess } from '../service-type.data';
+
+const jwtHelper = new JwtHelperService();
+
 export class LoanTypeSearchService {
   LoanTypeSourceObj = [];
   LoanTypeDestObj = [];
+  CurrentLoanType$ = new Subject<string>();
+  loanRetainConfirm$ = new Subject<boolean>();
+
+  constructor(private _servicetypeData: ServiceTypeDataAccess) {
+  }
+
+  private _currentLoanType: LoanTypeMappingModel;
 
   ServiceTypeLoanFiltersearch(search, _sourceobj, AssignedLoanTypes) {
     this.LoanTypeSourceObj = [];
@@ -42,4 +57,5 @@ export class LoanTypeSearchService {
     }
     return this.LoanTypeSourceObj;
   }
+
 }

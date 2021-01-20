@@ -39,7 +39,8 @@
             </div>
             <div *ngIf="AD_login" class="col-md-4 col-md-offset-0">
                 <div class="form-group">
-                <select id="edit_adGroupMaster" [(ngModel)]="roletypedata.ADGroupID" required="">
+                <select id="edit_adGroupMaster" [(ngModel)]="roletypedata.ADGroupID"
+                (change)="ADGroupChange()" required="">
                     <option [ngValue]="0">--Select--</option>
                     <option *ngFor="let adgroupmaster of ADGroupMasterList"
                     [ngValue]="adgroupmaster.ADGroupID">

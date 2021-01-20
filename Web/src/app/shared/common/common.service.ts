@@ -42,18 +42,27 @@ export class CommonService {
   private _customerItems: any[] = [];
   private _roleItems: any[] = [];
   private _sysLoanTypes: any[] = [];
-  UnLock() {
-    const reqBody = { TableSchema: AppSettings.TenantSchema, UserID: SessionHelper.UserDetails.UserID, Lock: false };
-    this._commonData.unLockUser(reqBody).subscribe(
-      res => {
-        if (res !== null) {
-          if (res.Data === 'True') {
-            SessionHelper.cleanSessionVariables();
-            this._route.navigate(['']);
+  UnLock(_routeURL: string) {
+    if (isTruthy(SessionHelper.UserDetails)) {
+      const reqBody = { TableSchema: AppSettings.TenantSchema, UserID: SessionHelper.UserDetails.UserID, Lock: false };
+      this._commonData.unLockUser(reqBody).subscribe(
+        res => {
+          if (res !== null) {
+            if (res.Data === 'True') {
+              SessionHelper.cleanSessionVariables();
+              this._route.navigate(['']);
+            }
           }
-        }
+        });
+    } else {
+      SessionHelper.cleanSessionVariables();
+      if (_routeURL.includes('/view/loandetails/')) {
+        const urls = _routeURL.split('/');
+        this._route.navigate(['']);
+        localStorage.setItem('loanURL', _routeURL);
       }
-    );
+      this._route.navigate(['']);
+    }
   }
 
   postError(reqBody: { Error: any }) {
@@ -98,6 +107,10 @@ export class CommonService {
     } else {
       this.GetAllSysStackingOrderDatas();
     }
+  }
+
+  ReloadSysStackingOrderData() {
+    this.GetAllSysStackingOrderDatas();
   }
 
   GetSysLOSFields(searchValue: string) {

@@ -125,6 +125,10 @@ export class LoanInfoDataAccess {
         return this._apiService.authHttpPost(LoanApiUrlConstant.UPDATE_LOAN_HEADERS, req);
     }
 
+    GetLoanInfo(req: { TableSchema: string, EncryptedLoanGUID: string }): Observable<MTSAPIResponse> {
+        return this._apiService.authHttpPost(LoanApiUrlConstant.GET_LOAN, req);
+    }
+
     SaveAndRevaluate(req: { TableSchema: string, LoanID: any, DocumentID: any, CurrentUserID: any, DocumentTables: any, DocumentFields: any, VersionNumber: any }): Observable<MTSAPIResponse> {
         return this._apiService.authHttpPost(LoanApiUrlConstant.UPDATE_LOAN_DOCUMENT, req);
     }

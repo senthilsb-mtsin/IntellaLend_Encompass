@@ -102,6 +102,8 @@ export class ApplicationConfigurationComponent
     } else if (value.ConfigType === 'password') {
 
       this.belowcomponent = 'password';
+    } else if (value.ConfigType === 'AD') {
+      this.belowcomponent = 'AD';
     } else if (value.ConfigType === 'WebHook') {
 
       this.belowcomponent = 'WebHook';
@@ -117,6 +119,7 @@ export class ApplicationConfigurationComponent
   AddInvestor() {
     this._appconfigservice.addStipluation$.next(true);
   }
+
   AddReportMaster() {
     this._appconfigservice.addReport$.next(true);
   }
@@ -132,13 +135,11 @@ export class ApplicationConfigurationComponent
    * Function to create WebHook subscription for selected Event type
    */
   createWebHookSubscription() {
-
   }
   /**
    * Function to delete WebHook Subscription for selected Event type
    */
   deleteWebHookSubscription() {
-
   }
   //#endregion
   ngOnDestroy() {

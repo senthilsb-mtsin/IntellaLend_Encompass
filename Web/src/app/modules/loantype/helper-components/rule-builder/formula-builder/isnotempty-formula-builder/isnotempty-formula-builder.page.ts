@@ -6,6 +6,7 @@ import { RuleBuilderService } from 'src/app/modules/loantype/service/rule-builde
 import { Subscription } from 'rxjs';
 import { isTruthy } from '@mts-functions/is-truthy.function';
 import { CommonRuleBuilderService } from 'src/app/shared/common/common-rule-builder.service';
+import { AppSettings } from '@mts-app-setting';
 
 @Component({
     selector: 'mts-isnotempty-formula-builder',
@@ -19,6 +20,9 @@ export class IsNotEmptyFormulaBuilderComponent implements OnInit, OnDestroy {
     currtDocFields: any[] = [[]];
     rowData: ChecklistItemRowData = new ChecklistItemRowData();
     waitingForData = true;
+
+    LosDocumentFields: any[] = [];
+    FannieMaeDocName: string = AppSettings.RuleFannieMaeDocName;
 
     constructor(
         private _commonRuleBuilderService: CommonRuleBuilderService,
@@ -59,10 +63,14 @@ export class IsNotEmptyFormulaBuilderComponent implements OnInit, OnDestroy {
             let ruleFormationValues = 'isnotempty([Rule])';
 
             myForm.isNotEmptyRule.forEach(elt => {
-                if (elt.NotEmptyDocTypes !== '' && typeof (elt.NotEmptyDocFieldTypes) === 'string' && elt.NotEmptyDocFieldTypes !== '') {
+                if (elt.NotEmptyDocTypes !== '' && typeof (elt.NotEmptyDocFieldTypes) === 'string' && elt.NotEmptyDocFieldTypes !== '' && elt.NotEmptyDocTypes !== AppSettings.RuleFannieMaeDocName) {
                     str += '[' + elt.NotEmptyDocTypes + '.' + elt.NotEmptyDocFieldTypes + ']';
-                } else if (elt.NotEmptyDocTypes !== '' && elt.NotEmptyDocFieldTypes !== '' && Array.isArray(elt.NotEmptyDocFieldTypes) && elt.NotEmptyDocFieldTypes.length > 0) {
+                } else if (elt.NotEmptyDocTypes !== '' && elt.NotEmptyDocFieldTypes !== '' && Array.isArray(elt.NotEmptyDocFieldTypes) && elt.NotEmptyDocFieldTypes.length > 0 && elt.NotEmptyDocTypes !== AppSettings.RuleFannieMaeDocName) {
                     str += '[' + elt.NotEmptyDocTypes + '.' + elt.NotEmptyDocFieldTypes[0].text + ']';
+                } else if (elt.NotEmptyDocTypes !== '' && typeof (elt.NotEmptyLosdocField) === 'string' && elt.NotEmptyLosdocField !== '' && elt.NotEmptyDocTypes === AppSettings.RuleFannieMaeDocName) {
+                    str += '[' + AppSettings.FannieMaeDocDisplayName + '.' + elt.NotEmptyLosdocField + ']';
+                } else if (elt.NotEmptyDocTypes !== '' && elt.NotEmptyLosdocField !== '' && Array.isArray(elt.NotEmptyLosdocField) && elt.NotEmptyLosdocField.length > 0 && elt.NotEmptyDocTypes === AppSettings.RuleFannieMaeDocName) {
+                    str += '[' + AppSettings.FannieMaeDocDisplayName + '.' + elt.NotEmptyLosdocField[0].text + ']';
                 } else {
                     this._commonRuleBuilderService.ruleBuilderNext.next(true);
                 }
@@ -74,6 +82,13 @@ export class IsNotEmptyFormulaBuilderComponent implements OnInit, OnDestroy {
             }
             this._commonRuleBuilderService.ruleExpression.next(ruleFormationValues);
         }));
+        this._subscriptions.push(this._ruleBuilderService.LosDocumentFields.subscribe((elements: any[]) => {
+
+            this.LosDocumentFields = [];
+            elements.forEach((element) => {
+                this.LosDocumentFields.push(element);
+            });
+        }));
     }
     GenerateFormValues() {
         let i = 0;
@@ -82,21 +97,43 @@ export class IsNotEmptyFormulaBuilderComponent implements OnInit, OnDestroy {
                 this.addRules();
                 this.formData.controls[i].get('NotEmptyDocTypes').setValue(element.NotEmptyDocTypes);
                 this._ruleBuilderService.docFieldsInitChange(this.formData.controls[i], this.currtDocFields, element.NotEmptyDocTypes, 'NotEmptyDocFieldTypes', i);
-                this.formData.controls[i].get('NotEmptyDocFieldTypes').setValue(element.NotEmptyDocFieldTypes[0].id);
+
+                if (isTruthy(element.NotEmptyDocFieldTypes)) {
+                    this.formData.controls[i].get('NotEmptyDocFieldTypes').setValue(element.NotEmptyDocFieldTypes[0].id);
+                }
+                if (isTruthy(element.NotEmptyLosdocField)) {
+                    this.formData.controls[i].get('NotEmptyLosdocField').setValue(element.NotEmptyLosdocField);
+                }
             }
             i++;
         });
     }
 
     IsNotEditEmptyDocOnChange(genVals: any, id: any, field: string) {
-        this._ruleBuilderService.docFieldsInitChange(this.formData.controls[id], this.currtDocFields, genVals, field, id);
+        const DocName: string = ((typeof (genVals) === 'string') ? genVals : genVals.target.selectedOptions[0].innerText);
+        if (DocName !== AppSettings.RuleFannieMaeDocName) {
+            this._ruleBuilderService.docFieldsInitChange(this.formData.controls[id], this.currtDocFields, genVals, field, id);
+        }
     }
 
     addRules() {
         this.formData.push(this._fb.group({
             NotEmptyDocTypes: [''],
-            NotEmptyDocFieldTypes: ['']
+            NotEmptyDocFieldTypes: [''],
+            NotEmptyLosdocField: ['']
         }));
+    }
+
+    OnChangeFieldValue(index: number) {
+        const SearchValue = this.formData.controls[index].get('NotEmptyLosdocField').value;
+        const LosDocumentName = this.formData.controls[index].get('NotEmptyDocTypes').value;
+        let LosDocumentId;
+        this.genDocTypes.forEach((a) => {
+            if (a.text === LosDocumentName) {
+                LosDocumentId = a.id;
+            }
+        });
+        this._ruleBuilderService.GetLosDocFields(LosDocumentId, SearchValue);
     }
 
     ngOnDestroy(): void {

@@ -10,7 +10,7 @@ import { RoleTypeRequest } from '../models/table-request.model';
 import { ChangeRoleRequest } from '../models/changerole.model';
 import { RoleDetailsRequest } from '../models/roletypedetails.model';
 import { Roletypemodel } from '../models/roletype-datatable.model';
-import { ADGroupMasterModel } from '../models/adgroupmaster.model';
+import { ADGroupMasterModel, CheckADGroupAssignedForRoleRequestModel } from '../models/adgroupmaster.model';
 const jwtHelper = new JwtHelperService();
 
 @Injectable()
@@ -26,6 +26,7 @@ export class RoleTypeService {
   roleAdminData: any[] = [];
   ADGroupMasterList$ = new Subject<any>();
   _setHomePage: any;
+  ADGroupAssignedForRole$ = new Subject<boolean>();
 
   constructor(private _roleAdminData: RoleTypeDataAccess, private _notificationService: NotificationService, private location: Location) { }
   private _menuarr: any[];
@@ -42,7 +43,7 @@ export class RoleTypeService {
 
   getADGroupMasterList() {
     const InputReq = new RoleTypeRequest(
-      AppSettings.SystemSchema,
+      AppSettings.TenantSchema,
     );
     return this._roleAdminData.GetADGroupMasterList(InputReq).subscribe(res => {
       const data = jwtHelper.decodeToken(res.Data)['data'];
@@ -235,6 +236,14 @@ export class RoleTypeService {
             this.isMapped$.next(false);
           }
         }
+      }
+    });
+  }
+  CheckADGroupAssignedForRole(req: CheckADGroupAssignedForRoleRequestModel) {
+    return this._roleAdminData.CheckADGroupAssignedForRole(req).subscribe(res => {
+      if (res !== null) {
+        const Result = jwtHelper.decodeToken(res.Data)['data'];
+        this.ADGroupAssignedForRole$.next(Result.ADGroupAssignedForOtherRole);
       }
     });
   }

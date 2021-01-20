@@ -8,16 +8,20 @@ import { NotificationService } from '@mts-notification';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SessionHelper } from '@mts-app-session';
 import { isTruthy } from '@mts-functions/is-truthy.function';
+import { AppSettings } from '@mts-app-setting';
+import { FannieMaeFieldsService } from 'src/app/modules/fanniemaeFields/services/fanniemaeFields.service';
 
 @Component({
     selector: 'mts-check-list-tab',
     templateUrl: 'check-list-tab.page.html',
-    styleUrls: ['check-list-tab.page.scss']
+    styleUrls: ['check-list-tab.page.css']
 })
 export class CheckListTabComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild(DataTableDirective) datatableEl: DataTableDirective;
     @ViewChild('auditCompleteModal') _auditCompleteModal: ModalDirective;
     @ViewChild('revertToReadyforAudit') revertToReadyforAudit: ModalDirective;
+    @ViewChild('FannieMaeFieldsModal') FannieMaeFieldsModal: ModalDirective;
+    showChecklist = false;
     showHide: boolean[] = [false, false, false];
     _disableAudit = false;
     isAuditComplete = false;
@@ -32,7 +36,8 @@ export class CheckListTabComponent implements OnInit, OnDestroy, AfterViewInit {
 
     constructor(
         private _loanInfoService: LoanInfoService,
-        private _notificationService: NotificationService
+        private _notificationService: NotificationService,
+        private _fannieMaeService: FannieMaeFieldsService
     ) {
         this.checkPermission('ReadonlyLoans', 0);
     }
@@ -59,6 +64,12 @@ export class CheckListTabComponent implements OnInit, OnDestroy, AfterViewInit {
             this.dTable.rows.add(res.checkListArryObj);
             this.dTable.draw();
         }));
+        this._subscriptions.push(this._loanInfoService.CheckLoad$.subscribe((res: boolean) => {
+            if (res) {
+                this.CheckListTableData();
+
+            }
+        }));
 
         this._subscriptions.push(this._loanInfoService.enableQuestionerSave$.subscribe((res: number) => {
             this.enableQuestionerSave = res;
@@ -80,6 +91,11 @@ export class CheckListTabComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         }));
 
+        this._subscriptions.push(this._fannieMaeService.showModal$.subscribe((res: boolean) => {
+            if (isTruthy(res)) {
+                this.FannieMaeFieldsModal.show();
+            }
+        }));
         this.dtChecklistOptions = {
             dom: 'Blfrtip',
             buttons: [{
@@ -178,8 +194,7 @@ export class CheckListTabComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     AuditComplete() {
-         this._loanInfoService.SetNotesValue(this.completeNotes);
-
+        this._loanInfoService.SetNotesValue(this.completeNotes);
         if (this._loanInfoService.GetLoanTableDetails().AssignedUserID !== 0) {
             if (this._loanInfoService.GetLoanTableDetails().AssignedUserID === SessionHelper.UserDetails.UserID) {
                 if (this._loanInfoService.GetStipulations().length > 0) {
@@ -219,36 +234,47 @@ export class CheckListTabComponent implements OnInit, OnDestroy, AfterViewInit {
         this._loanInfoService.SetNotesValue(this.completeNotes);
         this._loanInfoService.RevertLoanComplete();
     }
-CloseRevertAudit() {  this.completeNotes = '';
-   this._loanInfoService.SetNotesValue(this.completeNotes);
-   this.revertToReadyforAudit.hide();
+    CloseRevertAudit() {
+        this.completeNotes = '';
+        this._loanInfoService.SetNotesValue(this.completeNotes);
+        this.revertToReadyforAudit.hide();
 
-}
+    }
     ToggleChecklist() {
+        if (!this.showChecklist) {
+            this.showChecklist = true;
+            this.testSlide = this.testSlide === 'slide-in' ? 'slide-out' : 'slide-in';
+        }
+    }
+    ToggleCancelChecklist() {
+        this.showChecklist = false;
         this.testSlide = this.testSlide === 'slide-in' ? 'slide-out' : 'slide-in';
     }
-
     FromImageDocLink(docName: string, fieldname: string) {
-        const DocNameVersion = docName;
-        const docindex = docName.lastIndexOf('-V');
-        docName = (docindex !== -1) ? docName.substring(0, docindex) : docName;
-        const docObjectList = this._loanInfoService.GetLoan().loanDocuments.filter(d => d.DocName === docName);
-        let docObject;
-        if (fieldname === 'ManualDocs') {
-            docObject = docObjectList[0];
+        if (AppSettings.FannieMaeDocName === docName) {
+            this._fannieMaeService.GetFannieMaeFields(this.LoanHeaderInfo.LoanID);
         } else {
-            docObject = docObjectList.find((d) => d.DocNameVersion === DocNameVersion);
-        }
+            const DocNameVersion = docName;
+            const docindex = docName.lastIndexOf('-V');
+            docName = (docindex !== -1) ? docName.substring(0, docindex) : docName;
+            const docObjectList = this._loanInfoService.GetLoan().loanDocuments.filter(d => d.DocName === docName);
+            let docObject;
+            if (fieldname === 'ManualDocs') {
+                docObject = docObjectList[0];
+            } else {
+                docObject = docObjectList.find((d) => d.DocNameVersion === DocNameVersion);
+            }
 
-        const doc = docObject;
-        doc.lastPageNumber = 0;
-        doc.pageNumberArray = [];
-        doc.checkListState = true;
-        this._loanInfoService.SetLoanViewDocument(doc);
-        this._loanInfoService.ShowDocumentDetailView$.next(true);
-        setTimeout(() => {
+            const doc = docObject;
+            doc.lastPageNumber = 0;
+            doc.pageNumberArray = [];
+            doc.checkListState = true;
+            this._loanInfoService.SetLoanViewDocument(doc);
             this._loanInfoService.ShowDocumentDetailView$.next(true);
-        }, 300);
+            setTimeout(() => {
+                this._loanInfoService.ShowDocumentDetailView$.next(true);
+            }, 300);
+        }
     }
 
     SaveQuetionerAnswer() {
@@ -288,6 +314,9 @@ CloseRevertAudit() {  this.completeNotes = '';
     }
 
     ngAfterViewInit() {
+        this.CheckListTableData();
+    }
+    CheckListTableData() {
         this.datatableEl.dtInstance.then((dtInstance: DataTables.Api) => {
             this.dTable = dtInstance;
             this.GetChecklistDetails(false);
@@ -306,11 +335,12 @@ CloseRevertAudit() {  this.completeNotes = '';
             });
             const self = this;
             $('.checklistTable thead tr th').each(function (i) {
-                const title = $(this).text();
+                const title = $(this).text().replace(/[\s]/g, '');
                 const thWidth = $(this).width() - 10;
                 if (title !== 'Edit' && title !== 'View') {
-                    if (title === 'Status') {
-                        $(this).html(title + ' <br /> <select  style="height: 25.5px;width: ' + thWidth + 'px;" ><option value="">All</option><option value="Error">Error</option><option value="check_circle">Pass</option><option value="add_circle">Fail</option> <option value="man">Manual</option></select>');
+                    if (title === 'Status' || title === 'StatusAllErrorPassFailManual') {
+                        const newTitle = 'Status';
+                        $(this).html(newTitle + ' <br /> <select style="height: 25.5px;width: ' + thWidth + 'px;" ><option value="">All</option><option value="Error">Error</option><option value="check_circle">Pass</option><option value="add_circle">Fail</option> <option value="man">Manual</option></select>');
                         $('select', this).on('change', function () {
                             const val = this['value'];
                             let thIndex = i;
@@ -327,6 +357,7 @@ CloseRevertAudit() {  this.completeNotes = '';
                                     .column(thIndex)
                                     .search(val)
                                     .draw();
+
                             }
                         });
                     } else {
@@ -346,14 +377,18 @@ CloseRevertAudit() {  this.completeNotes = '';
                                     .column(thIndex)
                                     .search(val)
                                     .draw();
+
                             }
                         });
                     }
                 }
+                setTimeout(() => {
+                    self.dTable.columns.adjust().draw();
+                }, 300);
             });
         });
-    }
 
+    }
     DownloadChecklistDetails() {
         $('#loanChecklist .dt-button').click();
     }

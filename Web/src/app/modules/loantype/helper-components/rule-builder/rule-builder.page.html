@@ -33,7 +33,7 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <input [(ngModel)]="headerFieldID" (change)="EncompassHeaderFieldsChange($event)" [typeahead]="losEncompassFields" typeaheadOptionField="FieldIDDescription" (typeaheadLoading)="OnChangeLOSHeaderFieldValue()" [typeaheadOptionsLimit]="7" [typeaheadMinLength]="1"
+                    <input [(ngModel)]="headerFieldID" [typeahead]="losEncompassFields" typeaheadOptionField="FieldIDDescription" (typeaheadLoading)="OnChangeLOSHeaderFieldValue()" [typeaheadOptionsLimit]="7" [typeaheadMinLength]="1"
                         placeholder="Search Fields" class="form-control">
                     <label class="control-label selected">Encompass Header Fields</label>
                     <i class="bar"></i>

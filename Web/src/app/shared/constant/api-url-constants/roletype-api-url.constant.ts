@@ -7,4 +7,5 @@ export class RoleTypeApiUrlConstant {
   static GET_EDITROLEDETAILS = 'Menu/GetRoleMenuAccessList';
   static CheckUserRoleDetails = 'Master/ChecUserRoleDetails';
   static GetChangeMenuActive = 'Menu/GetRoleMenuDetails';
+  static CHECK_ADGROUP_ASSIGNED_FOR_ROLE = 'AD/CheckADGroupAssignedForRole';
 }

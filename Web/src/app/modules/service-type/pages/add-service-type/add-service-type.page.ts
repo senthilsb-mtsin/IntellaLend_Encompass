@@ -24,9 +24,13 @@ export class AddServiceTypeComponent implements OnInit, OnDestroy {
   //#region Public Variables
   slideOneTranClass: any = 'transForm';
   ServiceTypeName = '';
+  LoanTypeName = '';
+  IsAdd = false;
   AssignedLoanTypes: number[] = [];
+  AssignedLenders: number[] = [];
+  AllLenders: number[] = [];
   AddServiceTypeSteps = this._addServiceTypeService.AddServiceTypeSteps;
-  stepModel: ServiceTypeWizardStepModel = new ServiceTypeWizardStepModel(this.AddServiceTypeSteps.ServiceType, 'active', '');
+  stepModel: ServiceTypeWizardStepModel = new ServiceTypeWizardStepModel(this.AddServiceTypeSteps.ServiceType, 'active', '', '');
   loading = false;
   priorityList: ServiceTypePriorityModel[] = [];
   ReviewDetails: ServiceTypeModel;
@@ -65,6 +69,7 @@ export class AddServiceTypeComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this._addServiceTypeService.assignedLoanTypes.subscribe((res: number[]) => {
       this.AssignedLoanTypes = [...res];
     }));
+
     this.subscriptions.push(this._addServiceTypeService.Loading.subscribe((res: boolean) => {
       this.loading = res;
     }));
@@ -76,12 +81,24 @@ export class AddServiceTypeComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this._addServiceTypeService.roleList.subscribe((res: ServiceTypeRoleModel[]) => {
       this.RoleItems = [...res];
     }));
+    this.subscriptions.push(this._addServiceTypeService.CurrentLoanType$.subscribe((res: string) => {
+      this.LoanTypeName = res;
+    }));
+    this.subscriptions.push(this._addServiceTypeService.IsAdd$.subscribe((res: boolean) => {
+      this.IsAdd = res;
+    }));
 
     if (this._serviceType.Type !== 'Add') {
       this.ServiceTypeName = this._serviceType.ServiceTypeName;
       this._previousStep = true;
       this._addServiceTypeService.setCurrentServiceType({ ServiceTypeID: this._serviceType.ServiceTypeID, ServiceTypeName: this.ServiceTypeName });
     }
+    this.subscriptions.push(this._addServiceTypeService.allAssignedLenders.subscribe((res: number[]) => {
+      this.AssignedLenders = [...res];
+    }));
+    this.subscriptions.push(this._addServiceTypeService.allLenders$.subscribe((res: number[]) => {
+      this.AllLenders = [...res];
+    }));
   }
 
   AddServiceTypeSubmit() {
@@ -131,15 +148,17 @@ export class AddServiceTypeComponent implements OnInit, OnDestroy {
       } else {
         this.EditServiceTypeSubmit();
       }
-    } else if (this.stepModel.stepID === this.AddServiceTypeSteps.AssignLoanType) {
-      this.SaveLoanMapping();
+    } else if (this.stepModel.stepID === this.AddServiceTypeSteps.AssignLenders) {
+      this.SaveReviewLoanLenderMapping();
     }
   }
 
   GotoPreviousStep() {
     this._previousStep = true;
     if (this.stepModel.stepID === this.AddServiceTypeSteps.AssignLoanType) {
-      this._addServiceTypeService.setNextStep.next(new ServiceTypeWizardStepModel(this.AddServiceTypeSteps.ServiceType, 'active', ''));
+      this._addServiceTypeService.setNextStep.next(new ServiceTypeWizardStepModel(this.AddServiceTypeSteps.ServiceType, 'active', '', ''));
+    } else if (this.stepModel.stepID === this.AddServiceTypeSteps.AssignLenders) {
+      this._addServiceTypeService.setNextStep.next(new ServiceTypeWizardStepModel(this.AddServiceTypeSteps.AssignLoanType, 'active complete', 'active', ''));
     }
   }
 
@@ -152,10 +171,10 @@ export class AddServiceTypeComponent implements OnInit, OnDestroy {
     }
   }
 
-  SaveLoanMapping() {
+  SaveReviewLoanLenderMapping() {
     this._addServiceTypeService.Loading.next(true);
-    const req = new AssignLoanTypesRequestModel(this.ReviewDetails.ReviewTypeID, this.AssignedLoanTypes.filter((v, i, a) => a.indexOf(v) === i).slice());
-    this._addServiceTypeService.SaveLoanMapping(req);
+    // const req = new AssignLoanTypesRequestModel(this.ReviewDetails.ReviewTypeID, this.AssignedLoanTypes.filter((v, i, a) => a.indexOf(v) === i).slice());
+    this._addServiceTypeService.SaveReviewLoanLenderMapping(this.IsAdd);
   }
 
   GotoMaster() {

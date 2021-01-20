@@ -47,15 +47,29 @@ export class EditStackingOrderComponent implements OnInit, OnDestroy {
     private isKeepGoing = true;
 
     ngOnInit() {
+        this._subscription.push(this._addLoanTypeService.SysStackingOrderDetailData.subscribe((res: { StackingOrder: any[], StackingOrderGroup: any[], UnAssignedDocTypes: any[] }) => {
+            this.docSysStackingOrder = res.StackingOrder;
+            this.docGroupStackingOrder = res.StackingOrderGroup;
+            this.UnAssignedDocTypes = res.UnAssignedDocTypes;
+            this.FilterUnAssignedDocs = res.UnAssignedDocTypes;
+        }));
+        this._subscription.push(this.dragService.dropModel('nested-bag').subscribe((value) => {
+            this.onDropModel(value.item, value, false);
+        }));
+        this._subscription.push(this.dragService.drag('nested-bag').subscribe((value) => {
+            this.onDragElement(value);
+        }));
+        this._subscription.push(this.dragService.dragend().subscribe(() => {
+            this._addLoanTypeService.setDocSysStackingOrder(this.docSysStackingOrder.slice(), this.docGroupStackingOrder.slice());
+        }));
+        this._subscription.push(this._commonService.SystemStackingOrderMaster.subscribe((res: any[]) => {
+            this._stackGrp = res;
+        }));
         this.stackOrderType = this._addLoanTypeService.getStackType();
         this._addLoanTypeService.getStackUnDocTypes(this.stackOrderType);
         this._stackGrp = this._commonService.GetSysStackingOrderGroup();
         this.sysEditStackingOrderName = this._addLoanTypeService.getStackingOrder().Description;
         this.curentStackingOrderID = this._addLoanTypeService.getStackingOrder().StackingOrderID;
-
-        this._subscription.push(this._commonService.SystemStackingOrderMaster.subscribe((res: any[]) => {
-            this._stackGrp = res;
-        }));
 
         if (this.stackOrderType === 'createEdit') {
             this.promise = this._addLoanTypeService.getStackAssignDocTypes();
@@ -77,21 +91,6 @@ export class EditStackingOrderComponent implements OnInit, OnDestroy {
         } else {
             this.promise = this._addLoanTypeService.getSystemStackingOrderDetails();
         }
-
-        this._subscription.push(this._addLoanTypeService.SysStackingOrderDetailData.subscribe((res: { StackingOrder: any[], StackingOrderGroup: any[], UnAssignedDocTypes: any[] }) => {
-            this.docSysStackingOrder = res.StackingOrder;
-            this.docGroupStackingOrder = res.StackingOrderGroup;
-            this.UnAssignedDocTypes = res.UnAssignedDocTypes;
-            this.FilterUnAssignedDocs = res.UnAssignedDocTypes;
-        }));
-
-        this._subscription.push(this.dragService.dropModel('nested-bag').subscribe((value) => {
-            this.onDropModel(value.item, value, false);
-        }));
-
-        this._subscription.push(this.dragService.drag('nested-bag').subscribe((value) => {
-            this.onDragElement(value);
-        }));
     }
 
     InsertRemovedData(drpEltModel, value) {

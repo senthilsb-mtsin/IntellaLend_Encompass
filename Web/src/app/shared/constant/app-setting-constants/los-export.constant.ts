@@ -87,3 +87,20 @@ export class LOSExportStatusConstant {
       '-1': 'label label-warning',
     };
   }
+  export class LOSExportFileTypeConstant {
+    static LOS_CLASSIFICATION_EXCEPTION = 1;
+    static LOS_CLASSIFICATION_RESULTS = 2;
+    static LOS_VALIDATION_EXCEPTION = 3;
+    static LOS_LOAN_EXPORT = 4;
+    static LOS_LOAN_DOC_EXPORT = 5;
+    static LOS_LOAN_JSON_EXPORT = 6;
+
+    static LOSExportFileTypeDescription = {
+      '1': 'Classification Exception',
+      '2': 'Classification Results',
+      '3': 'Validation Exception',
+      '4': 'Loan Export',
+      '5': 'Loan Document Export',
+      '6': 'Loan Detail Export'
+    };
+  }

@@ -7,6 +7,14 @@
         </div>
         <div class="box-body">
             <div class="row">
+                <div class="col-md-12">
+                    <div class="text-right pu_toggle">
+                        <label class="tgl" style="font-size:14px">                
+                        <input [(ngModel)]="SelectRow.Active"  name="Active" type="checkbox"/>
+                        <span data-on="Active" data-off="Inactive"></span>
+                    </label>
+                    </div>
+                </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <input type="text" class="form-control mandatory" name="DocumentTypeFieldName" [(ngModel)]="DocumentTypeName" required="" disabled>

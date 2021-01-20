@@ -53,13 +53,30 @@ export class ManagerEditDocumentFieldComponent implements OnInit, AfterViewInit,
             aoColumns: [
                 { sTitle: 'Field Name', mData: 'Name' },
                 { sTitle: 'Field Display Name', mData: 'DisplayName' },
+                { sTitle: 'Active', mData: 'Active' },
                 { sTitle: 'Edit', mData: 'DocumentTypeID', sClass: 'text-center', bVisible: true },
                 { sTitle: '', mData: 'FieldID', bVisible: false }
             ],
             aoColumnDefs: [
-
                 {
                     'aTargets': [2],
+                    'mRender': function (data, type, row) {
+                        let statusFlag = '';
+                        if (data === true) {
+                            statusFlag = 'Active';
+                        } else {
+                            statusFlag = 'Inactive';
+                        }
+                        const statusColor = {
+                            'true': 'label-success',
+                            'false': 'label-danger'
+                        };
+
+                        return '<label class=\'label ' + statusColor[row['Active']] + ' label-table\'>' + statusFlag + '</label></td>';
+                    }
+                },
+                {
+                    'aTargets': [3],
                     'mRender': function (data, type, row) {
                         return '<span style=\'cursor: pointer;\' class=\'editField material-icons txt-warm\'>rate_review</span>';
                     }

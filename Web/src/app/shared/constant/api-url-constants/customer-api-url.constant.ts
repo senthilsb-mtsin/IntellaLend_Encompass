@@ -31,4 +31,8 @@ export class CustomerApiUrlConstant {
 
     static GET_ALL_CUSTOMER_CONFIG = 'CustConfig/GetAllCustConfig';
     static ADD_CUSTOMER_CONFIG = 'CustConfig/AddMultipleCustConfig';
+
+    static GET_CUSTOMER_IMPORT_STAGING = 'Customer/GetCustomerImportStaging';
+    static GET_CUSTOMER_IMPORT_STAGING_DETAILS = 'Customer/GetCustomerImportStagingDetails';
+    static UPLOAD_CUSTOMER_IMPORT_FILE = 'FileUpload/UploadCustomerImportFile';
 }

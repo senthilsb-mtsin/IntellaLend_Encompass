@@ -6,10 +6,11 @@ import { NotificationService } from '@mts-notification';
 import { RuleBuilderService } from 'src/app/modules/loantype/service/rule-builder.service';
 import { Subscription } from 'rxjs';
 import { isTruthy } from '@mts-functions/is-truthy.function';
-import { FormulaBuilderTypesConstant } from '@mts-app-setting';
+import { AppSettings, FormulaBuilderTypesConstant } from '@mts-app-setting';
 import { CommonService } from 'src/app/shared/common';
 import { RuleCheckValidation, SingleOperatorExistforRule } from 'src/app/modules/loantype/pipes';
 import { CommonRuleBuilderService } from 'src/app/shared/common/common-rule-builder.service';
+import { element } from 'protractor';
 
 @Component({
     selector: 'mts-losrule-formula-builder',
@@ -33,6 +34,9 @@ export class LOSRuleFormulaBuilderComponent implements OnInit, OnDestroy {
     losEncompassFields: any[] = [];
     headerFieldID = '';
     ErrorMsg = '';
+
+    LosDocumentFields: any[] = [];
+    FannieMaeDocName: string = AppSettings.RuleFannieMaeDocName;
 
     constructor(
         private _commonRuleBuilderService: CommonRuleBuilderService,
@@ -86,11 +90,15 @@ export class LOSRuleFormulaBuilderComponent implements OnInit, OnDestroy {
                     str += elements.openBrace + elements.loslookupvalueDocField + elements.closeBrace + elements.losDocFieldOperator;
                 } else if (elements.isLOSFieldsSelected && elements.losDocFieldId !== '') {
                     str += elements.openBrace + '[' + elements.losDocFieldId + ']' + elements.closeBrace + elements.losDocFieldOperator;
-                } else if (elements.losLookUpDocumentTypes !== '' && isTruthy(elements.losValuesField) && typeof (elements.losValuesField) === 'string' && elements.losValuesField !== '') {
+                } else if (elements.losLookUpDocumentTypes !== '' && isTruthy(elements.losValuesField) && typeof (elements.losValuesField) === 'string' && elements.losValuesField !== '' && elements.losLookUpDocumentTypes !== AppSettings.RuleFannieMaeDocName) {
                     str += elements.openBrace + '[' + elements.losLookUpDocumentTypes + '.' + elements.losValuesField + ']' + elements.closeBrace + elements.losDocFieldOperator;
-                } else if (elements.losLookUpDocumentTypes !== '' && isTruthy(elements.losValuesField) && Array.isArray(elements.losValuesField) && elements.losValuesField.length > 0) {
+                } else if (elements.losLookUpDocumentTypes !== '' && isTruthy(elements.losValuesField) && Array.isArray(elements.losValuesField) && elements.losValuesField.length > 0 && elements.losLookUpDocumentTypes !== AppSettings.RuleFannieMaeDocName) {
                     str += elements.openBrace + '[' + elements.losLookUpDocumentTypes + '.' + elements.losValuesField[0].text + ']' + elements.closeBrace + elements.losDocFieldOperator;
-                } else if (elements.losLookUpDocumentTypes === '' || elements.losValuesField === '' || elements.losDocFieldOperator === '') {
+                } else if (elements.losLookUpDocumentTypes !== '' && isTruthy(elements.LosdocField) && typeof (elements.LosdocField) === 'string' && elements.LosdocField !== '' && elements.losLookUpDocumentTypes === AppSettings.RuleFannieMaeDocName) {
+                    str += elements.openBrace + '[' + AppSettings.FannieMaeDocDisplayName + '.' + elements.LosdocField + ']' + elements.closeBrace + elements.losDocFieldOperator;
+                } else if (elements.losLookUpDocumentTypes !== '' && isTruthy(elements.LosdocField) && Array.isArray(elements.LosdocField) && elements.LosdocField.length > 0 && elements.losLookUpDocumentTypes === AppSettings.RuleFannieMaeDocName) {
+                    str += elements.openBrace + '[' + AppSettings.FannieMaeDocDisplayName + '.' + elements.LosdocField[0].text + ']' + elements.closeBrace + elements.losDocFieldOperator;
+                } else if (elements.losLookUpDocumentTypes === '' || (elements.losValuesField === '' && elements.LosdocField === '') || elements.losDocFieldOperator === '') {
                     this._commonRuleBuilderService.ruleBuilderNext.next(true);
                     losdocTypeFieldFlag = true;
                 } else {
@@ -139,13 +147,20 @@ export class LOSRuleFormulaBuilderComponent implements OnInit, OnDestroy {
             }
             this._commonRuleBuilderService.ruleExpression.next(ruleFormationValues);
         }));
+        this._subscriptions.push(this._ruleBuilderService.LosDocumentFields.subscribe((elements: any[]) => {
+
+            this.LosDocumentFields = [];
+            elements.forEach((ele) => {
+                this.LosDocumentFields.push(ele);
+            });
+        }));
     }
 
     CheckLOSOperatorFunction(formData: any) {
         const operatorArray = [];
-        formData.forEach(element => {
-            if (element.losDocFieldOperator !== '') {
-                operatorArray.push(element.losDocFieldOperator);
+        formData.forEach(ele => {
+            if (ele.losDocFieldOperator !== '') {
+                operatorArray.push(ele.losDocFieldOperator);
             }
         });
         return operatorArray.length > 0 && operatorArray.length === formData.length - 1;
@@ -190,7 +205,10 @@ export class LOSRuleFormulaBuilderComponent implements OnInit, OnDestroy {
     }
 
     DocTypesChanged(genVals: any, i: any) {
-        this._ruleBuilderService.docFieldsInitChange(this.formData.controls[i], this.currtDocFields, genVals, 'losValuesField', i);
+        const DocName: string = ((typeof (genVals) === 'string') ? genVals : genVals.target.selectedOptions[0].innerText);
+        if (DocName !== AppSettings.RuleFannieMaeDocName) {
+            this._ruleBuilderService.docFieldsInitChange(this.formData.controls[i], this.currtDocFields, genVals, 'losValuesField', i);
+        }
     }
 
     ChangeFieldOrLOS(vals: any, index: any) {
@@ -228,33 +246,39 @@ export class LOSRuleFormulaBuilderComponent implements OnInit, OnDestroy {
 
     GenerateFormValues() {
         let i = 0;
-        this.rowData.RuleJsonObject.losRule.forEach(element => {
+        this.rowData.RuleJsonObject.losRule.forEach(ele => {
             this.addRules();
-            this.formData.controls[i].get('losType').setValue(element.losType);
-            if (element.fieldOrLOSSelect === 'LOS') {
+            this.formData.controls[i].get('losType').setValue(ele.losType);
+            if (ele.fieldOrLOSSelect === 'LOS') {
                 this.LOSRuleType = 'Encompass';
                 this.formData.controls[i].get('isLOSFieldsSelected').setValue(true);
-                this.formData.controls[i].get('openBrace').setValue(element.openBrace);
-                this.formData.controls[i].get('closeBrace').setValue(element.closeBrace);
-                this.formData.controls[i].get('fieldOrLOSSelect').setValue(element.fieldOrLOSSelect);
-                this.formData.controls[i].get('losDocFieldId').setValue(element.losDocFieldId);
-                this.formData.controls[i].get('losDocFieldOperator').setValue(element.losDocFieldOperator);
+                this.formData.controls[i].get('openBrace').setValue(ele.openBrace);
+                this.formData.controls[i].get('closeBrace').setValue(ele.closeBrace);
+                this.formData.controls[i].get('fieldOrLOSSelect').setValue(ele.fieldOrLOSSelect);
+                this.formData.controls[i].get('losDocFieldId').setValue(ele.losDocFieldId);
+                this.formData.controls[i].get('losDocFieldOperator').setValue(ele.losDocFieldOperator);
             }
-            if (element.fieldOrLOSSelect === 'Field') {
-                this.formData.controls[i].get('openBrace').setValue(element.openBrace);
-                this.formData.controls[i].get('closeBrace').setValue(element.closeBrace);
-                this.formData.controls[i].get('fieldOrLOSSelect').setValue(element.fieldOrLOSSelect);
-                this.formData.controls[i].get('losLookUpDocumentTypes').setValue(element.losLookUpDocumentTypes);
-                this.DocTypesChanged(element.losLookUpDocumentTypes, i);
-                this.formData.controls[i].get('losValuesField').setValue(element.losValuesField[0].id);
-                this.formData.controls[i].get('losDocFieldOperator').setValue(element.losDocFieldOperator);
+            if (ele.fieldOrLOSSelect === 'Field') {
+                this.formData.controls[i].get('openBrace').setValue(ele.openBrace);
+                this.formData.controls[i].get('closeBrace').setValue(ele.closeBrace);
+                this.formData.controls[i].get('fieldOrLOSSelect').setValue(ele.fieldOrLOSSelect);
+                this.formData.controls[i].get('losLookUpDocumentTypes').setValue(ele.losLookUpDocumentTypes);
+                this.DocTypesChanged(ele.losLookUpDocumentTypes, i);
+
+                if (isTruthy(ele.losValuesField)) {
+                    this.formData.controls[i].get('losValuesField').setValue(ele.losValuesField[0].id);
+                }
+                if (isTruthy(ele.LosdocField)) {
+                    this.formData.controls[i].get('LosdocField').setValue(ele.LosdocField);
+                }
+                this.formData.controls[i].get('losDocFieldOperator').setValue(ele.losDocFieldOperator);
             }
-            if (element.fieldOrLOSSelect === 'Value') {
-                this.formData.controls[i].get('openBrace').setValue(element.openBrace);
-                this.formData.controls[i].get('closeBrace').setValue(element.closeBrace);
-                this.formData.controls[i].get('fieldOrLOSSelect').setValue(element.fieldOrLOSSelect);
-                this.formData.controls[i].get('loslookupvalueDocField').setValue(element.loslookupvalueDocField);
-                this.formData.controls[i].get('losDocFieldOperator').setValue(element.losDocFieldOperator);
+            if (ele.fieldOrLOSSelect === 'Value') {
+                this.formData.controls[i].get('openBrace').setValue(ele.openBrace);
+                this.formData.controls[i].get('closeBrace').setValue(ele.closeBrace);
+                this.formData.controls[i].get('fieldOrLOSSelect').setValue(ele.fieldOrLOSSelect);
+                this.formData.controls[i].get('loslookupvalueDocField').setValue(ele.loslookupvalueDocField);
+                this.formData.controls[i].get('losDocFieldOperator').setValue(ele.losDocFieldOperator);
             }
             i++;
         });
@@ -278,7 +302,8 @@ export class LOSRuleFormulaBuilderComponent implements OnInit, OnDestroy {
             fieldOrLOSSelect: ['LOS'],
             openBrace: [''],
             closeBrace: [''],
-            isLOSFieldsSelected: ['']
+            isLOSFieldsSelected: [''],
+            LosdocField: ['']
         }));
         this.currtDocFields.push([]);
     }
@@ -304,9 +329,21 @@ export class LOSRuleFormulaBuilderComponent implements OnInit, OnDestroy {
         }
     }
 
+    OnChangeFieldValue(index: number) {
+        const SearchValue = this.formData.controls[index].get('LosdocField').value;
+        const LosDocumentName = this.formData.controls[index].get('losLookUpDocumentTypes').value;
+        let LosDocumentId;
+        this.genDocTypes.forEach((a) => {
+            if (a.text === LosDocumentName) {
+                LosDocumentId = a.id;
+            }
+        });
+        this._ruleBuilderService.GetLosDocFields(LosDocumentId, SearchValue);
+    }
+
     ngOnDestroy(): void {
-        this._subscriptions.forEach(element => {
-            element.unsubscribe();
+        this._subscriptions.forEach(ele => {
+            ele.unsubscribe();
         });
 
     }

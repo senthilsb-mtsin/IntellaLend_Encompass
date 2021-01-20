@@ -6,6 +6,7 @@ import { MTSAPIResponse } from '@mts-api-response-model';
 import { LoanSearchApiUrlConstant } from 'src/app/shared/constant/api-url-constants/loan-search-api-rul.constant';
 import { LoanSearchRequestModel } from './models/loan-search-request.model';
 import { DeleteLoanRequestModel } from './models/loan-delete-request.model';
+import { FannieMaeApiUrlConstant } from '@mts-api-url';
 
 @Injectable()
 export class LoanSearchDataAccess {
@@ -48,5 +49,8 @@ export class LoanSearchDataAccess {
       LoanSearchApiUrlConstant.DELETE_LOANS,
       req
     );
+  }
+  GetFannieMaeCustomerConfig(req: {TableSchema: string}) {
+    return this._apiService.authHttpPost(FannieMaeApiUrlConstant.GET_FANNIEMAE_CUSTOMER_CONFIG, req);
   }
 }

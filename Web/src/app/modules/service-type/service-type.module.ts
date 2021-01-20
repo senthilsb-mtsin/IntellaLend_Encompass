@@ -1,6 +1,6 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { DataTablesModule } from 'angular-datatables';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { DragulaModule } from '@mts-dragula';
@@ -17,6 +17,12 @@ import { AssignLoanTypesComponent } from './helper-components/assign-loan-type/a
 import { LoanTypeSearchPipe } from './pipes/loantypesearch.pipe';
 import { MalihuScrollbarModule } from 'ngx-malihu-scrollbar';
 import { ViewServiceTypeComponent } from './pages/view-service-type/view-service-type.page';
+import { AssignLenderComponent } from './helper-components/assign-lender/assign-lender.component';
+import { ServiceCustomerImportMonitorComponent } from './pages/service-customer-import-monitor/service-customer-import-monitor.page';
+import { NgDateRangePickerModule } from '@mts-daterangepicker/ng-daterangepicker.module';
+import { CheckListItemNamePipe } from '../loantype/pipes';
+import { LenderSearchService } from './service/lender-search.service';
+import { LenderSearchPipe } from './pipes/lendersearch.pipe';
 
 @NgModule({
     imports: [
@@ -26,6 +32,7 @@ import { ViewServiceTypeComponent } from './pages/view-service-type/view-service
         CommonModule,
         MalihuScrollbarModule,
         DataTablesModule,
+        NgDateRangePickerModule,
         ModalModule.forRoot(),
         DragulaModule.forRoot(),
         NgBusyModule
@@ -35,14 +42,21 @@ import { ViewServiceTypeComponent } from './pages/view-service-type/view-service
         AddServiceTypeService,
         ViewServiceTypeComponent,
         ServiceTypeDataAccess,
-        CommonService
+        CommonService,
+        CheckListItemNamePipe,
+        DatePipe,
+        LenderSearchService
     ],
     declarations: [
         ServiceTypeComponent,
         AddServiceTypeComponent,
         ViewServiceTypeComponent,
         AssignLoanTypesComponent,
-        LoanTypeSearchPipe
+        LoanTypeSearchPipe,
+        LenderSearchPipe,
+        AssignLenderComponent,
+        ServiceCustomerImportMonitorComponent
+
     ]
 })
 

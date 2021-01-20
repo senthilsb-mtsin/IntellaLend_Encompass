@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { APIService } from 'src/app/shared/service/api.service';
 import { MTSAPIResponse } from '@mts-api-response-model';
-import { LoanTypeApiUrlConstant } from '@mts-api-url';
+import { CommonApiUrlConstant, LoanTypeApiUrlConstant } from '@mts-api-url';
 import { Observable } from 'rxjs';
 import { SyncCustomerRequest } from './models/sync-customer-request.model';
 import { AddLoantypeRequestModel } from './models/add-loantype-request.model';
@@ -148,5 +148,8 @@ export class LoanDataAccess {
   GetSysAllLoanTypeDocuments(req: { LoanTypeID: number }): Observable<MTSAPIResponse> {
       return this._api.authHttpPost(LoanTypeApiUrlConstant.GET_SYSTEM_LOANTYPE_DOCUMENTS, req);
 
+  }
+  GetLosDocFields(req: { TableSchema: string; LOSDocumentId: number; FieldSearchWord: string; }) {
+      return this._api.authHttpPost(CommonApiUrlConstant.GET_LOSDOCUMENT_FIELDS, req);
   }
 }

@@ -3,3 +3,9 @@ export class ADGroupMasterModel {
         public ADGroupName: string) {
     }
 }
+
+export class CheckADGroupAssignedForRoleRequestModel {
+    constructor(public TableSchema: string,
+        public ADGroupID: number,
+        public RoleID: number) { }
+}

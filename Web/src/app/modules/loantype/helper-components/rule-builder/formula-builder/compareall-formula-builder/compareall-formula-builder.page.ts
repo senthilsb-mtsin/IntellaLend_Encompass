@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { RuleBuilderService } from 'src/app/modules/loantype/service/rule-builder.service';
 import { isTruthy } from '@mts-functions/is-truthy.function';
 import { CommonRuleBuilderService } from 'src/app/shared/common/common-rule-builder.service';
+import { AppSettings } from '@mts-app-setting';
 
 @Component({
     selector: 'mts-compareall-formula-builder',
@@ -23,6 +24,9 @@ export class CompareAllFormulaBuilderComponent implements OnInit, OnDestroy {
     FieldErrorMsg = 'The value entered needs to match exactly with the selected Field value';
     isErrMsgs = false;
     inLookUpDocumentFieldMasterTypes: any[] = [];
+
+    LosDocumentFields: any[] = [];
+    FannieMaeDocName: string = AppSettings.RuleFannieMaeDocName;
 
     constructor(
         private _commonRuleBuilderService: CommonRuleBuilderService,
@@ -65,7 +69,7 @@ export class CompareAllFormulaBuilderComponent implements OnInit, OnDestroy {
             let ruleFormationValues = 'compare([Rule])';
             myForm.compareAllRule.forEach(elements => {
                 const compareallDisValField = isTruthy(elements.compareallDisValField) ? elements.compareallDisValField : '';
-                if (elements.ComapreAllDocumentTypes !== '' && elements.CompareAllDocField !== '') {
+                if (elements.ComapreAllDocumentTypes !== '' && elements.CompareAllDocField !== '' && elements.ComapreAllDocumentTypes !== AppSettings.RuleFannieMaeDocName) {
                     if (typeof (elements.CompareAllDocField) === 'string') {
                         this._commonRuleBuilderService.ruleBuilderNext.next(false);
                         str += '[' + elements.ComapreAllDocumentTypes + '.' + elements.CompareAllDocField + ']' + ',' + compareallDisValField;
@@ -75,6 +79,17 @@ export class CompareAllFormulaBuilderComponent implements OnInit, OnDestroy {
                     } else if (typeof (elements.CompareAllDocField) === 'object') {
                         this._commonRuleBuilderService.ruleBuilderNext.next(false);
                         str += '[' + elements.ComapreAllDocumentTypes + '.' + elements.CompareAllDocField.text + ']' + ',' + compareallDisValField;
+                    }
+                } else if (elements.ComapreAllDocumentTypes !== '' && elements.CompareAllLosdocField !== '' && elements.ComapreAllDocumentTypes === AppSettings.RuleFannieMaeDocName) {
+                    if (typeof (elements.CompareAllLosdocField) === 'string') {
+                        this._commonRuleBuilderService.ruleBuilderNext.next(false);
+                        str += '[' + AppSettings.FannieMaeDocDisplayName + '.' + elements.CompareAllLosdocField + ']' + ',' + compareallDisValField;
+                    } else if (Array.isArray(elements.InDocField) && elements.InDocField.length > 0) {
+                        this._commonRuleBuilderService.ruleBuilderNext.next(false);
+                        str += '[' + AppSettings.FannieMaeDocDisplayName + '.' + elements.CompareAllLosdocField[0].text + ']' + ',' + compareallDisValField;
+                    } else if (typeof (elements.CompareAllLosdocField) === 'object') {
+                        this._commonRuleBuilderService.ruleBuilderNext.next(false);
+                        str += '[' + AppSettings.FannieMaeDocDisplayName + '.' + elements.CompareAllLosdocField.text + ']' + ',' + compareallDisValField;
                     }
                 } else if (elements.compareallvalueDocField !== '') {
                     str += elements.compareallvalueDocField + ',' + compareallDisValField;
@@ -95,6 +110,13 @@ export class CompareAllFormulaBuilderComponent implements OnInit, OnDestroy {
 
             this._commonRuleBuilderService.ruleExpression.next(ruleFormationValues);
         }));
+        this._subscriptions.push(this._ruleBuilderService.LosDocumentFields.subscribe((elements: any[]) => {
+
+            this.LosDocumentFields = [];
+            elements.forEach((element) => {
+                this.LosDocumentFields.push(element);
+            });
+        }));
     }
 
     CompareAllEditFieldsChange(vals: any, index: any) {
@@ -104,6 +126,7 @@ export class CompareAllFormulaBuilderComponent implements OnInit, OnDestroy {
             $('#compareallvalueDisplayed_' + index).show();
             $('#compareallvalueDisplay_' + index).hide();
             this.formData.controls[index].get('CompareAllDocField').setValue('');
+            this.formData.controls[index].get('CompareAllLosdocField').setValue('');
         } else {
             this.formData.controls[index].get('compareallfieldsCustomValues').setValue(false);
             $('#compareallvalueDisplay_' + index).show();
@@ -123,6 +146,7 @@ export class CompareAllFormulaBuilderComponent implements OnInit, OnDestroy {
             $('#compareAlllookupvalueDisplay_' + index).show();
             $('#comparealllookupvalueDisplayed_' + index).hide();
             this.formData.controls[index].get('CompareAllValuesField').setValue('');
+            this.formData.controls[index].get('CompareAllLookUpLosdocField').setValue('');
         }
     }
 
@@ -136,14 +160,25 @@ export class CompareAllFormulaBuilderComponent implements OnInit, OnDestroy {
 
     addEditCompareAllValues() {
         this.currtDocFields[1] = [];
-        if (this.formData.controls[0].get('CompareAllLookUpDocumentTypes').value !== '' && this.formData.controls[0].get('CompareAllValuesField').value !== '') {
+        if (this.formData.controls[0].get('CompareAllLookUpDocumentTypes').value !== '' && (this.formData.controls[0].get('CompareAllValuesField').value !== '' || this.formData.controls[0].get('CompareAllLookUpLosdocField').value !== '')) {
             if (this.formData.controls[0].get('compareallDisValField').value !== '') {
-                this.formData.controls[0].get('compareallDisValField').setValue(this.formData.controls[0].get('compareallDisValField').value + ',' + '[' + this.formData.controls[0].get('CompareAllLookUpDocumentTypes').value + '.' + this.formData.controls[0].get('CompareAllValuesField').value + ']');
+                if (this.formData.controls[0].get('CompareAllLookUpDocumentTypes').value !== AppSettings.RuleFannieMaeDocName) {
+                    this.formData.controls[0].get('compareallDisValField').setValue(this.formData.controls[0].get('compareallDisValField').value + ',' + '[' + this.formData.controls[0].get('CompareAllLookUpDocumentTypes').value + '.' + this.formData.controls[0].get('CompareAllValuesField').value + ']');
+                } else {
+                    this.formData.controls[0].get('compareallDisValField').setValue(this.formData.controls[0].get('compareallDisValField').value + ',' + '[' + this.formData.controls[0].get('CompareAllLookUpDocumentTypes').value + '.' + this.formData.controls[0].get('CompareAllLookUpLosdocField').value + ']');
+                }
+
             } else {
-                this.formData.controls[0].get('compareallDisValField').setValue('[' + this.formData.controls[0].get('CompareAllLookUpDocumentTypes').value + '.' + this.formData.controls[0].get('CompareAllValuesField').value + ']');
+                if (this.formData.controls[0].get('CompareAllLookUpDocumentTypes').value !== AppSettings.RuleFannieMaeDocName) {
+                    this.formData.controls[0].get('compareallDisValField').setValue('[' + this.formData.controls[0].get('CompareAllLookUpDocumentTypes').value + '.' + this.formData.controls[0].get('CompareAllValuesField').value + ']');
+                } else {
+                    this.formData.controls[0].get('compareallDisValField').setValue('[' + this.formData.controls[0].get('CompareAllLookUpDocumentTypes').value + '.' + this.formData.controls[0].get('CompareAllLookUpLosdocField').value + ']');
+                }
+
             }
             this.formData.controls[0].get('CompareAllLookUpDocumentTypes').setValue('');
             this.formData.controls[0].get('CompareAllValuesField').setValue('');
+            this.formData.controls[0].get('CompareAllLookUpLosdocField').setValue('');
         } else if (this.formData.controls[0].get('comparealllookupvalueDocField').value !== '') {
             if (this.formData.controls[0].get('compareallDisValField').value !== '') {
                 this.formData.controls[0].get('compareallDisValField').setValue(this.formData.controls[0].get('compareallDisValField').value + ',' + this.formData.controls[0].get('comparealllookupvalueDocField').value);
@@ -176,7 +211,13 @@ export class CompareAllFormulaBuilderComponent implements OnInit, OnDestroy {
             if (element.compareallfieldsCustomValues === '' || element.compareallfieldsCustomValues === false) {
                 this.formData.controls[i].get('ComapreAllDocumentTypes').setValue(element.ComapreAllDocumentTypes);
                 this._ruleBuilderService.docFieldsInitChange(this.formData.controls[i], this.currtDocFields, element.ComapreAllDocumentTypes, 'CompareAllDocField', i);
-                this.formData.controls[i].get('CompareAllDocField').setValue(element.CompareAllDocField[0].id);
+
+                if (isTruthy(element.CompareAllDocField)) {
+                    this.formData.controls[i].get('CompareAllDocField').setValue(element.CompareAllDocField[0].id);
+                }
+                if (isTruthy(element.CompareAllLosdocField)) {
+                    this.formData.controls[i].get('CompareAllLosdocField').setValue(element.CompareAllLosdocField);
+                }
             }
             if (element.compareallfieldsCustomValues) {
                 $('#compareallvalueDisplayed_' + i).show();
@@ -199,8 +240,22 @@ export class CompareAllFormulaBuilderComponent implements OnInit, OnDestroy {
             CompareAllLookUpDocumentTypes: [''],
             CompareAllValuesField: [''],
             comparealllookupvalueDocField: [''],
-            compareallDisValField: [{ value: '', disabled: true }]
+            compareallDisValField: [{ value: '', disabled: true }],
+            CompareAllLosdocField: [''],
+            CompareAllLookUpLosdocField: [''],
         }));
+    }
+
+    OnChangeFieldValue(index: number, LodDocField: string, DocType: string) {
+        const SearchValue = this.formData.controls[index].get(LodDocField).value;
+        const LosDocumentName = this.formData.controls[index].get(DocType).value;
+        let LosDocumentId;
+        this.genDocTypes.forEach((a) => {
+            if (a.text === LosDocumentName) {
+                LosDocumentId = a.id;
+            }
+        });
+        this._ruleBuilderService.GetLosDocFields(LosDocumentId, SearchValue);
     }
 
     ngOnDestroy(): void {

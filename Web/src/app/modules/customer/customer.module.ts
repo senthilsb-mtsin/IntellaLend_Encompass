@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MalihuScrollbarModule } from 'ngx-malihu-scrollbar';
@@ -26,6 +26,11 @@ import { CustomerConfigComponent } from './helper-components/customer-config/cus
 import { ConditionGeneralRuleService } from '../loantype/service/condition-general-rule.service';
 import { LoanDataAccess } from '../loantype/loantype.data';
 import { LoanTypeService } from '../loantype/service/loantype.service';
+import { NgDateRangePickerModule } from '../../shared/custom-plugins/ng-daterangepicker-master/ng-daterangepicker.module';
+import { FileUploadModule } from 'ng2-file-upload';
+import { CustomerImportMoniterComponent } from './pages/customer-import-moniter/customer-import-moniter.page';
+import { SyncConfigService } from './services/syncconfig.service';
+import { SyncConfigComponent } from './pages/syncconfig/SyncConfig.page';
 
 @NgModule({
     imports: [
@@ -41,7 +46,9 @@ import { LoanTypeService } from '../loantype/service/loantype.service';
         NgBusyModule,
         Daterangepicker,
         MentionModule.forRoot(),
-        RuleBuilderModule
+        RuleBuilderModule,
+        NgDateRangePickerModule,
+        FileUploadModule
     ],
     providers: [
         CommonService,
@@ -51,7 +58,9 @@ import { LoanTypeService } from '../loantype/service/loantype.service';
         CommonRuleBuilderService,
         ConditionGeneralRuleService,
         LoanDataAccess,
-        LoanTypeService
+        LoanTypeService,
+        DatePipe,
+        SyncConfigService
     ],
     declarations: [
         CustomerComponent,
@@ -60,7 +69,9 @@ import { LoanTypeService } from '../loantype/service/loantype.service';
         CustLoanTypeMappingComponent,
         CustomerChecklistComponent,
         CustomerStackingOrderComponent,
-        CustomerConfigComponent
+        CustomerConfigComponent,
+        CustomerImportMoniterComponent,
+        SyncConfigComponent
     ]
 })
 export class CustomerModule { }

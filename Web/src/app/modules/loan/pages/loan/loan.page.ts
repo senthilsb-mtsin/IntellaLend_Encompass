@@ -6,7 +6,8 @@ import { Location } from '@angular/common';
 import { isTruthy } from '@mts-functions/is-truthy.function';
 import { Loan } from '../../models/loan-details.model';
 import { NotificationService } from '@mts-notification';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { StatusConstant } from '@mts-status-constant';
 
 @Component({
     selector: 'mts-loan-detail',
@@ -28,9 +29,27 @@ export class LoanComponent implements OnInit, OnDestroy {
     constructor(
         private _loanInfoService: LoanInfoService,
         private _location: Location,
-        private _notificationService: NotificationService,
-        private _route: Router
+        private _route: Router,
+        private _activeRoute: ActivatedRoute,
     ) {
+        this._activeRoute.params.subscribe((params: Params) => {
+            if (isTruthy(params) && isTruthy(params['id'])) {
+                if (params['id'] !== 'loanviewerror') {
+                    this._encryptedLoanGUID = params['id'];
+                    this.Promise = this._loanInfoService.GetLoanInfo(this._encryptedLoanGUID);
+                    this._loanInfoService.IsDirectLink = true;
+                }
+            } else {
+                this.setLoanDetails();
+                this._loanInfoService.IsDirectLink = false;
+            }
+        });
+    }
+
+    private _subscriptions: Subscription[] = [];
+    private _encryptedLoanGUID = '';
+
+    setLoanDetails() {
         this.loanSearchTableData = this._loanInfoService.GetLoanTableDetails();
         if (!isTruthy(this.loanSearchTableData) || !isTruthy(this.loanSearchTableData.LoanID)) {
             this._location.back();
@@ -39,9 +58,23 @@ export class LoanComponent implements OnInit, OnDestroy {
         }
     }
 
-    private _subscriptions: Subscription[] = [];
-
     ngOnInit() {
+
+        this._subscriptions.push(this._loanInfoService.LoanInfo$.subscribe((res: LoanSearchTableModel) => {
+            if (isTruthy(res) && (res['StatusID'] === StatusConstant.PENDING_AUDIT || res['StatusID'] === StatusConstant.COMPLETE)) {
+                this._loanInfoService.SetLoanPageInfo(res);
+                this.LoanFound = true;
+                this.setLoanDetails();
+            } else {
+                if (isTruthy(res)) {
+                    res.Message = 'Loan not in viewable status';
+                }
+
+                this._loanInfoService.SetLoanViewIssues(res);
+                this._route.navigate(['view/loandetails/loanviewerror']);
+            }
+        }));
+
         this._subscriptions.push(this._loanInfoService.LoanDetails$.subscribe((res: Loan) => {
             if (isTruthy(res) && res.LoanID === this.loanSearchTableData.LoanID) {
                 this.LoanFound = true;

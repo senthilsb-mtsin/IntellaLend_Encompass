@@ -1,5 +1,5 @@
 
-import { Injectable } from '@angular/core';
+import { Injectable, Injector, NgZone } from '@angular/core';
 import {
   HttpInterceptor,
   HttpRequest,
@@ -11,10 +11,11 @@ import { isTruthy } from '@mts-functions/is-truthy.function';
 import { throwError } from 'rxjs';
 import { NotificationService } from '@mts-notification';
 import { SessionHelper } from '@mts-app-session';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthInterceptorService implements HttpInterceptor {
-  constructor(private _notificationService: NotificationService) { }
+  constructor(private _notificationService: NotificationService, private injector: Injector) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     if (req.method === 'POST') {
@@ -40,6 +41,17 @@ export class AuthInterceptorService implements HttpInterceptor {
   }
 
   private AppendUserDetails(input: any) {
+
+    if (localStorage.getItem('userDetails') === null) {
+      const routerService = this.injector.get(Router);
+      const ngZone = this.injector.get(NgZone);
+      ngZone.run(() => {
+        routerService.navigate(['']);
+      });
+    } else {
+      SessionHelper.setSessionVariables();
+    }
+
     if (isTruthy(SessionHelper.UserDetails)) {
       let requestObj = input;
       if (this.GetObjectType(input) === 'String') {

@@ -7,6 +7,7 @@ import { AddRoleTypeRequestModel } from './models/roletype-request.model';
 import { RoleTypeRequest } from './models/table-request.model';
 import { RoleDetailsRequest } from './models/roletypedetails.model';
 import { ChangeRoleRequest } from './models/changerole.model';
+import { CheckADGroupAssignedForRoleRequestModel } from './models/adgroupmaster.model';
 
 @Injectable()
 export class RoleTypeDataAccess {
@@ -50,6 +51,12 @@ export class RoleTypeDataAccess {
   GetChangeMenuActive(ChangeMenu: ChangeRoleRequest) {
     return this._api.authHttpPost(
       RoleTypeApiUrlConstant.GetChangeMenuActive, ChangeMenu
+    );
+  }
+  CheckADGroupAssignedForRole(req: CheckADGroupAssignedForRoleRequestModel) {
+    return this._api.authHttpPost(
+      RoleTypeApiUrlConstant.CHECK_ADGROUP_ASSIGNED_FOR_ROLE,
+      req
     );
   }
 }

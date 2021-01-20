@@ -96,7 +96,7 @@ const layoutRoutes: Routes = [
       },
       {
         path: 'tenantconfig',
-        data: { routeURL: 'View\\ParkingSpot' },
+        data: { routeURL: 'View\\TenantConfig' },
         canActivate: [ConnectionAuthGuard],
         loadChildren: () =>
           import('../application-configuration/application-configuration.module').then((m) => m.ApplicationConfigurationModule)
@@ -172,7 +172,7 @@ const layoutRoutes: Routes = [
         canActivate: [ConnectionAuthGuard],
         loadChildren: () =>
           import('../export/export.module').then((m) => m.ExportModule),
-      }
+       }
     ],
   }
 ];

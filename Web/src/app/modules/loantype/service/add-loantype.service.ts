@@ -97,9 +97,9 @@ export class AddLoanTypeService {
             this.getSysDocumentTypes();
           } else {
             this._notificationService.showError('Loan Type Name already exist');
+            this.Loading.next(false);
           }
         }
-        this.Loading.next(false);
       });
   }
 
@@ -120,9 +120,9 @@ export class AddLoanTypeService {
             this.getSysDocumentTypes();
           } else {
             this._notificationService.showError('Loan Type Name already exist');
+            this.Loading.next(false);
           }
         }
-        this.Loading.next(false);
       });
   }
 
@@ -347,6 +347,9 @@ export class AddLoanTypeService {
 
   getStackUnDocTypes(stackType: string = '') {
     if (isTruthy(this._stackUnAssignedDocs) && this._stackUnAssignedDocs.length > 0) {
+      if (stackType === 'edit') {
+        this.setSysAllDocuments();
+      }
       this.StackUnAssignedDocs.next(this._stackUnAssignedDocs.slice());
       return Subscription.EMPTY;
     } else {
@@ -410,6 +413,7 @@ export class AddLoanTypeService {
           this._notificationService.showSuccess('Stacking Order Assigned Successfully');
           this._stackingOrderType = 'edit';
           this.stackingOrderType.next(this._stackingOrderType);
+          this._commonService.ReloadSysStackingOrderData();
         }
       } else {
         this._notificationService.showError('Error while creating');
@@ -742,6 +746,7 @@ export class AddLoanTypeService {
                 this._stackinOrder.Description = this._stackinOrderName;
                 this.SaveStackingOrderMapping();
                 this._notificationService.showSuccess('Stacking Order Saved Successfully');
+                this._commonService.ReloadSysStackingOrderData();
               } else {
                 this._notificationService.showError('Error while saving');
               }
@@ -829,7 +834,7 @@ export class AddLoanTypeService {
         }
       }
     });
-
+    this._sysUnAssignedStackingOrder = tempUnAssigned;
     this.SysStackingOrderDetailData.next({ StackingOrder: this._sysStackingOrderDetailData.slice(), StackingOrderGroup: this._sysGroupStackingOrderDetailData.slice(), UnAssignedDocTypes: tempUnAssigned.slice() });
 
   }
@@ -841,6 +846,7 @@ export class AddLoanTypeService {
         this._allDocTypes = result.AllDocTypes;
         this._assignedDocTypes = result.AssignedDocTypes;
         this.LoanTypeId = this._loanTypeID;
+        this.Loading.next(false);
         this.setNextStep.next(new LoanTypeWizardStepModel(this.AddLoantypeSteps.AssignDocumentType, 'active complete', 'active', '', ''));
       }
     );

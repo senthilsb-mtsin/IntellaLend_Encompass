@@ -27,6 +27,9 @@ export class DateDiffFormulaBuilderComponent implements OnInit, OnDestroy {
     ErrorMsg = '';
     currtDocFields: any[] = [];
 
+    LosDocumentFields: any[] = [];
+    FannieMaeDocName: string = AppSettings.RuleFannieMaeDocName;
+
     rowData: ChecklistItemRowData = new ChecklistItemRowData();
     waitingForData = true;
     dOptions: any = {
@@ -81,32 +84,58 @@ export class DateDiffFormulaBuilderComponent implements OnInit, OnDestroy {
             let datediffRuleOperatorCheck = false;
 
             form.datediffRule.forEach(elements => {
-                let fromField = '', toField = '';
-                if (elements.fromDateDocTypes !== '' && elements.ToDateDocumentTypes !== '' && elements.fromDate !== '' && elements.toDate !== '' && elements.dateOperator !== '' && elements.resultField !== '') {
-                    if (typeof (elements.fromDate) === 'string') {
+                let fromField = '', toField = '', fromDocType = '', toDocType = '';
+                if (elements.fromDateDocTypes !== '' && elements.ToDateDocumentTypes !== '' && (elements.fromDate !== '' || elements.FromDateLosdocField !== '') && elements.toDate !== '' && elements.dateOperator !== '' && elements.resultField !== '') {
+                    if (typeof (elements.fromDate) === 'string' && elements.fromDateDocTypes !== AppSettings.RuleFannieMaeDocName) {
+                        fromDocType = elements.fromDateDocTypes;
                         fromField = elements.fromDate;
-                        toField = elements.toDate;
-                    } else if (Array.isArray(elements.fromDate) && elements.fromDate.length > 0) {
+                        toField = elements.toDate !== '' ? elements.toDate : elements.ToDateLosdocField;
+                    } else if (Array.isArray(elements.fromDate) && elements.fromDate.length > 0 && elements.fromDateDocTypes !== AppSettings.RuleFannieMaeDocName) {
+                        fromDocType = elements.fromDateDocTypes;
                         fromField = elements.fromDate[0].text;
-                        toField = elements.toDate[0].text;
+                        toField = elements.toDate[0].text !== '' ? elements.toDate[0].text : elements.ToDateLosdocField[0].text;
+                    } else if (typeof (elements.FromDateLosdocField) === 'string' && elements.fromDateDocTypes === AppSettings.RuleFannieMaeDocName) {
+                        fromDocType = AppSettings.FannieMaeDocDisplayName;
+                        fromField = elements.FromDateLosdocField;
+                        toField = elements.toDate !== '' ? elements.toDate : elements.ToDateLosdocField;
+                    } else if (Array.isArray(elements.FromDateLosdocField) && elements.FromDateLosdocField.length > 0 && elements.fromDateDocTypes === AppSettings.RuleFannieMaeDocName) {
+                        fromDocType = AppSettings.FannieMaeDocDisplayName;
+                        fromField = elements.FromDateLosdocField[0].text;
+                        toField = elements.toDate[0].text !== '' ? elements.toDate[0].text : elements.ToDateLosdocField[0].text;
                     }
-                    str += '[' + elements.fromDateDocTypes + '.' + fromField + ']' + ',' + '[' + elements.ToDateDocumentTypes + '.' + toField + ']';
-                } else if (elements.datevalueDocField !== '' && elements.ToDateDocumentTypes !== '' && elements.toDate !== '' && elements.dateOperator !== '' && elements.resultField !== '') {
-                    if (typeof (elements.toDate) === 'string') {
+                    str += '[' + fromDocType + '.' + fromField + ']' + ',' + '[' + elements.ToDateDocumentTypes + '.' + toField + ']';
+                } else if (elements.datevalueDocField !== '' && elements.ToDateDocumentTypes !== '' && (elements.toDate !== '' || elements.ToDateLosdocField !== '') && elements.dateOperator !== '' && elements.resultField !== '') {
+                    if (typeof (elements.toDate) === 'string' && elements.ToDateDocumentTypes !== AppSettings.RuleFannieMaeDocName) {
+                        toDocType = elements.ToDateDocumentTypes;
                         toField = elements.toDate;
-                    } else if (Array.isArray(elements.toDate) && elements.toDate.length > 0) {
+                    } else if (Array.isArray(elements.toDate) && elements.toDate.length > 0 && elements.ToDateDocumentTypes !== AppSettings.RuleFannieMaeDocName) {
+                        toDocType = elements.ToDateDocumentTypes;
                         toField = elements.toDate[0].text;
+                    } else if (typeof (elements.ToDateLosdocField) === 'string' && elements.ToDateDocumentTypes === AppSettings.RuleFannieMaeDocName) {
+                        toDocType = AppSettings.FannieMaeDocDisplayName;
+                        toField = elements.ToDateLosdocField;
+                    } else if (Array.isArray(elements.ToDateLosdocField) && elements.ToDateLosdocField.length > 0 && elements.ToDateDocumentTypes === AppSettings.RuleFannieMaeDocName) {
+                        toDocType = AppSettings.FannieMaeDocDisplayName;
+                        toField = elements.ToDateLosdocField[0].text;
                     }
 
-                    str += elements.datevalueDocField + ',' + '[' + elements.ToDateDocumentTypes + '.' + toField + ']';
-                } else if (elements.toDatevalueDocField !== '' && elements.fromDateDocTypes !== '' && elements.fromDate !== '' && elements.dateOperator !== '' && elements.resultField !== '') {
-                    if (typeof (elements.fromDate) === 'string') {
+                    str += elements.datevalueDocField + ',' + '[' + toDocType + '.' + toField + ']';
+                } else if (elements.toDatevalueDocField !== '' && elements.fromDateDocTypes !== '' && (elements.fromDate !== '' || elements.FromDateLosdocField !== '') && elements.dateOperator !== '' && elements.resultField !== '') {
+                    if (typeof (elements.fromDate) === 'string' && elements.fromDateDocTypes !== AppSettings.RuleFannieMaeDocName) {
+                        fromDocType = elements.fromDateDocTypes;
                         fromField = elements.fromDate;
-                    } else if (Array.isArray(elements.fromDate) && elements.fromDate.length > 0) {
+                    } else if (Array.isArray(elements.fromDate) && elements.fromDate.length > 0 && elements.fromDateDocTypes !== AppSettings.RuleFannieMaeDocName) {
+                        fromDocType = elements.fromDateDocTypes;
                         fromField = elements.fromDate[0].text;
+                    } else if (typeof (elements.FromDateLosdocField) === 'string' && elements.fromDateDocTypes === AppSettings.RuleFannieMaeDocName) {
+                        fromDocType = AppSettings.FannieMaeDocDisplayName;
+                        fromField = elements.FromDateLosdocField;
+                    } else if (Array.isArray(elements.FromDateLosdocField) && elements.FromDateLosdocField.length > 0 && elements.fromDateDocTypes === AppSettings.RuleFannieMaeDocName) {
+                        fromDocType = AppSettings.FannieMaeDocDisplayName;
+                        fromField = elements.FromDateLosdocField[0].text;
                     }
 
-                    str += '[' + elements.fromDateDocTypes + '.' + fromField + ']' + ',' + elements.toDatevalueDocField;
+                    str += '[' + fromDocType + '.' + fromField + ']' + ',' + elements.toDatevalueDocField;
                 } else if (elements.datevalueDocField !== '' && elements.toDatevalueDocField !== '' && elements.dateOperator !== '' && elements.resultField !== '') {
                     str += elements.datevalueDocField + ',' + elements.toDatevalueDocField;
                 } else {
@@ -128,6 +157,13 @@ export class DateDiffFormulaBuilderComponent implements OnInit, OnDestroy {
             }
             this._commonRuleBuilderService.ruleExpression.next(ruleFormationValues);
         }));
+        this._subscriptions.push(this._ruleBuilderService.LosDocumentFields.subscribe((elements: any[]) => {
+
+            this.LosDocumentFields = [];
+            elements.forEach((element) => {
+                this.LosDocumentFields.push(element);
+            });
+        }));
     }
 
     GenerateFormValues() {
@@ -136,14 +172,24 @@ export class DateDiffFormulaBuilderComponent implements OnInit, OnDestroy {
             if (element.fromDateValue === '' || element.fromDateValue === false) {
                 this.formData.controls[index].get('fromDateDocTypes').setValue(element.fromDateDocTypes);
                 this._ruleBuilderService.docFieldsInitChange(this.formData.controls[index], this.currtDocFields, element.fromDateDocTypes, 'fromDate', 0);
-                this.formData.controls[index].get('fromDate').setValue(element.fromDate[0].id);
+                if (isTruthy(element.fromDate)) {
+                    this.formData.controls[index].get('fromDate').setValue(element.fromDate[0].id);
+                }
+                if (isTruthy(element.FromDateLosdocField)) {
+                    this.formData.controls[index].get('FromDateLosdocField').setValue(element.FromDateLosdocField);
+                }
                 this.formData.controls[index].get('dateOperator').setValue(element.dateOperator);
                 this.formData.controls[index].get('resultField').setValue(element.resultField);
             }
             if (element.datefieldsCustomValues === '' || element.datefieldsCustomValues === false) {
                 this.formData.controls[index].get('ToDateDocumentTypes').setValue(element.ToDateDocumentTypes);
                 this._ruleBuilderService.docFieldsInitChange(this.formData.controls[index], this.currtDocFields, element.ToDateDocumentTypes, 'toDate', 1);
-                this.formData.controls[index].get('toDate').setValue(element.toDate[0].id);
+                if (isTruthy(element.toDate)) {
+                    this.formData.controls[index].get('toDate').setValue(element.toDate[0].id);
+                }
+                if (isTruthy(element.ToDateLosdocField)) {
+                    this.formData.controls[index].get('ToDateLosdocField').setValue(element.ToDateLosdocField);
+                }
                 this.formData.controls[index].get('dateOperator').setValue(element.dateOperator);
                 this.formData.controls[index].get('resultField').setValue(element.resultField);
             }
@@ -181,6 +227,7 @@ export class DateDiffFormulaBuilderComponent implements OnInit, OnDestroy {
             $('#todatevalueDisplayed_' + index).show();
             $('#todatevalueDisplay_' + index).hide();
             this.formData.controls[index].get('toDate').setValue('');
+            this.formData.controls[index].get('ToDateLosdocField').setValue('');
             this.formData.controls[index].get('ToDateDocumentTypes').setValue('');
         } else {
             this.formData.controls[index].get('datefieldsCustomValues').setValue(false);
@@ -198,6 +245,7 @@ export class DateDiffFormulaBuilderComponent implements OnInit, OnDestroy {
             $('#datevalueDisplayed_' + index).show();
             $('#datevalueDisplay_' + index).hide();
             this.formData.controls[index].get('fromDate').setValue('');
+            this.formData.controls[index].get('FromDateLosdocField').setValue('');
             this.formData.controls[index].get('fromDateDocTypes').setValue('');
         } else {
             this.formData.controls[index].get('fromDateValue').setValue(false);
@@ -208,7 +256,10 @@ export class DateDiffFormulaBuilderComponent implements OnInit, OnDestroy {
     }
 
     DocTypesChanged(genVals: any, i: any, field: string) {
-        this._ruleBuilderService.docFieldsInitChange(this.formData.controls[0], this.currtDocFields, genVals, field, i);
+        const DocName: string = ((typeof (genVals) === 'string') ? genVals : genVals.target.selectedOptions[0].innerText);
+        if (DocName !== AppSettings.RuleFannieMaeDocName) {
+            this._ruleBuilderService.docFieldsInitChange(this.formData.controls[0], this.currtDocFields, genVals, field, i);
+        }
     }
 
     addRules() {
@@ -222,8 +273,22 @@ export class DateDiffFormulaBuilderComponent implements OnInit, OnDestroy {
             toDate: [''],
             toDatevalueDocField: [''],
             dateOperator: [''],
-            resultField: ['']
+            resultField: [''],
+            FromDateLosdocField: [''],
+            ToDateLosdocField: ['']
         }));
+    }
+
+    OnChangeFieldValue(index: number, LodDocField: string, DocType: string) {
+        const SearchValue = this.formData.controls[index].get(LodDocField).value;
+        const LosDocumentName = this.formData.controls[index].get(DocType).value;
+        let LosDocumentId;
+        this.genDocTypes.forEach((a) => {
+            if (a.text === LosDocumentName) {
+                LosDocumentId = a.id;
+            }
+        });
+        this._ruleBuilderService.GetLosDocFields(LosDocumentId, SearchValue);
     }
 
     ngOnDestroy(): void {

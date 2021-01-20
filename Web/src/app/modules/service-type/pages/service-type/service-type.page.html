@@ -16,6 +16,11 @@
                         <button id="lt_btnViewLoanType3" class="btn btn-warning btn-sm waves-effect waves-light"
                             type="button" (click)="ShowServiceTypeModal(2)" *ngIf="showHide[2]"
                             [disabled]="rowSelected"><i class="fa fa-eye"></i>&nbsp;&nbsp;View Service Type</button>
+                        <button id="lt_btnViewLoanType4" class="btn btn-warning btn-sm waves-effect waves-light"
+                            type="button" (click)="ShowServiceTypeModal(3)"
+                            ><i class="fa fa-download"></i>&nbsp;&nbsp;{{AuthorityLabelSingular}} Monitor</button>
+
+                            <!-- <button class="btn btn-warning btn-sm waves-effect waves-light" type="button" (click)="ShowCustomerModal(2)"><i class="fa fa-download"></i>&nbsp;&nbsp;Import {{AuthorityLabelSingular}}</button> -->
                     </div>
                 </div>
                 <div class="box-body">

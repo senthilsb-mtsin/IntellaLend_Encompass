@@ -35,6 +35,9 @@ export class DocumentDataAccess {
   CheckDocumentExistForEdit(_reqBody: any): Observable<MTSAPIResponse> {
     return this._api.authHttpPost(DocumentTypeApiUrlConstant.CHECK_DOCUMENT_DUPFOREDIT, _reqBody);
   }
+  SynDocTypes(_reqBody: any): Observable<MTSAPIResponse> {
+    return this._api.authHttpPost(DocumentTypeApiUrlConstant.SYNC_DOC_TYPES, _reqBody);
+  }
   GetDocumentFields(_reqBody: any): Observable<MTSAPIResponse> {
     return this._api.authHttpPost(DocumentFieldApiUrlConstant.GET_DOCUMENT_FIELDS, _reqBody);
   }

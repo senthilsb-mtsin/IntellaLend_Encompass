@@ -6,6 +6,8 @@ import { CustomerApiUrlConstant } from 'src/app/shared/constant/api-url-constant
 import { CustomerDatatableModel } from './models/customer-datatable.model';
 import { SaveCustReviewLoanMappingModel } from './models/save-cust-reivew-loan-mapping.model';
 import { StackingOrderDetailTable } from './models/stacking-order-detail-table.model';
+import { CustomerImportStagingDetailsRequestModel, CustomerImportStagingRequestModel } from './models/customer-import.model';
+import { SyncConfigApiUrlConstant } from 'src/app/shared/constant/api-url-constants/sync-config-api-url.constant';
 
 @Injectable()
 export class CustomerData {
@@ -68,7 +70,7 @@ export class CustomerData {
     }
 
     RemoveCustReviewMapping(req: { TableSchema: string, CustomerID: number, ReviewTypeID: number }): Observable<MTSAPIResponse> {
-        return this._api.authHttpPost(CustomerApiUrlConstant.SAVE_CUST_REVIEW_MAPPING, req);
+        return this._api.authHttpPost(CustomerApiUrlConstant.REMOVE_CUST_REVIEW_MAPPING, req);
     }
 
     RetainCustReviewMapping(req: { TableSchema: string, CustomerID: number, ReviewTypeID: number }): Observable<MTSAPIResponse> {
@@ -117,6 +119,20 @@ export class CustomerData {
 
     AddCustomerConfigData(req: { TableSchema: string, CustomerID: number, custConfigItems: any }): Observable<MTSAPIResponse> {
         return this._api.authHttpPost(CustomerApiUrlConstant.ADD_CUSTOMER_CONFIG, req);
+    }
+
+    GetCustomeImportStaging(req: CustomerImportStagingRequestModel) {
+        return this._api.authHttpPost(CustomerApiUrlConstant.GET_CUSTOMER_IMPORT_STAGING, req);
+    }
+
+    GetCustomeImportStagingDetails(req: CustomerImportStagingDetailsRequestModel) {
+        return this._api.authHttpPost(CustomerApiUrlConstant.GET_CUSTOMER_IMPORT_STAGING_DETAILS, req);
+    }
+    GetCustLoanTypeMapping(req: { TableSchema: string, CustomerID: number }): Observable<MTSAPIResponse> {
+        return this._api.authHttpPost(SyncConfigApiUrlConstant.GET_SYNC_CONFIG_DETAILS, req);
+    }
+    UpdateCustLoanTypeMapping(req: any): Observable<MTSAPIResponse> {
+        return this._api.authHttpPost(SyncConfigApiUrlConstant.UPDATE_SYNC_CONFIG, req);
     }
 
 }

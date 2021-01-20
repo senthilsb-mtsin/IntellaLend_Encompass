@@ -1,0 +1,9 @@
+
+/* This is for the data area that is scrollable */
+
+.tablecontainer {
+    overflow-y: auto;
+    min-height: 500px;
+    max-height: calc(100vh - 500px);
+    background: #fff;
+}

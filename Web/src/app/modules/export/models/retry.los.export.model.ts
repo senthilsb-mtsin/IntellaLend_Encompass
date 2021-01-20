@@ -9,3 +9,9 @@ export class RetryLOSExportModel {
         this.LoanID = LoanID;
      }
 }
+export class ReExportLOSModel {
+    constructor(public TableSchema: string,
+        public LoanID: number,
+        public FileType: number,
+        public ID: number) { }
+}

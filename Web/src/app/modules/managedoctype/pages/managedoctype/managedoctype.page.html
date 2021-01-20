@@ -3,7 +3,7 @@
         <div class="box">
             <div class="box-title">
                 <div class="box-caption">
-                    <span>Document Library</span>
+                    <span>{{AuthorityLabelSingular}} Document Library</span>
                 </div>
                 <div class="box-action">
                     <button id="dl_btnEditDT" class="btn btn-success btn-sm waves-effect waves-light" type="button" (click)="ShowDocumentTypeModal(1)" *ngIf="showHide[0]" [disabled]="rowSelected"><i class="fa fa-pencil"></i>&nbsp;&nbsp;Edit Document Type</button>
@@ -32,8 +32,11 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <button type="button" class="btn btn-secondary btn-info waves-effect waves-light m-t-30 m-l-30" (click)="GetManagerDoctypes()"><span class="material-icons">search</span>&nbsp;Search</button>
+                            <button type="button" class="btn btn-secondary btn-info waves-effect waves-light m-t-30  m-r-8" (click)="GetManagerDoctypes()"><span class="material-icons">search</span>Search</button>
+                            <!-- <button type="button" [disabled] ="!syncEnable" class="btn btn-secondary btn-info waves-effect waves-light m-t-30  m-r-8" (click)="SyncLoantype()">Sync LoanType</button> -->
+
                         </div>
+                      
                     </div>
                     <div class="col-md-12">
                         <div class="table-panel">

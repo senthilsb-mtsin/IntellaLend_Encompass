@@ -1,0 +1,59 @@
+/*Assign loan type*/
+.review_detail {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    transition: all ease 0.5s;
+}
+
+.sto_list {
+    height: calc(100vh - 335px);
+    overflow-y: auto;
+    border: 1px solid #e4e4e4;
+}
+
+.draganddrop {
+    padding: 8px 5px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    cursor: move;
+    border-color: rgba(57, 106, 156, 0.6)
+}
+
+.draganddrop:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.draganddrop i {
+    top: 4px;
+    position: relative;
+}
+
+.draganddrop span {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 94%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.DropHighlight {
+    border: 2px solid #FF8A65;
+}
+
+.SelectHighlight {
+    border: 2px solid #FF8A65;
+}
+
+.text-col-green {
+    color: #2E7D32;
+    cursor: pointer;
+}
+
+.iconpad{
+    font-size: 21px;
+    padding: 0px 6px;
+}

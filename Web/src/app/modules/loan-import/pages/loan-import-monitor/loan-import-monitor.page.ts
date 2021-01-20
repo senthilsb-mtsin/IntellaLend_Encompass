@@ -239,7 +239,7 @@ export class LoanImportMonitorComponent implements OnInit, OnDestroy, AfterViewI
           'mRender': function (data, type, row) {
             if (row['Status'] === -2) {
               return '<span style=\'font-size:21px;cursor: pointer;\' title=\'' + row['ErrorMsg'] + '\' class=\'retryUpload material-icons txt-info\'>settings_backup_restore</span>';
-            } else if (row['Status'] === StatusConstant.PENDING_AUDIT) {
+            } else if (row['Status'] === StatusConstant.PENDING_AUDIT || (row['Status'] === StatusConstant.COMPLETE)) {
               return '<span  title=\'' + 'View Loan' + '\' style=\'cursor: pointer;\' class=\'viewLoan material-icons txt-info\'>pageview</span>';
             } else if (row.Status === StatusConstant.FAILED_ENCOMPASS_DOWNLOAD) {
               return '<div  title=\'' + 'Retry Download' + '\' class =\'LoanDownloadRetry\'> <i class=\'fa fa-retweet\' aria-hidden=\'true\'></i></div>';

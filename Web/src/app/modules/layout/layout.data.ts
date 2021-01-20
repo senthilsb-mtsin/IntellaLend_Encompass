@@ -12,7 +12,7 @@ export class LayoutDataAccess {
         return this._api.authHttpPost(LoginApiUrlConstant.CHECK_CURRENT_PASSWORD, _reqBody);
     }
 
-    getDefaultRouteData(_reqBody: { TableSchema: string, RoleID: number, UserID: number }): Observable<MTSAPIResponse> {
+    getDefaultRouteData(_reqBody: { TableSchema: string, RoleID: number, UserID: number, ADLogin: boolean }): Observable<MTSAPIResponse> {
         return this._api.authHttpPost(LoginApiUrlConstant.GET_MENU, _reqBody);
     }
 

@@ -24,4 +24,7 @@ export class ManagerDocTypeDataAccess {
   CheckDocumentExistForEdit(_reqBody: any): Observable<MTSAPIResponse> {
     return this._api.authHttpPost(ManagerDocTypeApiUrlConstant.CHECK_DOCUMENT_DUPFOREDIT, _reqBody);
   }
+  SyncRetainUpdateStagings(_reqBody: any): Observable<MTSAPIResponse> {
+    return this._api.authHttpPost(ManagerDocTypeApiUrlConstant.UPDATE_RETAINUPDATE_STAGING, _reqBody);
+  }
 }

@@ -4,5 +4,6 @@ export class DocumentTypeApiUrlConstant {
   static CHECK_DOCUMENT_EXIST = 'Master/CheckDocumentDup';
   static GET_DOCUMENT_TYPEBASEDON_LOANTYPE = 'Mapping/GetDocumentTypesBasedonLoanType';
   static  CHECK_DOCUMENT_DUPFOREDIT = 'Master/CheckDocumentDupForEdit';
+  static SYNC_DOC_TYPES = 'Master/SyncDocType';
 
 }

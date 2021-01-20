@@ -1,7 +1,7 @@
 import { RouterModule, Routes } from '@angular/router';
 import { LoanComponent } from './pages/loan/loan.page';
 import { LoanDetailExportComponent } from './helper-components/loan-detail-export/loan-detail-export.page';
-import { LoanPopOutComponent } from './helper-components/loan-popout/loan-popout.page';
+import { LoanViewErrorComponent } from './helper-components/loan-view-error/loan-view-error.page';
 
 const loanRoutes: Routes = [
     {
@@ -13,8 +13,16 @@ const loanRoutes: Routes = [
         component: LoanComponent
     },
     {
+        path: 'loanviewerror',
+        component: LoanViewErrorComponent
+    },
+    {
         path: 'export',
         component: LoanDetailExportComponent
+    },
+    {
+        path: ':id',
+        component: LoanComponent
     }
 ];
 

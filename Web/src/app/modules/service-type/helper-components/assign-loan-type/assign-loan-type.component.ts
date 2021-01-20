@@ -1,200 +1,107 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { LoanTypeSearchService } from '../../service/loantype-search.service';
 import { AddServiceTypeService } from '../../service/add-service-type.service';
-import { DragulaService } from '@mts-dragula';
 import { Subscription } from 'rxjs';
-import { isTruthy } from '@mts-functions/is-truthy.function';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import { LoanTypeMappingModel } from '../../models/loan-type-mapping.model';
+import { NotificationService } from '@mts-notification';
+import { element } from 'protractor';
+import { AssignLoanTypesRequestModel } from '../../models/assign-loan-types-request.model';
+import { ServiceTypeModel } from '../../models/service-type.model';
 
 @Component({
     selector: 'mts-assign-loan-type',
     styleUrls: ['assign-loan-type.component.css'],
     templateUrl: 'assign-loan-type.component.html',
-    providers: [LoanTypeSearchService],
+    // providers: [LoanTypeSearchService],
 })
 export class AssignLoanTypesComponent implements OnInit, OnDestroy {
-    //#region Public Variables
+
     AllLoanTypes: any[] = [];
+    LoanTypesMapped: any[] = [];
+    LoanTypeName = '';
+    ReviewDetails: ServiceTypeModel;
     AssignedLoanTypes: any[] = [];
-    FilterAllLoanTypes: any[] = [];
-    allLoanSearchval = '';
-    assignedLoanSearchval = '';
+    @ViewChild('loanConfirmModal') loanConfirmModal: ModalDirective;
+    @ViewChild('loanRetainConfirm') loanRetainConfirm: ModalDirective;
 
-    @ViewChildren('allLoans') _allLoanChildrens: QueryList<ElementRef>;
-    @ViewChildren('assignedLoan') _assignLoanChildrens: QueryList<ElementRef>;
-    //#endregion Public Variables
-
-    //#region Constructor
     constructor(
         private _addServiceTypeService: AddServiceTypeService,
-        private _loantypeSearch: LoanTypeSearchService,
-        private dragService: DragulaService,
+        // private _loantypeSearch: LoanTypeSearchService,
+        private _notificationService: NotificationService
     ) { }
-    //#endregion Constructor
 
-    //#region  Private Variables
-    private subscriptions: Subscription[] = [];
-    //#endregion Private Variables
+    private _subscriptions: Subscription[] = [];
+    private _loanTypeID = 0;
+    private _currtLoanType: LoanTypeMappingModel;
 
-    //#region  Public Methods
-    ngOnInit(): void {
-        this.resetPageData();
-        this.dragService.dropModel().subscribe((value) => {
-            this.onDropModel(value);
-        });
-    }
+    ngOnInit() {
+        this._subscriptions.push(this._addServiceTypeService.loanRetainConfirm$.subscribe((res: boolean) => {
+            res ? this.loanRetainConfirm.show() : this.loanRetainConfirm.hide();
+        }));
+        this._subscriptions.push(this._addServiceTypeService.loanConfirmModal$.subscribe((res: boolean) => {
+            res ? this.loanConfirmModal.show() : this.loanConfirmModal.hide();
+        }));
 
-    resetPageData() {
         this.AllLoanTypes = this._addServiceTypeService.getAllLoanTypes();
+        this.ReviewDetails = this._addServiceTypeService.getCurrentReviewDetails();
         this.AssignedLoanTypes = this._addServiceTypeService.getAssignedLoanTypes();
-        this.FilterAllLoanTypes = this._addServiceTypeService.getAllLoanTypes();
-    }
-
-    MoveFromAllLoan() {
-        for (let i = 0; i < this._allLoanChildrens['_results'].length; i++) {
-            const clist = this._allLoanChildrens['_results'][i].nativeElement.classList.toString();
-            const loanTypeID = parseInt(this._allLoanChildrens['_results'][i].nativeElement.attributes['data-loanid'].value, 10);
-            const index = this.AllLoanTypes.findIndex(l => l.LoanTypeID === loanTypeID);
-            if (clist.indexOf('SelectHighlight') > -1) {
-                this.AssignedLoanTypes.push(this.AllLoanTypes[index]);
-                this.AllLoanTypes.splice(index, 1);
-                this._addServiceTypeService.setLoanTypes(this.AssignedLoanTypes, this.AllLoanTypes);
-            }
-        }
-    }
-
-    MoveToAllLoan() {
-        for (let i = 0; i < this._assignLoanChildrens['_results'].length; i++) {
-            const clist = this._assignLoanChildrens['_results'][i].nativeElement.classList.toString();
-            const loanTypeID = parseInt(this._assignLoanChildrens['_results'][i].nativeElement.attributes['data-loanid'].value, 10);
-            const index = this.AssignedLoanTypes.findIndex(l => l.LoanTypeID === loanTypeID);
-            if (clist.indexOf('SelectHighlight') > -1) {
-                this.AllLoanTypes.push(this.AssignedLoanTypes[index]);
-                this.AssignedLoanTypes.splice(index, 1);
-                this._addServiceTypeService.setLoanTypes(this.AssignedLoanTypes, this.AllLoanTypes);
-            }
-        }
-    }
-
-    MoveAllLoansToAssignedLoans() {
-        if (this._allLoanChildrens['_results'].length > 0) {
-            for (let i = 0; i < this._allLoanChildrens['_results'].length; i++) {
-                const clist = this._allLoanChildrens['_results'][i].nativeElement.classList.toString();
-                if (clist.indexOf('SelectHighlight') > -1) {
-                    this._allLoanChildrens['_results'][i].nativeElement.className = clist.replace('SelectHighlight', '');
-                } else {
-                    this._allLoanChildrens['_results'][i].nativeElement.className = clist + ' ' + 'SelectHighlight';
-                }
-            }
-            for (let i = 0; i < this._allLoanChildrens['_results'].length; i++) {
-                const clist = this._allLoanChildrens['_results'][i].nativeElement.classList.toString();
-                const loanID = parseInt(this._allLoanChildrens['_results'][i].nativeElement.attributes['data-loanid'].value, 10);
-                const index = this.AllLoanTypes.findIndex(l => l.LoanTypeID === loanID);
-                if (clist.indexOf('SelectHighlight') > -1) {
-                    this.AssignedLoanTypes.push(this.AllLoanTypes[index]);
-                    this.AllLoanTypes.splice(index, 1);
-                    this._addServiceTypeService.setLoanTypes(this.AssignedLoanTypes, this.AllLoanTypes);
-                }
-            }
-        } else {
-            for (let index = 0; index < this._assignLoanChildrens['_results'].length; index++) {
-                const clist = this._assignLoanChildrens['_results'][index].nativeElement.classList.toString();
-                if (clist.indexOf('SelectHighlight') > -1) {
-                    this._assignLoanChildrens['_results'][index].nativeElement.className = clist.replace('SelectHighlight', '');
-                } else {
-                    this._assignLoanChildrens['_results'][index].nativeElement.className = clist + ' ' + 'SelectHighlight';
-                }
-            }
-            for (let i = 0; i < this._assignLoanChildrens['_results'].length; i++) {
-                const clist = this._assignLoanChildrens['_results'][i].nativeElement.classList.toString();
-                const loanTypeID = parseInt(this._assignLoanChildrens['_results'][i].nativeElement.attributes['data-loanid'].value, 10);
-                const index = this.AssignedLoanTypes.findIndex(l => l.LoanTypeID === loanTypeID);
-                if (clist.indexOf('SelectHighlight') > -1) {
-                    this.AllLoanTypes.push(this.AssignedLoanTypes[index]);
-                    this.AssignedLoanTypes.splice(index, 1);
-                    this._addServiceTypeService.setLoanTypes(this.AssignedLoanTypes, this.AllLoanTypes);
-                }
-            }
-        }
-    }
-
-    AddLoanType(loanID: number) {
-        if (loanID > 0) {
-            const index = this.AllLoanTypes.findIndex(l => l.LoanTypeID === loanID);
-            if (isTruthy(index)) {
-                this.AssignedLoanTypes.push(this.AllLoanTypes[index]);
-                if (this.allLoanSearchval !== null) {
-                    const assignLoanValue = this.allLoanSearchval;
-                    this.allLoanSearchval = '';
-                    this.AllLoanTypes.splice(index, 1);
-                    this.allLoanSearchval = assignLoanValue;
-                } else {
-                    this.AllLoanTypes.splice(index, 1);
-                }
-                this._addServiceTypeService.setLoanTypes(this.AssignedLoanTypes, this.AllLoanTypes);
-            }
-        }
-    }
-
-    UnassignedLoanFilterSearch(search) {
-        this.AllLoanTypes = this._loantypeSearch.ServiceTypeLoanFiltersearch(
-            search,
-            this.FilterAllLoanTypes,
-            this.AssignedLoanTypes
-        );
-    }
-
-    setLoanSelected(index: number) {
-        const clist = this._allLoanChildrens['_results'][index].nativeElement.classList.toString();
-        if (clist.indexOf('SelectHighlight') > -1) {
-            this._allLoanChildrens['_results'][index].nativeElement.className = clist.replace('SelectHighlight', '');
-        } else {
-            this._allLoanChildrens['_results'][index].nativeElement.className = clist + ' ' + 'SelectHighlight';
-        }
-    }
-
-    setLoanAssignSelected(index: number) {
-        const clist = this._assignLoanChildrens['_results'][index].nativeElement.classList.toString();
-        if (clist.indexOf('SelectHighlight') > -1) {
-            this._assignLoanChildrens['_results'][index].nativeElement.className = clist.replace('SelectHighlight', '');
-        } else {
-            this._assignLoanChildrens['_results'][index].nativeElement.className = clist + ' ' + 'SelectHighlight';
-        }
-    }
-
-    RemoveLoanType(loanID: number) {
-        const index = this.AssignedLoanTypes.findIndex(l => l.LoanTypeID === loanID);
-        if (index !== undefined) {
-            this.AllLoanTypes.push(this.AssignedLoanTypes[index]);
-            if (this.assignedLoanSearchval !== null) {
-                const assignLoanValue = this.assignedLoanSearchval;
-                this.assignedLoanSearchval = '';
-                this.AssignedLoanTypes.splice(index, 1);
-                this.assignedLoanSearchval = assignLoanValue;
-            } else {
-                this.AssignedLoanTypes.splice(index, 1);
-            }
-            this._addServiceTypeService.setLoanTypes(this.AssignedLoanTypes, this.AllLoanTypes);
-        }
-    }
-
-    ngOnDestroy(): void {
-        this.dragService.destroy('dragloantype');
-        this.subscriptions.forEach((element) => {
-            element.unsubscribe();
+        this._addServiceTypeService.getSysLoanTypes();
+        this._addServiceTypeService.allAssignedLoanTypes.forEach((ele) => {
+            this.LoanTypesMapped.push({LoanTypeID: ele.LoanTypeID, LoanTypeName: ele.LoanTypeName, loading: false, DBMapped: ele.DBMapped, Mapped: ele.Mapped });
         });
     }
-    //#endregion Public Methods
 
-    //#region Private Methods
-    private onDropModel(args) {
-        const loanId = args.item.LoanTypeID;
-        if (args.target.getAttribute('DivType') === 'Assigned') {
-            args.el.classList.add('DropHighlight');
-            this.AddLoanType(loanId);
-        } else if (args.target.getAttribute('DivType') === 'UnAssigned') {
-            this.RemoveLoanType(loanId);
+    SetLoanType(loanType: LoanTypeMappingModel) {
+        this._currtLoanType = loanType;
+        loanType.Mapped = !loanType.Mapped;
+        this._loanTypeID = loanType.LoanTypeID;
+        this.LoanTypeName = loanType.LoanTypeName;
+        if (loanType.Mapped) {
+            loanType.loading = true;
+            this.CheckCustReviewLoanMapping(loanType);
+        } else if (loanType.DBMapped) {
+            this.loanConfirmModal.show();
+        }
+
+    }
+
+    RevertLoanType() {
+        if (this._currtLoanType.Mapped) {
+            this._currtLoanType.Mapped = false;
+            this.loanRetainConfirm.hide();
         }
     }
-    //#endregion Private Methods
 
+    RevertMappedLoanType() {
+        this._currtLoanType.Mapped = (this._currtLoanType.Mapped) ? false : true;
+        this.loanConfirmModal.hide();
+    }
+
+    RemoveLoanMapping() {
+        this._addServiceTypeService.RemoveReviewLoanMapping(this._currtLoanType);
+    }
+
+    CheckCustReviewLoanMapping(vals: LoanTypeMappingModel) {
+        this._addServiceTypeService.CheckCustReviewLoanMapping(vals);
+    }
+
+    CancelLoanTypeConfirm() {
+        this.loanConfirmModal.hide();
+        this._currtLoanType.Mapped = !this._currtLoanType.Mapped;
+    }
+
+    GetLenders(vals: LoanTypeMappingModel) {
+        this._addServiceTypeService.SetSelectedLoanType(vals);
+    }
+
+    GetCheckList(vals: LoanTypeMappingModel) {
+        // this._upsertCustomerService.SetSelectedLoanType(vals);
+    }
+
+    ngOnDestroy() {
+        this._subscriptions.forEach(ele => {
+            ele.unsubscribe();
+        });
+    }
 }

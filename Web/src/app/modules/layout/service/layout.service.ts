@@ -26,7 +26,7 @@ export class LayoutService {
     });
   }
 
-  setDefaultRoute(_resBody: { TableSchema: string, RoleID: number, UserID: number }) {
+  setDefaultRoute(_resBody: { TableSchema: string, RoleID: number, UserID: number, ADLogin: boolean }) {
     this._layoutData.getDefaultRouteData(_resBody).subscribe(
       (res: MTSAPIResponse) => {
         const MenuList = jwtHelper.decodeToken(res.Data)['data'];

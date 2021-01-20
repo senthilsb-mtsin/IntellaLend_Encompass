@@ -157,15 +157,16 @@ export class ManagerDoctypeService {
     GetManagerDoctypes(_req: ValidateModel) {
         this.CustomerID = _req.CustomerID;
         this.LoanTypeID = _req.LoanTypeID;
-            return this._managerDoctypeDataAccess.GetManagerDocTypes(_req).subscribe(res => {
-                if (isTruthy(res)) {
-                    const _managerDocs = jwtHelper.decodeToken(res.Data)['data'];
-                    this._managerDocData.next(_managerDocs);
-                }
-            });
+        return this._managerDoctypeDataAccess.GetManagerDocTypes(_req).subscribe(res => {
+            if (isTruthy(res)) {
+                const _managerDocs = jwtHelper.decodeToken(res.Data)['data'];
+                this._managerDocData.next(_managerDocs);
+            }
+        });
 
     }
-    setClick(val: any) {   this.show = true;
+    setClick(val: any) {
+        this.show = true;
     }
     GetCurrentLoanTypeId() {
         return this.LoanTypeID;
@@ -183,26 +184,38 @@ export class ManagerDoctypeService {
     GetLoantypeForCustomer(_req: any) {
         this.customerId = _req.CustomerID;
         if (this.customerId > 0) {
-                return this._managerDoctypeDataAccess.GetLoanTypeForCustomer(_req).subscribe(res => {
-                    if (isTruthy(res)) {
-                        this._loanTypeItems = [];
-                        const data = jwtHelper.decodeToken(res.Data)['data'];
-                        const _loanTypes = jwtHelper.decodeToken(res.Data)['data'];
-                        if (_loanTypes.length > 0) {
-                            _loanTypes.forEach(element => {
-                                this._loanTypeItems.push({ id: element.LoanTypeID, text: element.LoanTypeName });
-                            });
-                            this.LoanTypeItems.next(this._loanTypeItems.slice());
-                        }
+            return this._managerDoctypeDataAccess.GetLoanTypeForCustomer(_req).subscribe(res => {
+                if (isTruthy(res)) {
+                    this._loanTypeItems = [];
+                    const data = jwtHelper.decodeToken(res.Data)['data'];
+                    const _loanTypes = jwtHelper.decodeToken(res.Data)['data'];
+                    if (_loanTypes.length > 0) {
+                        _loanTypes.forEach(element => {
+                            this._loanTypeItems.push({ id: element.LoanTypeID, text: element.LoanTypeName });
+                        });
+                        this.LoanTypeItems.next(this._loanTypeItems.slice());
                     }
-                });
-            } else if (this.show) {
-                this._notificationService.showError('Select Customer');
-                this._loanTypeItems = [];
-                this.LoanTypeItems.next(this._loanTypeItems.slice());
+                }
+            });
+        } else if (this.show) {
+            this._notificationService.showError('Select Customer');
+            this._loanTypeItems = [];
+            this.LoanTypeItems.next(this._loanTypeItems.slice());
 
+        }
+
+    }
+    SyncRetainUpdateStagings(_req: any) {
+        return this._managerDoctypeDataAccess.SyncRetainUpdateStagings(_req).subscribe(res => {
+            if (isTruthy(res)) {
+                const result = jwtHelper.decodeToken(res.Data)['data'];
+                if (result === true) {
+                    this._notificationService.showSuccess('Sync Updated Successfully');
+                } else {
+                    this._notificationService.showError('Sync Update Failed');
+                }
             }
-
+        });
     }
     LoadDoctypes(_req: any) {
         return this._documentDataAccess.GetDocumentTypesBasedonLoanType(_req).subscribe(

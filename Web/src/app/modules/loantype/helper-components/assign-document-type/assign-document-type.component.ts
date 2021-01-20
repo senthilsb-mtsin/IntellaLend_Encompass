@@ -57,9 +57,9 @@ export class AssignDocumentTypesComponent implements OnInit, OnDestroy {
     this.dragService.dropModel().subscribe((value) => {
       this.onDropModel(value);
     });
-    this.dragService.dragend().subscribe(() =>{
+    this.dragService.dragend().subscribe(() => {
       this._addLoantypeService.setDocTypes(this.AssignedDocTypes, this.AllDocTypes);
-    })
+    });
     this._loanType = this._loanService.getLoanType();
     this.subscriptions.push(this._addLoantypeService.GeneralRuleclose.subscribe((res: boolean) => {
 
@@ -123,11 +123,11 @@ export class AssignDocumentTypesComponent implements OnInit, OnDestroy {
     for (let i = 0; i < this._allDocChildrens['_results'].length; i++) {
       const clist = this._allDocChildrens['_results'][i].nativeElement.classList.toString();
       const docID = parseInt(this._allDocChildrens['_results'][i].nativeElement.attributes['data-docid'].value, 10);
-      const index = this.AllDocTypes.findIndex(l => l.DocumentTypeID === docID);
+      const index = this.FilterAllDocTypes.findIndex(l => l.DocumentTypeID === docID);
       if (clist.indexOf('SelectHighlight') > -1) {
-        this.AssignedDocTypes.push(this.AllDocTypes[index]);
-        this.AllDocTypes.splice(index, 1);
-        this._addLoantypeService.setDocTypes(this.AssignedDocTypes, this.AllDocTypes);
+        this.AssignedDocTypes.push(this.FilterAllDocTypes[index]);
+        this.FilterAllDocTypes.splice(index, 1);
+        this._addLoantypeService.setDocTypes(this.AssignedDocTypes, this.FilterAllDocTypes);
       }
     }
   }
@@ -208,19 +208,15 @@ export class AssignDocumentTypesComponent implements OnInit, OnDestroy {
 
   AddDocumentType(documentID: number) {
     if (documentID > 0) {
-      const index = this.AllDocTypes.findIndex(l => l.DocumentTypeID === documentID);
+      const index = this.FilterAllDocTypes.findIndex(l => l.DocumentTypeID === documentID);
       if (isTruthy(index)) {
-        this.AssignedDocTypes.push(this.AllDocTypes[index]);
-        if (this.allDocSearchval !== null) {
-          const assignDocValue = this.allDocSearchval;
-          this.allDocSearchval = '';
-          this.AllDocTypes.splice(index, 1);
-          this.allDocSearchval = assignDocValue;
+        this.AssignedDocTypes.push(this.FilterAllDocTypes[index]);
+        if (this.allDocSearchval != null) {
+          this.FilterAllDocTypes.splice(index, 1);
         } else {
-          this.AllDocTypes.splice(index, 1);
+          this.FilterAllDocTypes.splice(index, 1);
         }
-        this._addLoantypeService.setDocTypes(this.AssignedDocTypes, this.AllDocTypes);
-        // this._conditionRuleService._loanType.LoanTypeID = this._addLoantypeService.LoanTypeId;
+        this._addLoantypeService.setDocTypes(this.AssignedDocTypes, this.FilterAllDocTypes);
       }
     }
   }
@@ -237,7 +233,6 @@ export class AssignDocumentTypesComponent implements OnInit, OnDestroy {
   }
 
   setDocSelected(index: number) {
-
     const clist = this._allDocChildrens['_results'][index].nativeElement.classList.toString();
     if (clist.indexOf('SelectHighlight') > -1) {
       this._allDocChildrens['_results'][index].nativeElement.className = clist.replace('SelectHighlight', '');
@@ -261,69 +256,44 @@ export class AssignDocumentTypesComponent implements OnInit, OnDestroy {
 
   }
   SaveDocLevelValue() {
-
     this._docmappingDetails = this.AssignedDocTypes.filter(l => l.DocumentTypeID === this._currentDocId);
     if (this._docmappingDetails !== undefined) {
-      for (let i = 0; i < this.AssignedDocTypes.length; i++) {
-        if (this.AssignedDocTypes[i].DocumentTypeID === this._currentDocId && ($('#DocumentLevel').is(':checked'))) {
-          this.AssignedDocTypes[i].DocumentLevel = DocumentLevelConstant.CRITICAL;
-          this.DocLevelModal.hide();
-          break;
-
-        } else if (this.AssignedDocTypes[i].DocumentTypeID === this._currentDocId && !($('#DocumentLevel').is(':checked'))) {
-          this.AssignedDocTypes[i].DocumentLevel = DocumentLevelConstant.NON_CRITICAL;
-          this.DocLevelModal.hide();
-
-          break;
-        }
-      }
-
+      const i = this.AssignedDocTypes.findIndex(x => x.DocumentTypeID === this._currentDocId);
+      const CheckBoxChecked = $('[type=checkbox][DocumentTypeID=' + this._currentDocId + ']').is(':checked');
+      this.AssignedDocTypes[i].DocumentLevel = CheckBoxChecked ? DocumentLevelConstant.CRITICAL : DocumentLevelConstant.NON_CRITICAL;
+      this.DocLevelModal.hide();
       this._addLoantypeService.setDocTypes(this.AssignedDocTypes, this.AllDocTypes);
     }
   }
   CloseModal() {
     this._docmappingDetails = this.AssignedDocTypes.filter(l => l.DocumentTypeID === this._currentDocId);
     if (this._docmappingDetails !== undefined) {
-      for (let i = 0; i < this.AssignedDocTypes.length; i++) {
-        if (this.AssignedDocTypes[i].DocumentTypeID === this._currentDocId && this.AssignedDocTypes[i].DocumentLevel === DocumentLevelConstant.CRITICAL) {
-          this.AssignedDocTypes[i].DocumentLevel = DocumentLevelConstant.CRITICAL;
-          this.DocLevelModal.hide();
-          $('#DocumentLevel').prop('checked', true);
-
-          break;
-
-        } else if (this.AssignedDocTypes[i].DocumentTypeID === this._currentDocId && this.AssignedDocTypes[i].DocumentLevel === DocumentLevelConstant.NON_CRITICAL) {
-          $('#DocumentLevel').prop('checked', false);
-          this.DocLevelModal.hide();
-
-          break;
-        }
-      }
+      const i = this.AssignedDocTypes.findIndex(x => x.DocumentTypeID === this._currentDocId);
+      const CheckBoxChecked = this.AssignedDocTypes[i].DocumentLevel === DocumentLevelConstant.CRITICAL;
+      $('[type=checkbox][DocumentTypeID=' + this._currentDocId + ']').prop('checked', CheckBoxChecked);
+      this.DocLevelModal.hide();
     }
-    this._addLoantypeService.setDocTypes(this.AssignedDocTypes, this.AllDocTypes);
   }
   RemoveDocumentType(docID: number, Name: string, _condition: any) {
     this.GetConditionExistDocTypes();
     if (this.ConditionExistdocNames.includes(Name)) {
       this._notificationService.showError('Document assigned to a condition');
-
-    } else if (_condition === null || _condition === '') {
-      const test = _condition.split(',');
+    } else {
       const index = this.AssignedDocTypes.findIndex(l => l.DocumentTypeID === docID);
       if (index !== undefined) {
         this.AllDocTypes.push(this.AssignedDocTypes[index]);
         if (this.assignedDocSearchval !== null) {
           const assignDocValue = this.assignedDocSearchval;
-          this.assignedDocSearchval = '';
           this.AssignedDocTypes.splice(index, 1);
-          this.assignedDocSearchval = assignDocValue;
         } else {
           this.AssignedDocTypes.splice(index, 1);
         }
+        const _removeDocName = this.ConditionExistdocNames.indexOf(Name);
+        if (_removeDocName >= 0) {
+          this.ConditionExistdocNames.splice(index, 1);
+        }
         this._addLoantypeService.setDocTypes(this.AssignedDocTypes, this.AllDocTypes);
       }
-    } else {
-      this._notificationService.showError('Document assigned to a condition');
     }
   }
   AddCondition(docName: any, _docid: number, _docLevel: number) {

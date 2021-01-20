@@ -6,6 +6,8 @@ import { CustomerDatatableModel } from '../../models/customer-datatable.model';
 import { DataTableDirective } from 'angular-datatables';
 import { SessionHelper } from '@mts-app-session';
 import { Router } from '@angular/router';
+import { isTruthy } from '@mts-functions/is-truthy.function';
+import { convertDateTimewithTime } from '@mts-functions/convert-datetime.function';
 
 @Component({
     selector: 'mts-customer',
@@ -19,6 +21,7 @@ export class CustomerComponent implements OnInit, OnDestroy, AfterViewInit {
     promise: Subscription;
     showHide: any = [false, false, false];
     rowSelected = true;
+    showCustomerImportMoniter = false;
 
     constructor(
         private _customerService: CustomerService,
@@ -27,6 +30,7 @@ export class CustomerComponent implements OnInit, OnDestroy, AfterViewInit {
         this.checkPermission('AddBtn', 0);
         this.checkPermission('EditBtn', 1);
         this.checkPermission('ViewBtn', 2);
+        this.checkPermission('SyncConfigBtn', 2);
     }
 
     private _subscriptions: Subscription[] = [];
@@ -54,10 +58,12 @@ export class CustomerComponent implements OnInit, OnDestroy, AfterViewInit {
                 { sTitle: 'State', mData: 'State', sWidth: '15%' },
                 { sTitle: 'Country', mData: 'Country', sWidth: '10%' },
                 { sTitle: 'Zip Code', mData: 'ZipCode', sWidth: '10%' },
-                { sTitle: 'Active/Inactive', mData: 'Active', sClass: 'text-center', sWidth: '10%' }
+                { mData: 'ModifiedOn', sTitle: 'Modified On', sClass: 'text-center', sWidth: '10%' },
+                { sTitle: 'Active/Inactive', mData: 'Active', sClass: 'text-center', sWidth: '10%' },
+
             ],
             aoColumnDefs: [{
-                'aTargets': [6],
+                'aTargets': [7],
                 'mRender': function (data, type, row) {
                     const statusFlag = data === true ? 'Active' : 'Inactive';
                     const statusColor = {
@@ -66,7 +72,15 @@ export class CustomerComponent implements OnInit, OnDestroy, AfterViewInit {
                     };
                     return '<label class=\'label ' + statusColor[row['Active']] + ' label-table\'>' + statusFlag + '</label>';
                 }
-            }],
+            },
+                {
+                    'aTargets': [6],
+                    'mRender': function (data, type, row) {
+                        return isTruthy(data) ? convertDateTimewithTime(data) : '';
+                    }
+                },
+
+            ],
             rowCallback: (row: Node, data: CustomerDatatableModel, index: number) => {
                 const self = this;
                 $('td', row).unbind('click');
@@ -105,6 +119,10 @@ export class CustomerComponent implements OnInit, OnDestroy, AfterViewInit {
             this._route.navigate(['view/customer/addcustomer']);
         } else if (modalType === 1) {
             this._route.navigate(['view/customer/editcustomer']);
+        } else if (modalType === 2) {
+            this._route.navigate(['view/customer/import']);
+        } else if (modalType === 3) {
+            this._route.navigate(['view/customer/syncconfig']);
         }
     }
 

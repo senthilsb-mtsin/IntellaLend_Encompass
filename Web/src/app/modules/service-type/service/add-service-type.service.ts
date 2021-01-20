@@ -12,6 +12,7 @@ import { ServiceTypePriorityModel } from '../models/service-type-priority.model'
 import { AppSettings } from '@mts-app-setting';
 import { ServiceTypeModel } from '../models/service-type.model';
 import { ServiceTypeRoleModel } from '../models/service-type-role.model';
+import { LoanTypeMappingModel } from '../models/loan-type-mapping.model';
 
 const jwtHelper = new JwtHelperService();
 
@@ -22,10 +23,17 @@ export class AddServiceTypeService {
   setNextStep = new Subject<ServiceTypeWizardStepModel>();
   assignedLoanTypes = new Subject<number[]>();
   isRowNotSelected = new Subject<boolean>();
-  AddServiceTypeSteps: any = { ServiceType: 1, AssignLoanType: 2 };
+  AddServiceTypeSteps: any = { ServiceType: 1, AssignLoanType: 2, AssignLenders: 3 };
   Loading = new Subject<boolean>();
   priorityList = new Subject<ServiceTypePriorityModel[]>();
   roleList = new Subject<ServiceTypeRoleModel[]>();
+  loanRetainConfirm$ = new Subject<boolean>();
+  loanConfirmModal$ = new Subject<boolean>();
+  allAssignedLoanTypes = new Subject<any>();
+  allLenders$ = new Subject<any>();
+  allAssignedLenders = new Subject<any>();
+  CurrentLoanType$ = new Subject<string>();
+  IsAdd$ = new Subject<boolean>();
   //#endregion Public Variables
 
   //#region Constructor
@@ -34,13 +42,20 @@ export class AddServiceTypeService {
     private _notificationService: NotificationService,
     private _commonService: CommonService,
     private _location: Location) {
-      this.getServicePriorityList();
-    }
+    this.getServicePriorityList();
+  }
   //#endregion Constructor
 
   //#region Private Variables
+  private _currentLoanType: LoanTypeMappingModel;
+  private _loanTypeIds: any[] = [];
   private _allLoanTypes: any[] = [];
   private _assignedLoanTypes: any[] = [];
+
+  // Lender variables
+  private _allLenders: any[] = [];
+  private _assignedLenders: any[] = [];
+
   private _serviceTypeID = 0;
   private _serviceTypeName = '';
   private _priorityList: ServiceTypePriorityModel[] = [];
@@ -86,8 +101,18 @@ export class AddServiceTypeService {
       });
   }
 
-  SaveLoanMapping(req: AssignLoanTypesRequestModel) {
-    this._ServiceTypeData.SaveLoanMapping(req).subscribe(res => {
+  SaveReviewLoanLenderMapping(_isAdd: boolean) {
+    const _allLenderIDs = [];
+    this._allLenders.forEach(element => {
+      _allLenderIDs.push(element.CustomerID);
+    });
+    const _assignedlenderIDs = [];
+    this._assignedLenders.forEach(element => {
+      _assignedlenderIDs.push(element.CustomerID);
+    });
+    // const _IsAdd = this.IsAdd$;
+    const req = { TableSchema: AppSettings.TenantSchema, ReviewTypeID : this._reviewDetails.ReviewTypeID, LoanTypeID: this._currentLoanType.LoanTypeID, AllLendersIDs : _allLenderIDs, AssignedLendersIDs: _assignedlenderIDs, IsAdd : _isAdd};
+    this._ServiceTypeData.SaveReviewLoanLenderMapping(req).subscribe(res => {
       const result = jwtHelper.decodeToken(res.Data)['data'];
       if (result) {
         this._notificationService.showSuccess('Service Types Mapping Updated Successfully');
@@ -105,7 +130,7 @@ export class AddServiceTypeService {
     return this._serviceTypeName;
   }
 
-  setCurrentReviewDetails(serviceTypModel: ServiceTypeModel ) {
+  setCurrentReviewDetails(serviceTypModel: ServiceTypeModel) {
     this._reviewDetails = serviceTypModel;
   }
 
@@ -141,8 +166,31 @@ export class AddServiceTypeService {
     this.assignedLoanTypes.next(_loanIDs);
   }
 
+  getAllLenders() {
+    return this._allLenders.slice();
+  }
+
+  getAllAssignedLenders() {
+    const _lenderIDs = [];
+    this._assignedLenders.forEach(element => {
+      _lenderIDs.push({CustomerID: element.CustomerID, CustomerName: element.CustomerName});
+    });
+    this.allAssignedLenders.next(_lenderIDs);
+    return this._assignedLenders.slice();
+  }
+
+  setLenders(_assignedLenders: any[], _allLenders: any[]) {
+    const _lenderIDs = [];
+    _assignedLenders.forEach(element => {
+      _lenderIDs.push({CustomerID: element.CustomerID, CustomerName: element.CustomerName});
+    });
+    this._assignedLenders = _assignedLenders.slice();
+    this._allLenders = _allLenders.slice();
+    this.allAssignedLenders.next(_lenderIDs);
+  }
+
   GoToServiceType() {
-    this.setNextStep.next(new ServiceTypeWizardStepModel(this.AddServiceTypeSteps.ServiceType, 'active', ''));
+    this.setNextStep.next(new ServiceTypeWizardStepModel(this.AddServiceTypeSteps.ServiceType, 'active', '', ''));
   }
 
   getServicePriorityList() {
@@ -195,16 +243,87 @@ export class AddServiceTypeService {
   //#endregion Public Methods
 
   //#region Private Methods
-  private getSysLoanTypes() {
+  getSysLoanTypes() {
     this._ServiceTypeData.GetSysLoanTypes({ ReviewTypeID: this._serviceTypeID }).subscribe(
       res => {
         const result = jwtHelper.decodeToken(res.Data)['data'];
         this._allLoanTypes = result.AllLoanTypes;
+        this.allAssignedLoanTypes = result.AssignedLoanTypes;
         this._assignedLoanTypes = result.AssignedLoanTypes;
-        this.setNextStep.next(new ServiceTypeWizardStepModel(this.AddServiceTypeSteps.AssignLoanType, 'active complete', 'active'));
+        this.setNextStep.next(new ServiceTypeWizardStepModel(this.AddServiceTypeSteps.AssignLoanType, 'active complete', 'active', ''));
       }
     );
   }
+
+  getAssignedLenders() {
+    this._ServiceTypeData.GetAssignedLenders({TableSchema: AppSettings.TenantSchema, ReviewTypeID: this._serviceTypeID, LoanTypeID: this._currentLoanType.LoanTypeID }).subscribe(
+      res => {
+        const result = jwtHelper.decodeToken(res.Data)['data'];
+        this.allLenders$.next(result.AllLenders);
+        this._allLenders = result.AllLenders;
+        this.allAssignedLenders.next(result.AssignedLenders);
+        this._assignedLenders = result.AssignedLenders;
+      }
+    );
+  }
+
+  SetSelectedLoanType(vals: LoanTypeMappingModel) {
+
+    this._currentLoanType = vals;
+    this.CurrentLoanType$.next(this._currentLoanType.LoanTypeName);
+    this.setNextStep.next(new ServiceTypeWizardStepModel(this.AddServiceTypeSteps.AssignLenders, 'active complete', 'active complete', 'active'));
+  }
+
+  CheckCustReviewLoanMapping(vals: LoanTypeMappingModel) {
+
+    const req = { TableSchema: AppSettings.TenantSchema, ReviewTypeID: this._serviceTypeID, LoanTypeID: vals.LoanTypeID };
+    this._ServiceTypeData.CheckCustReviewLoanMapping(req).subscribe(res => {
+      const Result = jwtHelper.decodeToken(res.Data)['data'];
+      if (Result) {
+        vals.loading = false;
+        this.loanRetainConfirm$.next(true);
+      } else {
+        this.SetCustReviewLoanMapping(vals);
+      }
+    });
+  }
+
+  SetCustReviewLoanMapping(vals: LoanTypeMappingModel) {
+    this.loanRetainConfirm$.next(false);
+    vals.loading = true;
+    this._loanTypeIds = [];
+    this._loanTypeIds.push(vals.LoanTypeID);
+    const req = new AssignLoanTypesRequestModel(
+      this._serviceTypeID,
+      this._loanTypeIds,
+    );
+    this._ServiceTypeData.SaveLoanMapping(req).subscribe(res => {
+      const Result = jwtHelper.decodeToken(res.Data)['data'];
+      if (Result) {
+        vals.loading = false;
+        if (!vals.DBMapped) {
+          vals.DBMapped = !vals.DBMapped;
+        }
+        this._notificationService.showSuccess('Mapping Added Successfully');
+      }
+    });
+  }
+
+  RemoveReviewLoanMapping(vals: LoanTypeMappingModel) {
+    this._loanTypeIds = [];
+    this._loanTypeIds.push(vals.LoanTypeID);
+    const req = new AssignLoanTypesRequestModel(
+      this._serviceTypeID,
+      this._loanTypeIds,
+    );
+    this._ServiceTypeData.RemoveLoanMapping(req).subscribe(res => {
+        const Result = jwtHelper.decodeToken(res.Data)['data'];
+        if (Result) {
+            this.loanConfirmModal$.next(false);
+            this._notificationService.showSuccess('Mapping Removed Successfully');
+        }
+    });
+}
 
   private GotoMaster() {
     this._location.back();

@@ -34,7 +34,7 @@
                                         (click)="SaveQuetionerAnswer()">
                                         <i class="material-icons">save</i>&nbsp;&nbsp;Save
                                     </button>
-                                    <button id="toggle" type="button" (click)=ToggleChecklist()
+                                    <button id="toggle" type="button" (click)=ToggleCancelChecklist()
                                         class="btn btn-info btn-sm waves-effect waves-light m-l-1"><i class="material-icons">arrow_back</i>&nbsp;&nbsp;back
                                     </button>
                                 </span>
@@ -191,6 +191,26 @@
                     <i class="material-icons">check_circle</i>&nbsp;&nbsp;Yes</button>
                 <button type="button" class="btn btn-secondary bg-white waves-effect waves-light" type="button" (click)="CloseRevertAudit()">
                     <i class="material-icons">cancel</i>&nbsp;&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div bsModal #FannieMaeFieldsModal="bs-modal" class="modal fade" [config]="{backdrop: 'static', keyboard: false}" role="dialog">
+    <div class="modal-dialog modal-lg" style="width:80%;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="box-action">
+                    <button (click)="FannieMaeFieldsModal.hide()" title="Close" class="btn btn-danger p-l-2 p-r-2 btn-sm waves-effect waves-light" type="button">
+                    <i class="material-icons">close</i>
+                  </button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12">
+                    <mts-fanniemae-fields></mts-fanniemae-fields>
+                </div>
+            </div>
+            <div class="modal-footer">
             </div>
         </div>
     </div>

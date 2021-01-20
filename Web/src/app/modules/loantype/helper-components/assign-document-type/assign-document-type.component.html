@@ -2,7 +2,7 @@
     <div id="review_detail" class="review_detail fadeIn">
         <div class="col-md-5 col-centered">
             <div class="form-group icon m0">
-                <input type="text" placeholder="All Document Types" (ngModelChange)="UnassignedDocFilterSearch($event)"
+                <input type="text" placeholder="All Document Types"
                     required="" [(ngModel)]="allDocSearchval">
                 <i class="bar"></i>
                 <span class="material-icons">search</span>
@@ -10,7 +10,7 @@
             <div class="card-spc slimScrollCustom sto_list" id="document" malihu-scrollbar>
                 <div [dragula]='"nested-type"' class='dragScroll' DivType="UnAssigned" [(dragulaModel)]='AllDocTypes'>
                     <div #allDocs class="draganddrop" (click)="setDocSelected(i)"
-                        [attr.data-docid]="docType.DocumentTypeID" *ngFor="let docType of AllDocTypes; let i = index;">
+                        [attr.data-docid]="docType.DocumentTypeID" *ngFor="let docType of AllDocTypes|docmastersearch: allDocSearchval; let i = index;">
                         <span>{{ docType.Name }}</span>
                         <i class="fa fa-plus-circle fa-lg pull-right text-col-green"
                             (click)="AddDocumentType(docType.DocumentTypeID)"></i>
@@ -82,6 +82,7 @@
                                     <th>
                                         <input id="Doclevel" name="DocumentLevel"
                                             [title]="doc.DocumentLevel == 11 ? 'Critical' : 'Non-Critical'" id="DocumentLevel"
+                                            [attr.DocumentTypeID]="doc.DocumentTypeID"
                                             type="checkbox" [checked]="doc.DocumentLevel==11"
                                             (click)="ShowDocLevelModal(doc.DocumentTypeID,doc.Name)"
                                             style="cursor: pointer;font-size: medium; padding-top: 10px;" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

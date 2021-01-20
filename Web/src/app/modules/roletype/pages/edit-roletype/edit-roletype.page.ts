@@ -7,7 +7,8 @@ import { ChangeRoleRequest } from '../../models/changerole.model';
 import { RoleDetailsRequest } from '../../models/roletypedetails.model';
 import { Roletypemodel } from '../../models/roletype-datatable.model';
 import { environment } from 'src/environments/environment';
-import { ADGroupMasterModel } from '../../models/adgroupmaster.model';
+import { ADGroupMasterModel, CheckADGroupAssignedForRoleRequestModel } from '../../models/adgroupmaster.model';
+import { NotificationService } from '@mts-notification';
 @Component({
   selector: 'mts-edit-roletype',
   templateUrl: './edit-roletype.page.html',
@@ -25,7 +26,8 @@ export class EditRoleTypeComponent implements OnInit, OnDestroy {
   AD_login: boolean = environment.ADAuthentication;
   ADGroupMasterList: ADGroupMasterModel[] = [];
 
-  constructor(private _roleTypeService: RoleTypeService) { }
+  constructor(private _roleTypeService: RoleTypeService
+    , private _notificationService: NotificationService) { }
 
   private subscription: Subscription[] = [];
 
@@ -54,6 +56,12 @@ export class EditRoleTypeComponent implements OnInit, OnDestroy {
           this.roletypedata.Active = true;
         })
     );
+    this.subscription.push(this._roleTypeService.ADGroupAssignedForRole$.subscribe(res => {
+      if (res) {
+        this._notificationService.showError('ADGroup already assigned');
+        this.roletypedata.ADGroupID = 0;
+      }
+    }));
 
     this.EditRoleDetails();
   }
@@ -84,6 +92,15 @@ export class EditRoleTypeComponent implements OnInit, OnDestroy {
 
   CloseRole() {
     this._roleTypeService.CloseRole();
+  }
+  ADGroupChange() {
+    const req: CheckADGroupAssignedForRoleRequestModel = new CheckADGroupAssignedForRoleRequestModel(AppSettings.TenantSchema,
+        this.roletypedata.ADGroupID,
+        this.roletypedata.RoleID
+      );
+      if (this.roletypedata.ADGroupID !== 0) {
+        this._roleTypeService.CheckADGroupAssignedForRole(req);
+      }
   }
 
   ngOnDestroy() {

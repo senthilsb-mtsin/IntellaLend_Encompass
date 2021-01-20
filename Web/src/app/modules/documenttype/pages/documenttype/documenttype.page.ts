@@ -8,6 +8,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { DocumentTypeService } from '../../services/documenttype.service';
 import { DocumentTypeDatatableModel } from '../../models/document-type-datatable.model';
 import { isTruthy } from '@mts-functions/is-truthy.function';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'mts-documenttype',
@@ -15,6 +16,8 @@ import { isTruthy } from '@mts-functions/is-truthy.function';
     styleUrls: ['documenttype.page.css'],
 })
 export class DocumentTypeComponent implements OnInit, AfterViewInit {
+    @ViewChild('confirmdataModal') confirmdataModal: ModalDirective;
+    showLoading = false;
 
     showHide: any = [false, false, false];
     documentTypeListMaster: any = [];
@@ -33,19 +36,24 @@ export class DocumentTypeComponent implements OnInit, AfterViewInit {
 
     }
 
-    private subscription: Subscription;
+    private subscriptions: Subscription[] = [];
     private dTable: any;
     @ViewChild(DataTableDirective, { static: false }) private datatableElement: DataTableDirective;
 
     ngOnInit() {
-        this.subscription = this._commonservice.SystemDocumentTypeMaster.subscribe((res: any) => {
+        this.subscriptions.push(this._documentTypeService.showLoading.subscribe((res: boolean) => {
+            this.showLoading = res;
+          }));
+        this.subscriptions.push(this._documentTypeService.syncDetailEnable.subscribe((res: boolean) => {
+            this.confirmdataModal.hide();
+           }));
+        this.subscriptions.push(this._commonservice.SystemDocumentTypeMaster.subscribe((res: any) => {
             this.dTable.clear();
             this.dTable.rows.add(res);
             this.dTable.draw();
 
-        });
-
-        this.dtOptions = {
+        }));
+     this.dtOptions = {
             displayLength: 10,
             aaData: [],
             'iDisplayLength': 10,
@@ -58,7 +66,7 @@ export class DocumentTypeComponent implements OnInit, AfterViewInit {
                 { sTitle: 'DocumentTypeID', mData: 'DocumentTypeID', sClass: 'text-right', bVisible: false },
                 { sTitle: 'Document Name', mData: 'Name', sWidth: '30%' },
                 { sTitle: 'Document Display Name', mData: 'DisplayName', sWidth: '30%' },
-                { sTitle: 'EFolder Name', mData: 'ParkingSpotName', sWidth: '38%' },
+                { sTitle: 'EFolder Name', mData: 'ParkingSpotName', sWidth: '38%' , bVisible: false},
                 { sTitle: 'Document Level', mData: 'DocumentLevel', sClass: 'text-center', sWidth: '14%', bVisible: false },
                 { sTitle: 'Active/Inactive', mData: 'Active', sClass: 'text-center', sWidth: '10%' },
                 { mData: 'DocumentLevel', bVisible: false },
@@ -100,7 +108,9 @@ export class DocumentTypeComponent implements OnInit, AfterViewInit {
 
         };
     }
-
+    Close() {
+        this.confirmdataModal.hide();
+    }
     ngAfterViewInit() {
         this.datatableElement.dtInstance.then((dtInstance: DataTables.Api) => {
             this.dTable = dtInstance;
@@ -112,6 +122,10 @@ export class DocumentTypeComponent implements OnInit, AfterViewInit {
         this.rowSelected = $(rowIndex).hasClass('selected');
         this._documentTypeService.SetDocumentTypeRowData(rowData);
 
+    }
+    SyncDocTypes() {
+        this._documentTypeService.showLoading.next(true);
+        this._documentTypeService.SyncDocTypes({TableSchema: AppSettings.TenantSchema});
     }
     ShowDocumentTypeModal(modalType: number) {
      if (modalType === 0) {
@@ -138,7 +152,8 @@ export class DocumentTypeComponent implements OnInit, AfterViewInit {
     }
 
     ngDestroy() {
-        this.subscription.unsubscribe();
+        this.subscriptions.forEach(element => {
+            element.unsubscribe();
+        });
     }
-
 }

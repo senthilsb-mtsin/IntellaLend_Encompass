@@ -16,6 +16,7 @@ import { ChecklistItemRowData } from '../../loantype/models/checklist-items-tabl
 import { CheckListItemNamePipe } from '../../loantype/pipes';
 import { CommonRuleBuilderService } from 'src/app/shared/common/common-rule-builder.service';
 import { StackingOrderDetailTable } from '../models/stacking-order-detail-table.model';
+import { CustomerImportStagingDetailsRequestModel, CustomerImportStagingRequestModel } from '../models/customer-import.model';
 
 const jwtHelper = new JwtHelperService();
 
@@ -39,6 +40,8 @@ export class UpsertCustomerService {
     CloneModal$ = new Subject<boolean>();
     isRowNotSelected$ = new Subject<boolean>();
     CustomerConfig$ = new Subject<{ ConfigID: number, CustomerID: number, CustomerName: string, Configkey: string, ConfigValue: string, Active: boolean }[]>();
+    CustomerImportStagingDatatable$ = new Subject<any[]>();
+    CustomerImportStagingDetailsDatatable$ = new Subject<any[]>();
 
     constructor(
         private _customerData: CustomerData,
@@ -70,15 +73,21 @@ export class UpsertCustomerService {
             if (req.customerMaster.Type === 'Add' && Result.Success) {
                 this._currentCustomer.CustomerID = Result.CustomerID;
             }
-            if ((req.customerMaster.Type === 'Add' && Result.Success) || (req.customerMaster.Type === 'Edit' && Result)) {
+            if ((req.customerMaster.Type === 'Add' && Result.Success) || (req.customerMaster.Type === 'Edit' && Result.Success)) {
                 this._customerService.setCurrectCustomer(this._currentCustomer);
                 this._commonRuleBuilderService.setCurrentCustomer(this._currentCustomer.CustomerID);
                 this.setNextStep$.next(new CustomerWizardStepModel(this.UpsertCustomerSteps.ServiceType, 'active complete', 'active', '', '', '', ''));
                 this._notificationService.showSuccess(AppSettings.AuthorityLabelSingular + (req.customerMaster.Type === 'Add' ? ' Added ' : ' Updated ') + 'Successfully');
             }
 
-            if ((req.customerMaster.Type === 'Add' && !Result.Success) || (req.customerMaster.Type === 'Edit' && !Result)) {
-                this._notificationService.showError(AppSettings.AuthorityLabelSingular + ' Name already exist');
+            if ((req.customerMaster.Type === 'Add' && !Result.Success) || (req.customerMaster.Type === 'Edit' && !Result.Success)) {
+                if (Result.CustomerNameExist && Result.CustomerCodeExist) {
+                    this._notificationService.showError(AppSettings.AuthorityLabelSingular + ' Name and ' + AppSettings.AuthorityLabelSingular + ' Code already exist');
+                } else if (Result.CustomerNameExist) {
+                    this._notificationService.showError(AppSettings.AuthorityLabelSingular + ' Name already exist');
+                } else if (Result.CustomerCodeExist) {
+                    this._notificationService.showError(AppSettings.AuthorityLabelSingular + ' Code already exist');
+                }
             }
 
             this.Loading$.next(false);
@@ -534,6 +543,24 @@ export class UpsertCustomerService {
                     this._notificationService.showSuccess('Configuration Updated Successfully');
                 } else { this._notificationService.showError('Configuration Updated Failed'); }
             } else { this._notificationService.showError('Configuration Updated Failed'); }
+        });
+    }
+
+    GetCustomeImportStaging(req: CustomerImportStagingRequestModel) {
+        return this._customerData.GetCustomeImportStaging(req).subscribe(res => {
+            const result = jwtHelper.decodeToken(res.Data)['data'];
+            if (result !== null) {
+                this.CustomerImportStagingDatatable$.next(result);
+            }
+        });
+    }
+
+    GetCustomeImportStagingDetails(req: CustomerImportStagingDetailsRequestModel) {
+        return this._customerData.GetCustomeImportStagingDetails(req).subscribe(res => {
+            const result = jwtHelper.decodeToken(res.Data)['data'];
+            if (result !== null) {
+                this.CustomerImportStagingDetailsDatatable$.next(result);
+            }
         });
     }
 

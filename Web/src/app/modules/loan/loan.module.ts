@@ -32,6 +32,9 @@ import { LoanGiftLetterComponent } from './helper-components/loan-reverification
 import { LoanOccupancyLetterComponent } from './helper-components/loan-reverification/loan-occupancy-letter/loan-occupancy-letter.page';
 import { LoanCPALetterComponent } from './helper-components/loan-reverification/loan-cpa-letter/loan-cpa-letter.page';
 import { MonthYearPickerModule } from '@mts-month-year-picker/month-year-picker.module';
+import { FannieMaeFieldsModule } from '../fanniemaeFields/fanniemaeFields.module';
+import { FannieMaeFieldsService } from '../fanniemaeFields/services/fanniemaeFields.service';
+import { FannieMaeFieldsDataAccess } from '../fanniemaeFields/fanniemaeFields.data';
 @NgModule({
     imports: [
         FormsModule,
@@ -53,11 +56,14 @@ import { MonthYearPickerModule } from '@mts-month-year-picker/month-year-picker.
         TooltipModule.forRoot(),
         SharedPipeModule,
         LoanSharedModule,
-        MonthYearPickerModule
+        MonthYearPickerModule,
+        FannieMaeFieldsModule
     ],
     providers: [
-        EmailCheckPipe
-    ],
+        EmailCheckPipe,
+        FannieMaeFieldsService,
+        FannieMaeFieldsDataAccess
+     ],
     declarations: [
         LoanComponent,
         LoanDetailDashboardComponent,

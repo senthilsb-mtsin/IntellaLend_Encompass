@@ -40,7 +40,7 @@ export class StatusConstant {
   static LOAN_WAITING = 0;
   static LOS_LOAN_EXPORT_STAGED = 500;
   static STATUS_DESCRIPTION = {
-    '1': 'Complete Audit',
+    '1': 'Export Complete',
     '2': 'Pending IDC Processing',
     '3': 'IDC Completed',
     '4': 'Pending Box Import',
@@ -83,7 +83,7 @@ export class StatusConstant {
     '407': 'Error',
     '408': 'IDC Error',
     '0': 'Loan Waiting',
-    '500': 'LOS Export Staged',
+    '500': 'Export Waiting',
   };
   static PRIORITY_LEVEL = {
     '0': 'Priority Unavailable',

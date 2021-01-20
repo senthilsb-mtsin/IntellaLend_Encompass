@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, HostListener, ChangeDetectorRef, AfterViewChecked, OnChanges } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { isTruthy } from '@mts-functions/is-truthy.function';
 
 @Component({
   selector: 'MonthYearPicker',
@@ -24,7 +25,7 @@ export class MonthYearPickerComponent implements OnInit, OnChanges, AfterViewChe
   }
 
   ngOnInit() {
-    if (this._selectedDate !== '') {
+    if (isTruthy(this._selectedDate)) {
       // const tempDate = new Date();
       const tempMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 

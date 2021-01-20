@@ -296,7 +296,11 @@ export class LoanHeaderComponent implements OnInit, OnDestroy {
     }
 
     back() {
-        this._location.back();
+        if (this._loanInfoService.IsDirectLink) {
+            this._route.navigate(['view/loansearch']);
+        } else {
+            this._location.back();
+        }
     }
 
     showError() {
@@ -375,10 +379,7 @@ export class LoanHeaderComponent implements OnInit, OnDestroy {
     }
 
     checkHeadervalidation() {
-        if (!isTruthy(this.LoanHeaderInfo['BorrowerName'])) {
-            this._notificationService.showError('Borrower Name is Required');
-            return false;
-        } else if (!isTruthy(this.LoanHeaderInfo['LoanNumber'])) {
+        if (!isTruthy(this.LoanHeaderInfo['LoanNumber'])) {
             this._notificationService.showError('Loan Number is Required');
             return false;
         }

@@ -27,13 +27,21 @@
                                 <i class="bar"></i>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" *ngIf="inrule.controls.InDocumentTypes.value !== FannieMaeDocName">
                             <div class="form-group m-t-25 m-b-10 text-left">
                                 <select formControlName="InDocField">
                                     <option value=""  selected disabled>--Select--</option>
                                     <option *ngFor="let dtype of currtDocFields[0]" [ngValue]="dtype">{{dtype}}</option>
                                 </select>
                                 <label class="control-label selected">Doc Fields</label><i class="bar"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-6" *ngIf="inrule.controls.InDocumentTypes.value === FannieMaeDocName">
+                            <div class="form-group  m-t-25 m-b-10">
+                                <input formControlName="InLosdocField" [typeahead]="LosDocumentFields" (typeaheadLoading)="OnChangeFieldValue(i, 'InLosdocField', 'InDocumentTypes')" [typeaheadOptionsLimit]="7" [typeaheadMinLength]="1"
+                                    placeholder="Search Fields" class="form-control">
+                                <label class="control-label selected">Doc Field</label>
+                                <i class="bar"></i>
                             </div>
                         </div>
                     </div>
@@ -71,13 +79,21 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-6" *ngIf="inrule.controls.InLookUpDocumentTypes.value !== FannieMaeDocName">
                             <div class="form-group m-t-25 m-b-10 text-left">
                                 <select formControlName="InValuesField">
                                     <option value=""  selected disabled>--Select--</option>
                                     <option *ngFor="let dtype of currtDocFields[1]" [ngValue]="dtype">{{dtype}}</option>
                                 </select>
                                 <label class="control-label selected">Doc Fields</label><i class="bar"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-6" *ngIf="inrule.controls.InLookUpDocumentTypes.value === FannieMaeDocName">
+                            <div class="form-group  m-t-25 m-b-10">
+                                <input formControlName="InLookUpLosdocField" [typeahead]="LosDocumentFields" (typeaheadLoading)="OnChangeFieldValue(i,'InLookUpLosdocField', 'InLookUpDocumentTypes')" [typeaheadOptionsLimit]="7" [typeaheadMinLength]="1"
+                                    placeholder="Search Fields" class="form-control">
+                                <label class="control-label selected">Doc Field</label>
+                                <i class="bar"></i>
                             </div>
                         </div>
                     </div>

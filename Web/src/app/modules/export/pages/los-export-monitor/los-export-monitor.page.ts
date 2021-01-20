@@ -6,12 +6,12 @@ import { ExportService } from '../../service/export.service';
 import { Router } from '@angular/router';
 import { LosExportdateModel } from '../../models/los.export.date.model';
 import { isTruthy } from '@mts-functions/is-truthy.function';
-import { AppSettings, LOSExportStagingStatusConstant, LOSExportStatusConstant } from '@mts-app-setting';
+import { AppSettings, LOSExportFileTypeConstant, LOSExportStagingStatusConstant, LOSExportStatusConstant } from '@mts-app-setting';
 import { NgDateRangePickerComponent } from '@mts-daterangepicker/ng-daterangepicker.component';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { LOsExportStagingModel } from '../../models/los.export.staging.model';
-import { RetryLOSExportModel } from '../../models/retry.los.export.model';
+import { ReExportLOSModel, RetryLOSExportModel } from '../../models/retry.los.export.model';
 import { CommonService } from 'src/app/shared/common';
 
 @Component({
@@ -39,6 +39,7 @@ export class LosExportMonitorComponent implements OnInit, OnDestroy, AfterViewIn
     rowData: LOsExportStagingModel;
     promise: Subscription;
     RetryFileType = '';
+    Task = '';
     commonActiveCustomerItems: any = [];
     commonActiveLoanTypeItems: any = [];
     commonActiveReviewTypeItems: any = [];
@@ -124,9 +125,10 @@ export class LosExportMonitorComponent implements OnInit, OnDestroy, AfterViewIn
             aaData: [],
             'select': {
                 style: 'single',
-                info: false,
-                selector: 'td:not(:last-child)'
+                 info: false,
+                 selector: 'td:not(:last-child)'
             },
+            'scrollY': 'calc(100vh - 440px)',
             'aLengthMenu': [[5, 10, 25, 50, -1], [5, 10, 25, 50, 'All']],
             'iDisplayLength': 5,
             aoColumns: [
@@ -137,7 +139,9 @@ export class LosExportMonitorComponent implements OnInit, OnDestroy, AfterViewIn
                 { sTitle: 'Trailing batch id', mData: 'TrailingBatchId', sClass: 'text-center', sWidth: '20%'},
                 { sTitle: 'Processed On', mData: 'ModifiedOn', sClass: 'text-center', sWidth: '20%' },
                 { sTitle: 'Status', mData: 'Status', sClass: 'text-center table-panel', sWidth: '20%' },
-                { sTitle: 'Retry', mData: 'ID', sClass: 'text-center', sWidth: '10%' },
+                { sTitle: 'Redo', mData: 'ID', sClass: 'text-center', sWidth: '10%' },
+                { sTitle: 'File type id', mData: 'FileType', bVisible: false,  sClass: 'text-center' },
+                { sTitle: 'Is Latest', mData: 'IsLatest', bVisible: false,  sClass: 'text-center' }
 
             ],
             aoColumnDefs: [
@@ -159,6 +163,8 @@ export class LosExportMonitorComponent implements OnInit, OnDestroy, AfterViewIn
                     'mRender': function (data, type, row) {
                         if (row.Status === LOSExportStatusConstant.LOS_LOAN_ERROR) {
                             return '<span style="cursor:pointer" class="LosExportRetry btn fa fa-undo"></span>';
+                        } else if (row.Status === LOSExportStatusConstant.LOS_LOAN_PROCESSED && row.IsLatest) {
+                            return '<span style="cursor:pointer" class="LosReExport btn fa fa-undo"></span>';
                         } else {
                             return '';
                         }
@@ -173,6 +179,11 @@ export class LosExportMonitorComponent implements OnInit, OnDestroy, AfterViewIn
                 $('td .LosExportRetry', row).unbind('click');
                 $('td .LosExportRetry', row).bind('click', () => {
                     self.LosExportRetry(row, data);
+                });
+
+                $('td .LosReExport', row).unbind('click');
+                $('td .LosReExport', row).bind('click', () => {
+                    self.LosReExport(row, data);
                 });
 
                 return row;
@@ -222,6 +233,9 @@ export class LosExportMonitorComponent implements OnInit, OnDestroy, AfterViewIn
                 this.LosExportStagingMonitorTable.rows.add(result);
                 this.LosExportStagingMonitorTable.draw();
                 if (result != null) {
+                    setTimeout(() => {
+                        this.LosExportStagingMonitorTable.columns.adjust().draw();
+                    }, 300);
                     this.LosExportDetailsModal.show();
 
                 }
@@ -232,13 +246,23 @@ export class LosExportMonitorComponent implements OnInit, OnDestroy, AfterViewIn
     LosExportRetry(rowIndex: Node, Data: any) {
         this.rowData = Data;
         this.RetryFileType = Data.FileTypeName;
+        this.Task = 'retry';
         this.RetryConfirmModel.show();
-
     }
     RetryLOSexportDetails() {
         const InputReq = new RetryLOSExportModel(AppSettings.TenantSchema, this.rowData.ID, this.rowData.LoanID);
         this._exportservice.RetryLOSexportDetails(InputReq);
 
+    }
+    LosReExport(rowIndex: Node, Data: any) {
+        this.rowData = Data;
+        this.RetryFileType = Data.FileTypeName;
+        this.Task = 'Re-Export';
+        this.RetryConfirmModel.show();
+    }
+    ReExportLOSDetails() {
+        const req = new ReExportLOSModel(AppSettings.TenantSchema, this.rowData.LoanID, this.rowData.FileType, this.rowData.ID);
+        this._exportservice.ReExportLOSDetails(req);
     }
     SearchLOSExportDetails(dateFrom: any, dateTo: any) {
         let fromDateStr, toDatStr;
@@ -265,7 +289,8 @@ export class LosExportMonitorComponent implements OnInit, OnDestroy, AfterViewIn
                         this.SearchLOSExportDetails(this.receivedDate.dateFrom, this.receivedDate.dateTo);
                     }
                 } else if (dtInstance.context[0].sTableId === 'LosExportStagingDetails') {
-                    this.LosExportStagingMonitorTable = dtInstance;
+                        this.LosExportStagingMonitorTable = dtInstance;
+
                 }
             });
         });

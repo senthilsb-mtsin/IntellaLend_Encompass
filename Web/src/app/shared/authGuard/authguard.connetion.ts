@@ -30,7 +30,7 @@ export class ConnectionAuthGuard implements CanActivate {
         }
       }
     }
-    this._commonService.UnLock();
+    this._commonService.UnLock(route['_routerState'].url);
     return false;
   }
 }

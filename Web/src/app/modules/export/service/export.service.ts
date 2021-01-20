@@ -8,6 +8,7 @@ import { LoanExportModel, LoanJobModel } from '../models/loan-export.model';
 import { TenantRequestModel } from '../../loan-import/models/tenant-request.model';
 import { EncompassExportModel, EncompassSearchExportModel, SearchExportModel } from '../models/encompass.export.model';
 import { LosExportdateModel } from '../models/los.export.date.model';
+import { ReExportLOSModel } from '../models/retry.los.export.model';
 
 const jwtHelper = new JwtHelperService();
 
@@ -81,6 +82,21 @@ export class ExportService {
           const data = jwtHelper.decodeToken(res.Data)['data'];
           this.retryLOSexport.next();
           this._notificationservice.showSuccess('Status Successfully Updated');
+        }
+      }
+    );
+  }
+  ReExportLOSDetails(req: ReExportLOSModel) {
+    return this._exportdata.ReExportLOSDetails(req).subscribe(
+      res => {
+        if (res !== null) {
+          const Result = jwtHelper.decodeToken(res.Data)['data'];
+          if (Result) {
+            this.retryLOSexport.next();
+            this._notificationservice.showSuccess('Re-Export initiated successfully');
+          } else {
+            this._notificationservice.showError('Unable to Re-Export');
+          }
         }
       }
     );

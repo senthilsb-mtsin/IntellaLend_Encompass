@@ -101,7 +101,6 @@ export class UpsertCustomerComponent implements OnInit, OnDestroy {
   }
 
   EditCustomerSubmit() {
-
     if (!this._upsertCustomerService.validate() && !this._upsertCustomerService.CheckDuplicate()) {
       this._upsertCustomerService.Loading$.next(true);
       this._upsertCustomerService.AddCustomeSubmit();

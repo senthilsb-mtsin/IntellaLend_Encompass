@@ -19,6 +19,7 @@ import { NotificationService } from '@mts-notification';
 export class ManagerDocumentTypeComponent implements OnInit, AfterViewInit, OnDestroy {
     dtOptions: any = {};
     rowSelected = true;
+    syncEnable = false;
     promise: Subscription;
     addStatus: any = [];
     CustomerItems: any = [];
@@ -167,13 +168,23 @@ export class ManagerDocumentTypeComponent implements OnInit, AfterViewInit, OnDe
         if ((this.Customervalue === undefined || this.Customervalue === 0 || this.Customervalue === '0') && (this.LoanTypevalue === undefined || this.LoanTypevalue === 0 || this.LoanTypevalue === '0' ) && (this.click !== undefined)) {
             this.promise = this._managerDocservice.GetManagerDoctypes(inputData);
             this._notificationService.showError('Select Customer');
+            this.syncEnable = false;
         } else if ((this.LoanTypevalue === undefined || this.LoanTypevalue === 0 || this.LoanTypevalue === '0') && (this.Customervalue !== '0' || this.Customervalue !== undefined || this.Customervalue !== 0)  && (this.click !== undefined)) {
             this.promise = this._managerDocservice.GetManagerDoctypes(inputData);
             this._notificationService.showError('Select LoanType');
+            this.syncEnable = false;
 
         } else if ((this.LoanTypevalue !== undefined || this.LoanTypevalue !== '0') && (this.Customervalue !== '0' || this.Customervalue !== undefined)) {
             this.promise = this._managerDocservice.GetManagerDoctypes(inputData);
+            this.syncEnable = true;
         }
+    }
+    SyncLoantype() {
+        if (this.LoanTypevalue !== 0 && this.Customervalue !== 0) {
+            const req: any = { TableSchema: AppSettings.TenantSchema, LoanTypeID: this._managerDocservice.LoanTypeID };
+            this._managerDocservice.SyncRetainUpdateStagings(req);
+        }
+
     }
     CheckTrigger() {
         this.click = true;

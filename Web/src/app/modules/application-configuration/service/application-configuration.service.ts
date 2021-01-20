@@ -37,6 +37,7 @@ export class ApplicationConfigService {
           this.appconfigtabledata$.next(result);
         }
       });
+
   }
   GetConfigvalues(inputs: any) {
     return this._appconfigdata.GetConfigvalues(inputs).subscribe(

@@ -204,6 +204,24 @@ export class ApplicationConfigDataAccess {
       AppConfigApiUrlConstant.GET_SMTP_DETAILS
     );
   }
+  GetADGroups(pmInputReq: any): Observable<MTSAPIResponse> {
+    return this._apiService.authHttpPost(
+      AppConfigApiUrlConstant.GET_ADGroups,
+      pmInputReq
+    );
+  }
+  GetADConfigValue(req: ConfigRequestModel): Observable<MTSAPIResponse> {
+    return this._apiService.authHttpPost(
+      AppConfigApiUrlConstant.GET_ADConfig,
+      req
+    );
+  }
+  SaveADConfigValue(req: any): Observable<MTSAPIResponse> {
+    return this._apiService.authHttpPost(
+      AppConfigApiUrlConstant.SAVE_ADConfig,
+      req
+    );
+  }
   /**
    * Function to check the selected Event type exists or not
    * @param req Parameter of type `CheckWebHookEventTypeExistModal`

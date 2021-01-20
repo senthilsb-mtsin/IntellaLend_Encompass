@@ -6,6 +6,7 @@ import { RuleBuilderService } from 'src/app/modules/loantype/service/rule-builde
 import { ChecklistItemRowData } from 'src/app/modules/loantype/models/checklist-items-table.model';
 import { isTruthy } from '@mts-functions/is-truthy.function';
 import { CommonRuleBuilderService } from 'src/app/shared/common/common-rule-builder.service';
+import { AppSettings } from '@mts-app-setting';
 
 @Component({
     selector: 'mts-in-formula-builder',
@@ -24,6 +25,9 @@ export class INFormulaBuilderComponent implements OnInit, OnDestroy {
     FieldErrorMsg = 'The value entered needs to match exactly with the selected Field value';
     isErrMsgs = false;
     inLookUpDocumentFieldMasterTypes: any[] = [];
+
+    LosDocumentFields: any[] = [];
+    FannieMaeDocName: string = AppSettings.RuleFannieMaeDocName;
 
     constructor(
         private _commonRuleBuilderService: CommonRuleBuilderService,
@@ -64,12 +68,18 @@ export class INFormulaBuilderComponent implements OnInit, OnDestroy {
             let ruleFormationValues = 'in([Rule])';
             myForm.inRule.forEach(elements => {
                 const inDisvalField = isTruthy(elements.InDisValField) ? elements.InDisValField : '';
-                if (elements.InDocumentTypes !== '' && elements.InDocField !== '' && Array.isArray(elements.InDocField) && elements.InDocField.length > 0) {
+                if (elements.InDocumentTypes !== '' && elements.InDocField !== '' && Array.isArray(elements.InDocField) && elements.InDocField.length > 0 && elements.InDocumentTypes !== AppSettings.RuleFannieMaeDocName) {
                     str += '[' + elements.InDocumentTypes + '.' + elements.InDocField[0].text + ']' + ',' + inDisvalField;
-                } else if (elements.InDocumentTypes !== '' && elements.InDocField !== '' && typeof (elements.InDocField) === 'string') {
+                } else if (elements.InDocumentTypes !== '' && elements.InLosdocField !== '' && Array.isArray(elements.InLosdocField) && elements.InLosdocField.length > 0 && elements.InDocumentTypes === AppSettings.RuleFannieMaeDocName) {
+                    str += '[' + AppSettings.FannieMaeDocDisplayName + '.' + elements.InLosdocField[0].text + ']' + ',' + inDisvalField;
+                } else if (elements.InDocumentTypes !== '' && elements.InDocField !== '' && typeof (elements.InDocField) === 'string' && elements.InDocumentTypes !== AppSettings.RuleFannieMaeDocName) {
                     str += '[' + elements.InDocumentTypes + '.' + elements.InDocField + ']' + ',' + inDisvalField;
-                } else if (elements.InDocumentTypes !== '' && elements.InDocField !== '' && typeof (elements.InDocField) === 'object') {
+                } else if (elements.InDocumentTypes !== '' && elements.InLosdocField !== '' && typeof (elements.InLosdocField) === 'string' && elements.InDocumentTypes === AppSettings.RuleFannieMaeDocName) {
+                    str += '[' + AppSettings.FannieMaeDocDisplayName + '.' + elements.InLosdocField + ']' + ',' + inDisvalField;
+                } else if (elements.InDocumentTypes !== '' && elements.InDocField !== '' && typeof (elements.InDocField) === 'object' && elements.InDocumentTypes !== AppSettings.RuleFannieMaeDocName) {
                     str += '[' + elements.InDocumentTypes + '.' + elements.InDocField.text + ']' + ',' + inDisvalField;
+                } else if (elements.InDocumentTypes !== '' && elements.InLosdocField !== '' && typeof (elements.InLosdocField) === 'object' && elements.InDocumentTypes === AppSettings.RuleFannieMaeDocName) {
+                    str += '[' + AppSettings.FannieMaeDocDisplayName + '.' + elements.InLosdocField.text + ']' + ',' + inDisvalField;
                 } else if (elements.invalueDocField !== '') {
                     str += elements.invalueDocField + ',' + inDisvalField;
                 }
@@ -86,6 +96,13 @@ export class INFormulaBuilderComponent implements OnInit, OnDestroy {
             }
             this._commonRuleBuilderService.ruleExpression.next(ruleFormationValues);
         }));
+        this._subscriptions.push(this._ruleBuilderService.LosDocumentFields.subscribe((elements: any[]) => {
+
+            this.LosDocumentFields = [];
+            elements.forEach((element) => {
+                this.LosDocumentFields.push(element);
+            });
+        }));
     }
 
     InFieldsChange(vals: any, index: any) {
@@ -95,6 +112,7 @@ export class INFormulaBuilderComponent implements OnInit, OnDestroy {
             $('#invalueDisplayed_' + index).show();
             $('#invalueDisplay_' + index).hide();
             this.formData.controls[index].get('InDocField').setValue('');
+            this.formData.controls[index].get('InLosdocField').setValue('');
         } else {
             this.formData.controls[index].get('infieldsCustomValues').setValue(false);
             $('#invalueDisplay_' + index).show();
@@ -104,7 +122,10 @@ export class INFormulaBuilderComponent implements OnInit, OnDestroy {
     }
 
     InDocTypesChanged(genVals: any, i: any, field: string) {
-        this._ruleBuilderService.docFieldsInitChange(this.formData.controls[0], this.currtDocFields, genVals, field, i);
+        const DocName: string = ((typeof (genVals) === 'string') ? genVals : genVals.target.selectedOptions[0].innerText);
+        if (DocName !== AppSettings.RuleFannieMaeDocName) {
+            this._ruleBuilderService.docFieldsInitChange(this.formData.controls[0], this.currtDocFields, genVals, field, i);
+        }
     }
 
     InClearField() {
@@ -113,14 +134,25 @@ export class INFormulaBuilderComponent implements OnInit, OnDestroy {
 
     addInValues() {
         this.inLookUpDocumentFieldMasterTypes = [];
-        if (this.formData.controls[0].get('InLookUpDocumentTypes').value !== '' && this.formData.controls[0].get('InValuesField').value !== '') {
+        if (this.formData.controls[0].get('InLookUpDocumentTypes').value !== '' && (this.formData.controls[0].get('InValuesField').value !== '' || this.formData.controls[0].get('InLookUpLosdocField').value !== '')) {
             if (this.formData.controls[0].get('InDisValField').value !== '') {
-                this.formData.controls[0].get('InDisValField').setValue(this.formData.controls[0].get('InDisValField').value + ',' + '[' + this.formData.controls[0].get('InLookUpDocumentTypes').value + '.' + this.formData.controls[0].get('InValuesField').value + ']');
+                if (this.formData.controls[0].get('InLookUpDocumentTypes').value !== AppSettings.RuleFannieMaeDocName) {
+                    this.formData.controls[0].get('InDisValField').setValue(this.formData.controls[0].get('InDisValField').value + ',' + '[' + this.formData.controls[0].get('InLookUpDocumentTypes').value + '.' + this.formData.controls[0].get('InValuesField').value + ']');
+                } else {
+                    this.formData.controls[0].get('InDisValField').setValue(this.formData.controls[0].get('InDisValField').value + ',' + '[' + this.formData.controls[0].get('InLookUpDocumentTypes').value + '.' + this.formData.controls[0].get('InLookUpLosdocField').value + ']');
+                }
+
             } else {
-                this.formData.controls[0].get('InDisValField').setValue('[' + this.formData.controls[0].get('InLookUpDocumentTypes').value + '.' + this.formData.controls[0].get('InValuesField').value + ']');
+
+                if (this.formData.controls[0].get('InLookUpDocumentTypes').value !== AppSettings.RuleFannieMaeDocName) {
+                    this.formData.controls[0].get('InDisValField').setValue('[' + this.formData.controls[0].get('InLookUpDocumentTypes').value + '.' + this.formData.controls[0].get('InValuesField').value + ']');
+                } else {
+                    this.formData.controls[0].get('InDisValField').setValue('[' + this.formData.controls[0].get('InLookUpDocumentTypes').value + '.' + this.formData.controls[0].get('InLookUpLosdocField').value + ']');
+                }
             }
             this.formData.controls[0].get('InLookUpDocumentTypes').setValue('');
             this.formData.controls[0].get('InValuesField').setValue('');
+            this.formData.controls[0].get('InLookUpLosdocField').setValue('');
         } else if (this.formData.controls[0].get('inlookupvalueDocField').value !== '') {
 
             if (this.formData.controls[0].get('InDisValField').value !== '') {
@@ -155,7 +187,13 @@ export class INFormulaBuilderComponent implements OnInit, OnDestroy {
             if (element.infieldsCustomValues === '') {
                 this.formData.controls[i].get('InDocumentTypes').setValue(element.InDocumentTypes);
                 this._ruleBuilderService.docFieldsInitChange(this.formData.controls[i], this.currtDocFields, element.InDocumentTypes, 'InDocField', i);
-                this.formData.controls[i].get('InDocField').setValue(element.InDocField[0].id);
+
+                if (isTruthy(element.InDocField)) {
+                    this.formData.controls[i].get('InDocField').setValue(element.InDocField[0].id);
+                }
+                if (isTruthy(element.InLosdocField)) {
+                    this.formData.controls[i].get('InLosdocField').setValue(element.InLosdocField);
+                }
             }
             if (element.infieldsCustomValues === true) {
                 $('#invalueDisplayed_' + i).show();
@@ -174,12 +212,26 @@ export class INFormulaBuilderComponent implements OnInit, OnDestroy {
             invalueDocField: [''],
             InDocumentTypes: [''],
             InDocField: [''],
+            InLosdocField: [''],
             inlookupfieldsCustomValues: [''],
             InLookUpDocumentTypes: [''],
             inlookupvalueDocField: [''],
+            InLookUpLosdocField: [''],
             InValuesField: [''],
             InDisValField: [{ value: '', disabled: true }]
         }));
+    }
+
+    OnChangeFieldValue(index: number, LosDocField: string, DocType: string) {
+        const SearchValue = this.formData.controls[index].get(LosDocField).value;
+        const LosDocumentName = this.formData.controls[index].get(DocType).value;
+        let LosDocumentId;
+        this.genDocTypes.forEach((a) => {
+            if (a.text === LosDocumentName) {
+                LosDocumentId = a.id;
+            }
+        });
+        this._ruleBuilderService.GetLosDocFields(LosDocumentId, SearchValue);
     }
 
     ngOnDestroy(): void {

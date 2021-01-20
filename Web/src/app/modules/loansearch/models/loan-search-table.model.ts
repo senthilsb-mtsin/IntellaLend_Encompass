@@ -19,4 +19,9 @@ export class LoanSearchTableModel {
     LoggedUserID: any;
     LoggerUserFirstName: any;
     LoggerUserLastName: any;
+    Message: any;
+}
+export class FannieMaeFields {
+    FieldID: string;
+    FieldValue: string;
 }

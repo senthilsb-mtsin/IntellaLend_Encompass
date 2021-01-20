@@ -123,27 +123,27 @@ private _subscriptions: Subscription[] = [];
 
         let i = 0;
 
-        this.rowData.ConditionObject.schema.forEach(element => {
+        this.rowData.ConditionObject.schema.forEach(ele => {
            if (i === 0) {
             this.addRules();
 
            }
-            if (element.fieldsCustomValues === '') {
-                this.formData.controls[i].get('openBrace').setValue(element.openBrace);
-                this.formData.controls[i].get('generalDocumentTypes').setValue(element.generalDocumentTypes);
-                this.GeneralDocTypesChanged(element.generalDocumentTypes, i);
-                this.formData.controls[i].get('docField').setValue(element.docField);
-                this.formData.controls[i].get('closeBrace').setValue(element.closeBrace);
-                this.formData.controls[i].get('docFieldOperator').setValue(element.docFieldOperator);
+            if (ele.fieldsCustomValues === '') {
+                this.formData.controls[i].get('openBrace').setValue(ele.openBrace);
+                this.formData.controls[i].get('generalDocumentTypes').setValue(ele.generalDocumentTypes);
+                this.GeneralDocTypesChanged(ele.generalDocumentTypes, i);
+                this.formData.controls[i].get('docField').setValue(ele.docField);
+                this.formData.controls[i].get('closeBrace').setValue(ele.closeBrace);
+                this.formData.controls[i].get('docFieldOperator').setValue(ele.docFieldOperator);
             }
-             if (element.fieldsCustomValues === true) {
+             if (ele.fieldsCustomValues === true) {
                  $('#valueDisplayed_' + i).show();
                  $('#valueDisplay_' + i).hide();
-                 this.formData.controls[i].get('openBrace').setValue(element.openBrace);
-                 this.formData.controls[i].get('fieldsCustomValues').setValue(element.fieldsCustomValues);
-                this.formData.controls[i].get('valueDocField').setValue(element.valueDocField);
-                 this.formData.controls[i].get('closeBrace').setValue(element.closeBrace);
-                 this.formData.controls[i].get('docFieldOperator').setValue(element.docFieldOperator);
+                 this.formData.controls[i].get('openBrace').setValue(ele.openBrace);
+                 this.formData.controls[i].get('fieldsCustomValues').setValue(ele.fieldsCustomValues);
+                this.formData.controls[i].get('valueDocField').setValue(ele.valueDocField);
+                 this.formData.controls[i].get('closeBrace').setValue(ele.closeBrace);
+                 this.formData.controls[i].get('docFieldOperator').setValue(ele.docFieldOperator);
             }
             if (i === this.rowData.ConditionObject.schema.length - 1) {
 

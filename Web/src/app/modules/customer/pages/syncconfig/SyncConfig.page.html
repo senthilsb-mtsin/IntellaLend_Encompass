@@ -1,0 +1,62 @@
+<div class="box m-b-0">
+    <div class="box-title">
+        <h5>{{_customerName}}</h5>
+    </div>
+    <div class="box-body">
+        <div class="row-centered">
+            <div class="headercontainer" [cgBusy]="promise">
+                <div class="tablecontainer">
+                    <table class="table table-bordered table-striped table-hover m-b-0" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th scope="col">Loan Type Name</th>
+                                <th style="width: 180px" scope="col">Document Sync</th>
+                                <th style="width: 180px" scope="col">LoanType Sync</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let ltm of CustLoanTypeMapped">
+                                <td class="text-left">{{ltm.LoanTypeName}}</td>
+                                <td style="width: 180px" class="text-center">
+                                    <div class="pu_toggle">
+                                        <label class="tgl m-b-0" style="font-size:14px">
+                                            <input [checked]="ltm.DocumentTypeSync" (change)="SetDocumentTypeSync(ltm);"
+                                                name="DocumentActive" type="checkbox" />
+                                            <span data-on="On" data-off="Off"></span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td style="width: 180px" class="text-center">
+                                    <div class="pu_toggle">
+                                        <label class="tgl m-b-0" style="font-size:14px">
+                                            <input [checked]="ltm.LoanTypeSync" (change)="SetLoanTypeSync(ltm);"
+                                                name="LoanTypeActive" type="checkbox" />
+                                            <span data-on="On" data-off="Off"></span>
+                                        </label>
+                                    </div>            
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box-footer p-t-5 p-b-5">
+        <div class="row" style="margin-top: 10px">
+            <div class="col-md-6 text-left">
+                <button type="button" (click)="CloseLoanTypeMapping()"
+                    class="btn btn-secondary bg-white waves-effect waves-light"><i
+                        class="material-icons">close</i>&nbsp;Cancel</button>
+            </div>
+            <div class="col-md-6 text-right">
+                <button type="button" (click)="SaveCustLoanTypeMapping()"
+                    class="btn btn-info waves-effect waves-light"><i
+                        class="material-icons">save</i>&nbsp;Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

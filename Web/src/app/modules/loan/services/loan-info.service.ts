@@ -39,17 +39,19 @@ export class LoanInfoService {
 
     _mappingTemplate$ = new Subject<any>();
     mentionDropOptions$ = new Subject<{ mentionDocTypes: any, mentionDocFields: any }>();
-
     AuditReportBlog$ = new Subject<any>();
     ReverificationBlog$ = new Subject<any>();
     DocumentDownloadBlog$ = new Subject<any>();
-    newDocTypeID$ = new Subject<any>();
+    newDocType$ = new Subject<{DocID: number, DocName: string, DocNameVersion: string}>();
     EmailConfirmModal$ = new Subject<boolean>();
+    CheckLoad$ = new Subject<boolean>();
     EmailRetryModal$ = new Subject<boolean>();
     AuditEmailConfirmModal$ = new Subject<boolean>();
     LoanDetails$ = new BehaviorSubject<Loan>(null);
+    LoanInfo$ = new Subject<LoanSearchTableModel>();
     LoanDetailsSub$ = new Subject<Loan>();
     loanFilterResult$ = new Subject<any>();
+    LoanViewIssues$ = new Subject<any>();
     LoanPDFCheck$ = new Subject<{ ShowDownload: boolean, PDFLink: string }>();
     showImgDiv$ = new Subject<boolean>();
     documentObsoleteModal$ = new Subject<boolean>();
@@ -85,6 +87,7 @@ export class LoanInfoService {
     LoanPopOutImageViewerHeight$ = new Subject<string>();
     LoanReverifyImageViewerHeight$ = new Subject<string>();
     changeField$ = new Subject<{ fieldCount: any, returnFieldCount: any }>();
+    IsDirectLink = false;
 
     constructor(
         private _loanInfoDataAccess: LoanInfoDataAccess,
@@ -99,16 +102,27 @@ export class LoanInfoService {
     private _assignUserList: { UserID: number, UserName: string, AssignedUserID: number }[] = [];
     private _loanAPIResponse: Loan = null;
     private _userNames: any[] = [];
-    private _currentDoc: { DocID: any, VersionNumber: any, lastPageNumber: any, pageNumberArray: any[], _currentDocName: any, _totalImageCount: any, checkListState: any };
+    private _currentDoc: { DocID: any, VersionNumber: any, lastPageNumber: any, pageNumberArray: any[], _currentDocName: any, _totalImageCount: any, checkListState: any, DocNameVersion: any };
     private fieldFrmGrp: FormGroup;
     private _currentForm: { datatables: any, fields: any } = { datatables: {}, fields: {} };
     private LoanDocuments: any[] = [];
     private ReverificationMaster: any[] = [];
     private _templateFields: LoanTemplateField = new LoanTemplateField();
     private CompleteNotes: any = '';
+    private _loanViewerIssues: any;
+
+    SetLoanViewIssues(Issues: any) {
+        this._loanViewerIssues = Issues;
+    }
+
+    GetLoanViewIssues() {
+        return this._loanViewerIssues;
+    }
+
     SetNotesValue(completeNotes: any) {
         this.CompleteNotes = completeNotes;
     }
+
     CompleteLoan() {
         const req = {
             TableSchema: AppSettings.TenantSchema,
@@ -227,10 +241,13 @@ export class LoanInfoService {
                     stackDoc.ToolTipValue = ((this.CheckMoreThanOnce(stackDoc.DocName)) ? stackDoc.DocName + ' - V' + (stackDoc.FieldOrderBy === '' ? (stackDoc.VersionNumber).toString() : this.GetFieldVersionNumber(stackDoc.DocName, stackDoc.FieldOrderVersion)) : stackDoc.DocName) + '' + docval;
                     stackDoc.DocNameVersion = ((this.CheckMoreThanOnce(stackDoc.DocName)) ? stackDoc.DocName + '-V' + (stackDoc.FieldOrderBy === '' ? (stackDoc.VersionNumber).toString() : this.GetFieldVersionNumber(stackDoc.DocName, stackDoc.FieldOrderVersion)) : stackDoc.DocName);
                 });
+                this.CheckLoad$.next(true);
             }
             if (this._loanAPIResponse === null) {
                 this._loanAPIResponse = new Loan();
                 this._loanAPIResponse.LoanID = 0;
+                this.CheckLoad$.next(true);
+
             }
 
             if (this._loanData.Status === StatusConstant.COMPLETE) {
@@ -248,6 +265,8 @@ export class LoanInfoService {
                 }
             }
             this.LoanDetails$.next(this._loanAPIResponse);
+            this.CheckLoad$.next(true);
+
         });
     }
 
@@ -560,6 +579,14 @@ export class LoanInfoService {
         });
     }
 
+    GetLoanInfo(_encryptedLoanGUID: string) {
+        const req = { TableSchema: AppSettings.TenantSchema, EncryptedLoanGUID: _encryptedLoanGUID };
+        return this._loanInfoDataAccess.GetLoanInfo(req).subscribe(res => {
+            const data = jwtHelper.decodeToken(res.Data)['data'];
+            this.LoanInfo$.next(data);
+        });
+    }
+
     GetUserMaster() {
         if (this._userNames.length > 0) {
             this.usernameNotes$.next(this._userNames.slice());
@@ -631,7 +658,6 @@ export class LoanInfoService {
             }
         });
     }
-
     SetLoanPageInfo(loanData: LoanSearchTableModel) {
         this._loanHeaderInfo.LoanID = loanData.LoanID;
         this._loanHeaderInfo.LoanAmount = loanData.LoanAmount;
@@ -1092,13 +1118,13 @@ export class LoanInfoService {
                     _docs.splice(i, 1);
                 }
             }
-        } else if (splits[0] === 'isexist' || splits[0] === 'isexistAny' || ruleType === 'groupby') {
+        } else if (ruleType === 'isexist' || splits[0] === 'isexistAny' || ruleType === 'groupby') {
             _docs = [];
         }
 
         const _associatedDocs = [];
         _docs.forEach(element => {
-            if (this._loanAPIResponse.loanDocuments.filter(d => d.DocName === element.Docname && d.DocumentLevelIcon !== 'Success').length === 1) {
+            if (element.Docname !== AppSettings.FannieMaeDocDisplayName && (this._loanAPIResponse.loanDocuments.filter(d => d.DocName === element.Docname || d.DocNameVersion === element.Docname).length === 0 || this._loanAPIResponse.loanDocuments.filter(d => (d.DocName === element.Docname || d.DocNameVersion === element.Docname) && d.DocumentLevelIcon !== 'Success' ).length > 0)) {
                 _associatedDocs.push({ DocumentName: element.Docname, FieldName: element.Fieldname, MissingDoc: true });
             } else if (splits[0] === 'checkall') {
                 _associatedDocs.push({ DocumentName: '', FieldName: '' });

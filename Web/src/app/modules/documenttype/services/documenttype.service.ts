@@ -25,11 +25,14 @@ export class DocumentTypeService {
     DocumentTypeID = new Subject<any>();
     DocumentTypeName = new Subject<any>();
     isLoad = new Subject<any>();
+    syncDetailEnable = new Subject<any>();
     IsValidate = false;
     AddDocTypeSteps: any = {
         DocumentType: 1,
         Documentfields: 2
     };
+    showLoading = new Subject<boolean>();
+
     constructor(private _documentDataAccess: DocumentDataAccess, private _commonservice: CommonService, private _route: Router, private location: Location, private _notificationService: NotificationService) {
 
     }
@@ -40,7 +43,23 @@ export class DocumentTypeService {
     SetDocumentTypeRowData(inputData: DocumentTypeDatatableModel) {
         this._documentTypeRowData = inputData;
     }
+    SyncDocTypes(req: { TableSchema: string }) {
+        return this._documentDataAccess.SynDocTypes(req).subscribe(res => {
+            if (isTruthy(res)) {
+                const data = jwtHelper.decodeToken(res.Data)['data'];
+                this.syncDetailEnable.next(true);
+                this._notificationService.showSuccess('Document Sync Successfully');
+                this.showLoading.next(false);
 
+            } else {
+                this.syncDetailEnable.next(true);
+                this._notificationService.showError('Document Sync Failed');
+                this.showLoading.next(false);
+
+            }
+
+        });
+    }
     getDocumentTypeRowData(): void {
         this.DocumentTypeData.next(this._documentTypeRowData);
     }

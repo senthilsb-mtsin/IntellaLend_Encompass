@@ -265,7 +265,7 @@
                 </div>
             </div>
             <hr class="fancy-line">
-            <div class="modal-body" style="height: 500px;overflow: hidden;">
+            <div class="modal-body" style="height: 500px;overflow: hidden;" *ngIf="auditPDFModal.isShown">
                 <pdf-viewer [src]="pdfSrc" [render-text]="true" [zoom]="1.0" [autoresize]="true" style="display: block;overflow-y: auto;height: 499px;"></pdf-viewer>
             </div>
             <div class="modal-footer">

@@ -1,0 +1,87 @@
+<div class="row" style="display: block;">
+    <div class="col-md-12">
+        <div class="table-panel box">
+            <div class="box-body">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" class="form-control mandatory" name="Domain Name" required [(ngModel)]="adconfig.AD_Domain">
+                                <label class="control-label" for="input">
+                                    Domain Name
+                                </label>
+                                <i class="bar"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="text" class="form-control mandatory" name="LDAP Url" required [(ngModel)]="adconfig.LDAP_url">
+                                <label class="control-label" for="input">
+                                    LDAP Url
+                                </label>
+                                <i class="bar"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4 p-t-25 text-left">
+                            <button class="btn btn-info waves-effect waves-light m-r-8" type="button" [disabled]="!btnEnabled" (click)="GetADGroups()">
+                                &nbsp;Get AD Groups
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="row m-t-20">
+
+                    <div class="col-md-12 text-right">
+                        <button class="btn btn-info waves-effect waves-light m-r-8" type="button" (click)="saveADGroup()">
+                            <i class="material-icons">save</i>
+                            &nbsp;Save
+                        </button>
+                        <button type="button" class="btn btn-secondary waves-effect waves-light bg-white" type="button" (click)="CancelAdConfig()">
+
+
+                            <i class="material-icons">clear</i>
+                            &nbsp;Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div bsModal #ADGroupModal="bs-modal" [config]="{backdrop: false}" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:70%;" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-left">
+                <h5 class="modal-title">AD Groups</h5>
+            </div>
+            <div class="modal-body" style="overflow-y:auto">
+                <div class="headercontainer" style="width:100%;">
+                    <div class="tablecontainer">
+                        <table class="table table-bordered table-striped table-hover m-b-0" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Available Group
+                                        <div class="colAlign">Available Group</div>
+                                    </th>
+                                    <th scope="col">New Groups
+                                        <div class="colAlign">New Groups</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let avGroup of AdGroups">
+                                    <td class="text-left" style="width:30%">{{avGroup.AvailableGroup}}</td>
+                                    <td class="text-left" style="width:30%">{{avGroup.NewGroups}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default bg-white waves-effect waves-light" type="button" (click)="ADGroupModal.hide()"><i class="material-icons">clear</i>&nbsp;Close</button>
+            </div>
+        </div>
+    </div>
+</div>

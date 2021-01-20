@@ -8,6 +8,7 @@ import { SessionHelper } from '@mts-app-session';
 import { isTruthy } from '@mts-functions/is-truthy.function';
 import { AddServiceTypeService } from '../../service/add-service-type.service';
 import { ServiceTypeModel } from '../../models/service-type.model';
+import { AppSettings } from '@mts-app-setting';
 
 @Component({
   selector: 'mts-service-type',
@@ -26,6 +27,7 @@ export class ServiceTypeComponent implements OnInit, AfterViewInit {
   ReviewTypeName = '';
   promise: Subscription;
   priorityList: any = [];
+  AuthorityLabelSingular: string = AppSettings.AuthorityLabelSingular;
   //#endregion Public Variables
 
   //#region Constructor
@@ -33,6 +35,7 @@ export class ServiceTypeComponent implements OnInit, AfterViewInit {
     this.checkPermission('AddBtn', 0);
     this.checkPermission('EditBtn', 1);
     this.checkPermission('ViewBtn', 2);
+    // this.checkPermission('ImportBtn', 3);
   }
   //#endregion Constructor
 
@@ -164,6 +167,8 @@ export class ServiceTypeComponent implements OnInit, AfterViewInit {
     } else if (modalType === 2) {
       this._serviceTypeService.setServiceType({ Type: 'View', ServiceTypeID: this.ReviewTypeID, ServiceTypeName: this.ReviewTypeName });
       this._route.navigate(['view/reviewtype/viewreviewtype']);
+    } else if (modalType === 3) {
+      this._route.navigate(['view/reviewtype/import']);
     }
   }
 

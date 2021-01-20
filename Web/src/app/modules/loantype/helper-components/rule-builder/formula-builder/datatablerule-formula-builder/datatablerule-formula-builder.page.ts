@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { ChecklistItemRowData } from 'src/app/modules/loantype/models/checklist-items-table.model';
-import { FormulaBuilderTypesConstant } from '@mts-app-setting';
+import { AppSettings, FormulaBuilderTypesConstant } from '@mts-app-setting';
 import { AddLoanTypeService } from 'src/app/modules/loantype/service/add-loantype.service';
 import { RuleBuilderService } from 'src/app/modules/loantype/service/rule-builder.service';
 import { RuleCheckValidation, SingleOperatorExistforRule } from 'src/app/modules/loantype/pipes';
@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 import { isTruthy } from '@mts-functions/is-truthy.function';
 import { NotificationService } from '@mts-notification';
 import { CommonRuleBuilderService } from 'src/app/shared/common/common-rule-builder.service';
+import { element } from 'protractor';
 
 @Component({
     selector: 'mts-datatablerule-formula-builder',
@@ -34,6 +35,9 @@ export class DataTableFormulaBuilderComponent implements OnInit, OnDestroy {
     headerFieldID = '';
     ErrorMsg = '';
     rowKeyValue = '#SUM#';
+
+    LosDocumentFields: any[] = [];
+    FannieMaeDocName: string = AppSettings.RuleFannieMaeDocName;
 
     constructor(
         private _commonRuleBuilderService: CommonRuleBuilderService,
@@ -84,17 +88,21 @@ export class DataTableFormulaBuilderComponent implements OnInit, OnDestroy {
             let docTypeFieldFlag = false;
 
             form.datatableRule.forEach(elements => {
-                if (elements.generalDocumentTypes !== '' && isTruthy(elements.docField) && typeof (elements.docField) === 'string' && elements.docField !== '') {
+                if (elements.generalDocumentTypes !== '' && isTruthy(elements.docField) && typeof (elements.docField) === 'string' && elements.docField !== '' && elements.generalDocumentTypes !== AppSettings.RuleFannieMaeDocName) {
                     str += elements.openBrace + '[' + elements.generalDocumentTypes + '.' + elements.docField + ']' + elements.closeBrace + elements.docFieldOperator;
-                } else if (elements.generalDocumentTypes !== '' && isTruthy(elements.docField) && Array.isArray(elements.docField) && elements.docField.length > 0) {
+                } else if (elements.generalDocumentTypes !== '' && isTruthy(elements.docField) && Array.isArray(elements.docField) && elements.docField.length > 0 && elements.generalDocumentTypes !== AppSettings.RuleFannieMaeDocName) {
                     str += elements.openBrace + '[' + elements.generalDocumentTypes + '.' + elements.docField[0].text + ']' + elements.closeBrace + elements.docFieldOperator;
+                } else if (elements.generalDocumentTypes !== '' && isTruthy(elements.LosdocField) && typeof (elements.LosdocField) === 'string' && elements.LosdocField !== '' && elements.generalDocumentTypes === AppSettings.RuleFannieMaeDocName) {
+                    str += elements.openBrace + '[' + AppSettings.FannieMaeDocDisplayName + '.' + elements.LosdocField + ']' + elements.closeBrace + elements.docFieldOperator;
+                } else if (elements.generalDocumentTypes !== '' && isTruthy(elements.LosdocField) && Array.isArray(elements.LosdocField) && elements.LosdocField.length > 0 && elements.generalDocumentTypes === AppSettings.RuleFannieMaeDocName) {
+                    str += elements.openBrace + '[' + AppSettings.FannieMaeDocDisplayName + '.' + elements.LosdocField[0].text + ']' + elements.closeBrace + elements.docFieldOperator;
                 } else if (elements.valueDocField !== '') {
                     str += elements.openBrace + elements.valueDocField + elements.closeBrace + elements.docFieldOperator;
                 } else if (elements.fieldOrTableSelect === 'Table' && elements.tableName !== '' && elements.columnName && elements.isKeyColumnEnabled && elements.rowNumber !== '') {
                     str += elements.openBrace + '[' + elements.generalDocumentTypes + '.' + elements.tableName + '.' + elements.columnName + '.' + '|' + elements.rowNumber + '|' + ']' + elements.closeBrace + elements.docFieldOperator;
                 } else if (elements.fieldOrTableSelect === 'Table' && elements.tableName !== '' && elements.columnName !== '' && !(elements.isKeyColumnEnabled)) {
                     str += elements.openBrace + '[' + elements.generalDocumentTypes + '.' + elements.tableName + '.' + elements.columnName + '.' + this.rowKeyValue + ']' + elements.closeBrace + elements.docFieldOperator;
-                } else if (elements.generalDocumentTypes === '' || elements.docField === '' || elements.docFieldOperator === '') {
+                } else if (elements.generalDocumentTypes === '' || (elements.docField === '' && elements.LosdocField) || elements.docFieldOperator === '') {
                     this._commonRuleBuilderService.ruleBuilderNext.next(true);
                     docTypeFieldFlag = true;
                 }
@@ -141,6 +149,13 @@ export class DataTableFormulaBuilderComponent implements OnInit, OnDestroy {
             this._commonRuleBuilderService.ruleExpression.next(ruleFormationValues);
 
         }));
+        this._subscriptions.push(this._ruleBuilderService.LosDocumentFields.subscribe((elements: any[]) => {
+
+            this.LosDocumentFields = [];
+            elements.forEach((ele) => {
+                this.LosDocumentFields.push(ele);
+            });
+        }));
     }
 
     ChangeFieldOrTable(vals: any, index: any) {
@@ -148,6 +163,7 @@ export class DataTableFormulaBuilderComponent implements OnInit, OnDestroy {
             this.isErrMsgs = true;
             this.formData.controls[index].get('fieldOrTableSelect').setValue('Value');
             this.formData.controls[index].get('docField').setValue('');
+            this.formData.controls[index].get('LosdocField').setValue('');
             this.formData.controls[index].get('generalDocumentTypes').setValue('');
             this.formData.controls[index].get('fieldsCustomValues').setValue(true);
             this.formData.controls[index].get('docFieldOperator').setValue('');
@@ -173,7 +189,10 @@ export class DataTableFormulaBuilderComponent implements OnInit, OnDestroy {
     }
 
     DocTypesChanged(genVals: any, i: any) {
-        this._ruleBuilderService.docFieldsInitChange(this.formData.controls[i], this.currtDocFields, genVals, 'docField', i);
+        const DocName: string = ((typeof (genVals) === 'string') ? genVals : genVals.target.selectedOptions[0].innerText);
+        if (DocName !== AppSettings.RuleFannieMaeDocName) {
+            this._ruleBuilderService.docFieldsInitChange(this.formData.controls[i], this.currtDocFields, genVals, 'docField', i);
+        }
     }
 
     removeRules(i: any) {
@@ -183,46 +202,52 @@ export class DataTableFormulaBuilderComponent implements OnInit, OnDestroy {
     GenerateFormValues() {
         let i = 0;
         const rowKeysArry = [];
-        this.rowData.RuleJsonObject.datatableRule.forEach(element => {
+        this.rowData.RuleJsonObject.datatableRule.forEach(ele => {
             this.addRules();
-            if (element.fieldOrTableSelect === 'Field') {
-                this.formData.controls[i].get('fieldOrTableSelect').setValue(element.fieldOrTableSelect);
-                this.formData.controls[i].get('openBrace').setValue(element.openBrace);
-                this.DocTypesChanged(element.generalDocumentTypes, i);
-                this.formData.controls[i].get('generalDocumentTypes').setValue(element.generalDocumentTypes);
-                this.formData.controls[i].get('docField').setValue(element.docField[0].id);
-                this.formData.controls[i].get('closeBrace').setValue(element.closeBrace);
-                this.formData.controls[i].get('docFieldOperator').setValue(element.docFieldOperator);
-            }
-            if (element.fieldOrTableSelect === 'Value') {
-                this.formData.controls[i].get('openBrace').setValue(element.openBrace);
-                this.formData.controls[i].get('fieldOrTableSelect').setValue(element.fieldOrTableSelect);
-                this.formData.controls[i].get('valueDocField').setValue(element.valueDocField);
-                this.formData.controls[i].get('closeBrace').setValue(element.closeBrace);
-                this.formData.controls[i].get('docFieldOperator').setValue(element.docFieldOperator);
-            }
-            if (element.fieldOrTableSelect === 'Table') {
-                this.formData.controls[i].get('openBrace').setValue(element.openBrace);
-                this.formData.controls[i].get('fieldOrTableSelect').setValue(element.fieldOrTableSelect);
-                this.DataTableInitRuleDocTypesChanged(element.generalDocumentTypes, i);
-                this.formData.controls[i].get('generalDocumentTypes').setValue(element.generalDocumentTypes);
-                this.formData.controls[i].get('tableName').setValue(element.tableName[0].id);
-                this.DataTableEditInitTableNameChanged(element.tableName, i);
-                if (element.isKeyColumnEnabled) {
-                    rowKeysArry.push(i);
-                    this.formData.controls[i].get('isKeyColumnEnabled').setValue(element.isKeyColumnEnabled);
-                    this.formData.controls[i].get('rowNumber').setValue(element.rowNumber);
+            if (ele.fieldOrTableSelect === 'Field') {
+                this.formData.controls[i].get('fieldOrTableSelect').setValue(ele.fieldOrTableSelect);
+                this.formData.controls[i].get('openBrace').setValue(ele.openBrace);
+                this.DocTypesChanged(ele.generalDocumentTypes, i);
+                this.formData.controls[i].get('generalDocumentTypes').setValue(ele.generalDocumentTypes);
+
+                if (isTruthy(ele.docField)) {
+                    this.formData.controls[i].get('docField').setValue(ele.docField[0].id);
                 }
-                this.formData.controls[i].get('columnName').setValue(element.columnName[0].id);
-                this.formData.controls[i].get('closeBrace').setValue(element.closeBrace);
-                this.formData.controls[i].get('docFieldOperator').setValue(element.docFieldOperator);
+                if (isTruthy(ele.LosdocField)) {
+                    this.formData.controls[i].get('LosdocField').setValue(ele.LosdocField);
+                }
+                this.formData.controls[i].get('closeBrace').setValue(ele.closeBrace);
+                this.formData.controls[i].get('docFieldOperator').setValue(ele.docFieldOperator);
+            }
+            if (ele.fieldOrTableSelect === 'Value') {
+                this.formData.controls[i].get('openBrace').setValue(ele.openBrace);
+                this.formData.controls[i].get('fieldOrTableSelect').setValue(ele.fieldOrTableSelect);
+                this.formData.controls[i].get('valueDocField').setValue(ele.valueDocField);
+                this.formData.controls[i].get('closeBrace').setValue(ele.closeBrace);
+                this.formData.controls[i].get('docFieldOperator').setValue(ele.docFieldOperator);
+            }
+            if (ele.fieldOrTableSelect === 'Table') {
+                this.formData.controls[i].get('openBrace').setValue(ele.openBrace);
+                this.formData.controls[i].get('fieldOrTableSelect').setValue(ele.fieldOrTableSelect);
+                this.DataTableInitRuleDocTypesChanged(ele.generalDocumentTypes, i);
+                this.formData.controls[i].get('generalDocumentTypes').setValue(ele.generalDocumentTypes);
+                this.formData.controls[i].get('tableName').setValue(ele.tableName[0].id);
+                this.DataTableEditInitTableNameChanged(ele.tableName, i);
+                if (ele.isKeyColumnEnabled) {
+                    rowKeysArry.push(i);
+                    this.formData.controls[i].get('isKeyColumnEnabled').setValue(ele.isKeyColumnEnabled);
+                    this.formData.controls[i].get('rowNumber').setValue(ele.rowNumber);
+                }
+                this.formData.controls[i].get('columnName').setValue(ele.columnName[0].id);
+                this.formData.controls[i].get('closeBrace').setValue(ele.closeBrace);
+                this.formData.controls[i].get('docFieldOperator').setValue(ele.docFieldOperator);
             }
             i++;
         });
 
         setTimeout(() => {
-            rowKeysArry.forEach(element => {
-                this.SetInitKeyValue(element);
+            rowKeysArry.forEach(ele => {
+                this.SetInitKeyValue(ele);
             });
         }, 1000);
     }
@@ -274,11 +299,11 @@ export class DataTableFormulaBuilderComponent implements OnInit, OnDestroy {
         const tableNames = [];
         const items = this.genDocTypes.filter(x => x.text === docVal);
         const i = items[0].id;
-        this.dataTableRuleMasters.forEach(element => {
-            if (i === element.DocID) {
-                const dupTable = tableNames.filter(x => x.text === element.TableName);
+        this.dataTableRuleMasters.forEach(ele => {
+            if (i === ele.DocID) {
+                const dupTable = tableNames.filter(x => x.text === ele.TableName);
                 if (dupTable.length === 0) {
-                    tableNames.push({ id: element.TableName, text: element.TableName });
+                    tableNames.push({ id: ele.TableName, text: ele.TableName });
                 }
             }
         });
@@ -291,9 +316,9 @@ export class DataTableFormulaBuilderComponent implements OnInit, OnDestroy {
 
     checkOperatorFunction(formData: any) {
         const operatorArray = [];
-        formData.forEach(element => {
-            if (element.docFieldOperator !== '') {
-                operatorArray.push(element.docFieldOperator);
+        formData.forEach(ele => {
+            if (ele.docFieldOperator !== '') {
+                operatorArray.push(ele.docFieldOperator);
             }
         });
         return (operatorArray.length > 0 && operatorArray.length === formData.length - 1);
@@ -312,7 +337,8 @@ export class DataTableFormulaBuilderComponent implements OnInit, OnDestroy {
             columnName: [''],
             rowNumber: [''],
             fieldOrTableSelect: ['Field'],
-            isKeyColumnEnabled: ['']
+            isKeyColumnEnabled: [''],
+            LosdocField: ['']
         }));
         this.currtDocFields.push([]);
         this.currtDocTables.push([]);
@@ -336,9 +362,21 @@ export class DataTableFormulaBuilderComponent implements OnInit, OnDestroy {
         }
     }
 
+    OnChangeFieldValue(index: number) {
+        const SearchValue = this.formData.controls[index].get('LosdocField').value;
+        const LosDocumentName = this.formData.controls[index].get('generalDocumentTypes').value;
+        let LosDocumentId;
+        this.genDocTypes.forEach((a) => {
+            if (a.text === LosDocumentName) {
+                LosDocumentId = a.id;
+            }
+        });
+        this._ruleBuilderService.GetLosDocFields(LosDocumentId, SearchValue);
+    }
+
     ngOnDestroy(): void {
-        this._subscriptions.forEach(element => {
-            element.unsubscribe();
+        this._subscriptions.forEach(ele => {
+            ele.unsubscribe();
         });
     }
 }

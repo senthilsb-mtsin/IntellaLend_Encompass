@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  applicationVersion: '2020.10.1',
+  applicationVersion: '2020.12.1',
   apiURL: 'http://localhost:56179/api/',
   whiteListDomain: 'localhost:56179',
   ADAuthentication: true

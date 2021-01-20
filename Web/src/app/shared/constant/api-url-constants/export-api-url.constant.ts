@@ -13,5 +13,6 @@ export class ExportApiUrlConstant {
   static SEARCH_LOAN_EXPORT = 'Export/SearchLoanExport';
   static SEARCH_LOS_EXPORT_DETAILS = 'Export/SearchLosExportMonitorDetails';
   static GET_CURRENT_LOSEXPORT_DETAILS = 'Export/GetLOSCurrentExportLoanDetail';
- static  RETRY_LOS_EXPORT_DETAILS = 'Export/RetryLosExportDetails';
+  static  RETRY_LOS_EXPORT_DETAILS = 'Export/RetryLosExportDetails';
+  static  RE_EXPORT_LOS_DETAILS = 'Export/ReExportLosDetail';
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
-import { FormulaBuilderTypesConstant } from '@mts-app-setting';
+import { AppSettings, FormulaBuilderTypesConstant } from '@mts-app-setting';
 import { ChecklistItemRowData } from 'src/app/modules/loantype/models/checklist-items-table.model';
 import { RuleBuilderService } from 'src/app/modules/loantype/service/rule-builder.service';
 import { AddLoanTypeService } from 'src/app/modules/loantype/service/add-loantype.service';
@@ -27,6 +27,8 @@ export class IFFormulaBuilderComponent  implements OnInit, OnDestroy {
     currtDocFields: { formDataConditionalExtraFields: any[], formDataTrueConditionalExtraFields: any[], formDataFalseConditionalExtraFields: any[] } = {
         formDataConditionalExtraFields: [], formDataTrueConditionalExtraFields: [], formDataFalseConditionalExtraFields: []
     };
+    LosDocumentFields: any[] = [];
+    FannieMaeDocName: string = AppSettings.RuleFannieMaeDocName;
 
     rowData: ChecklistItemRowData = new ChecklistItemRowData();
     waitingForData = true;
@@ -55,7 +57,8 @@ export class IFFormulaBuilderComponent  implements OnInit, OnDestroy {
             showValueField: '#valueDisplay_',
             openBracketField: 'conditionalExtraFieldopenBrace',
             closeBracketField: 'conditionalExtraFieldcloseBrace',
-            operator: 'ifdocFieldOperator'
+            operator: 'ifdocFieldOperator',
+            LosDocField: 'IfLosdocField'
         }
     }, {
         jObjectName: 'TrueConditionalExtraFields',
@@ -70,7 +73,8 @@ export class IFFormulaBuilderComponent  implements OnInit, OnDestroy {
             showValueField: '#truevalueDisplay_',
             openBracketField: 'trueExtraFieldopenBrace',
             closeBracketField: 'TrueExtraFieldcloseBrace',
-            operator: 'trueDocFieldOperator'
+            operator: 'trueDocFieldOperator',
+            LosDocField: 'TrueLosdocField'
         }
     }, {
         jObjectName: 'FalseConditionalExtraFields',
@@ -85,7 +89,8 @@ export class IFFormulaBuilderComponent  implements OnInit, OnDestroy {
             showValueField: '#falsevalueDisplay_',
             openBracketField: 'falseExtraFieldopenBrace',
             closeBracketField: 'FalseExtraFieldcloseBrace',
-            operator: 'FalseDocFieldOperator'
+            operator: 'FalseDocFieldOperator',
+            LosDocField: 'FalseLosdocField'
         }
     }];
     get formData() { return <FormArray>this.rulesFrmGrp.get('conditionalRule'); }
@@ -133,8 +138,10 @@ export class IFFormulaBuilderComponent  implements OnInit, OnDestroy {
                 str = '';
                 if (form.conditionalRule[0][_form.jObjectName].length > 0) {
                     form.conditionalRule[0][_form.jObjectName].forEach(element => {
-                        if (element[_form.formFields.docTypeField] !== '' && element[_form.formFields.docField] !== '') {
+                        if (element[_form.formFields.docTypeField] !== '' && element[_form.formFields.docField] !== '' && element[_form.formFields.docTypeField] !== AppSettings.RuleFannieMaeDocName) {
                             str += element[_form.formFields.openBracketField] + '[' + element[_form.formFields.docTypeField] + '.' + element[_form.formFields.docField] + ']' + element[_form.formFields.closeBracketField] + element[_form.formFields.operator];
+                        } else if (element[_form.formFields.docTypeField] !== '' && element[_form.formFields.LosDocField] !== '' && element[_form.formFields.docTypeField] === AppSettings.RuleFannieMaeDocName) {
+                            str += element[_form.formFields.openBracketField] + '[' + AppSettings.FannieMaeDocDisplayName + '.' + element[_form.formFields.LosDocField] + ']' + element[_form.formFields.closeBracketField] + element[_form.formFields.operator];
                         } else if (element[_form.formFields.valueDocField] !== '') {
                             str += element[_form.formFields.openBracketField] + element[_form.formFields.valueDocField] + element[_form.formFields.closeBracketField] + element[_form.formFields.operator];
                         } else if (element[_form.formFields.docTypeField] === '' || element[_form.formFields.docField] === '' || element[_form.formFields.docTypeField] === 0) {
@@ -178,6 +185,13 @@ export class IFFormulaBuilderComponent  implements OnInit, OnDestroy {
             }
             this._commonRuleBuilderService.ruleExpression.next(ruleFormationValues);
         }));
+        this._subscriptions.push(this._ruleBuilderService.LosDocumentFields.subscribe((elements: any[]) => {
+
+            this.LosDocumentFields = [];
+            elements.forEach((element) => {
+                this.LosDocumentFields.push(element);
+            });
+        }));
     }
 
     CheckIfRuleOperatorFunction(_formType: string, formData: any) {
@@ -200,7 +214,12 @@ export class IFFormulaBuilderComponent  implements OnInit, OnDestroy {
                 this[form.formType].controls[i].get(form.formFields.openBracketField).setValue(element[form.formFields.openBracketField]);
                 this[form.formType].controls[i].get(form.formFields.docTypeField).setValue(element[form.formFields.docTypeField]);
                 this.DocTypesChanged(element[form.formFields.docTypeField], i, form.formType);
-                this[form.formType].controls[i].get(form.formFields.docField).setValue(element[form.formFields.docField][0].id);
+                if (isTruthy(element[form.formFields.docField])) {
+                    this[form.formType].controls[i].get(form.formFields.docField).setValue(element[form.formFields.docField][0].id);
+                }
+                if (isTruthy(element[form.formFields.LosDocField])) {
+                    this[form.formType].controls[i].get(form.formFields.LosDocField).setValue(element[form.formFields.LosDocField]);
+                }
                 this[form.formType].controls[i].get(form.formFields.closeBracketField).setValue(element[form.formFields.closeBracketField]);
                 this[form.formType].controls[i].get(form.formFields.operator).setValue(element[form.formFields.operator]);
             }
@@ -216,8 +235,12 @@ export class IFFormulaBuilderComponent  implements OnInit, OnDestroy {
     }
 
     DocTypesChanged(genVals: any, i: any, _formType: string) {
-        const form = this._formMetaData.filter(f => f.formType === _formType)[0];
-        this._ruleBuilderService.docFieldsInitChange(this[_formType].controls[i], this.currtDocFields[_formType], genVals, form.formFields.docField, i);
+
+        const DocName: string = ((typeof (genVals) === 'string') ? genVals : genVals.target.selectedOptions[0].innerText);
+        if ((DocName !== AppSettings.RuleFannieMaeDocName)) {
+            const form = this._formMetaData.filter(f => f.formType === _formType)[0];
+            this._ruleBuilderService.docFieldsInitChange(this[_formType].controls[i], this.currtDocFields[_formType], genVals, form.formFields.docField, i);
+        }
     }
 
     removeRules(i: any, _formType: string) {
@@ -267,8 +290,24 @@ export class IFFormulaBuilderComponent  implements OnInit, OnDestroy {
         formFields[_form.formFields.docTypeField] = [''];
         formFields[_form.formFields.operator] = [''];
         formFields[_form.formFields.customField] = [''];
+        formFields[_form.formFields.LosDocField] = [''];
         this[_formType].push(this._fb.group(formFields));
         this.currtDocFields[_formType].push([]);
+    }
+
+    OnChangeFieldValue(index: number, formType: string) {
+
+        const form = this._formMetaData.filter(f => f.formType === formType)[0];
+
+        const SearchValue = this[form.formType].controls[index].get(form.formFields.LosDocField).value;
+        const LosDocumentName = this[form.formType].controls[index].get(form.formFields.docTypeField).value;
+        let LosDocumentId;
+        this.genDocTypes.forEach((a) => {
+            if (a.text === LosDocumentName) {
+                LosDocumentId = a.id;
+            }
+        });
+        this._ruleBuilderService.GetLosDocFields(LosDocumentId, SearchValue);
     }
 
     ngOnDestroy(): void {

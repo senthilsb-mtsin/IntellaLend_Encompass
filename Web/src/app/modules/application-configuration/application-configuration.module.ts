@@ -19,6 +19,7 @@ import { SmtpSettingsComponent } from './helper-components/smtp-settings/smtp-se
 import { BoxSettingsComponent } from './helper-components/box-settings/box-settings.component';
 import { ReportMasterComponent } from './helper-components/report-master/report-master.component';
 import { ConfigSettingsComponent } from './helper-components/config-settings/config-settings.component';
+import { ADConfigurationComponent } from './helper-components/ad-configuration/ad-configuration.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { ConfigSettingsComponent } from './helper-components/config-settings/con
     BoxSettingsComponent,
     ReportMasterComponent,
     ConfigSettingsComponent,
+    ADConfigurationComponent
   ],
   imports: [
     CommonModule,
