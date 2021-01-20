@@ -285,8 +285,8 @@ namespace IL.EncompassFileDownloader
                                             dataAccess.UpdateDownloadStaging(_fieldUpdate.ID, EncompassDownloadStepStatusConstant.Error, ex.Message);
                                             throw ex;
                                         }
-
-                                        File.Move(lockFileName, OrgFileName);
+                                        string _donFile = Path.ChangeExtension(OrgFileName,".don");
+                                        File.Move(lockFileName, _donFile);
                                         dataAccess.UpdateEDownloadStatus(downloadID, EncompassStatusConstant.DOWNLOAD_SUCCESS, LoanNumber);
                                     }
                                 }
