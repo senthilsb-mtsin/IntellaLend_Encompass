@@ -29,22 +29,22 @@ namespace IntellaLend.CommonServices
         public List<User> GetUsersList()
         {
             return new UserDataAccess(TableSchema).GetUsersList();
-        }      
+        }
 
         public object GetUser(string UserName)
         {
             return new UserDataAccess(TableSchema).GetUserDetails(UserName);
         }
-        public object GetServiceBasedUserDetails(Int64 loanId,string serviceTypeName)
+        public object GetServiceBasedUserDetails(Int64 loanId, string serviceTypeName)
         {
-            return new UserDataAccess(TableSchema).GetServiceBasedUserDetails(loanId,serviceTypeName);
+            return new UserDataAccess(TableSchema).GetServiceBasedUserDetails(loanId, serviceTypeName);
         }
         public object getKPIConfig()
         {
             return new UserDataAccess(TableSchema).getKPIConfig();
         }
 
-        public bool updateKPIConfig(Int64 id,Int64 goal,DateTime? from, DateTime? to,Int64 UserGroupGoal)
+        public bool updateKPIConfig(Int64 id, Int64 goal, DateTime? from, DateTime? to, Int64 UserGroupGoal)
         {
             return new UserDataAccess(TableSchema).updateKPIConfig(id, goal, from, to, UserGroupGoal);
         }
@@ -84,9 +84,18 @@ namespace IntellaLend.CommonServices
 
         public bool LockUnlockUser(Int64 UserID, bool Lock)
         {
-            return new UserDataAccess(TableSchema).LockUnlockUser(UserID, Lock);             
+            return new UserDataAccess(TableSchema).LockUnlockUser(UserID, Lock);
         }
-        
+
+        public bool AddADUser(User user)
+        {
+            user.CreatedOn = DateTime.Now;
+            user.LastModified = DateTime.Now;
+            user.PasswordCreatedDate = DateTime.Now;
+            user.LastPwdModifiedDate = DateTime.Now;
+            return new UserDataAccess(TableSchema).AddADUser(user);
+        }
+
 
         public bool AddUser(User user)
         {
@@ -98,8 +107,10 @@ namespace IntellaLend.CommonServices
             user.LastPwdModifiedDate = DateTime.Now;
             user.Status = 0; // 0 - For New User , 1 - Active User
 
-            string password = random.GeneratePassword();
-            CustomerConfig _custConfig = new CustConfigDataAccess(TableSchema).GetCustomerConfiguraton(ConfigConstant.APPLICATIONURL);
+            string password = string.Empty;
+            CustomerConfig _custConfig = null;
+            password = random.GeneratePassword();
+            _custConfig = new CustConfigDataAccess(TableSchema).GetCustomerConfiguraton(ConfigConstant.APPLICATIONURL);
             user.Password = MD5Hashing.Create(MD5Hashing.Create(password) + user.CreatedOn.ToString(DateConstance.LongDateFormart));
 
             bool result = userDataAccess.AddUser(user);
@@ -129,13 +140,13 @@ namespace IntellaLend.CommonServices
 
             //if (userData.SetSecurityQuestion(SecurityQuestion))
             //{
-                User dbUser = userData.GetUserWithId(SecurityQuestion.UserID);
-                               
-                dbUser.Password = MD5Hashing.Create(NewPwd + dbUser.CreatedOn.ToString(DateConstance.LongDateFormart));
+            User dbUser = userData.GetUserWithId(SecurityQuestion.UserID);
 
-                dbUser.Status = 1;
+            dbUser.Password = MD5Hashing.Create(NewPwd + dbUser.CreatedOn.ToString(DateConstance.LongDateFormart));
 
-                return userData.SetNewPassword(dbUser);
+            dbUser.Status = 1;
+
+            return userData.SetNewPassword(dbUser);
             //}
 
             return false;
@@ -144,11 +155,11 @@ namespace IntellaLend.CommonServices
 
         public bool CheckCurrentPassword(Int64 UserId, string CurrentPwd)
         {
-            UserDataAccess userData = new UserDataAccess(TableSchema);           
+            UserDataAccess userData = new UserDataAccess(TableSchema);
 
             User dbUser = userData.GetUserWithId(UserId);
 
-            return dbUser.Password == MD5Hashing.Create(CurrentPwd + dbUser.CreatedOn.ToString(DateConstance.LongDateFormart));          
+            return dbUser.Password == MD5Hashing.Create(CurrentPwd + dbUser.CreatedOn.ToString(DateConstance.LongDateFormart));
         }
 
         public bool UpdateNewPassword(Int64 UserId, string NewPwd)
@@ -156,12 +167,12 @@ namespace IntellaLend.CommonServices
             UserDataAccess userData = new UserDataAccess(TableSchema);
 
             User dbUser = userData.GetUserWithId(UserId);
-            
+
             dbUser.Password = MD5Hashing.Create(NewPwd + dbUser.CreatedOn.ToString(DateConstance.LongDateFormart));
 
             return userData.SetNewPassword(dbUser);
         }
-        
+
         public void AddUserSession(Int64 userID, bool isActive)
         {
             UserDataAccess userData = new UserDataAccess(TableSchema);

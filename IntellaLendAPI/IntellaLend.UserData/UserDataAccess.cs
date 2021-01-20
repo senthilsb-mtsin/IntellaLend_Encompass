@@ -29,6 +29,21 @@ namespace IntellaLend.EntityDataHandler
 
         #region Public Methods
 
+        public UserRoleMappingTemp GetADRoleMapping(string groupName)
+        {
+            using (var db = new DBConnect(TableSchema))
+            {
+                return (from r in db.Roles.AsNoTracking()
+                        join ad in db.ADGroupMasters.AsNoTracking() on r.ADGroupID equals ad.ADGroupID
+                        where ad.ADGroupName == groupName
+                        select new UserRoleMappingTemp()
+                        {
+                            RoleID = r.RoleID,
+                            RoleName = r.RoleName
+                        }).FirstOrDefault();
+            }
+        }
+
         public User GetUser(string userName)
         {
             User user = null;
@@ -42,7 +57,7 @@ namespace IntellaLend.EntityDataHandler
                         user.customerDetail = db.CustomerMaster.Where(c => c.CustomerID == user.CustomerID).FirstOrDefault();
 
                     user.UserAddressDetail = db.UserAddressDetail.Where(c => c.UserID == user.UserID).FirstOrDefault();
-                    user.UserRoleMapping = db.UserRoleMapping.Where(c => c.UserID == user.UserID).ToList();
+                    user.UserRoleMapping = db.UserRoleMapping.Where(c => c.UserID == user.UserID).OrderBy(x => x.RoleID).ToList();
                 }
             }
             return user;
@@ -51,7 +66,7 @@ namespace IntellaLend.EntityDataHandler
         public bool UpateNoOfAttempts(User user, Int64 NofAttempts)
         {
             using (var db = new DBConnect(TableSchema))
-            {               
+            {
                 if (user != null)
                 {
                     user.NoOfAttempts = user.NoOfAttempts + 1;
@@ -76,13 +91,13 @@ namespace IntellaLend.EntityDataHandler
             using (var db = new DBConnect(TableSchema))
             {
                 var userSession = db.UserSession.AsNoTracking().Where(u => u.UserID == userID).FirstOrDefault();
-                if(userSession!=null && userSession.UserID!=0)
+                if (userSession != null && userSession.UserID != 0)
                 {
                     userSession.Active = isActive;
                     userSession.LastAccessedTime = DateTime.Now;
                     db.Entry(userSession).State = EntityState.Modified;
                     db.SaveChanges();
-                    
+
                 }
                 else
                 {
@@ -97,9 +112,9 @@ namespace IntellaLend.EntityDataHandler
                     db.SaveChanges();
                 }
 
-              
 
-             }
+
+            }
         }
 
         public bool PasswordExpiryCheck(User user)
@@ -118,18 +133,28 @@ namespace IntellaLend.EntityDataHandler
             }
             return false;
         }
+
+        public List<UserRoleMapping> GetUserRoleMapping(Int64 UserID)
+        {
+            using (var db = new DBConnect(TableSchema))
+            {
+                return db.UserRoleMapping.AsNoTracking().Where(c => c.UserID == UserID).ToList();
+            }
+        }
+
+
         public User GetUserWithId(Int64 UserID)
         {
             User user = null;
             using (var db = new DBConnect(TableSchema))
             {
-                user = db.Users.Where(u => u.UserID == UserID).FirstOrDefault();
+                user = db.Users.AsNoTracking().Where(u => u.UserID == UserID).FirstOrDefault();
 
                 if (user != null)
                 {
-                    user.CustomAddressDetails = db.CustomAddressDetail.Where(c => c.UserID == user.UserID).ToList();
-                    user.UserAddressDetail = db.UserAddressDetail.Where(c => c.UserID == user.UserID).FirstOrDefault();
-                    user.UserRoleMapping = db.UserRoleMapping.Where(c => c.UserID == user.UserID).ToList();
+                    user.CustomAddressDetails = db.CustomAddressDetail.AsNoTracking().Where(c => c.UserID == user.UserID).ToList();
+                    user.UserAddressDetail = db.UserAddressDetail.AsNoTracking().Where(c => c.UserID == user.UserID).FirstOrDefault();
+                    user.UserRoleMapping = db.UserRoleMapping.AsNoTracking().Where(c => c.UserID == user.UserID).ToList();
                 }
             }
             return user;
@@ -140,11 +165,11 @@ namespace IntellaLend.EntityDataHandler
             User user = null;
             using (var db = new DBConnect(TableSchema))
             {
-                user = db.Users.Where(u => u.UserName == userName).FirstOrDefault();
+                user = db.Users.AsNoTracking().Where(u => u.UserName == userName).FirstOrDefault();
 
                 if (user != null)
                 {
-                    user.userSecurityQuestion = db.UserSecurityQuestion.Where(c => c.UserID == user.UserID).FirstOrDefault();
+                    user.userSecurityQuestion = db.UserSecurityQuestion.AsNoTracking().Where(c => c.UserID == user.UserID).FirstOrDefault();
                     user.Password = null;
                 }
             }
@@ -156,7 +181,7 @@ namespace IntellaLend.EntityDataHandler
             User user = null;
             using (var db = new DBConnect(TableSchema))
             {
-                user = db.Users.Where(u => u.UserName == userName).FirstOrDefault();
+                user = db.Users.AsNoTracking().Where(u => u.UserName == userName).FirstOrDefault();
 
                 if (user != null)
                     user.Password = null;
@@ -170,12 +195,12 @@ namespace IntellaLend.EntityDataHandler
             User user = null;
             using (var db = new DBConnect(TableSchema))
             {
-                user = db.Users.Where(u => u.UserName == userName).FirstOrDefault();
+                user = db.Users.AsNoTracking().Where(u => u.UserName == userName).FirstOrDefault();
 
                 if (user != null)
                 {
-                    user.UserAddressDetail = db.UserAddressDetail.Where(c => c.UserID == user.UserID).FirstOrDefault();
-                    user.UserRoleMapping = db.UserRoleMapping.Where(c => c.UserID == user.UserID).ToList();
+                    user.UserAddressDetail = db.UserAddressDetail.AsNoTracking().Where(c => c.UserID == user.UserID).FirstOrDefault();
+                    user.UserRoleMapping = db.UserRoleMapping.AsNoTracking().Where(c => c.UserID == user.UserID).ToList();
                 }
             }
 
@@ -183,24 +208,24 @@ namespace IntellaLend.EntityDataHandler
 
         }
 
-        public bool updateKPIConfig(Int64 id, Int64 goal, DateTime? from, DateTime? to,Int64 UserGroupGoal)
+        public bool updateKPIConfig(Int64 id, Int64 goal, DateTime? from, DateTime? to, Int64 UserGroupGoal)
         {
             bool result = false;
             using (var db = new DBConnect(TableSchema))
             {
-                KPIGoalConfig goalConfgi = db.KPIGoalConfig.AsNoTracking().Where(k => k.ID == id).FirstOrDefault(); 
-                if(goalConfgi != null)
+                KPIGoalConfig goalConfgi = db.KPIGoalConfig.AsNoTracking().Where(k => k.ID == id).FirstOrDefault();
+                if (goalConfgi != null)
                 {
                     KpiUserGroupConfig _usergroupConfig = db.KpiUserGroupConfig.AsNoTracking().Where(x => x.GroupID == goalConfgi.UserGroupID && x.Goal != UserGroupGoal).FirstOrDefault();
 
                     goalConfgi.Goal = goal;
-                   // goalConfgi.PeriodFrom = from;
-                   // goalConfgi.PeriodTo = to;
+                    // goalConfgi.PeriodFrom = from;
+                    // goalConfgi.PeriodTo = to;
                     goalConfgi.ModifiedOn = DateTime.Now;
                     db.Entry(goalConfgi).State = EntityState.Modified;
                     db.SaveChanges();
 
-                    if(_usergroupConfig != null)
+                    if (_usergroupConfig != null)
                     {
                         _usergroupConfig.Goal = UserGroupGoal;
                         _usergroupConfig.ModifiedOn = DateTime.Now;
@@ -213,7 +238,7 @@ namespace IntellaLend.EntityDataHandler
                 }
 
             }
-                return result;
+            return result;
         }
 
         public List<User> GetUsersList()
@@ -230,10 +255,10 @@ namespace IntellaLend.EntityDataHandler
                     if (user.CustomerID != 0)
                         user.customerDetail = db.CustomerMaster.AsNoTracking().SingleOrDefault(cm => cm.CustomerID == user.CustomerID);
 
-                    
-                    user.CustomAddressDetails = db.CustomAddressDetail.Where(c => c.UserID == user.UserID).ToList();
-                    user.UserAddressDetail = db.UserAddressDetail.Where(c => c.UserID == user.UserID).FirstOrDefault();
-                    user.UserRoleMapping = db.UserRoleMapping.Where(c => c.UserID == user.UserID).ToList();
+
+                    user.CustomAddressDetails = db.CustomAddressDetail.AsNoTracking().Where(c => c.UserID == user.UserID).ToList();
+                    user.UserAddressDetail = db.UserAddressDetail.AsNoTracking().Where(c => c.UserID == user.UserID).FirstOrDefault();
+                    user.UserRoleMapping = db.UserRoleMapping.AsNoTracking().Where(c => c.UserID == user.UserID).ToList();
 
                     foreach (UserRoleMapping item in user.UserRoleMapping)
                         item.RoleMaster = db.Roles.AsNoTracking().Where(r => r.RoleID == item.RoleID).FirstOrDefault();
@@ -241,15 +266,15 @@ namespace IntellaLend.EntityDataHandler
             }
             return users;
         }
-        public object GetServiceBasedUserDetails(Int64 loanId,string serviceTypeName)
+        public object GetServiceBasedUserDetails(Int64 loanId, string serviceTypeName)
         {
             object user = null;
-            
+
             List<UserRoleMapping> userRole = new List<UserRoleMapping>();
             using (var db = new DBConnect(TableSchema))
             {
                 Int64 _assignedUserId = db.Loan.AsNoTracking().Where(l => l.LoanID == loanId).Select(l => l.AssignedUserID).FirstOrDefault();
-                List<User> users = db.Users.AsNoTracking().Where(x=>x.Active == true).ToList();
+                List<User> users = db.Users.AsNoTracking().Where(x => x.Active == true).ToList();
                 //if (ConfigurationManager.AppSettings["PreClosing"].ToString().Equals(serviceTypeName))
                 //{
                 //    userRole = db.UserRoleMapping.AsNoTracking().Where(u => u.RoleName == RoleConstant.UNDERWRITER).ToList();
@@ -263,7 +288,7 @@ namespace IntellaLend.EntityDataHandler
                 //            where RT.ReviewTypeName.Trim().ToLower() == serviceTypeName.Trim().ToLower()
                 //            select userrole).ToList();
                 user = (from u in users
-                        join userrole in db.UserRoleMapping.AsNoTracking() on u.UserID equals userrole.UserID 
+                        join userrole in db.UserRoleMapping.AsNoTracking() on u.UserID equals userrole.UserID
                         join RT in db.ReviewTypeMaster.AsNoTracking() on userrole.RoleID equals RT.UserRoleID
                         where RT.ReviewTypeName.Trim().ToLower() == serviceTypeName.Trim().ToLower()
                         && userrole.RoleID == RT.UserRoleID
@@ -276,7 +301,7 @@ namespace IntellaLend.EntityDataHandler
             }
             return user;
         }
-        
+
         public bool IsUserLimitExceeded()
         {
             bool result = false;
@@ -289,10 +314,21 @@ namespace IntellaLend.EntityDataHandler
                 {
                     List<User> _lsUsers = db.Users.AsNoTracking().ToList();
 
-                    result = !(_lsUsers.Count() < Convert.ToInt32(_appConfig.ConfigValue));                    
+                    result = !(_lsUsers.Count() < Convert.ToInt32(_appConfig.ConfigValue));
                 }
             }
             return result;
+        }
+
+        public bool AddADUser(User user)
+        {
+            using (var db = new DBConnect(TableSchema))
+            {
+                db.Users.Add(user);
+                db.SaveChanges();
+
+                return true;
+            }
         }
 
         public bool AddUser(User user)
@@ -311,38 +347,47 @@ namespace IntellaLend.EntityDataHandler
                         db.Users.Add(user);
                         db.SaveChanges();
 
-                        user.UserAddressDetail.UserID = user.UserID;
-                        db.UserAddressDetail.Add(user.UserAddressDetail);
-                        db.SaveChanges();
-
-                        foreach (var customAddressDetails in user.CustomAddressDetails)
+                        if (user.UserAddressDetail != null)
                         {
-                            customAddressDetails.UserID = user.UserID;
-                            db.CustomAddressDetail.Add(customAddressDetails);
+                            user.UserAddressDetail.UserID = user.UserID;
+                            db.UserAddressDetail.Add(user.UserAddressDetail);
                             db.SaveChanges();
                         }
 
-                        foreach (var userRoleMapping in user.UserRoleMapping)
+                        if (user.CustomAddressDetails != null)
                         {
-                            userRoleMapping.UserID = user.UserID;
-                            db.UserRoleMapping.Add(userRoleMapping);
-                            db.SaveChanges();
-
-                            KpiUserGroupConfig _kpiGroup = db.KpiUserGroupConfig.AsNoTracking().Where(k => k.RoleID == userRoleMapping.RoleID).OrderByDescending(k => k.GroupID).FirstOrDefault();
-
-                            if (_kpiGroup != null)
+                            foreach (var customAddressDetails in user.CustomAddressDetails)
                             {
-                                goal.UserID = user.UserID;
-                                goal.Goal = 0;
-                                goal.UserGroupID = _kpiGroup.GroupID;
-                                goal.PeriodFrom = _kpiGroup.PeriodFrom;
-                                goal.PeriodTo = _kpiGroup.PeriodTo;
-                                goal.CreatedOn = DateTime.Now;
-                                goal.ModifiedOn = DateTime.Now;
-                                db.KPIGoalConfig.Add(goal);
+                                customAddressDetails.UserID = user.UserID;
+                                db.CustomAddressDetail.Add(customAddressDetails);
                                 db.SaveChanges();
                             }
-                           
+                        }
+
+                        if (user.UserRoleMapping != null)
+                        {
+                            foreach (var userRoleMapping in user.UserRoleMapping)
+                            {
+                                userRoleMapping.UserID = user.UserID;
+                                db.UserRoleMapping.Add(userRoleMapping);
+                                db.SaveChanges();
+
+                                KpiUserGroupConfig _kpiGroup = db.KpiUserGroupConfig.AsNoTracking().Where(k => k.RoleID == userRoleMapping.RoleID).OrderByDescending(k => k.GroupID).FirstOrDefault();
+
+                                if (_kpiGroup != null)
+                                {
+                                    goal.UserID = user.UserID;
+                                    goal.Goal = 0;
+                                    goal.UserGroupID = _kpiGroup.GroupID;
+                                    goal.PeriodFrom = _kpiGroup.PeriodFrom;
+                                    goal.PeriodTo = _kpiGroup.PeriodTo;
+                                    goal.CreatedOn = DateTime.Now;
+                                    goal.ModifiedOn = DateTime.Now;
+                                    db.KPIGoalConfig.Add(goal);
+                                    db.SaveChanges();
+                                }
+
+                            }
                         }
 
                         tran.Commit();
@@ -364,7 +409,7 @@ namespace IntellaLend.EntityDataHandler
             using (var db = new DBConnect(TableSchema))
             {
                 using (var transaction = db.Database.BeginTransaction())
-                {                    
+                {
                     User dbUser = db.Users.AsNoTracking().Where(u => u.UserID == user.UserID).FirstOrDefault();
 
                     dbUser.UserRoleMapping = db.UserRoleMapping.AsNoTracking().Where(ur => ur.UserID == user.UserID).ToList();
@@ -379,9 +424,9 @@ namespace IntellaLend.EntityDataHandler
                     db.SaveChanges();
 
                     db.Entry(user.UserAddressDetail).State = EntityState.Modified;
-                    db.SaveChanges();                   
+                    db.SaveChanges();
 
-                   foreach (var additionalAddressDetails in user.CustomAddressDetails)
+                    foreach (var additionalAddressDetails in user.CustomAddressDetails)
                     {
                         db.Entry(additionalAddressDetails).State = EntityState.Modified;
                         db.SaveChanges();
@@ -401,7 +446,7 @@ namespace IntellaLend.EntityDataHandler
 
                     KPIGoalConfig goal = db.KPIGoalConfig.AsNoTracking().Where(g => g.UserID == user.UserID).FirstOrDefault();
                     UserRoleMapping filter = user.UserRoleMapping.Find(r => r.RoleID == RoleConstant.POST_CLOSER_ROLEID);
-                    
+
                     if (goal != null)
                     {
                         db.Entry(goal).State = EntityState.Deleted;
@@ -544,27 +589,27 @@ namespace IntellaLend.EntityDataHandler
         }
 
         public object getKPIConfig()
-       {
+        {
             List<KPIGoalConfig> goal = new List<KPIGoalConfig>();
             //var obj;
             using (var db = new DBConnect(TableSchema))
             {
                 //goal = db.KPIGoalConfig.AsNoTracking().ToList();
-                 return (from kpi in db.KPIGoalConfig
-                       join urs in db.Users on kpi.UserID equals urs.UserID
-                       select new
-                       {
-                           UserName = urs.FirstName + " " + urs.LastName,
-                           UserID = kpi.UserID,
-                           ID = kpi.ID,
-                           Goal = kpi.Goal,
-                           PeriodFrom = kpi.PeriodFrom,
-                           PeriodTo = kpi.PeriodTo,
-                           CreatedOn = kpi.CreatedOn,
-                           ModifiedOn = kpi.ModifiedOn
-                       }).ToList();
+                return (from kpi in db.KPIGoalConfig
+                        join urs in db.Users on kpi.UserID equals urs.UserID
+                        select new
+                        {
+                            UserName = urs.FirstName + " " + urs.LastName,
+                            UserID = kpi.UserID,
+                            ID = kpi.ID,
+                            Goal = kpi.Goal,
+                            PeriodFrom = kpi.PeriodFrom,
+                            PeriodTo = kpi.PeriodTo,
+                            CreatedOn = kpi.CreatedOn,
+                            ModifiedOn = kpi.ModifiedOn
+                        }).ToList();
             }
-                //return obj;
+            //return obj;
         }
 
         #endregion

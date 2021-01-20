@@ -25,6 +25,8 @@ namespace IntellaLendAPI.App_Start
         public string Issuer { get; set; }
 
         public bool IsSecretBase64Encoded { get; set; }
+        private const string BasicAuthResponseHeader = "WWW-Authenticate";
+        private const string BasicAuthResponseHeaderValue = "Basic";
 
         public JsonWebTokenValidationHandler()
         {
@@ -85,7 +87,7 @@ namespace IntellaLendAPI.App_Start
 
         private void CheckUserLogin(string requestJson, string requestPath)
         {
-            if (JWTToken.HashToken != null)
+            if (JWTToken.HashToken != null && !string.IsNullOrEmpty(requestJson))
             {
                 Newtonsoft.Json.Linq.JObject requestObj = (Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(requestJson);
 
@@ -93,9 +95,13 @@ namespace IntellaLendAPI.App_Start
                 {
 
                     Int64 rUserID = 0;
-                    if (requestPath.Contains("/api/User/SetSecurityQuestion"))
+                    if (requestPath.Contains("/api/User/SetSecurityQuestion") && requestObj["SecurityQuestion"] != null && requestObj["SecurityQuestion"]["UserID"] != null)
                     {
                         Int64.TryParse(requestObj["SecurityQuestion"]["UserID"].ToString(), out rUserID);
+                    }
+                    else if (requestObj["RequestUserInfo"] != null && requestObj["RequestUserInfo"]["RequestUserID"] != null)
+                    {
+                        Int64.TryParse(requestObj["RequestUserInfo"]["RequestUserID"].ToString(), out rUserID);
                     }
                     else if (requestObj["UserID"] != null)
                     {
@@ -104,7 +110,7 @@ namespace IntellaLendAPI.App_Start
 
                     Int64 sessionUserID = new logOnService(JWTToken.HashToken.Schema).GetUserHash(JWTToken.HashToken.HashSet);
 
-                    if (rUserID > 0 && !rUserID.Equals(new logOnService(JWTToken.HashToken.Schema).GetUserHash(JWTToken.HashToken.HashSet)))
+                    if (rUserID > 0 && !rUserID.Equals(sessionUserID))
                         throw new Exception("User Authentication Failed");
 
                 }
@@ -119,17 +125,20 @@ namespace IntellaLendAPI.App_Start
                 string requestJson = request.Content.ReadAsStringAsync().Result;
                 LogMessage($"Request BODY : {requestJson}");
 
-                if (!request.RequestUri.LocalPath.Contains("/api/FileUpload") && !request.RequestUri.LocalPath.Contains("/api/IntellaLend/ReverificationFileUploader"))
+                if (!request.RequestUri.LocalPath.Contains("/api/FileUpload"))
                 {
-                    LogMessage($"Step 1 : {request.RequestUri.LocalPath}");
-                    CheckUserLogin(requestJson, request.RequestUri.LocalPath);
-                }
+                    if (!request.RequestUri.LocalPath.Contains("/api/IntellaLend/ReverificationFileUploader"))
+                    {
+                        LogMessage($"Step 1 : {request.RequestUri.LocalPath}");
+                        CheckUserLogin(requestJson, request.RequestUri.LocalPath);
+                    }
 
-                RequestUserInfo userInfo = GetRequestUserInfo(requestJson);
-                if (userInfo.RequestUserID != 0 && !string.IsNullOrEmpty(userInfo.RequestUserTableSchema))
-                {
-                    UserService userService = new UserService(userInfo.RequestUserTableSchema);
-                    userService.AddUserSession(userInfo.RequestUserID, isActive);
+                    RequestUserInfo userInfo = GetRequestUserInfo(requestJson);
+                    if (userInfo.RequestUserID != 0 && !string.IsNullOrEmpty(userInfo.RequestUserTableSchema))
+                    {
+                        UserService userService = new UserService(userInfo.RequestUserTableSchema);
+                        userService.AddUserSession(userInfo.RequestUserID, isActive);
+                    }
                 }
             }
         }
@@ -182,19 +191,19 @@ namespace IntellaLendAPI.App_Start
                     {
                         Exception exe = new Exception(ex.Message, ex);
                         MTSExceptionHandler.HandleException(ref exe);
-                        errorResponse = request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex);
+                        errorResponse = request.CreateResponse(HttpStatusCode.Unauthorized, ex);
                     }
                     catch (JsonWebToken.TokenValidationException ex)
                     {
                         Exception exe = new Exception(ex.Message, ex);
                         MTSExceptionHandler.HandleException(ref exe);
-                        errorResponse = request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex);
+                        errorResponse = request.CreateResponse(HttpStatusCode.Unauthorized, ex);
                     }
                     catch (Exception ex)
                     {
                         Exception exe = new Exception(ex.Message, ex);
                         MTSExceptionHandler.HandleException(ref exe);
-                        errorResponse = request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+                        errorResponse = request.CreateResponse(HttpStatusCode.InternalServerError, ex);
                     }
                     //finally
                     //{
@@ -216,14 +225,15 @@ namespace IntellaLendAPI.App_Start
                     {
                         Exception exe = new Exception(ex.Message, ex);
                         MTSExceptionHandler.HandleException(ref exe);
-                        errorResponse = request.CreateErrorResponse(HttpStatusCode.Unauthorized, ex);
+                        errorResponse = request.CreateResponse(HttpStatusCode.Unauthorized);
                     }
                 }
 
                 if (errorResponse != null)
                 {
                     LogMessage($"Got error for request URL : {request.RequestUri.LocalPath}");
-                    return Task.FromResult(errorResponse);
+                    errorResponse.ReasonPhrase = "You have no token";
+                    return Task.FromResult<HttpResponseMessage>(errorResponse);
                 }
                 else
                 {

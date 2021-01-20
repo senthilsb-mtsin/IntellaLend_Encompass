@@ -133,7 +133,27 @@ namespace IntellaLendAPI.Controllers
             Logger.WriteTraceLog($"End GetRetentionLoans()");
             return response;
         }
+        [HttpPost]
+        public TokenResponse GetFannieMaeFields(GetFieldRequest _fannieMaeFields)
+        {
+            Logger.WriteTraceLog($"Start GetFannieMaeFields()");
+            Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(_fannieMaeFields)}");
+            TokenResponse response = new TokenResponse();
+            try
+            {
+                response.token = new JWTToken().CreateJWTToken();
+                response.data = new JWTToken().CreateJWTToken(new LoanService(_fannieMaeFields.TableSchema).GetFannieMaeFields(_fannieMaeFields.LoanID));
+            }
 
+            catch (Exception ex)
+            {
+                response.token = null;
+                response.ResponseMessage.MessageDesc = ex.Message;
+                MTSExceptionHandler.HandleException(ref ex);
+            }
+            Logger.WriteTraceLog($"End GetFannieMaeFields()");
+            return response;
+        }
         [HttpPost]
         public TokenResponse GetDashRetentionLoans(DashSearchRequest req)
         {
@@ -175,6 +195,28 @@ namespace IntellaLendAPI.Controllers
                 MTSExceptionHandler.HandleException(ref ex);
             }
             Logger.WriteTraceLog($"End GetLoanAudit()");
+            return response;
+        }
+
+        [HttpPost]
+        public TokenResponse GetLoan(DirectLoanRequest req)
+        {
+            Logger.WriteTraceLog($"Start GetDashRetentionLoans()");
+            Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(req)}");
+            TokenResponse response = new TokenResponse();
+            try
+            {
+                response.token = new JWTToken().CreateJWTToken();
+                response.data = new JWTToken().CreateJWTToken(new LoanService(req.TableSchema).GetLoan(req.EncryptedLoanGUID));
+            }
+
+            catch (Exception ex)
+            {
+                response.token = null;
+                response.ResponseMessage.MessageDesc = ex.Message;
+                MTSExceptionHandler.HandleException(ref ex);
+            }
+            Logger.WriteTraceLog($"End GetDashRetentionLoans()");
             return response;
         }
 

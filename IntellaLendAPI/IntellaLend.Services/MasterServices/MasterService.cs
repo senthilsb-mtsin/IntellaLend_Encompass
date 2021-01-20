@@ -42,6 +42,11 @@ namespace IntellaLend.CommonServices
             return new MasterDataAccess(TenantSchema).GetCustomerList();
         }
 
+        public bool SyncDocType(string _schema)
+        {
+            return new MasterDataAccess(TenantSchema).SyncDocType(_schema);
+        }
+
 
         public List<ReviewPriorityMaster> GetReviewPriorityMaster()
         {
@@ -75,7 +80,7 @@ namespace IntellaLend.CommonServices
         }
 
         #endregion
-        
+
         #region CheckList
         public List<CheckListMaster> GetCheckListMaster(bool activeFilter)
         {
@@ -97,7 +102,7 @@ namespace IntellaLend.CommonServices
             return new MasterDataAccess(TenantSchema).AddCheckList(CheckList);
         }
         #endregion
-        
+
         #region StackingOrder
         public List<StackingOrderMaster> GetStackingOrderMaster(bool activeFilter)
         {
@@ -155,11 +160,11 @@ namespace IntellaLend.CommonServices
         {
             return new MasterDataAccess().CheckDocumentDupForEdit(DocumentTypeName);
         }
-      
+
         public Int64 AddDocumentType(string DocumentTypeName, string DocumentDisplayName, Int32 DocumentLevel, Int32 EncompassParkingSpotID)
         {
-            
-return new MasterDataAccess().AddDocumentType(DocumentTypeName, DocumentDisplayName, DocumentLevel,EncompassParkingSpotID);
+
+            return new MasterDataAccess().AddDocumentType(DocumentTypeName, DocumentDisplayName, DocumentLevel, EncompassParkingSpotID);
         }
 
         public List<SecurityQuestionMasters> GetSecurityQuestionList()
@@ -176,7 +181,7 @@ return new MasterDataAccess().AddDocumentType(DocumentTypeName, DocumentDisplayN
         {
             return new IntellaLendDataAccess().GetSearchWorkFlowSatus();
         }
-        
+
 
         public List<object> GetDocumentTypeMaster(bool activeFilter)
         {
@@ -186,14 +191,14 @@ return new MasterDataAccess().AddDocumentType(DocumentTypeName, DocumentDisplayN
         {
             return new MasterDataAccess(TenantSchema).GetActiveDocumentTypeMaster();
         }
-        
+
         public bool AddDocumentType(DocumentTypeMaster docTypeMaster)
         {
             return new MasterDataAccess(TenantSchema).AddDocumentType(docTypeMaster);
         }
-        
 
-        public bool UpdateDocumentType(DocumentTypeMaster docTypeMaster,Int64 ParkingSpotID)
+
+        public bool UpdateDocumentType(DocumentTypeMaster docTypeMaster, Int64 ParkingSpotID)
         {
             return new MasterDataAccess(TenantSchema).UpdateDocumentType(docTypeMaster, ParkingSpotID);
         }
@@ -205,10 +210,10 @@ return new MasterDataAccess().AddDocumentType(DocumentTypeName, DocumentDisplayN
 
         public object GetActiveDocumentTypeMasterWithCustandLoan(Int64 CustomerID, Int64 LoanTypeID)
         {
-            return new MasterDataAccess(TenantSchema).GetActiveDocumentTypeMasterWithCustandLoan(CustomerID,LoanTypeID);
+            return new MasterDataAccess(TenantSchema).GetActiveDocumentTypeMasterWithCustandLoan(CustomerID, LoanTypeID);
         }
 
-        public bool UpdateManagerDocumentType(DocumentTypeMaster documentType,Int64 CustomerID,Int64 LoanTypeID)
+        public bool UpdateManagerDocumentType(DocumentTypeMaster documentType, Int64 CustomerID, Int64 LoanTypeID)
         {
             return new MasterDataAccess(TenantSchema).UpdateManagerDocumentType(documentType, CustomerID, LoanTypeID);
         }
@@ -227,11 +232,15 @@ return new MasterDataAccess().AddDocumentType(DocumentTypeName, DocumentDisplayN
         }
 
         #region RoleMaster
-        public object AddRoleDetails(RoleMaster roletype,List<MenuMaster> menus)
+        public object AddRoleDetails(RoleMaster roletype, List<MenuMaster> menus)
         {
             return new IntellaLendDataAccess(TenantSchema).AddRoleDetails(roletype, menus);
         }
-        public object UpdateRoleDetails(RoleMaster roletype,List<MenuMaster> menus)
+        public bool SyncRetainUpdateStagings(Int64 LoanTypeID)
+        {
+            return new IntellaLendDataAccess(TenantSchema).SyncRetainUpdateStagings(LoanTypeID);
+        }
+        public object UpdateRoleDetails(RoleMaster roletype, List<MenuMaster> menus)
         {
             return new IntellaLendDataAccess(TenantSchema).UpdateRoleDetails(roletype, menus);
         }
@@ -243,7 +252,7 @@ return new MasterDataAccess().AddDocumentType(DocumentTypeName, DocumentDisplayN
         #endregion
 
         #region Kpi User List
-        public object GetUserRoleList (Int64 RoleID)
+        public object GetUserRoleList(Int64 RoleID)
         {
             return new IntellaLendDataAccess(TenantSchema).GetUserRoleList(RoleID);
         }
@@ -251,32 +260,32 @@ return new MasterDataAccess().AddDocumentType(DocumentTypeName, DocumentDisplayN
         {
             return new IntellaLendDataAccess(TenantSchema).SaveKpiConfigurationDetails(kpiUserGroupConfig, kpiconfig, IsExistNewUserGrp);
         }
-        public object SaveKpiConfigurationDetails(Int64 groupID,int configType,Int64 goal)
+        public object SaveKpiConfigurationDetails(Int64 groupID, int configType, Int64 goal)
         {
             return new IntellaLendDataAccess(TenantSchema).SaveKpiConfigurationDetails(groupID, configType, goal);
         }
-        public object UpdateKPIConfigStagingData(Int64 ID,Int64 groupID, int configType, Int64 goal, int status)
+        public object UpdateKPIConfigStagingData(Int64 ID, Int64 groupID, int configType, Int64 goal, int status)
         {
-            return new IntellaLendDataAccess(TenantSchema).UpdateKPIConfigStagingData(ID,groupID, configType, goal);
+            return new IntellaLendDataAccess(TenantSchema).UpdateKPIConfigStagingData(ID, groupID, configType, goal);
         }
         public object GetKPIGoalConfigStagingDetails(Int64 groupID, int configType)
         {
             return new IntellaLendDataAccess(TenantSchema).GetKPIGoalConfigStagingDetails(groupID, configType);
         }
-        
+
 
         #endregion
 
         #region Encompass Parking Spot
-        public object AddParkingSpot(string ParkSpotName , Boolean Active)
+        public object AddParkingSpot(string ParkSpotName, Boolean Active)
         {
             return new MasterDataAccess().AddParkingSpot(ParkSpotName, Active);
         }
-        public object UpdateParkingSpot(string ParkSpotName, Boolean Active,Int64 ParkingSpotID)
+        public object UpdateParkingSpot(string ParkSpotName, Boolean Active, Int64 ParkingSpotID)
         {
-            return new MasterDataAccess().UpdateParkingSpot(ParkSpotName, Active,ParkingSpotID);
+            return new MasterDataAccess().UpdateParkingSpot(ParkSpotName, Active, ParkingSpotID);
         }
-        
+
         #endregion
         #endregion
     }

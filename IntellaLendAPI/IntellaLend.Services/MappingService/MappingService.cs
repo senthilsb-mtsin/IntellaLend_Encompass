@@ -29,7 +29,7 @@ namespace IntellaLend.CommonServices
         {
             return new MappingDataAccess(TableSchema).GetSyncLoanDetails(LoanTypeID);
         }
-        public bool SyncCustomerLoanType(Int64 LoanTypeID, Int64 UserID,Int64 SyncLevel)
+        public bool SyncCustomerLoanType(Int64 LoanTypeID, Int64 UserID, Int64 SyncLevel)
         {
             return new MappingDataAccess(TableSchema).SyncCustomerLoanType(LoanTypeID, UserID, SyncLevel);
         }
@@ -53,7 +53,14 @@ namespace IntellaLend.CommonServices
         {
             return new MappingDataAccess(TableSchema).GetCustReviewLoanCheckList(CustomerID, ReviewTypeID, LoanTypeID);
         }
-        
+        public object GetCustLoantypeMapping(Int64 CustomerID)
+        {
+            return new MappingDataAccess(TableSchema).GetCustLoantypeMapping(CustomerID);
+        }
+        public object SaveCustLoantypeMapping(List<CustLoantypeMapping> custLoantypeMappings)
+        {
+            return new MappingDataAccess(TableSchema).SaveCustLoantypeMapping(custLoantypeMappings);
+        }
 
         public bool SaveCustReviewMapping(Int64 CustomerID, Int64 ReviewTypeId)
         {
@@ -68,7 +75,7 @@ namespace IntellaLend.CommonServices
         {
             return new MappingDataAccess(TableSchema).RetainCustReviewLoanMapping(CustomerID, ReviewTypeID, LoanTypeID);
         }
-        
+
 
         public bool CheckCustReviewMapping(Int64 CustomerID, Int64 ReviewTypeId)
         {
@@ -89,7 +96,7 @@ namespace IntellaLend.CommonServices
         {
             return new MappingDataAccess(TableSchema).CustLoanDocTypeMapping(customerID, loanTypeID);
         }
-        public List<object> GetCustLoanDocTypeMapping(Int64 loanTypeID,Int64 DocumentTypeID)
+        public List<object> GetCustLoanDocTypeMapping(Int64 loanTypeID, Int64 DocumentTypeID)
         {
             return new MappingDataAccess(TableSchema).GetCustLoanDocTypeMapping(loanTypeID, DocumentTypeID);
         }
@@ -119,9 +126,9 @@ namespace IntellaLend.CommonServices
             return new MappingDataAccess(TableSchema).GetCustReviewTypes(CustomerID);
         }
 
-        public object GetCustReviewLoanTypes(Int64 customerID, Int64 reviewTypeID,bool isSaveEdit)
+        public object GetCustReviewLoanTypes(Int64 customerID, Int64 reviewTypeID, bool isSaveEdit)
         {
-            return new MappingDataAccess(TableSchema).CustReviewLoanTypes(customerID, reviewTypeID,isSaveEdit);
+            return new MappingDataAccess(TableSchema).CustReviewLoanTypes(customerID, reviewTypeID, isSaveEdit);
         }
 
         public object CustReviewLoanStackMapping(int customerID, int loanTypeID, int reviewTypeID)
@@ -130,7 +137,7 @@ namespace IntellaLend.CommonServices
         }
         public bool CloneFromSystem(Int64 customerID, Int64 reviewTypeID, Int64[] loanTypeIDs)
         {
-            return new MappingDataAccess(TableSchema).CloneFromSystem(customerID, reviewTypeID, loanTypeIDs);            
+            return new MappingDataAccess(TableSchema).CloneFromSystem(customerID, reviewTypeID, loanTypeIDs);
         }
 
         public bool RemoveCustReviewMapping(Int64 customerID, Int64 reviewTypeID)
@@ -145,6 +152,15 @@ namespace IntellaLend.CommonServices
         public bool RemoveCustConfigUploadPath(Int64 customerID, Int64 reviewTypeID, Int64 LoanTypeID)
         {
             return new MappingDataAccess(TableSchema).RemoveCustConfigUploadPath(customerID, reviewTypeID, LoanTypeID);
+        }
+        public object GetReviewLoanLenderMapped( Int64 reviewTypeID, Int64 LoanTypeID)
+        {
+            return new MappingDataAccess(TableSchema).GetReviewLoanLenderMapped(reviewTypeID, LoanTypeID);
+        }
+
+        public object SaveReviewLoanLenderMapping(Int64 reviewTypeID, Int64 LoanTypeID,Int64[] allLenderIDs,Int64[] assignedLenderIDs,bool IsAdd)
+        {
+            return new MappingDataAccess(TableSchema).SaveReviewLoanLenderMapping(reviewTypeID, LoanTypeID, allLenderIDs,assignedLenderIDs,IsAdd);
         }
         
         //public object GetAllDocMappedCustomerandLoanTypes(long docTypeID)

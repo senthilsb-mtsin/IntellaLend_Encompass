@@ -26,7 +26,7 @@ namespace IntellaLendAPI.Controllers
                 response.token = new JWTToken().CreateJWTToken();
                 response.data = new JWTToken().CreateJWTToken(new CustomerService(customerDetails.TableSchema).GetCustomerList(false));
             }
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 response.token = null;
                 response.ResponseMessage.MessageDesc = exc.Message;
@@ -50,7 +50,7 @@ namespace IntellaLendAPI.Controllers
             }
             catch (Exception exc)
             {
-                response.token = null;                
+                response.token = null;
                 response.ResponseMessage.MessageDesc = exc.Message;
                 MTSExceptionHandler.HandleException(ref exc);
             }
@@ -58,7 +58,7 @@ namespace IntellaLendAPI.Controllers
             return response;
         }
         [HttpPost]
-        public TokenResponse EditCustomer (CustomerUpdateRequest customerMasterDetials)
+        public TokenResponse EditCustomer(CustomerUpdateRequest customerMasterDetials)
 
         {
             Logger.WriteTraceLog($"Start EditCustomer()");
@@ -71,7 +71,7 @@ namespace IntellaLendAPI.Controllers
                 response.data = new JWTToken().CreateJWTToken(new CustomerService(customerMasterDetials.TableSchema).EditCustomer(customerMasterDetials.customerMaster));
             }
 
-            catch(Exception exc)
+            catch (Exception exc)
             {
                 response.token = null;
                 response.ResponseMessage.MessageDesc = exc.Message;
@@ -123,6 +123,50 @@ namespace IntellaLendAPI.Controllers
                 MTSExceptionHandler.HandleException(ref exc);
             }
             Logger.WriteTraceLog($"End RetentionPurge()");
+            return response;
+        }
+
+        [HttpPost]
+        public TokenResponse GetCustomerImportStaging(RequestCustomerImportStaging req)
+        {
+            Logger.WriteTraceLog($"Start GetCustomerImportStaging()");
+            Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(req)}");
+            TokenResponse response = new TokenResponse();
+            response.ResponseMessage = new ResponseMessage();
+            try
+            {
+                response.token = new JWTToken().CreateJWTToken();
+                response.data = new JWTToken().CreateJWTToken(new CustomerService(req.TableSchema).GetCustomerImportStaging(req.Status, req.ImportDateFrom, req.ImportDateTo,req.AssignType));
+            }
+            catch (Exception exc)
+            {
+                response.token = null;
+                response.ResponseMessage.MessageDesc = exc.Message;
+                MTSExceptionHandler.HandleException(ref exc);
+            }
+            Logger.WriteTraceLog($"End GetCustomerImportStaging()");
+            return response;
+        }
+
+        [HttpPost]
+        public TokenResponse GetCustomerImportStagingDetails(RequestCustomerImportStagingDetails req)
+        {
+            Logger.WriteTraceLog($"Start GetCustomerImportStagingDetails()");
+            Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(req)}");
+            TokenResponse response = new TokenResponse();
+            response.ResponseMessage = new ResponseMessage();
+            try
+            {
+                response.token = new JWTToken().CreateJWTToken();
+                response.data = new JWTToken().CreateJWTToken(new CustomerService(req.TableSchema).GetCustomerImportStagingDetails(req.CustomerImportStagingID));
+            }
+            catch (Exception exc)
+            {
+                response.token = null;
+                response.ResponseMessage.MessageDesc = exc.Message;
+                MTSExceptionHandler.HandleException(ref exc);
+            }
+            Logger.WriteTraceLog($"End GetCustomerImportStagingDetails()");
             return response;
         }
     }

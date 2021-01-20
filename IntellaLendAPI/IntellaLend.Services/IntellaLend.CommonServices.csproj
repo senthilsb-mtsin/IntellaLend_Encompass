@@ -61,6 +61,7 @@
     <Compile Include="CustomerService\CustConfigService.cs" />
     <Compile Include="CustomerService\CustomerService.cs" />
     <Compile Include="DashboardServices\DashboardService.cs" />
+    <Compile Include="EmailServices\EmailService.cs" />
     <Compile Include="IntellaLendService\IntellaLendServices.cs" />
     <Compile Include="IntellaLendService\RequestLoggingService.cs" />
     <Compile Include="LoanService\FIleUploadService.cs" />
@@ -95,9 +96,21 @@
       <Project>{99230248-b677-4ca6-bb99-f40f5416c14e}</Project>
       <Name>IntellaLend.WFProxy</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\IntellaLendBlocks\MTSEntBlocks.LoggerBlock\MTSEntBlocks.LoggerBlock.csproj">
+      <Project>{167D2B19-F361-4093-8E1F-61D5778F5C5D}</Project>
+      <Name>MTSEntBlocks.LoggerBlock</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\IntellaLendBlocks\MTSRuleEngine\MTSRuleEngine.csproj">
       <Project>{5f014003-50d8-49e0-8afe-91d38dccc97c}</Project>
       <Name>MTSRuleEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IntellaLendBlocks\UtilsBlock\UtilsBlock.csproj">
+      <Project>{60C51B78-D847-4463-95FD-123D2E8FE1DA}</Project>
+      <Name>UtilsBlock</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntellaLend.ADServices\IntellaLend.ADServices.csproj">
+      <Project>{C7BBAC2C-AFE4-48C6-9F4A-66A0546DA803}</Project>
+      <Name>IntellaLend.ADServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\IntellaLend.CheckListItemData\IntellaLend.CheckListItemData.csproj">
       <Project>{184945f1-2043-473a-a152-1a70fc659c6f}</Project>
@@ -170,7 +183,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties VsiSettingsState="Initialized" VsiUseTimeUtc="UseGlobal" VsiDeltaBaseDate="7/30/2020 3:13:46 PM" VsiUseGlobalBaseDate="True" VsiConfigurationBuildAction="UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal" VsiAutoInformationalVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoFileVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiEnabled="True" BuildVersion_StartDate="2017/9/1" BuildVersion_BuildVersioningStyle="YearStamp.MonthStamp.DayStamp.TimeStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" BuildVersion_UseGlobalSettings="True" BuildVersion_UseUniversalClock="True" />
+      <UserProperties BuildVersion_UseUniversalClock="True" BuildVersion_UseGlobalSettings="True" BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="YearStamp.MonthStamp.DayStamp.TimeStamp" BuildVersion_StartDate="2017/9/1" VsiEnabled="True" VsiAutoVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoFileVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoInformationalVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiConfigurationBuildAction="UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal" VsiUseGlobalBaseDate="True" VsiDeltaBaseDate="7/30/2020 3:13:46 PM" VsiUseTimeUtc="UseGlobal" VsiSettingsState="Initialized" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

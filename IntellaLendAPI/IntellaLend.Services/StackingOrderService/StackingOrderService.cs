@@ -58,7 +58,7 @@ namespace IntellaLend.CommonServices
 
         public List<DocumentTypeMaster> GetSystemDocumentTypesWithDocFields(Int64 loanTypeID)
         {
-            return new IntellaLendDataAccess().GetSystemDocumentTypesWithFields(loanTypeID);
+            return new IntellaLendDataAccess().GetSystemDocumentTypesAndLosDocumentTypesWithFields(loanTypeID);
         }
         
         

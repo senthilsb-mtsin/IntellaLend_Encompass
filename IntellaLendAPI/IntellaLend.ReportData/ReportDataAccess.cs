@@ -443,7 +443,7 @@ namespace IntellaLend.ReportData
                              join c in db.CheckListDetailMaster.AsNoTracking() on lca.ChecklistDetailID equals c.CheckListDetailID
                              join l in db.Loan.AsNoTracking() on lca.LoanID equals l.LoanID
                              where (l.CreatedOn > FromDate && l.CreatedOn < ToDate
-                             && l.Status == StatusConstant.PENDING_AUDIT && lca.Result == false && c.Rule_Type == 0 && c.Category == categoryName)
+                             && (l.Status == StatusConstant.PENDING_AUDIT || l.Status == StatusConstant.COMPLETE) && lca.Result == false && c.Rule_Type == 0 && c.Category == categoryName)
                              group lca by new { lca.LoanID, lca.CustomerID } into g
                              select new
                              {
@@ -580,21 +580,24 @@ namespace IntellaLend.ReportData
 
                 List<string> batchIdentifier = loans.Select(x => "'" + x.BatchID + "'").Distinct().ToList();
 
-                string type = DataEntryType == 1 ? "READY_FOR_REVIEW" : "READY_FOR_VALIDATION";
-                string sql = $"select batch_status, identifier from batch_instance where batch_status = '{type}' AND identifier in ({string.Join(",", batchIdentifier)}) ";
-                System.Data.DataTable dt = new DataAccess2("EphesoftConnectionName").ExecuteDataTable(sql);
                 Dictionary<Int64, Int32> customerBatchCount = new Dictionary<long, int>();
-                if (dt != null && dt.Rows.Count > 0 && dt.Columns.Count > 0)
+                if (batchIdentifier.Count > 0)
                 {
-                    foreach (DataRow dr in dt.Rows)
+                    string type = DataEntryType == 1 ? "READY_FOR_REVIEW" : "READY_FOR_VALIDATION";
+                    string sql = $"select batch_status, identifier from batch_instance where batch_status = '{type}' AND identifier in ({string.Join(",", batchIdentifier)}) ";
+                    System.Data.DataTable dt = new DataAccess2("EphesoftConnectionName").ExecuteDataTable(sql);
+                    if (dt != null && dt.Rows.Count > 0 && dt.Columns.Count > 0)
                     {
-                        var batchDetail = loans.Where(x => x.BatchID == dr["identifier"].ToString()).FirstOrDefault();
-                        if (batchDetail != null)
+                        foreach (DataRow dr in dt.Rows)
                         {
-                            if (customerBatchCount.ContainsKey(batchDetail.CustomerID))
-                                customerBatchCount[batchDetail.CustomerID] = customerBatchCount[batchDetail.CustomerID] + 1;
-                            else
-                                customerBatchCount[batchDetail.CustomerID] = 1;
+                            var batchDetail = loans.Where(x => x.BatchID == dr["identifier"].ToString()).FirstOrDefault();
+                            if (batchDetail != null)
+                            {
+                                if (customerBatchCount.ContainsKey(batchDetail.CustomerID))
+                                    customerBatchCount[batchDetail.CustomerID] = customerBatchCount[batchDetail.CustomerID] + 1;
+                                else
+                                    customerBatchCount[batchDetail.CustomerID] = 1;
+                            }
                         }
                     }
                 }
@@ -834,7 +837,7 @@ namespace IntellaLend.ReportData
                 //if (_reviewtypemster != null && _reviewtypemster.SearchCriteria == "Received_Date")
                 await Task.Run(() =>
                 {
-                    if (_reviewtypemster != null && _reviewtypemster.SearchCriteria == "Received_Date")
+                    if (_reviewtypemster != null)
                     {
                         var rules = (from lca in db.LoanChecklistAudit.AsNoTracking()
                                      join l in db.Loan.AsNoTracking() on lca.LoanID equals l.LoanID
@@ -1261,7 +1264,7 @@ namespace IntellaLend.ReportData
                                   join l in db.Loan.AsNoTracking() on lca.LoanID equals l.LoanID
                                   join c in db.CheckListDetailMaster.AsNoTracking() on lca.ChecklistDetailID equals c.CheckListDetailID
                                   //join lt in db.LoanTypeMaster.AsNoTracking() on lca.LoanTypeID equals lt.LoanTypeID
-                                  where l.Status == StatusConstant.PENDING_AUDIT && l.CreatedOn > FromDate && l.CreatedOn <= ToDate && c.Rule_Type == 0 && lca.Result == false
+                                  where (l.Status == StatusConstant.PENDING_AUDIT || l.Status == StatusConstant.COMPLETE) && l.CreatedOn > FromDate && l.CreatedOn <= ToDate && c.Rule_Type == 0 && lca.Result == false
                                   select new
                                   {
                                       LoanID = l.LoanID,

@@ -229,7 +229,7 @@ namespace IntellaLend.EntityDataHandler
                 //status=-3---All
                 boxList = db.BoxDownloadQueue.AsNoTracking().Where(search => search.CreatedOn >= FromDate && search.CreatedOn < ToDate &&
                 (
-                (status == -3 && (search.Status == BoxDownloadStatusConstant.DOWNLOAD_FAILED || search.Status == BoxDownloadStatusConstant.DOWNLOAD_PENDING || search.Status == BoxDownloadStatusConstant.DOWNLOAD_SUCCESS || search.Status == StatusConstant.LOAN_DELETED || search.Status == StatusConstant.MOVE_TO_PROCESSING_QUEUE || search.Status == StatusConstant.LOS_LOAN_STAGED)) ||
+                (status == -3 && (search.Status == BoxDownloadStatusConstant.DOWNLOAD_FAILED || search.Status == BoxDownloadStatusConstant.DOWNLOAD_PENDING || search.Status == BoxDownloadStatusConstant.DOWNLOAD_SUCCESS || search.Status == StatusConstant.LOAN_DELETED || search.Status == StatusConstant.MOVE_TO_PROCESSING_QUEUE || search.Status == StatusConstant.LOS_LOAN_STAGED || search.Status == StatusConstant.COMPLETE)) ||
                 (status == -2 && search.Status == BoxDownloadStatusConstant.DOWNLOAD_FAILED) ||
                 (status == StatusConstant.READY_FOR_IDC && search.Status == BoxDownloadStatusConstant.DOWNLOAD_SUCCESS) ||
                 (status == StatusConstant.PENDING_BOX_DOWNLOAD && search.Status == BoxDownloadStatusConstant.DOWNLOAD_PENDING) ||
@@ -238,7 +238,8 @@ namespace IntellaLend.EntityDataHandler
                 (status == StatusConstant.FAILED_BOX_DOWNLOAD && search.Status == BoxDownloadStatusConstant.DOWNLOAD_FAILED) ||
                 (status == StatusConstant.LOAN_DELETED && search.Status == StatusConstant.LOAN_DELETED) ||
                 (status == StatusConstant.MOVE_TO_PROCESSING_QUEUE && search.Status == StatusConstant.MOVE_TO_PROCESSING_QUEUE) ||
-                (status == StatusConstant.LOS_LOAN_STAGED && search.Status == StatusConstant.LOS_LOAN_STAGED))
+                (status == StatusConstant.LOS_LOAN_STAGED && search.Status == StatusConstant.LOS_LOAN_STAGED) ||
+                (status == StatusConstant.COMPLETE && search.Status == StatusConstant.COMPLETE))
                 ).ToList();
 
 
@@ -256,7 +257,7 @@ namespace IntellaLend.EntityDataHandler
                 List<BoxMonitorReport> loanList = new List<BoxMonitorReport>();
 
                 var newGroupList = groupList.Where(a => !boxErrorLoans.Any(m => m.LoanID == a.LoanID)).ToList();
-                if (status != LOSImportStatusConstant.LOS_IMPORT_PROCESSING && status != LOSImportStatusConstant.LOS_IMPORT_STAGED && status != LOSImportStatusConstant.LOS_IMPORT_FAILED)
+                if (status != 12 && status != LOSImportStatusConstant.LOS_IMPORT_STAGED && status != LOSImportStatusConstant.LOS_IMPORT_FAILED)
                 {
                     loanList = (from search in newGroupList.AsEnumerable()
                                 join L in db.Loan.AsNoTracking() on search.LoanID equals L.LoanID
@@ -323,9 +324,9 @@ namespace IntellaLend.EntityDataHandler
 
                                                     where (L.CreatedOn >= FromDate && L.CreatedOn < ToDate) && (L.UploadType == UploadConstant.ADHOC || L.UploadType == UploadConstant.ENCOMPASS || L.UploadType == UploadConstant.UNC || L.UploadType == UploadConstant.LOS) &&
                                                     (
-                                                     (status == -3 && (L.Status == StatusConstant.IDC_ERROR || L.Status == StatusConstant.READY_FOR_IDC || L.Status == StatusConstant.COMPLETE|| L.Status == StatusConstant.PENDING_IDC || L.Status == StatusConstant.PENDING_AUDIT || L.Status == StatusConstant.LOAN_DELETED || L.Status == StatusConstant.MOVE_TO_PROCESSING_QUEUE ||
+                                                     (status == -3 && (L.Status == StatusConstant.IDC_ERROR || L.Status == StatusConstant.READY_FOR_IDC || L.Status == StatusConstant.COMPLETE || L.Status == StatusConstant.PENDING_IDC || L.Status == StatusConstant.PENDING_AUDIT || L.Status == StatusConstant.LOAN_DELETED || L.Status == StatusConstant.MOVE_TO_PROCESSING_QUEUE ||
 
-                                                     L.Status == StatusConstant.FAILED_ENCOMPASS_DOWNLOAD || L.Status == StatusConstant.PENDING_ENCOMPASS_DOWNLOAD)) ||
+                                                     L.Status == StatusConstant.FAILED_ENCOMPASS_DOWNLOAD || L.Status == StatusConstant.PENDING_ENCOMPASS_DOWNLOAD || L.Status == StatusConstant.LOS_LOAN_STAGED)) ||
 
                                                      (status == StatusConstant.READY_FOR_IDC && L.Status == StatusConstant.READY_FOR_IDC) ||
                                                           (status == StatusConstant.COMPLETE && L.Status == StatusConstant.COMPLETE) ||
@@ -432,7 +433,10 @@ namespace IntellaLend.EntityDataHandler
                             a.Status == StatusConstant.CLASSIFICATION_WAITING ||
                             a.Status == StatusConstant.FIELD_EXTRACTION_WAITING ||
                             a.Status == StatusConstant.IDCERROR ||
-                            a.Status == StatusConstant.RUNNING)).ToList();
+                            a.Status == StatusConstant.RUNNING ||
+                            a.Status == StatusConstant.IDC_DELETED
+
+                         )).ToList();
 
                             List<ELoanAttachmentDownload> _docs = db.ELoanAttachmentDownload.AsNoTracking().Where(x => x.LoanID == item.LoanID && x.TypeOfDownload == EncompassLoanAttachmentDownloadConstant.TrailingDocuments && x.Status == EncompassStatusConstant.DOWNLOAD_FAILED).ToList();
 
@@ -528,7 +532,7 @@ namespace IntellaLend.EntityDataHandler
                     }
                 }
                 //Get Los Processing Loans
-                if (status == LOSImportStatusConstant.LOS_IMPORT_PROCESSING || status == -3)
+                if (status == 12 || status == -3)
                 {
                     List<LOSImportStaging> _losProcessing = db.LOSImportStaging.AsNoTracking().Where(x => x.LoanID == 0 && x.Status == LOSImportStatusConstant.LOS_IMPORT_PROCESSING && x.Createdon >= FromDate && x.Createdon < ToDate).ToList();
 
@@ -617,7 +621,19 @@ namespace IntellaLend.EntityDataHandler
                         loanList.Add(data);
                     }
                 }
+                foreach (BoxMonitorReport _missingDoc in loanList)
+                {
+                    List<AuditLoanMissingDoc> loanDoc = db.AuditLoanMissingDoc.AsNoTracking().Where(a => a.LoanID == _missingDoc.LoanID &&
+                    (a.Status == StatusConstant.MOVED_TO_IDC ||
+                    a.Status == StatusConstant.CLASSIFICATION_WAITING ||
+                    a.Status == StatusConstant.FIELD_EXTRACTION_WAITING ||
+                    a.Status == StatusConstant.IDCERROR ||
+                    a.Status == StatusConstant.RUNNING ||
+                    a.Status == StatusConstant.IDC_DELETED
+                )).ToList();
 
+                    _missingDoc.IsMissingDocAvailable = loanDoc.Count > 0;
+                }
 
                 foreach (BoxMonitorReport item in loanList)
                 {
@@ -635,6 +651,7 @@ namespace IntellaLend.EntityDataHandler
                         }
                         FileName = Path.GetFileNameWithoutExtension(FileName);
                         item.BoxFileName = FileName + ".json";
+
                     }
                 }
                 var loans = loanList.OrderByDescending(o => o.Uploaded).ToList();

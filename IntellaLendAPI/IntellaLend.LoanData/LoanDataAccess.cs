@@ -108,6 +108,7 @@ namespace IntellaLend.EntityDataHandler
                                  Customer = CUST.CustomerName,
                                  AuditDueDate = search.AuditDueDate,
                                  AssignedUserID = L.AssignedUserID,
+                                 UploadType = L.UploadType
                              }
                           ).OrderByDescending(c => c.ReceivedDate).Take(100).ToList();
                 }
@@ -146,7 +147,8 @@ namespace IntellaLend.EntityDataHandler
                                  Customer = CUST.CustomerName,
                                  AssignedUserID = L.AssignedUserID > 0 ? L.AssignedUserID : 0,
                                  AssignedUser = USER.UserID > 0 ? USER.FirstName + " " + USER.LastName : "UnAsssigned",
-                                 AuditDueDate = search.AuditDueDate
+                                 AuditDueDate = search.AuditDueDate,
+                                 UploadType = L.UploadType
                              }
                           ).OrderByDescending(c => c.ReceivedDate).Take(100).ToList();
                 }
@@ -197,7 +199,8 @@ namespace IntellaLend.EntityDataHandler
                                  Customer = CUST.CustomerName,
                                  AssignedUserID = L.AssignedUserID > 0 ? L.AssignedUserID : 0,
                                  AssignedUser = USER.UserID > 0 ? USER.FirstName + USER.LastName : "UnAsssigned",
-                                 AuditDueDate = search.AuditDueDate
+                                 AuditDueDate = search.AuditDueDate,
+                                 UploadType = L.UploadType
                              }
                          ).ToList();
 
@@ -238,7 +241,8 @@ namespace IntellaLend.EntityDataHandler
                              Customer = l.Customer,
                              AssignedUserID = l.AssignedUserID,
                              AssignedUser = l.AssignedUser,
-                             AuditDueDate = l.AuditDueDate
+                             AuditDueDate = l.AuditDueDate,
+                             UploadType = l.UploadType
                          }).ToList();
 
                 loan = (from l in loans.AsEnumerable()
@@ -265,7 +269,8 @@ namespace IntellaLend.EntityDataHandler
                             Customer = l.Customer,
                             AssignedUserID = l.AssignedUserID,
                             AssignedUser = l.AssignedUser,
-                            AuditDueDate = l.AuditDueDate
+                            AuditDueDate = l.AuditDueDate,
+                            UploadType = l.UploadType
                         }).ToList().OrderBy(c => c.Customer).ToList();
 
 
@@ -273,7 +278,46 @@ namespace IntellaLend.EntityDataHandler
 
             return loan;
         }
+        public object GetLoanInfo(string _loanGUID)
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
 
+                Guid loanGUID = new Guid(_loanGUID);
+
+                Loan _loan = db.Loan.AsNoTracking().Where(x => x.LoanGUID == loanGUID).FirstOrDefault();
+                if (_loan != null)
+                {
+                    LoanSearch _search = db.LoanSearch.AsNoTracking().Where(x => x.LoanID == _loan.LoanID).FirstOrDefault();
+                    return new
+                    {
+                        LoanID = _loan.LoanID,
+                        LoanAmount = _search.LoanAmount,
+                        BorrowerName = _search.BorrowerName,
+                        ServiceTypeName = db.ReviewTypeMaster.AsNoTracking().Where(x => x.ReviewTypeID == _loan.ReviewTypeID).FirstOrDefault().ReviewTypeName,
+                        AuditMonthYear = _loan.AuditMonthYear.ToString("MMMM yyyy"),
+                        ReceivedDate = _search.ReceivedDate,
+                        LoanNumber = _loan.LoanNumber,
+                        LoanTypeName = db.LoanTypeMaster.AsNoTracking().Where(x => x.LoanTypeID == _loan.LoanTypeID).FirstOrDefault().LoanTypeName,
+                        StatusDescription = StatusConstant.GetStatusDescription(_loan.Status),
+                        AuditDueDate = _search.AuditDueDate,
+                        Customer = db.CustomerMaster.AsNoTracking().Where(x => x.CustomerID == _loan.CustomerID).FirstOrDefault().CustomerName,
+                        EphesoftBatchInstanceID = db.IDCFields.AsNoTracking().Where(x => x.LoanID == _loan.LoanID).FirstOrDefault().IDCBatchInstanceID,
+                        AssignedUser = "",
+                        AssignedUserID = _loan.AssignedUserID,
+                        StatusID = _loan.Status,
+                        CurrentUserID = _loan.LoggedUserID,
+                        LoanTypeID = _loan.LoanTypeID,
+                        LoggedUserID = _loan.LoggedUserID,
+                        LoggerUserFirstName = "",
+                        LoggerUserLastName = "",
+                        Message = ""
+
+                    };
+                }
+                else return null;
+            }
+        }
         public object GetPurgeStagingDetails(long batchID)
         {
             object getPurgeStaging;
@@ -701,7 +745,7 @@ namespace IntellaLend.EntityDataHandler
                     LoanID = LoanID,
                     FileType = LOSExportFileTypeConstant.LOS_LOAN_EXPORT,
                     Status = LOSExportStatusConstant.LOS_LOAN_STAGED,
-                    FileName = $"{loanNumber}_IL_Export_{DateTime.Now.ToString("yyyyMMddhhmmss")}.json",
+                    FileName = $"{loanNumber}_IL_Export_{DateTime.Now.ToString("yyyyMMddhhmmssfff")}.json",
                     FileJson = string.Empty,
                     ErrorMsg = string.Empty,
                     CreatedOn = DateTime.Now,
@@ -1052,6 +1096,62 @@ namespace IntellaLend.EntityDataHandler
             }
             return loanDatas;
         }
+        public List<FannieMaeFields> GetFannieMaeFields(Int64 LoanID)
+        {
+
+            using (var db = new DBConnect(TenantSchema))
+            {
+
+                LOSLoanDetails _losTableFields = db.LOSLoanDetails.AsNoTracking().Where(l => l.LoanID == LoanID).FirstOrDefault();
+                List<FannieMaeFields> _FannieMaefields = new List<FannieMaeFields>();
+                if (_losTableFields != null && !string.IsNullOrEmpty(_losTableFields.LOSDetailJSON))
+                {
+                    var _fields = JsonConvert.DeserializeObject<Dictionary<String, dynamic>>(_losTableFields.LOSDetailJSON);
+                    var _fieldsList = _fields.ToList();
+
+
+                    foreach (var _field in _fieldsList)
+                    {
+                        string FieldID = string.Empty;
+                        string FieldValue = string.Empty;
+                        string FieldName = string.Empty;
+
+                        LOSDocumentFields _losFieldTable = db.LOSDocumentFields.AsNoTracking().Where(los => los.FieldID == _field.Key).FirstOrDefault();
+
+                        if (_losTableFields != null)
+                            FieldName = _losFieldTable.FieldName;
+
+                        if (_field.Value.Type == FannieMaeFieldTypeConstant.SType)
+                        {
+                            FieldID = "#" + _field.Key + "#" + FieldName;
+                            FieldValue = _field.Value.Value;
+
+                            _FannieMaefields.Add(new FannieMaeFields() { FieldID = FieldID, FieldValue = FieldValue });
+
+                        }
+                        else if (_field.Value.Type == FannieMaeFieldTypeConstant.MType)
+                        {
+                            Int64 Version = 1;
+
+                            foreach (var _fieldValue in _field.Value.Value)
+                            {
+                                FieldID = "#" + _field.Key + "#" + FieldName + "-V" + Version;
+                                FieldValue = _fieldValue;
+                                _FannieMaefields.Add(new FannieMaeFields() { FieldID = FieldID, FieldValue = FieldValue });
+                                Version++;
+                            }
+                        }
+
+                    }
+                }
+
+
+                return _FannieMaefields;
+
+            }
+        }
+
+
 
         public bool UpdateLoanDocument(Int64 LoanID, Int64 DocumentID, Int64 CurrentUserID, List<DocumentLevelFields> DocumentFields, Int32 VersionNumber, List<DataTable> updatedDocTables)
         {
@@ -1918,7 +2018,7 @@ namespace IntellaLend.EntityDataHandler
                             int docIndex = loanBatch.Documents.IndexOf(oldDoc);
                             string auditMsg = string.Empty, auditSysMsg = string.Empty;
                             DocumentTypeMaster docMaster = db.DocumentTypeMaster.AsNoTracking().Where(d => d.DocumentTypeID == NewDocumentID).FirstOrDefault();
-                            List<DocumentFieldMaster> docFields = db.DocumentFieldMaster.AsNoTracking().Where(d => d.DocumentTypeID == NewDocumentID).ToList();
+                            List<DocumentFieldMaster> docFields = db.DocumentFieldMaster.AsNoTracking().Where(d => d.DocumentTypeID == NewDocumentID && d.Active).ToList();
                             List<DataTable> _docTables = new List<DataTable>();
                             if (_docTables == null || _docTables.Count == 0)
                             {
@@ -1941,7 +2041,7 @@ namespace IntellaLend.EntityDataHandler
                                 {
                                     FieldID = docField.FieldID,
                                     Type = docField.Name,
-                                    Name = docField.DisplayName,
+                                    Name = docField.Name,
                                     FieldDisplayName = docField.DisplayName,
                                     Value = string.Empty
                                 };
@@ -2427,9 +2527,10 @@ namespace IntellaLend.EntityDataHandler
                         masData.IDCBC = string.IsNullOrEmpty(_idcfield.IDCBatchClassID) ? string.Empty : _idcfield.IDCBatchClassID;
                         masData.IDCBCName = string.IsNullOrEmpty(_idcfield.IDCBatchClassName) ? string.Empty : _idcfield.IDCBatchClassName;
 
-                        masData.ReviewBy = _idcfield.IDCReviewerName.Substring(0, _idcfield.IDCReviewerName.LastIndexOf('|')).Trim();
+                        // if reviewer not available set to system
+                        masData.ReviewBy = string.IsNullOrEmpty(_idcfield.IDCReviewerName) ? "System" : _idcfield.IDCReviewerName.Substring(0, _idcfield.IDCReviewerName.LastIndexOf('|')).Trim();
                         masData.ReviewOn = _idcfield.IDCLevelOneCompletionDate.ToString();
-                        masData.ReviewDuration = _idcfield.IDCLevelOneDuration.Substring(0, _idcfield.IDCLevelOneDuration.LastIndexOf('|')).Trim();
+                        masData.ReviewDuration = string.IsNullOrEmpty(_idcfield.IDCLevelOneDuration) ? "" : _idcfield.IDCLevelOneDuration.Substring(0, _idcfield.IDCLevelOneDuration.LastIndexOf('|')).Trim();
                     }
 
                     masData.Event = LOSExportEventConstant.LOS_CLASSIFICATION_RESULTS_EVENT;
@@ -2712,6 +2813,7 @@ namespace IntellaLend.EntityDataHandler
                     {
                         var item = (from l in db.Loan.AsNoTracking()
                                     join RTM in db.ReviewTypeMaster.AsNoTracking() on l.ReviewTypeID equals RTM.ReviewTypeID
+                                    join LTM in db.LoanTypeMaster.AsNoTracking() on l.LoanTypeID equals LTM.LoanTypeID
                                     join cus in db.CustomerMaster.AsNoTracking() on l.CustomerID equals cus.CustomerID
                                     where l.LoanID == LoanID
                                     select new
@@ -2720,6 +2822,8 @@ namespace IntellaLend.EntityDataHandler
                                         Customer = cus.CustomerName,
                                         ServiceType = RTM.ReviewTypeName,
                                         AuditMonthYear = l.AuditMonthYear,
+                                        LoanType = LTM.LoanTypeName,
+                                        LoanNumber = l.LoanNumber,
                                         Priority = l.Priority, //RTM.ReviewTypePriority == null ? 0 : RTM.ReviewTypePriority
                                     }).FirstOrDefault();
 
@@ -2738,6 +2842,8 @@ namespace IntellaLend.EntityDataHandler
                             Customer = item.Customer,
                             ServiceType = item.ServiceType,
                             AuditMonthYear = auditMonth,
+                            LoanType = item.LoanType,
+                            LoanNumber = item.LoanNumber,
                             Priority = item.Priority,
                             AuditDueDate = AuditDueDate
                         };
@@ -2747,6 +2853,7 @@ namespace IntellaLend.EntityDataHandler
                     {
                         var item = (from l in db.Loan.AsNoTracking()
                                     join RTM in db.ReviewTypeMaster.AsNoTracking() on l.ReviewTypeID equals RTM.ReviewTypeID
+                                    join LTM in db.LoanTypeMaster.AsNoTracking() on l.LoanTypeID equals LTM.LoanTypeID
                                     join cus in db.CustomerMaster.AsNoTracking() on l.CustomerID equals cus.CustomerID
                                     where l.LoanID == LoanID
                                     select new
@@ -2755,6 +2862,8 @@ namespace IntellaLend.EntityDataHandler
                                         Customer = cus.CustomerName,
                                         ServiceType = RTM.ReviewTypeName,
                                         AuditMonthYear = l.AuditMonthYear,
+                                        LoanType = LTM.LoanTypeName,
+                                        LoanNumber = l.LoanNumber,
                                         Priority = l.Priority //RTM.ReviewTypePriority
                                     }).FirstOrDefault();
 
@@ -2774,11 +2883,42 @@ namespace IntellaLend.EntityDataHandler
                             ServiceType = item.ServiceType,
                             AuditMonthYear = auditMonth,
                             Priority = item.Priority,
+                            LoanType = item.LoanType,
+                            LoanNumber = item.LoanNumber,
                             AuditDueDate = AuditDueDate
                         };
                     }
                 }
             }
+        }
+
+        public string GetDocumentStackingOrder(Int64 loanID, Int64 configId)
+        {
+            string result = string.Empty;
+            using (var db = new DBConnect(TenantSchema))
+            {
+                Loan _loan = db.Loan.AsNoTracking().Where(l => l.LoanID == loanID).FirstOrDefault();
+                if (_loan != null)
+                {
+                    Int64 StackingGrpId = 0;
+                    StackingGrpId = db.CustReviewLoanStackMapping.AsNoTracking().Where(map => map.CustomerID == _loan.CustomerID && map.ReviewTypeID == _loan.ReviewTypeID && map.LoanTypeID == _loan.LoanTypeID).FirstOrDefault().StackingOrderID;
+                    if (StackingGrpId != 0)
+                    {
+                        List<StackingOrderDetailMaster> _stackingOrder = db.StackingOrderDetailMaster.AsNoTracking().Where(s => s.StackingOrderID == StackingGrpId).OrderBy(s => s.SequenceID).ToList();
+                        var resObj = (from sodm in _stackingOrder
+                                      join dms in db.DocumentTypeMaster.AsNoTracking() on sodm.DocumentTypeID equals dms.DocumentTypeID
+                                      where dms.Active == true
+                                      select new
+                                      {
+                                          ConfigID = configId,
+                                          SequenceNumber = sodm.SequenceID,
+                                          DocumentName = dms.Name
+                                      }).OrderBy(a => a.SequenceNumber).ToList();
+                        result = JsonConvert.SerializeObject(resObj);
+                    }
+                }
+            }
+            return result;
         }
 
         public object CheckLoanPageCount(Int64 loanID, Int64 pageCount)
@@ -3078,6 +3218,9 @@ namespace IntellaLend.EntityDataHandler
                 using (var tran = db.Database.BeginTransaction())
                 {
                     LoanDetail loanDetail = db.LoanDetail.Where(l => l.LoanID == LoanID).AsNoTracking().FirstOrDefault();
+                    LoanEvaluatedResult loanEvaluatedResult = db.LoanEvaluatedResult.AsNoTracking().Where(l => l.LoanID == LoanID).FirstOrDefault();
+                    var EvaluatedResult = JsonConvert.DeserializeObject<CheckListResult>(loanEvaluatedResult.EvaluatedResult);
+                    EvaluatedResult.loanQuestioner = questioner;
 
                     if (loanDetail != null)
                     {
@@ -3087,6 +3230,10 @@ namespace IntellaLend.EntityDataHandler
                         db.SaveChanges();
                         string[] auditDescs = AuditDataAccess.GetAuditDescription(TenantSchema, AuditConfigConstant.MANUAL_QUESTIONER_UPDATED);
                         LoanAudit.InsertLoanDetailsAudit(db, loanDetail, CurrentUserID, auditDescs[0], auditDescs[1]);
+                        loanEvaluatedResult.EvaluatedResult = JsonConvert.SerializeObject(EvaluatedResult);
+                        loanEvaluatedResult.ModifiedOn = DateTime.Now;
+                        db.Entry(loanEvaluatedResult).State = EntityState.Modified;
+                        db.SaveChanges();
                         tran.Commit();
                     }
                 }
@@ -3392,10 +3539,11 @@ namespace IntellaLend.EntityDataHandler
             {
                 data = (from Et in db.EmailTracker.AsNoTracking()
                         join L in db.Loan.AsNoTracking() on Et.LoanID equals L.LoanID
+                        join U in db.Users.AsNoTracking() on Et.UserID equals U.UserID
                         select new
                         {
                             ID = Et.ID,
-                            To = Et.To,
+                            To = string.IsNullOrEmpty(U.Email) ? Et.To : U.Email,
                             SendBy = Et.SendBy,
                             Body = Et.Body,
                             Attachments = Et.Attachments,
@@ -5286,10 +5434,10 @@ namespace IntellaLend.EntityDataHandler
                                      ErrorMsg = lefs.ErrorMsg,
                                      Status = lefs.Status,
                                      ModifiedOn = lefs.ModifiedOn,
+                                     CreatedOn = lefs.CreatedOn,
                                      TrailingBatchId = amd.IDCBatchInstanceID
                                  }
-                    ).ToList().OrderBy(l => l.ModifiedOn);
-
+                    ).OrderBy(l => l.ModifiedOn).ToList();
                 data = (_losLoans.Select(item => new
                 {
                     ID = item.ID,
@@ -5302,7 +5450,8 @@ namespace IntellaLend.EntityDataHandler
                     Status = item.Status,
                     ModifiedOn = item.ModifiedOn,
                     TrailingBatchId = item.TrailingBatchId,
-                })).ToList().OrderBy(l => l.ModifiedOn);
+                    IsLatest = (_losLoans.Where(x => x.FileType == item.FileType).OrderByDescending(x => x.CreatedOn).FirstOrDefault() == item),
+                })).OrderBy(l => l.ModifiedOn).ToList();
             }
 
             return data;
@@ -5312,7 +5461,7 @@ namespace IntellaLend.EntityDataHandler
         {
             using (var db = new DBConnect(TenantSchema))
             {
-                List<LOSExportFileStaging> _LosFailedLoans = db.LOSExportFileStaging.Where(x => x.ID == ID && (x.Status == EncompassUploadConstant.UPLOAD_FAILED || x.Status == EncompassUploadConstant.UPLOAD_WAITING)).ToList();
+                List<LOSExportFileStaging> _LosFailedLoans = db.LOSExportFileStaging.AsNoTracking().Where(x => x.ID == ID && x.Status == LOSExportStatusConstant.LOS_LOAN_ERROR).ToList();
                 if (_LosFailedLoans != null && _LosFailedLoans.Count > 0)
                 {
                     foreach (LOSExportFileStaging _Loans in _LosFailedLoans)
@@ -5327,6 +5476,33 @@ namespace IntellaLend.EntityDataHandler
                 }
             }
             return false;
+        }
+
+        public bool ReExportLosDetail(Int64 LoanID, Int32 FileType, Int64 ID)
+        {
+            bool Result = false;
+            using (var db = new DBConnect(TenantSchema))
+            {
+                Loan loan = db.Loan.AsNoTracking().Where(x => x.LoanID.Equals(LoanID)).FirstOrDefault();
+                LOSExportFileStaging losExportFileStaging = db.LOSExportFileStaging.AsNoTracking().Where(x => x.ID.Equals(ID)).FirstOrDefault();
+                if (Result = (loan != null))
+                {
+                    LOSExportFileStaging _lStage = new LOSExportFileStaging()
+                    {
+                        LoanID = LoanID,
+                        FileType = FileType,
+                        Status = LOSExportStatusConstant.LOS_LOAN_STAGED,
+                        FileName = $"{loan.LoanNumber}{LOSExportFileTypeConstant.GetFileNameWord(FileType)}{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.json",
+                        FileJson = losExportFileStaging.FileJson,
+                        ErrorMsg = string.Empty,
+                        CreatedOn = DateTime.Now,
+                        ModifiedOn = DateTime.Now
+                    };
+                    db.LOSExportFileStaging.Add(_lStage);
+                    db.SaveChanges();
+                }
+            }
+            return Result;
         }
 
         public class LOSExportDetails
@@ -5403,6 +5579,8 @@ namespace IntellaLend.EntityDataHandler
             public Int64 LoanID { get; set; }
             public string LoanNumber { get; set; }
             public Int64 LoanTypeID { get; set; }
+
+            public Int64 UploadType { get; set; }
             public DateTime? ReceivedDate { get; set; }
             public Int64 Status { get; set; }
             //   public Int64 SubStatus { get; set; }

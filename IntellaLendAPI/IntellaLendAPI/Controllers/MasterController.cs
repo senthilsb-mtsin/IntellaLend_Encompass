@@ -37,8 +37,31 @@ namespace IntellaLendAPI.Controllers
                 MTSExceptionHandler.HandleException(ref ex);
             }
             Logger.WriteTraceLog($"End GetRoleMaster()");
-            return response; 
+            return response;
         }
+        [HttpPost]
+        public TokenResponse SyncDocType(CommonListRequest _master)
+        {
+            Logger.WriteTraceLog($"Start SyncDocType()");
+            Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(_master)}");
+            TokenResponse response = new TokenResponse();
+            response.ResponseMessage = new ResponseMessage();
+
+            try
+            {
+                response.token = new JWTToken().CreateJWTToken();
+                response.data = new JWTToken().CreateJWTToken(new MasterService(_master.TableSchema).SyncDocType(_master.TableSchema));
+            }
+            catch (Exception ex)
+            {
+                response.token = null;
+                response.ResponseMessage.MessageDesc = ex.Message;
+                MTSExceptionHandler.HandleException(ref ex);
+            }
+            Logger.WriteTraceLog($"End SyncDocType()");
+            return response;
+        }
+
         [HttpPost]
         public TokenResponse GetAllRoleMasterList(CommonListRequest roleMaster)
         {
@@ -94,7 +117,7 @@ namespace IntellaLendAPI.Controllers
             try
             {
                 response.token = new JWTToken().CreateJWTToken();
-                response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).AddRoleDetails(request.roletype,request.menus));
+                response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).AddRoleDetails(request.roletype, request.menus));
             }
             catch (Exception ex)
             {
@@ -103,6 +126,27 @@ namespace IntellaLendAPI.Controllers
                 MTSExceptionHandler.HandleException(ref ex);
             }
             Logger.WriteTraceLog($"End AddRoleDetails()");
+            return response;
+        }
+        [HttpPost]
+        public TokenResponse SyncRetainUpdateStagings(SyncLevelRequest request)
+        {
+            Logger.WriteTraceLog($"Start SyncRetainUpdateStagings()");
+            Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(request)}");
+            TokenResponse response = new TokenResponse();
+            response.ResponseMessage = new ResponseMessage();
+            try
+            {
+                response.token = new JWTToken().CreateJWTToken();
+                response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).SyncRetainUpdateStagings(request.LoanTypeID));
+            }
+            catch (Exception ex)
+            {
+                response.token = null;
+                response.ResponseMessage.MessageDesc = ex.Message;
+                MTSExceptionHandler.HandleException(ref ex);
+            }
+            Logger.WriteTraceLog($"End SyncRetainUpdateStagings()");
             return response;
         }
         [HttpPost]
@@ -115,9 +159,9 @@ namespace IntellaLendAPI.Controllers
             try
             {
                 response.token = new JWTToken().CreateJWTToken();
-                response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).UpdateRoleDetails(request.roletype,request.menus));
+                response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).UpdateRoleDetails(request.roletype, request.menus));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response.token = null;
                 response.ResponseMessage.MessageDesc = ex.Message;
@@ -210,11 +254,12 @@ namespace IntellaLendAPI.Controllers
             Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(loanTypeMaster)}");
             TokenResponse response = new TokenResponse();
             response.ResponseMessage = new ResponseMessage();
-            try {
+            try
+            {
                 response.token = new JWTToken().CreateJWTToken();
                 response.data = new JWTToken().CreateJWTToken(new MasterService(loanTypeMaster.TableSchema).GetLoanTypeMaster(true));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response.token = null;
                 response.ResponseMessage.MessageDesc = ex.Message;
@@ -446,7 +491,7 @@ namespace IntellaLendAPI.Controllers
                 response.token = new JWTToken().CreateJWTToken();
                 response.data = new JWTToken().CreateJWTToken(new MasterService(reviewTypeMaster.TableSchema).GetReviewTypeMaster(true));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response.token = null;
                 response.ResponseMessage.MessageDesc = ex.Message;
@@ -816,7 +861,7 @@ namespace IntellaLendAPI.Controllers
             Logger.WriteTraceLog($"End CheckDocumentDup()");
             return response;
         }
-     
+
         [HttpGet]
         public TokenResponse GetSystemDocumentTypeMaster()
         {
@@ -891,7 +936,7 @@ namespace IntellaLendAPI.Controllers
             try
             {
                 response.token = new JWTToken().CreateJWTToken();
-                response.data = new JWTToken().CreateJWTToken(new MasterService(docTypeMaster.TableSchema).GetActiveDocumentTypeMasterWithCustandLoan(docTypeMaster.CustomerID,docTypeMaster.LoanTypeID));
+                response.data = new JWTToken().CreateJWTToken(new MasterService(docTypeMaster.TableSchema).GetActiveDocumentTypeMasterWithCustandLoan(docTypeMaster.CustomerID, docTypeMaster.LoanTypeID));
             }
             catch (Exception ex)
             {
@@ -948,8 +993,8 @@ namespace IntellaLendAPI.Controllers
             return response;
         }
 
-        
-        
+
+
         [HttpPost]
         public TokenResponse AddNewDocumentType(AddDocumentTypeRequest request)
         {
@@ -960,7 +1005,7 @@ namespace IntellaLendAPI.Controllers
             try
             {
                 response.token = new JWTToken().CreateJWTToken();
-                response.data = new JWTToken().CreateJWTToken(new MasterService().AddDocumentType(request.DocumentTypeName, request.DocumentDisplayName,Convert.ToInt32(request.DocumentLevel), Convert.ToInt32(request.ParkingSpotID)));
+                response.data = new JWTToken().CreateJWTToken(new MasterService().AddDocumentType(request.DocumentTypeName, request.DocumentDisplayName, Convert.ToInt32(request.DocumentLevel), Convert.ToInt32(request.ParkingSpotID)));
             }
             catch (Exception ex)
             {
@@ -982,7 +1027,7 @@ namespace IntellaLendAPI.Controllers
             try
             {
                 response.token = new JWTToken().CreateJWTToken();
-                response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).UpdateDocumentType(request.documentType,request.ParkingSpotID));
+                response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).UpdateDocumentType(request.documentType, request.ParkingSpotID));
             }
             catch (Exception ex)
             {
@@ -1004,7 +1049,7 @@ namespace IntellaLendAPI.Controllers
             try
             {
                 response.token = new JWTToken().CreateJWTToken();
-                response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).UpdateManagerDocumentType(request.documentType,request.CustomerID,request.LoanTypeID));
+                response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).UpdateManagerDocumentType(request.documentType, request.CustomerID, request.LoanTypeID));
             }
             catch (Exception ex)
             {
@@ -1037,7 +1082,7 @@ namespace IntellaLendAPI.Controllers
             Logger.WriteTraceLog($"End AddManagerDocumentType()");
             return response;
         }
-        
+
 
         [HttpPost]
         public TokenResponse GetReviewPriorityMaster(CommonListRequest customerMaster)
@@ -1087,7 +1132,7 @@ namespace IntellaLendAPI.Controllers
             }
             Logger.WriteTraceLog($"End UpdateDocumentField()");
             return response;
-        }        
+        }
 
         [HttpPost]
         public TokenResponse GetUserMasters(CommonListRequest clr)
@@ -1139,7 +1184,7 @@ namespace IntellaLendAPI.Controllers
 
         #region KPI User Role Configuration
         [HttpPost]
-        public TokenResponse GetUserRoleList (RoleListRequest request)
+        public TokenResponse GetUserRoleList(RoleListRequest request)
         {
             Logger.WriteTraceLog($"Start GetUserRoleList()");
             Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(request)}");
@@ -1150,7 +1195,7 @@ namespace IntellaLendAPI.Controllers
                 response.token = new JWTToken().CreateJWTToken();
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).GetUserRoleList(request.RoleID));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response.token = null;
                 response.ResponseMessage.MessageDesc = ex.Message;
@@ -1160,7 +1205,7 @@ namespace IntellaLendAPI.Controllers
             return response;
         }
         [HttpPost]
-      public TokenResponse  SaveKpiConfigurationDetails (AddKpiGoalConfig request)
+        public TokenResponse SaveKpiConfigurationDetails(AddKpiGoalConfig request)
         {
             Logger.WriteTraceLog($"Start SaveKpiConfigurationDetails()");
             Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(request)}");
@@ -1169,9 +1214,9 @@ namespace IntellaLendAPI.Controllers
             try
             {
                 response.token = new JWTToken().CreateJWTToken();
-                response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).SaveKpiConfigurationDetails(request.KpiUserGroupConfig, request.KpiGoalConfig,request.IsExistNewUserGrp));
+                response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).SaveKpiConfigurationDetails(request.KpiUserGroupConfig, request.KpiGoalConfig, request.IsExistNewUserGrp));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response.token = null;
                 response.ResponseMessage.MessageDesc = ex.Message;
@@ -1211,7 +1256,7 @@ namespace IntellaLendAPI.Controllers
             try
             {
                 response.token = new JWTToken().CreateJWTToken();
-                response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).UpdateKPIConfigStagingData(request.ID,request.GroupID, request.ConfigType, request.Goal, request.Status));
+                response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).UpdateKPIConfigStagingData(request.ID, request.GroupID, request.ConfigType, request.Goal, request.Status));
             }
             catch (Exception ex)
             {
@@ -1243,7 +1288,7 @@ namespace IntellaLendAPI.Controllers
             Logger.WriteTraceLog($"End GetKPIGoalConfigStagingDetails()");
             return response;
         }
-        
+
         #endregion
 
 
@@ -1279,7 +1324,7 @@ namespace IntellaLendAPI.Controllers
             try
             {
                 response.token = new JWTToken().CreateJWTToken();
-                response.data = new JWTToken().CreateJWTToken(new MasterService(requset.TableSchema).UpdateParkingSpot(requset.ParkingSpotName, requset.Active,requset.ParkingSpotID));
+                response.data = new JWTToken().CreateJWTToken(new MasterService(requset.TableSchema).UpdateParkingSpot(requset.ParkingSpotName, requset.Active, requset.ParkingSpotID));
             }
             catch (Exception ex)
             {

@@ -1,7 +1,10 @@
-﻿using IntellaLend.Constance;
+﻿using IntellaLend.ADServices;
+using IntellaLend.Constance;
 using IntellaLend.Model;
+using MTSEntBlocks.LoggerBlock;
 using MTSEntityDataAccess;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 
@@ -26,33 +29,41 @@ namespace IntellaLend.EntityDataHandler
 
         #region Public Methods        
 
-        public object getRoleDetails(Int64 roleID, Int64 UserID)
+        public object getRoleDetails(Int64 roleID, Int64 UserID, bool ADLogin = false)
         {
             object data;
             using (var db = new DBConnect(TableSchema))
             {
+                List<TempUserRoleMapping> UserRoleMapping = new List<TempUserRoleMapping>();
+                if (!ADLogin)
+                    UserRoleMapping = db.UserRoleMapping.AsNoTracking().Select(x => new TempUserRoleMapping() { RoleID = x.RoleID, UserID = x.UserID }).ToList();
+                else
+                    UserRoleMapping = new ADService(TableSchema).GetUserGroup(UserID).Select(x => new TempUserRoleMapping() { RoleID = x.RoleID, UserID = x.UserID }).ToList();
 
-                var role = (from r in db.Roles.AsNoTracking()
-                            join ur in db.UserRoleMapping.AsNoTracking() on r.RoleID equals ur.RoleID
+                Logger.WriteTraceLog($"UserRoleMapping : {UserRoleMapping.Count}");
+
+                var role = (from r in db.Roles.AsNoTracking().AsEnumerable()
+                            join ur in UserRoleMapping on r.RoleID equals ur.RoleID
                             where ur.UserID == UserID && r.RoleID == roleID
                             select r).FirstOrDefault();
 
                 if (role != null)
                 {
-                    var startPage = (from r in db.Roles.AsNoTracking()
-                                     join ur in db.UserRoleMapping.AsNoTracking() on r.RoleID equals ur.RoleID
+                    var startPage = (from r in db.Roles.AsNoTracking().AsEnumerable()
+                                     join ur in UserRoleMapping on r.RoleID equals ur.RoleID
                                      where ur.UserID == UserID && r.RoleID == roleID
                                      select new { r.StartPage }).FirstOrDefault().StartPage;
 
-                    var roleDetails = (from r in db.Roles.AsNoTracking()
-                                       join ur in db.UserRoleMapping.AsNoTracking() on r.RoleID equals ur.RoleID
+                    var roleDetails = (from r in db.Roles.AsNoTracking().AsEnumerable()
+                                       join ur in UserRoleMapping on r.RoleID equals ur.RoleID
                                        where ur.UserID == UserID && r.RoleID == roleID
                                        select r).FirstOrDefault();
 
-                    var roleURLs = (from r in db.Roles.AsNoTracking()
-                                    join ur in db.UserRoleMapping.AsNoTracking() on r.RoleID equals ur.RoleID
+                    var roleURLs = (from r in db.Roles.AsNoTracking().AsEnumerable()
+                                    join ur in UserRoleMapping on r.RoleID equals ur.RoleID
                                     join au in db.AccessURLs.AsNoTracking() on r.RoleID equals au.RoleID
-                                    where ur.UserID == UserID && r.RoleID == roleID
+                                    where (ur.UserID == UserID && r.RoleID == roleID
+                                        && !(ADLogin && au.URL.Contains("View\\User")))
                                     select new
                                     {
                                         r.RoleID,
@@ -65,15 +76,16 @@ namespace IntellaLend.EntityDataHandler
                                                           x.RoleID,
                                                           x.URL
                                                       }).ToList();
-                    var roleMenus = (from rm in db.RoleMenuMapping.AsNoTracking()
-                                     join ur in db.UserRoleMapping.AsNoTracking() on rm.RoleID equals ur.RoleID
-                                     join m in db.Menus.AsNoTracking() on rm.MenuID equals m.MenuID
-                                     where ur.UserID == UserID && rm.RoleID == roleID
+                    var roleMenus = (from rm in db.RoleMenuMapping.AsNoTracking().AsEnumerable()
+                                     join ur in UserRoleMapping on rm.RoleID equals ur.RoleID
+                                     join m in db.Menus.AsNoTracking().AsEnumerable() on rm.MenuID equals m.MenuID
+                                     where (ur.UserID == UserID && rm.RoleID == roleID
+                                        && !(ADLogin && m.MenuTitle.Equals("User Administration")))
                                      orderby rm.MenuOrder, m.MenuGroupID
                                      select new { m.MenuID, m.MenuTitle, m.Icon, m.RouteLink, rm.MenuOrder, m.MenuGroupID, m.IsComponent }).ToList();
 
                     var menuGroup = (from rm in roleMenus
-                                     join mg in db.MenuGroupMaster.AsNoTracking() on rm.MenuGroupID equals mg.MenuGroupID into mgrm
+                                     join mg in db.MenuGroupMaster.AsNoTracking().AsEnumerable() on rm.MenuGroupID equals mg.MenuGroupID into mgrm
                                      from rmmg in mgrm.DefaultIfEmpty()
                                      group rmmg by new { MenuGroupID = rmmg?.MenuGroupID ?? 0, MenuGroupTitle = rmmg?.MenuGroupTitle ?? String.Empty, MenuGroupIcon = rmmg?.MenuGroupIcon ?? String.Empty } into g
                                      select new
@@ -326,5 +338,11 @@ namespace IntellaLend.EntityDataHandler
         }
         #endregion
 
+    }
+
+    class TempUserRoleMapping
+    {
+        public Int64 RoleID { get; set; }
+        public Int64 UserID { get; set; }
     }
 }

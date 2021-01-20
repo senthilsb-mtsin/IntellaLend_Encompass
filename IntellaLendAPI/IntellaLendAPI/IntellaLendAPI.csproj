@@ -26,6 +26,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -312,6 +313,7 @@
     <Compile Include="Controllers\IntellaLendController.cs" />
     <Compile Include="Controllers\LoanController.cs" />
     <Compile Include="Controllers\EphesoftInterfaceController.cs" />
+    <Compile Include="Controllers\ADController.cs" />
     <Compile Include="Controllers\LOSExportController.cs" />
     <Compile Include="Controllers\MappingController.cs" />
     <Compile Include="Controllers\MasterController.cs" />
@@ -476,6 +478,7 @@
     <Content Include="Views\Email\RuleFindingsEmail.cshtml" />
     <Content Include="Views\Image\AuditReport.cshtml" />
     <Content Include="Views\LOSExport\LOSExportJSONStructure.cshtml" />
+    <Content Include="Views\Email\MASJsonEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -532,6 +535,10 @@
     <ProjectReference Include="..\..\IntellaLendBlocks\UtilsBlock\UtilsBlock.csproj">
       <Project>{60C51B78-D847-4463-95FD-123D2E8FE1DA}</Project>
       <Name>UtilsBlock</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IntellaLend.ADServices\IntellaLend.ADServices.csproj">
+      <Project>{c7bbac2c-afe4-48c6-9f4a-66a0546da803}</Project>
+      <Name>IntellaLend.ADServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\IntellaLend.ExceptionHandler\IntellaLend.ExceptionHandler.csproj">
       <Project>{2c2f1e69-1bdf-498f-82c7-c8bcc6ec5f21}</Project>

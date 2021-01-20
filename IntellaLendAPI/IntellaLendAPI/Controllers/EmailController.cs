@@ -1,7 +1,10 @@
 ﻿using IntellaLend.CommonServices;
+using IntellaLend.CommonServices.EmailServices;
+using IntellaLend.Model;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Web.Mvc;
 
 namespace IntellaLendAPI.Controllers
@@ -53,6 +56,17 @@ namespace IntellaLendAPI.Controllers
             }
            
             //ViewBag.URL = emailParams[3];
+            return View();
+        }
+
+        public ActionResult MASJsonEmail()
+        {
+            string[] emailparams = Request.QueryString["ID"].Split(',');
+            EmailService emailService = new EmailService(emailparams[0]);
+            LOSImportStaging stagingDetail = emailService.GetImportStagingDetails(Convert.ToInt64(emailparams[1]));
+            string fileName = Path.GetFileName(Path.ChangeExtension(stagingDetail.FileName,"json"));
+            ViewBag.FileName = fileName;
+            ViewBag.ErrorMsg = stagingDetail.ErrorMsg;
             return View();
         }
     }

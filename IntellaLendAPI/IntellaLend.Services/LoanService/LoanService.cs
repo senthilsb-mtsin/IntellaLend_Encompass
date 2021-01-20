@@ -3,6 +3,7 @@ using IntellaLend.Constance;
 using IntellaLend.EntityDataHandler;
 using IntellaLend.Model;
 using IntellaLend.RuleEngine;
+using MTSEntBlocks.UtilsBlock;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -107,6 +108,10 @@ namespace IntellaLend.CommonServices
         public object GetRetentionLoans(DateTime fromDate, DateTime toDate)
         {
             return new LoanDataAccess(TenantSchema).GetRetentionLoans(fromDate, toDate);
+        }
+        public List<FannieMaeFields> GetFannieMaeFields(Int64 LoanID)
+        {
+            return new LoanDataAccess(TenantSchema).GetFannieMaeFields(LoanID);
         }
 
         public object GetRetentionLoans(DateTime AuditMonthYear)
@@ -483,6 +488,11 @@ namespace IntellaLend.CommonServices
             return new LoanDataAccess(TenantSchema).UpdateEphesoftBatchDetail(loanID, batchid, docID, batchclassid, batchclassname);
         }
 
+        public string GetDocumentStackingOrder(Int64 loanID, Int64 configId)
+        {
+            return new LoanDataAccess(TenantSchema).GetDocumentStackingOrder(loanID, configId);
+        }
+
         public bool UpdateEphesoftReviewedDate(Int64 loanID, string batchid)
         {
             return new LoanDataAccess(TenantSchema).UpdateEphesoftReviewedDate(loanID, batchid);
@@ -652,6 +662,21 @@ namespace IntellaLend.CommonServices
         {
             return new LoanDataAccess(TenantSchema).GetEmailTrackerDetails(emailtrack.FromDate, emailtrack.ToDate);
         }
+
+        public object GetLoan(string _loanGUID)
+        {
+            try
+            {
+
+                _loanGUID = CommonUtils.EnDecrypt(_loanGUID, true);
+                return new LoanDataAccess(TenantSchema).GetLoanInfo(_loanGUID);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
 
         public LoanAuditReportPDF GetLoanAuditReportDeatils(Int64 LoanID)
         {
@@ -857,6 +882,10 @@ namespace IntellaLend.CommonServices
         public object SearchLosExportMonitorDetails(Int64 CustomerId, Exportmodel exportmodel, Int64 LoanTypeId, Int64 ServiceTypeId)
         {
             return new LoanDataAccess(TenantSchema).SearchLosExportMonitorDetails(CustomerId, exportmodel.FromDate, exportmodel.ToDate, LoanTypeId, ServiceTypeId);
+        }
+        public object ReExportLosDetail(Int64 LoanID, Int32 FileType, Int64 ID)
+        {
+            return new LoanDataAccess(TenantSchema).ReExportLosDetail(LoanID, FileType, ID);
         }
     }
 }

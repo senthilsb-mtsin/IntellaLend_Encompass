@@ -2,7 +2,6 @@
 using IntellaLend.Model;
 using MTSEntBlocks.LoggerBlock;
 using MTSEntBlocks.UtilsBlock;
-using Newtonsoft.Json;
 using Rotativa;
 using Rotativa.Options;
 using System;

@@ -102,6 +102,51 @@ namespace IntellaLendAPI.Controllers
             Logger.WriteTraceLog($"End SaveCustReviewLoanMapping()");
             return response;
         }
+
+        [HttpPost]
+        public TokenResponse GetCustLoantypeMapping(RequestCustLoanMapping req)
+        {
+            Logger.WriteTraceLog($"Start GetCustLoantypeMapping()");
+            Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(req)}");
+            TokenResponse response = new TokenResponse();
+            response.ResponseMessage = new ResponseMessage();
+            try
+            {
+                response.token = new JWTToken().CreateJWTToken();
+                response.data = new JWTToken().CreateJWTToken(new MappingService(req.TableSchema).GetCustLoantypeMapping(req.CustomerID));
+            }
+            catch (Exception exc)
+            {
+                response.token = null;
+                response.ResponseMessage.MessageDesc = exc.Message;
+                MTSExceptionHandler.HandleException(ref exc);
+            }
+            Logger.WriteTraceLog($"End GetCustLoantypeMapping()");
+            return response;
+        }
+
+        [HttpPost]
+        public TokenResponse SaveCustLoanTypeMapping(CustLoantypeMappingUpdateRequest req)
+        {
+            Logger.WriteTraceLog($"Start SaveCustLoanTypeMapping()");
+            Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(req)}");
+            TokenResponse response = new TokenResponse();
+            response.ResponseMessage = new ResponseMessage();
+            try
+            {
+                response.token = new JWTToken().CreateJWTToken();
+                response.data = new JWTToken().CreateJWTToken(new MappingService(req.TableSchema).SaveCustLoantypeMapping(req.lsCustLoanTypeMappings));
+            }
+            catch (Exception exc)
+            {
+                response.token = null;
+                response.ResponseMessage.MessageDesc = exc.Message;
+                MTSExceptionHandler.HandleException(ref exc);
+            }
+            Logger.WriteTraceLog($"End SaveCustLoanTypeMapping()");
+            return response;
+        }
+
         [HttpPost]
         public TokenResponse SaveCustLoanUploadPath(RequestCustLoanReviewCheckListMapping req)
         {
@@ -608,6 +653,51 @@ namespace IntellaLendAPI.Controllers
             Logger.WriteTraceLog($"End RemoveCustConfigUploadPath()");
             return response;
         }
+
+        [HttpPost]
+        public TokenResponse GetReviewLoanLenderMapped(RequestReviewLoanLenderMapping req)
+        {
+            Logger.WriteTraceLog($"Start GetReviewLoanLenderMapped()");
+            Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(req)}");
+            TokenResponse response = new TokenResponse();
+            response.ResponseMessage = new ResponseMessage();
+            try
+            {
+                response.token = new JWTToken().CreateJWTToken();
+                response.data = new JWTToken().CreateJWTToken(new MappingService(req.TableSchema).GetReviewLoanLenderMapped(req.ReviewTypeID,req.LoanTypeID));
+            }
+            catch (Exception exc)
+            {
+                response.token = null;
+                response.ResponseMessage.MessageDesc = exc.Message;
+                MTSExceptionHandler.HandleException(ref exc);
+            }
+            Logger.WriteTraceLog($"End GetReviewLoanLenderMapped()");
+            return response;
+        }
+
+        [HttpPost]
+        public TokenResponse SaveReviewLoanLenderMapping(RequestSaveReviewLoanLenderMapping req)
+        {
+            Logger.WriteTraceLog($"Start SaveReviewLoanLenderMapping()");
+            Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(req)}");
+            TokenResponse response = new TokenResponse();
+            response.ResponseMessage = new ResponseMessage();
+            try
+            {
+                response.token = new JWTToken().CreateJWTToken();
+                response.data = new JWTToken().CreateJWTToken(new MappingService(req.TableSchema).SaveReviewLoanLenderMapping(req.ReviewTypeID, req.LoanTypeID,req.AllLendersIDs,req.AssignedLendersIDs,req.IsAdd));
+            }
+            catch (Exception exc)
+            {
+                response.token = null;
+                response.ResponseMessage.MessageDesc = exc.Message;
+                MTSExceptionHandler.HandleException(ref exc);
+            }
+            Logger.WriteTraceLog($"End SaveReviewLoanLenderMapping()");
+            return response;
+        }
+
 
     }
 }

@@ -1,0 +1,32 @@
+﻿@{
+    Layout = null;
+}
+<email>
+    <To>mohan.s@mtsin.com</To>
+    <Subject>MAS Json File Failed</Subject>
+    <From>no-reply@IntellaLend.com</From>
+    <Cc />
+    <BCc />
+    <Body>
+        <![CDATA[
+        <div>
+            <p>Hello Mohanraj, </p>
+            <p>MAS Json file failed to Import </p>
+
+            <br />
+            <br />
+            <br />
+            <br />
+            <br /><a style="color:red">@ViewBag.FileName</a>
+
+            <p>
+                @ViewBag.ErrorMsg
+            </p>
+            <br />
+            <br /> IntellaLend Team  <br />
+
+        </div>
+        <footer> <p>Note: This is an auto generated email. Replies to this email is not monitored.</p></footer>
+        ]]>
+    </Body>
+</email>

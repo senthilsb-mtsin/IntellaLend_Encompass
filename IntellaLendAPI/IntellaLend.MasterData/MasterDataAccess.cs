@@ -1,5 +1,7 @@
 ﻿using IntellaLend.Constance;
 using IntellaLend.Model;
+using MTSEntBlocks.ExceptionBlock.Handlers;
+using MTSEntBlocks.LoggerBlock;
 using MTSEntityDataAccess;
 using System;
 using System.Collections.Generic;
@@ -44,20 +46,20 @@ namespace IntellaLend.EntityDataHandler
             using (var db = new DBConnect(TenantSchema))
             {
                 ADRoles = (from r in db.Roles
-                         join adg in db.ADGroupMasters on r.ADGroupID equals adg.ADGroupID into lsjoin
-                         from adgm in lsjoin.DefaultIfEmpty()
-                         select new RoleMasterADGroup
-                         {
-                             RoleID = r.RoleID,
-                             RoleName = r.RoleName,
-                             StartPage = r.StartPage,
-                             AuthorityLevel = r.AuthorityLevel,
-                             IncludeKpi = r.IncludeKpi,
-                             Active = r.Active,
-                             ExternalRole = r.ExternalRole,
-                             ADGroupID = adgm.ADGroupID == null ? 0 : adgm.ADGroupID,
-                             ADGroupName = adgm.ADGroupName ?? string.Empty,
-                         }).ToList();
+                           join adg in db.ADGroupMasters on r.ADGroupID equals adg.ADGroupID into lsjoin
+                           from adgm in lsjoin.DefaultIfEmpty()
+                           select new RoleMasterADGroup
+                           {
+                               RoleID = r.RoleID,
+                               RoleName = r.RoleName,
+                               StartPage = r.StartPage,
+                               AuthorityLevel = r.AuthorityLevel,
+                               IncludeKpi = r.IncludeKpi,
+                               Active = r.Active,
+                               ExternalRole = r.ExternalRole,
+                               ADGroupID = adgm.ADGroupID == null ? 0 : adgm.ADGroupID,
+                               ADGroupName = adgm.ADGroupName ?? string.Empty,
+                           }).ToList();
             }
             return ADRoles;
         }
@@ -65,7 +67,7 @@ namespace IntellaLend.EntityDataHandler
         {
 
             List<ADGroupMasters> ADGroupMaster = null;
-            using (var db = new DBConnect(SystemSchema))
+            using (var db = new DBConnect(TenantSchema))
             {
                 ADGroupMaster = db.ADGroupMasters.AsNoTracking().ToList();
             }
@@ -100,7 +102,26 @@ namespace IntellaLend.EntityDataHandler
             }
             return lst;
         }
+        public bool SyncDocType(string Schema)
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
+                try
+                {
+                    Logger.WriteTraceLog($"{Schema} system Doctype sync - Processing");
+                    db.Database.ExecuteSqlCommand($"EXEC {Schema}.SYNCDOCTYPES");
+                    Logger.WriteTraceLog($"{Schema} system Doctype sync  Completed");
 
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    MTSExceptionHandler.HandleException(ref ex);
+                    throw ex;
+                }
+                return false;
+            }
+        }
         public List<SecurityQuestionMasters> GetSecurityQuestionList()
         {
             List<SecurityQuestionMasters> SecurityQuestionLs = null;
@@ -310,7 +331,6 @@ namespace IntellaLend.EntityDataHandler
                 }
             }
         }
-
         public List<User> GetUserMasters()
         {
             using (var db = new DBConnect(TenantSchema))
@@ -318,6 +338,7 @@ namespace IntellaLend.EntityDataHandler
                 return db.Users.AsNoTracking().Where(us => us.Active == true).ToList();
             }
         }
+
 
         /*
       public Int64 AddReviewTypeToSystemSchema(DBConnect db, ReviewTypeMaster reviewtype)
@@ -664,7 +685,7 @@ namespace IntellaLend.EntityDataHandler
                             DocumentTypeID = Field.DocumentTypeID,
                             Name = Field.Name,
                             DisplayName = Field.DisplayName,
-                            Active = true,
+                            Active = Field.Active,
                             DocOrderByField = Field.OrderBy ? "Desc" : null,
                             CreatedOn = DateTime.Now,
                             ModifiedOn = DateTime.Now
@@ -841,6 +862,33 @@ namespace IntellaLend.EntityDataHandler
 
         #endregion
 
+        #region AD Group 
+
+        public object AddADGroups(List<string> _ADGroups)
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
+                List<ADGroupMasters> _groups = db.ADGroupMasters.AsNoTracking().ToList();
+
+                List<string> newGroups = _ADGroups.Where(x => !_groups.Any(g => g.ADGroupName == x)).ToList();
+
+                foreach (var item in newGroups)
+                {
+                    db.ADGroupMasters.Add(new ADGroupMasters()
+                    {
+                        ADGroupName = item,
+                        CreatedOn = DateTime.Now,
+                        ModifiedOn = DateTime.Now
+                    });
+
+                    db.SaveChanges();
+                }
+
+                return new { AvailableGroup = _groups.Select(x => x.ADGroupName).ToList(), NewGroups = newGroups };
+            }
+        }
+
+        #endregion
 
         #region Encompass Parking Spot 
 

@@ -81,7 +81,8 @@ namespace IntellaLend.EntityDataHandler
                                  DocumentType = rmGroup.DocumentType == null ? String.Empty : rmGroup.DocumentType,
                                  UserID = cl.UserID,
                                  LOSFieldDescription = cl.LOSFieldDescription,
-                                 LOSValue = string.IsNullOrEmpty(cl.LOSValueToEvalRule) ? string.Empty : cl.LOSValueToEvalRule,
+                                 LOSValueToEvalRule = string.IsNullOrEmpty(cl.LOSValueToEvalRule) ? string.Empty : cl.LOSValueToEvalRule,
+                                 LOSFieldToEvalRule = cl.LOSFieldToEvalRule,
                                  RuleType = cl.Rule_Type,
                                  LosIsMatched = cl.LosIsMatched
                              }).ToList();
@@ -110,7 +111,8 @@ namespace IntellaLend.EntityDataHandler
                             LoanType = string.Empty,
                             CustomerName = string.Empty,
                             LOSFieldDescription = d.LOSFieldDescription,
-                            LOSValue = d.LOSValue,
+                            LOSValueToEvalRule = d.LOSValueToEvalRule,
+                            LOSFieldToEvalRule = d.LOSFieldToEvalRule,
                             RuleType = d.RuleType,
                             LosIsMatched = d.LosIsMatched,
                         }).ToList();

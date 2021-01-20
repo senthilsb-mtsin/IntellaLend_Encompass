@@ -26,7 +26,7 @@ namespace IntellaLend_API.Controllers
                 string Hash = string.Empty;
                 //response.token = new JWTToken().CreateJWTToken();
                 logOnService _logOn = new logOnService(userForm.TableSchema);
-                response.data = new JWTToken().CreateJWTToken(_logOn.GetLoginUser(userForm.UserName, userForm.Password, out Hash));
+                response.data = new JWTToken().CreateJWTToken(_logOn.GetLoginUser(userForm.UserName, userForm.Password, userForm.ADLogin, out Hash));
                 response.token = new JWTToken().CreateJWTToken(Hash, userForm.TableSchema);
             }
             catch (Exception ex)

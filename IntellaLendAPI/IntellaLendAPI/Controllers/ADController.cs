@@ -1,4 +1,4 @@
-﻿using IntellaLend.CommonServices;
+﻿using IntellaLend.ADServices;
 using IntellaLendAPI.Models;
 using IntellaLendJWTToken;
 using MTSEntBlocks.ExceptionBlock.Handlers;
@@ -8,40 +8,16 @@ using System;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
-
 namespace IntellaLendAPI.Controllers
 {
     [Authorize]
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class MenuController : ApiController
+    public class ADController : ApiController
     {
         [HttpPost]
-        public TokenResponse GetMenuList(RoleListRequest roleName)
+        public TokenResponse GetADGroups(GetADGroupsRequest request)
         {
-            Logger.WriteTraceLog($"Start GetMenuList()");
-            Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(roleName)}");
-            TokenResponse response = new TokenResponse();
-            response.ResponseMessage = new ResponseMessage();
-
-            try
-            {
-                logOnService _logOn = new logOnService(roleName.TableSchema);
-                response.token = new JWTToken().CreateJWTToken();
-                response.data = new JWTToken().CreateJWTToken(_logOn.getRoleDetails(roleName.RoleID, roleName.UserID, roleName.ADLogin));
-            }
-            catch (Exception ex)
-            {
-                response.token = null;
-                response.ResponseMessage.MessageDesc = ex.Message;
-                MTSExceptionHandler.HandleException(ref ex);
-            }
-            Logger.WriteTraceLog($"End GetMenuList()");
-            return response;
-        }
-        [HttpPost]
-        public TokenResponse GetAllMenuList(MenuListRequest request)
-        {
-            Logger.WriteTraceLog($"Start GetAllMenuList()");
+            Logger.WriteTraceLog($"Start GetADGroups()");
             Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(request)}");
             TokenResponse response = new TokenResponse();
             response.ResponseMessage = new ResponseMessage();
@@ -49,7 +25,7 @@ namespace IntellaLendAPI.Controllers
             try
             {
                 response.token = new JWTToken().CreateJWTToken();
-                response.data = new JWTToken().CreateJWTToken(new logOnService(request.TableSchema).GetMenuList());
+                response.data = new JWTToken().CreateJWTToken(new ADService(request.TableSchema).GetADGroups(request.LDAPUrl));
             }
             catch (Exception ex)
             {
@@ -57,21 +33,21 @@ namespace IntellaLendAPI.Controllers
                 response.ResponseMessage.MessageDesc = ex.Message;
                 MTSExceptionHandler.HandleException(ref ex);
             }
-            Logger.WriteTraceLog($"End GetAllMenuList()");
+            Logger.WriteTraceLog($"End GetADGroups()");
             return response;
         }
+
         [HttpPost]
-        public TokenResponse GetRoleMenuAccessList(RoleMenuAccessList request)
+        public TokenResponse GetADConfig(GetAppConfig req)
         {
-            Logger.WriteTraceLog($"Start GetRoleMenuAccessList()");
-            Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(request)}");
+            Logger.WriteTraceLog($"Start GetADConfig()");
             TokenResponse response = new TokenResponse();
             response.ResponseMessage = new ResponseMessage();
 
             try
             {
                 response.token = new JWTToken().CreateJWTToken();
-                response.data = new JWTToken().CreateJWTToken(new logOnService(request.TableSchema).GetMenuAccessList(request.RoleID, request.IsMappedMenuView));
+                response.data = new JWTToken().CreateJWTToken(new ADService(req.TableSchema).GetADConfig());
             }
             catch (Exception ex)
             {
@@ -79,21 +55,22 @@ namespace IntellaLendAPI.Controllers
                 response.ResponseMessage.MessageDesc = ex.Message;
                 MTSExceptionHandler.HandleException(ref ex);
             }
-            Logger.WriteTraceLog($"End GetRoleMenuAccessList()");
+            Logger.WriteTraceLog($"End GetADConfig()");
             return response;
         }
+
+
         [HttpPost]
-        public TokenResponse GetRoleMenuDetails(RoleMenuActiveList request)
+        public TokenResponse SaveADConfig(RequestSaveADConfig req)
         {
-            Logger.WriteTraceLog($"Start GetRoleMenuDetails()");
-            Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(request)}");
+            Logger.WriteTraceLog($"Start SaveADConfig()");
             TokenResponse response = new TokenResponse();
             response.ResponseMessage = new ResponseMessage();
 
             try
             {
                 response.token = new JWTToken().CreateJWTToken();
-                response.data = new JWTToken().CreateJWTToken(new logOnService(request.TableSchema).GetRoleMenuActive(request.RoleID, request.menus));
+                response.data = new JWTToken().CreateJWTToken(new ADService(req.TableSchema).SaveADConfig(req.ADDOMAIN,req.LDAPURL));
             }
             catch (Exception ex)
             {
@@ -101,7 +78,29 @@ namespace IntellaLendAPI.Controllers
                 response.ResponseMessage.MessageDesc = ex.Message;
                 MTSExceptionHandler.HandleException(ref ex);
             }
-            Logger.WriteTraceLog($"End GetRoleMenuDetails()");
+            Logger.WriteTraceLog($"End SaveADConfig()");
+            return response;
+        }
+
+        [HttpPost]
+        public TokenResponse CheckADGroupAssignedForRole(ADGroupAssignedForRoleRequest req)
+        {
+            Logger.WriteTraceLog($"Start CheckADGroupAssignedForRole()");
+            TokenResponse response = new TokenResponse();
+            response.ResponseMessage = new ResponseMessage();
+
+            try
+            {
+                response.token = new JWTToken().CreateJWTToken();
+                response.data = new JWTToken().CreateJWTToken(new ADService(req.TableSchema).CheckADGroupAssignedForRole(req.ADGroupID, req.RoleID));
+            }
+            catch (Exception ex)
+            {
+                response.token = null;
+                response.ResponseMessage.MessageDesc = ex.Message;
+                MTSExceptionHandler.HandleException(ref ex);
+            }
+            Logger.WriteTraceLog($"End CheckADGroupAssignedForRole()");
             return response;
         }
     }

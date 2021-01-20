@@ -38,6 +38,24 @@ namespace IntellaLend_API.Controllers
             return response;
         }
         #region MAS
+        [HttpPost]
+        public StackingOrderDocumentsResponse GetDocumentStackingOrder(GetDocumentStackingOrderRequest request)
+        {
+            Logger.WriteTraceLog($"Start GetDocumentStackingOrder()");
+            StackingOrderDocumentsResponse response = new StackingOrderDocumentsResponse();
+            try
+            {
+                var loanService = new LoanService(request.TableSchema);
+                response.stackingOrderDocuments = loanService.GetDocumentStackingOrder(request.LoanID, request.ConfigID);
+            }
+            catch (Exception ex)
+            {
+                response.ResponseMessage.MessageDesc = ex.Message;
+                MTSExceptionHandler.HandleException(ref ex);
+            }
+            Logger.WriteTraceLog($"End GetDocumentStackingOrder()");
+            return response;
+        }
 
         [HttpPost]
         public IntellaLendResponse UpdateLOSExportFileStaging(MASUpdateLOSExportFileStagingRequest request)

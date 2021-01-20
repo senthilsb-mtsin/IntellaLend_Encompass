@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AF898D76-D4F3-4129-B3B0-90EE3CA9FB57}</ProjectGuid>
+    <ProjectGuid>{C7BBAC2C-AFE4-48C6-9F4A-66A0546DA803}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IntellaLend.LogInData</RootNamespace>
-    <AssemblyName>IntellaLend.LogInData</AssemblyName>
+    <RootNamespace>IntellaLend.ADServices</RootNamespace>
+    <AssemblyName>IntellaLend.ADServices</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,7 +22,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
+    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -31,21 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.Protocols" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,7 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="logOnDataAccess.cs" />
+    <Compile Include="ADService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -63,36 +51,34 @@
       <Name>IntellaLend.Constance</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\IntellaLendBlocks\IntellaLend.Model\IntellaLend.Model.csproj">
-      <Project>{1153d611-e67c-4a1a-be68-ee2aeea2df8e}</Project>
+      <Project>{1153D611-E67C-4A1A-BE68-EE2AEEA2DF8E}</Project>
       <Name>IntellaLend.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\IntellaLendBlocks\MTSEntBlocks.ExceptionBlock\MTSEntBlocks.ExceptionBlock.csproj">
+      <Project>{BF640616-4953-47C5-8BEC-613A645CFDD1}</Project>
+      <Name>MTSEntBlocks.ExceptionBlock</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\IntellaLendBlocks\MTSEntBlocks.LoggerBlock\MTSEntBlocks.LoggerBlock.csproj">
       <Project>{167D2B19-F361-4093-8E1F-61D5778F5C5D}</Project>
       <Name>MTSEntBlocks.LoggerBlock</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\IntellaLendBlocks\MTSEntityDataAccess\MTSEntityDataAccess.csproj">
-      <Project>{9980d561-76c0-486f-9744-5d1bf6512b9d}</Project>
-      <Name>MTSEntityDataAccess</Name>
+    <ProjectReference Include="..\IntellaLend.CustomerData\IntellaLend.CustomerData.csproj">
+      <Project>{7b3e81e5-c4cb-471c-9982-7ebd5b34f749}</Project>
+      <Name>IntellaLend.CustomerData</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IntellaLend.ADServices\IntellaLend.ADServices.csproj">
-      <Project>{C7BBAC2C-AFE4-48C6-9F4A-66A0546DA803}</Project>
-      <Name>IntellaLend.ADServices</Name>
+    <ProjectReference Include="..\IntellaLend.MasterData\IntellaLend.MasterData.csproj">
+      <Project>{86DF93CF-B3F1-4D98-B9E7-CBCC9ADEE282}</Project>
+      <Name>IntellaLend.MasterData</Name>
     </ProjectReference>
-    <ProjectReference Include="..\IntellaLend.Hashing\IntellaLend.Hashing.csproj">
-      <Project>{1F14598F-58DD-4EAE-B6C8-71B950F9EC72}</Project>
-      <Name>IntellaLend.Hashing</Name>
+    <ProjectReference Include="..\IntellaLend.UserData\IntellaLend.UserData.csproj">
+      <Project>{78e761dc-420f-47c5-9f95-bb548a9e7448}</Project>
+      <Name>IntellaLend.UserData</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <ProjectExtensions>
-    <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="YearStamp.MonthStamp.DayStamp.TimeStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_StartDate="2000/1/1" BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" BuildVersion_UseGlobalSettings="True" BuildVersion_UseUniversalClock="True" VsiEnabled="True" VsiAutoVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoFileVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoInformationalVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiConfigurationBuildAction="UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal" VsiUseGlobalBaseDate="True" VsiDeltaBaseDate="7/30/2020 3:13:46 PM" VsiUseTimeUtc="UseGlobal" VsiSettingsState="Initialized" />
-    </VisualStudio>
-  </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

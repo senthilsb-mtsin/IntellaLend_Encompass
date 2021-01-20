@@ -1,26 +1,25 @@
-Timestamp: 10/8/2020 6:26:36 PM
+Timestamp: 12/22/2020 8:44:24 PM
 
-Message: HandlingInstanceID: f604d84a-1707-4a20-8dc6-ec0719e6f981
+Message: HandlingInstanceID: 2b1fe417-729e-405d-a758-23068e105ccf
 An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
 ------------------------------------------------------------------------------------------------
-10/08/2020 18:26:36
-Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.10.8.1823, Culture=neutral, PublicKeyToken=null
-Message : Web TimeStamp: 2020-10-08T12:56:30.618Z. Token is NULL for the request(Customer/GetActiveCustomerList). Check API for further logs.
+12/22/2020 20:44:24
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'Tue Dec 22 2020 20:44:05 GMT+0530 (India Standard Time)'. Current value: '12/01/2020'.","stack":"Error: ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'Tue Dec 22 2020 20:44:05 GMT+0530 (India Standard Time)'. Current value: '12/01/2020'.\n    at throwErrorIfNoChangesMode (http://localhost:4200/vendor.js:26886:11)\n    at bindingUpdated (http://localhost:4200/vendor.js:37680:17)\n    at Module.ɵɵproperty (http://localhost:4200/vendor.js:38707:9)\n    at IdcWorkloadReportComponent_Template (http://localhost:4200/dashboard-dashboard-module.js:14503:65)\n    at executeTemplate (http://localhost:4200/vendor.js:30144:9)\n    at refreshView (http://localhost:4200/vendor.js:29983:13)\n    at refreshComponent (http://localhost:4200/vendor.js:31433:13)\n    at refreshChildComponents (http://localhost:4200/vendor.js:29704:9)\n    at refreshView (http://localhost:4200/vendor.js:30039:13)\n    at refreshComponent (http://localhost:4200/vendor.js:31433:13)"}
 Source : 
 Help link : 
 Data : System.Collections.ListDictionaryInternal
 TargetSite : 
 HResult : -2146233088
-Stack Trace : Token is NULL for the request(Customer/GetActiveCustomerList). Check API for further logs.
-
+Stack Trace : The stack trace is unavailable.
 Additional Info:
 
-MachineName : MTS0094
-TimeStamp : 10/8/2020 12:56:36 PM
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:14:24 PM
 FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
-AppDomainName : /LM/W3SVC/2/ROOT-1-132466352407374383
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
 ThreadIdentity : 
-WindowsIdentity : MTS0094\mtsuser
+WindowsIdentity : MTS0091\mtsuser
 
 
 Category: UIErrorLog
@@ -28,29 +27,28 @@ EventID: 4000
 Priority: 0
 Severity: ErrorTitile: Angular UI Exception
 ----------------------------------
-Timestamp: 10/8/2020 6:26:36 PM
+Timestamp: 12/22/2020 8:44:24 PM
 
-Message: HandlingInstanceID: 65a05e36-10ba-40a9-889a-2532efb4fb92
+Message: HandlingInstanceID: feeb1f3f-20b8-4b30-91ad-f9f2b0414cd6
 An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
 ------------------------------------------------------------------------------------------------
-10/08/2020 18:26:36
-Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.10.8.1823, Culture=neutral, PublicKeyToken=null
-Message : Web TimeStamp: 2020-10-08T12:56:30.645Z. Token is NULL for the request(Customer/GetActiveCustomerList). Check API for further logs.
+12/22/2020 20:44:24
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Cannot read property '0' of undefined","stack":"TypeError: Cannot read property '0' of undefined\n    at SafeSubscriber._next (http://localhost:4200/dashboard-dashboard-module.js:17014:35)\n    at SafeSubscriber.__tryOrUnsub (http://localhost:4200/vendor.js:80499:16)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:80438:22)\n    at Subscriber._next (http://localhost:4200/vendor.js:80388:26)\n    at Subscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at TapSubscriber._next (http://localhost:4200/vendor.js:87244:26)\n    at TapSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at CatchSubscriber._next (http://localhost:4200/vendor.js:80388:26)\n    at CatchSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at MapSubscriber._next (http://localhost:4200/vendor.js:84866:26)"}
 Source : 
 Help link : 
 Data : System.Collections.ListDictionaryInternal
 TargetSite : 
 HResult : -2146233088
-Stack Trace : Token is NULL for the request(Customer/GetActiveCustomerList). Check API for further logs.
-
+Stack Trace : The stack trace is unavailable.
 Additional Info:
 
-MachineName : MTS0094
-TimeStamp : 10/8/2020 12:56:36 PM
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:14:24 PM
 FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
-AppDomainName : /LM/W3SVC/2/ROOT-1-132466352407374383
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
 ThreadIdentity : 
-WindowsIdentity : MTS0094\mtsuser
+WindowsIdentity : MTS0091\mtsuser
 
 
 Category: UIErrorLog
@@ -58,29 +56,28 @@ EventID: 4000
 Priority: 0
 Severity: ErrorTitile: Angular UI Exception
 ----------------------------------
-Timestamp: 10/8/2020 6:26:37 PM
+Timestamp: 12/22/2020 8:44:25 PM
 
-Message: HandlingInstanceID: d4317f02-95db-4b54-a116-868389066382
+Message: HandlingInstanceID: f7c81af8-b9c0-4a9a-82d1-727e59ca1182
 An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
 ------------------------------------------------------------------------------------------------
-10/08/2020 18:26:37
-Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.10.8.1823, Culture=neutral, PublicKeyToken=null
-Message : Web TimeStamp: 2020-10-08T12:56:30.706Z. Token is NULL for the request(Customer/GetActiveCustomerList). Check API for further logs.
+12/22/2020 20:44:25
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Cannot read property '0' of undefined","stack":"TypeError: Cannot read property '0' of undefined\n    at SafeSubscriber._next (http://localhost:4200/dashboard-dashboard-module.js:16979:47)\n    at SafeSubscriber.__tryOrUnsub (http://localhost:4200/vendor.js:80499:16)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:80438:22)\n    at Subscriber._next (http://localhost:4200/vendor.js:80388:26)\n    at Subscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at TapSubscriber._next (http://localhost:4200/vendor.js:87244:26)\n    at TapSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at CatchSubscriber._next (http://localhost:4200/vendor.js:80388:26)\n    at CatchSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at MapSubscriber._next (http://localhost:4200/vendor.js:84866:26)"}
 Source : 
 Help link : 
 Data : System.Collections.ListDictionaryInternal
 TargetSite : 
 HResult : -2146233088
-Stack Trace : Token is NULL for the request(Customer/GetActiveCustomerList). Check API for further logs.
-
+Stack Trace : The stack trace is unavailable.
 Additional Info:
 
-MachineName : MTS0094
-TimeStamp : 10/8/2020 12:56:37 PM
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:14:25 PM
 FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
-AppDomainName : /LM/W3SVC/2/ROOT-1-132466352407374383
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
 ThreadIdentity : 
-WindowsIdentity : MTS0094\mtsuser
+WindowsIdentity : MTS0091\mtsuser
 
 
 Category: UIErrorLog
@@ -88,29 +85,28 @@ EventID: 4000
 Priority: 0
 Severity: ErrorTitile: Angular UI Exception
 ----------------------------------
-Timestamp: 10/8/2020 6:26:37 PM
+Timestamp: 12/22/2020 8:44:25 PM
 
-Message: HandlingInstanceID: 4170e4df-6463-4d81-a416-f023c77e833d
+Message: HandlingInstanceID: c56c5de9-7d54-4dc3-ae21-01edd56b79a8
 An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
 ------------------------------------------------------------------------------------------------
-10/08/2020 18:26:37
-Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.10.8.1823, Culture=neutral, PublicKeyToken=null
-Message : Web TimeStamp: 2020-10-08T12:56:32.622Z. Cannot read property '0' of undefined
+12/22/2020 20:44:25
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Cannot read property '0' of undefined","stack":"TypeError: Cannot read property '0' of undefined\n    at SafeSubscriber._next (http://localhost:4200/dashboard-dashboard-module.js:16927:47)\n    at SafeSubscriber.__tryOrUnsub (http://localhost:4200/vendor.js:80499:16)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:80438:22)\n    at Subscriber._next (http://localhost:4200/vendor.js:80388:26)\n    at Subscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at TapSubscriber._next (http://localhost:4200/vendor.js:87244:26)\n    at TapSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at CatchSubscriber._next (http://localhost:4200/vendor.js:80388:26)\n    at CatchSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at MapSubscriber._next (http://localhost:4200/vendor.js:84866:26)"}
 Source : 
 Help link : 
 Data : System.Collections.ListDictionaryInternal
 TargetSite : 
 HResult : -2146233088
-Stack Trace : Cannot read property '0' of undefined
-
+Stack Trace : The stack trace is unavailable.
 Additional Info:
 
-MachineName : MTS0094
-TimeStamp : 10/8/2020 12:56:37 PM
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:14:25 PM
 FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
-AppDomainName : /LM/W3SVC/2/ROOT-1-132466352407374383
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
 ThreadIdentity : 
-WindowsIdentity : MTS0094\mtsuser
+WindowsIdentity : MTS0091\mtsuser
 
 
 Category: UIErrorLog
@@ -118,29 +114,28 @@ EventID: 4000
 Priority: 0
 Severity: ErrorTitile: Angular UI Exception
 ----------------------------------
-Timestamp: 10/8/2020 6:26:37 PM
+Timestamp: 12/22/2020 8:44:27 PM
 
-Message: HandlingInstanceID: c304d83b-54e3-459d-a4db-b81182cfb48a
+Message: HandlingInstanceID: 683b8e86-55a2-4221-88ac-0406b21a8586
 An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
 ------------------------------------------------------------------------------------------------
-10/08/2020 18:26:37
-Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.10.8.1823, Culture=neutral, PublicKeyToken=null
-Message : Web TimeStamp: 2020-10-08T12:56:33.954Z. Cannot read property 'isStock' of undefined
+12/22/2020 20:44:27
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Cannot read property '0' of undefined","stack":"TypeError: Cannot read property '0' of undefined\n    at SafeSubscriber._next (http://localhost:4200/dashboard-dashboard-module.js:16959:54)\n    at SafeSubscriber.__tryOrUnsub (http://localhost:4200/vendor.js:80499:16)\n    at SafeSubscriber.next (http://localhost:4200/vendor.js:80438:22)\n    at Subscriber._next (http://localhost:4200/vendor.js:80388:26)\n    at Subscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at TapSubscriber._next (http://localhost:4200/vendor.js:87244:26)\n    at TapSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at CatchSubscriber._next (http://localhost:4200/vendor.js:80388:26)\n    at CatchSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at MapSubscriber._next (http://localhost:4200/vendor.js:84866:26)"}
 Source : 
 Help link : 
 Data : System.Collections.ListDictionaryInternal
 TargetSite : 
 HResult : -2146233088
-Stack Trace : Cannot read property 'isStock' of undefined
-
+Stack Trace : The stack trace is unavailable.
 Additional Info:
 
-MachineName : MTS0094
-TimeStamp : 10/8/2020 12:56:37 PM
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:14:27 PM
 FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
-AppDomainName : /LM/W3SVC/2/ROOT-1-132466352407374383
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
 ThreadIdentity : 
-WindowsIdentity : MTS0094\mtsuser
+WindowsIdentity : MTS0091\mtsuser
 
 
 Category: UIErrorLog
@@ -148,29 +143,927 @@ EventID: 4000
 Priority: 0
 Severity: ErrorTitile: Angular UI Exception
 ----------------------------------
-Timestamp: 10/8/2020 6:27:04 PM
+Timestamp: 12/22/2020 8:46:12 PM
 
-Message: HandlingInstanceID: 9824538a-a35e-416f-bd1c-0e30236aa121
+Message: HandlingInstanceID: 22f89e80-9333-4a42-abb0-ffa60d8f692e
 An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
 ------------------------------------------------------------------------------------------------
-10/08/2020 18:27:04
-Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.10.8.1823, Culture=neutral, PublicKeyToken=null
-Message : Web TimeStamp: 2020-10-08T12:57:04.129Z. Cannot read property 'isStock' of undefined
+12/22/2020 20:46:12
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.","stack":"Error: Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.\n    at MapSubscriber.project (http://localhost:4200/main.js:2798:27)\n    at MapSubscriber._next (http://localhost:4200/vendor.js:84860:35)\n    at MapSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at FilterSubscriber._next (http://localhost:4200/vendor.js:84379:30)\n    at FilterSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at MergeMapSubscriber.notifyNext (http://localhost:4200/vendor.js:85105:26)\n    at InnerSubscriber._next (http://localhost:4200/vendor.js:79660:21)\n    at InnerSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at XMLHttpRequest.onLoad (http://localhost:4200/vendor.js:18797:30)\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)"}
 Source : 
 Help link : 
 Data : System.Collections.ListDictionaryInternal
 TargetSite : 
 HResult : -2146233088
-Stack Trace : Cannot read property 'isStock' of undefined
-
+Stack Trace : The stack trace is unavailable.
 Additional Info:
 
-MachineName : MTS0094
-TimeStamp : 10/8/2020 12:57:04 PM
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:16:12 PM
 FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
-AppDomainName : /LM/W3SVC/2/ROOT-1-132466352407374383
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
 ThreadIdentity : 
-WindowsIdentity : MTS0094\mtsuser
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 8:48:20 PM
+
+Message: HandlingInstanceID: 69607a8e-4efb-4b87-8962-7fe4afe5b25a
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 20:48:20
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Uncaught (in promise): TypeError: Cannot read property 'LoanID' of null\nTypeError: Cannot read property 'LoanID' of null\n    at LoanInfoService.GetChecklistDetails (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~1297461c.js:550:141)\n    at CheckListTabComponent.GetChecklistDetails (http://localhost:4200/loan-loan-module.js:21289:49)\n    at http://localhost:4200/loan-loan-module.js:21214:18\n    at ZoneDelegate.invoke (http://localhost:4200/polyfills.js:377:30)\n    at Object.onInvoke (http://localhost:4200/vendor.js:56711:33)\n    at ZoneDelegate.invoke (http://localhost:4200/polyfills.js:376:36)\n    at Zone.run (http://localhost:4200/polyfills.js:136:47)\n    at http://localhost:4200/polyfills.js:870:40\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)\n    at Object.onInvokeTask (http://localhost:4200/vendor.js:56689:33)","stack":"Error: Uncaught (in promise): TypeError: Cannot read property 'LoanID' of null\nTypeError: Cannot read property 'LoanID' of null\n    at LoanInfoService.GetChecklistDetails (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~1297461c.js:550:141)\n    at CheckListTabComponent.GetChecklistDetails (http://localhost:4200/loan-loan-module.js:21289:49)\n    at http://localhost:4200/loan-loan-module.js:21214:18\n    at ZoneDelegate.invoke (http://localhost:4200/polyfills.js:377:30)\n    at Object.onInvoke (http://localhost:4200/vendor.js:56711:33)\n    at ZoneDelegate.invoke (http://localhost:4200/polyfills.js:376:36)\n    at Zone.run (http://localhost:4200/polyfills.js:136:47)\n    at http://localhost:4200/polyfills.js:870:40\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)\n    at Object.onInvokeTask (http://localhost:4200/vendor.js:56689:33)\n    at resolvePromise (http://localhost:4200/polyfills.js:811:39)\n    at http://localhost:4200/polyfills.js:877:21\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)\n    at Object.onInvokeTask (http://localhost:4200/vendor.js:56689:33)\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:411:40)\n    at Zone.runTask (http://localhost:4200/polyfills.js:180:51)\n    at drainMicroTaskQueue (http://localhost:4200/polyfills.js:582:39)\n    at invokeTask (http://localhost:4200/polyfills.js:497:25)\n    at ZoneTask.invoke (http://localhost:4200/polyfills.js:482:52)\n    at timer (http://localhost:4200/polyfills.js:2565:33)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:18:20 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 8:48:21 PM
+
+Message: HandlingInstanceID: d180548d-1fe8-420d-a226-c431da338b8f
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 20:48:21
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Cannot read property 'getMonth' of undefined","stack":"TypeError: Cannot read property 'getMonth' of undefined\n    at MonthYearPickerComponent.ngOnInit (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~81d556dd.js:95:67)\n    at callHook (http://localhost:4200/vendor.js:23608:18)\n    at callHooks (http://localhost:4200/vendor.js:23572:17)\n    at executeInitAndCheckHooks (http://localhost:4200/vendor.js:23512:9)\n    at refreshView (http://localhost:4200/vendor.js:30001:21)\n    at refreshEmbeddedViews (http://localhost:4200/vendor.js:31379:17)\n    at refreshView (http://localhost:4200/vendor.js:30010:9)\n    at refreshComponent (http://localhost:4200/vendor.js:31433:13)\n    at refreshChildComponents (http://localhost:4200/vendor.js:29704:9)\n    at refreshView (http://localhost:4200/vendor.js:30039:13)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:18:21 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 8:48:24 PM
+
+Message: HandlingInstanceID: 356c7c9b-abd8-4dfe-9a74-808af206f3cc
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 20:48:24
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.","stack":"Error: Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.\n    at MapSubscriber.project (http://localhost:4200/main.js:2798:27)\n    at MapSubscriber._next (http://localhost:4200/vendor.js:84860:35)\n    at MapSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at FilterSubscriber._next (http://localhost:4200/vendor.js:84379:30)\n    at FilterSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at MergeMapSubscriber.notifyNext (http://localhost:4200/vendor.js:85105:26)\n    at InnerSubscriber._next (http://localhost:4200/vendor.js:79660:21)\n    at InnerSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at XMLHttpRequest.onLoad (http://localhost:4200/vendor.js:18797:30)\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:18:24 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 8:53:49 PM
+
+Message: HandlingInstanceID: 049fec41-098c-4aaa-80c6-e22a2c176d63
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 20:53:49
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Uncaught (in promise): TypeError: Cannot read property 'LoanID' of null\nTypeError: Cannot read property 'LoanID' of null\n    at LoanInfoService.GetChecklistDetails (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~1297461c.js:550:141)\n    at CheckListTabComponent.GetChecklistDetails (http://localhost:4200/loan-loan-module.js:21290:49)\n    at http://localhost:4200/loan-loan-module.js:21214:18\n    at ZoneDelegate.invoke (http://localhost:4200/polyfills.js:377:30)\n    at Object.onInvoke (http://localhost:4200/vendor.js:56711:33)\n    at ZoneDelegate.invoke (http://localhost:4200/polyfills.js:376:36)\n    at Zone.run (http://localhost:4200/polyfills.js:136:47)\n    at http://localhost:4200/polyfills.js:870:40\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)\n    at Object.onInvokeTask (http://localhost:4200/vendor.js:56689:33)","stack":"Error: Uncaught (in promise): TypeError: Cannot read property 'LoanID' of null\nTypeError: Cannot read property 'LoanID' of null\n    at LoanInfoService.GetChecklistDetails (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~1297461c.js:550:141)\n    at CheckListTabComponent.GetChecklistDetails (http://localhost:4200/loan-loan-module.js:21290:49)\n    at http://localhost:4200/loan-loan-module.js:21214:18\n    at ZoneDelegate.invoke (http://localhost:4200/polyfills.js:377:30)\n    at Object.onInvoke (http://localhost:4200/vendor.js:56711:33)\n    at ZoneDelegate.invoke (http://localhost:4200/polyfills.js:376:36)\n    at Zone.run (http://localhost:4200/polyfills.js:136:47)\n    at http://localhost:4200/polyfills.js:870:40\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)\n    at Object.onInvokeTask (http://localhost:4200/vendor.js:56689:33)\n    at resolvePromise (http://localhost:4200/polyfills.js:811:39)\n    at http://localhost:4200/polyfills.js:877:21\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)\n    at Object.onInvokeTask (http://localhost:4200/vendor.js:56689:33)\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:411:40)\n    at Zone.runTask (http://localhost:4200/polyfills.js:180:51)\n    at drainMicroTaskQueue (http://localhost:4200/polyfills.js:582:39)\n    at invokeTask (http://localhost:4200/polyfills.js:497:25)\n    at ZoneTask.invoke (http://localhost:4200/polyfills.js:482:52)\n    at timer (http://localhost:4200/polyfills.js:2565:33)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:23:49 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 8:53:51 PM
+
+Message: HandlingInstanceID: 8924d4f3-3384-4174-a289-298cb3a15de1
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 20:53:51
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Cannot read property 'getMonth' of undefined","stack":"TypeError: Cannot read property 'getMonth' of undefined\n    at MonthYearPickerComponent.ngOnInit (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~81d556dd.js:95:67)\n    at callHook (http://localhost:4200/vendor.js:23608:18)\n    at callHooks (http://localhost:4200/vendor.js:23572:17)\n    at executeInitAndCheckHooks (http://localhost:4200/vendor.js:23512:9)\n    at refreshView (http://localhost:4200/vendor.js:30001:21)\n    at refreshEmbeddedViews (http://localhost:4200/vendor.js:31379:17)\n    at refreshView (http://localhost:4200/vendor.js:30010:9)\n    at refreshComponent (http://localhost:4200/vendor.js:31433:13)\n    at refreshChildComponents (http://localhost:4200/vendor.js:29704:9)\n    at refreshView (http://localhost:4200/vendor.js:30039:13)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:23:51 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 8:53:53 PM
+
+Message: HandlingInstanceID: 644552f2-d6d7-4cb4-830b-a76d2c412804
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 20:53:53
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.","stack":"Error: Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.\n    at MapSubscriber.project (http://localhost:4200/main.js:2798:27)\n    at MapSubscriber._next (http://localhost:4200/vendor.js:84860:35)\n    at MapSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at FilterSubscriber._next (http://localhost:4200/vendor.js:84379:30)\n    at FilterSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at MergeMapSubscriber.notifyNext (http://localhost:4200/vendor.js:85105:26)\n    at InnerSubscriber._next (http://localhost:4200/vendor.js:79660:21)\n    at InnerSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at XMLHttpRequest.onLoad (http://localhost:4200/vendor.js:18797:30)\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:23:53 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 8:59:40 PM
+
+Message: HandlingInstanceID: d8bae7cc-6580-411e-b024-88133593b10a
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 20:59:40
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Uncaught (in promise): TypeError: Cannot read property 'LoanID' of null\nTypeError: Cannot read property 'LoanID' of null\n    at LoanInfoService.GetChecklistDetails (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~1297461c.js:550:141)\n    at CheckListTabComponent.GetChecklistDetails (http://localhost:4200/loan-loan-module.js:21290:49)\n    at http://localhost:4200/loan-loan-module.js:21214:18\n    at ZoneDelegate.invoke (http://localhost:4200/polyfills.js:377:30)\n    at Object.onInvoke (http://localhost:4200/vendor.js:56711:33)\n    at ZoneDelegate.invoke (http://localhost:4200/polyfills.js:376:36)\n    at Zone.run (http://localhost:4200/polyfills.js:136:47)\n    at http://localhost:4200/polyfills.js:870:40\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)\n    at Object.onInvokeTask (http://localhost:4200/vendor.js:56689:33)","stack":"Error: Uncaught (in promise): TypeError: Cannot read property 'LoanID' of null\nTypeError: Cannot read property 'LoanID' of null\n    at LoanInfoService.GetChecklistDetails (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~1297461c.js:550:141)\n    at CheckListTabComponent.GetChecklistDetails (http://localhost:4200/loan-loan-module.js:21290:49)\n    at http://localhost:4200/loan-loan-module.js:21214:18\n    at ZoneDelegate.invoke (http://localhost:4200/polyfills.js:377:30)\n    at Object.onInvoke (http://localhost:4200/vendor.js:56711:33)\n    at ZoneDelegate.invoke (http://localhost:4200/polyfills.js:376:36)\n    at Zone.run (http://localhost:4200/polyfills.js:136:47)\n    at http://localhost:4200/polyfills.js:870:40\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)\n    at Object.onInvokeTask (http://localhost:4200/vendor.js:56689:33)\n    at resolvePromise (http://localhost:4200/polyfills.js:811:39)\n    at http://localhost:4200/polyfills.js:877:21\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)\n    at Object.onInvokeTask (http://localhost:4200/vendor.js:56689:33)\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:411:40)\n    at Zone.runTask (http://localhost:4200/polyfills.js:180:51)\n    at drainMicroTaskQueue (http://localhost:4200/polyfills.js:582:39)\n    at invokeTask (http://localhost:4200/polyfills.js:497:25)\n    at ZoneTask.invoke (http://localhost:4200/polyfills.js:482:52)\n    at timer (http://localhost:4200/polyfills.js:2565:33)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:29:40 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 8:59:44 PM
+
+Message: HandlingInstanceID: 093d7c8e-8b64-46aa-871e-247930e105a0
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 20:59:44
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Cannot read property 'getMonth' of undefined","stack":"TypeError: Cannot read property 'getMonth' of undefined\n    at MonthYearPickerComponent.ngOnInit (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~81d556dd.js:95:67)\n    at callHook (http://localhost:4200/vendor.js:23608:18)\n    at callHooks (http://localhost:4200/vendor.js:23572:17)\n    at executeInitAndCheckHooks (http://localhost:4200/vendor.js:23512:9)\n    at refreshView (http://localhost:4200/vendor.js:30001:21)\n    at refreshEmbeddedViews (http://localhost:4200/vendor.js:31379:17)\n    at refreshView (http://localhost:4200/vendor.js:30010:9)\n    at refreshComponent (http://localhost:4200/vendor.js:31433:13)\n    at refreshChildComponents (http://localhost:4200/vendor.js:29704:9)\n    at refreshView (http://localhost:4200/vendor.js:30039:13)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:29:44 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 8:59:45 PM
+
+Message: HandlingInstanceID: 1bf9a1ad-eec0-4b5c-b0d3-2a0498953e3b
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 20:59:45
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.","stack":"Error: Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.\n    at MapSubscriber.project (http://localhost:4200/main.js:2798:27)\n    at MapSubscriber._next (http://localhost:4200/vendor.js:84860:35)\n    at MapSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at FilterSubscriber._next (http://localhost:4200/vendor.js:84379:30)\n    at FilterSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at MergeMapSubscriber.notifyNext (http://localhost:4200/vendor.js:85105:26)\n    at InnerSubscriber._next (http://localhost:4200/vendor.js:79660:21)\n    at InnerSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at XMLHttpRequest.onLoad (http://localhost:4200/vendor.js:18797:30)\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:29:45 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:06:21 PM
+
+Message: HandlingInstanceID: 298a0324-e90f-4cac-87cb-f797b9b2c0b3
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:06:21
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Uncaught (in promise): TypeError: Cannot read property 'LoanID' of null\nTypeError: Cannot read property 'LoanID' of null\n    at LoanInfoService.GetChecklistDetails (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~1297461c.js:550:141)\n    at CheckListTabComponent.GetChecklistDetails (http://localhost:4200/loan-loan-module.js:21285:49)\n    at http://localhost:4200/loan-loan-module.js:21214:18\n    at ZoneDelegate.invoke (http://localhost:4200/polyfills.js:377:30)\n    at Object.onInvoke (http://localhost:4200/vendor.js:56711:33)\n    at ZoneDelegate.invoke (http://localhost:4200/polyfills.js:376:36)\n    at Zone.run (http://localhost:4200/polyfills.js:136:47)\n    at http://localhost:4200/polyfills.js:870:40\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)\n    at Object.onInvokeTask (http://localhost:4200/vendor.js:56689:33)","stack":"Error: Uncaught (in promise): TypeError: Cannot read property 'LoanID' of null\nTypeError: Cannot read property 'LoanID' of null\n    at LoanInfoService.GetChecklistDetails (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~1297461c.js:550:141)\n    at CheckListTabComponent.GetChecklistDetails (http://localhost:4200/loan-loan-module.js:21285:49)\n    at http://localhost:4200/loan-loan-module.js:21214:18\n    at ZoneDelegate.invoke (http://localhost:4200/polyfills.js:377:30)\n    at Object.onInvoke (http://localhost:4200/vendor.js:56711:33)\n    at ZoneDelegate.invoke (http://localhost:4200/polyfills.js:376:36)\n    at Zone.run (http://localhost:4200/polyfills.js:136:47)\n    at http://localhost:4200/polyfills.js:870:40\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)\n    at Object.onInvokeTask (http://localhost:4200/vendor.js:56689:33)\n    at resolvePromise (http://localhost:4200/polyfills.js:811:39)\n    at http://localhost:4200/polyfills.js:877:21\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)\n    at Object.onInvokeTask (http://localhost:4200/vendor.js:56689:33)\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:411:40)\n    at Zone.runTask (http://localhost:4200/polyfills.js:180:51)\n    at drainMicroTaskQueue (http://localhost:4200/polyfills.js:582:39)\n    at invokeTask (http://localhost:4200/polyfills.js:497:25)\n    at ZoneTask.invoke (http://localhost:4200/polyfills.js:482:52)\n    at timer (http://localhost:4200/polyfills.js:2565:33)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:36:21 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:06:23 PM
+
+Message: HandlingInstanceID: 2f39e2d2-4e29-43ca-87e3-a599150334a3
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:06:23
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Cannot read property 'getMonth' of undefined","stack":"TypeError: Cannot read property 'getMonth' of undefined\n    at MonthYearPickerComponent.ngOnInit (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~81d556dd.js:95:67)\n    at callHook (http://localhost:4200/vendor.js:23608:18)\n    at callHooks (http://localhost:4200/vendor.js:23572:17)\n    at executeInitAndCheckHooks (http://localhost:4200/vendor.js:23512:9)\n    at refreshView (http://localhost:4200/vendor.js:30001:21)\n    at refreshEmbeddedViews (http://localhost:4200/vendor.js:31379:17)\n    at refreshView (http://localhost:4200/vendor.js:30010:9)\n    at refreshComponent (http://localhost:4200/vendor.js:31433:13)\n    at refreshChildComponents (http://localhost:4200/vendor.js:29704:9)\n    at refreshView (http://localhost:4200/vendor.js:30039:13)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:36:23 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:06:25 PM
+
+Message: HandlingInstanceID: 9bcd4046-ac9d-4491-8dc8-24828cb3f345
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:06:25
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.","stack":"Error: Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.\n    at MapSubscriber.project (http://localhost:4200/main.js:2798:27)\n    at MapSubscriber._next (http://localhost:4200/vendor.js:84860:35)\n    at MapSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at FilterSubscriber._next (http://localhost:4200/vendor.js:84379:30)\n    at FilterSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at MergeMapSubscriber.notifyNext (http://localhost:4200/vendor.js:85105:26)\n    at InnerSubscriber._next (http://localhost:4200/vendor.js:79660:21)\n    at InnerSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at XMLHttpRequest.onLoad (http://localhost:4200/vendor.js:18797:30)\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:36:25 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:09:26 PM
+
+Message: HandlingInstanceID: 4a140c25-ba19-4c22-ba06-10dba0fd56a4
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:09:26
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Cannot read property 'getMonth' of undefined","stack":"TypeError: Cannot read property 'getMonth' of undefined\n    at MonthYearPickerComponent.ngOnInit (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~81d556dd.js:95:67)\n    at callHook (http://localhost:4200/vendor.js:23608:18)\n    at callHooks (http://localhost:4200/vendor.js:23572:17)\n    at executeInitAndCheckHooks (http://localhost:4200/vendor.js:23512:9)\n    at refreshView (http://localhost:4200/vendor.js:30001:21)\n    at refreshEmbeddedViews (http://localhost:4200/vendor.js:31379:17)\n    at refreshView (http://localhost:4200/vendor.js:30010:9)\n    at refreshComponent (http://localhost:4200/vendor.js:31433:13)\n    at refreshChildComponents (http://localhost:4200/vendor.js:29704:9)\n    at refreshView (http://localhost:4200/vendor.js:30039:13)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:39:26 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:09:28 PM
+
+Message: HandlingInstanceID: 6328b827-15d2-4cb0-90eb-ccbcb2300dc8
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:09:28
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.","stack":"Error: Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.\n    at MapSubscriber.project (http://localhost:4200/main.js:2798:27)\n    at MapSubscriber._next (http://localhost:4200/vendor.js:84860:35)\n    at MapSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at FilterSubscriber._next (http://localhost:4200/vendor.js:84379:30)\n    at FilterSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at MergeMapSubscriber.notifyNext (http://localhost:4200/vendor.js:85105:26)\n    at InnerSubscriber._next (http://localhost:4200/vendor.js:79660:21)\n    at InnerSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at XMLHttpRequest.onLoad (http://localhost:4200/vendor.js:18797:30)\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:39:28 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:13:47 PM
+
+Message: HandlingInstanceID: 70f5248a-b25e-43f2-aa69-c47635dec219
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:13:47
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Cannot read property 'getMonth' of undefined","stack":"TypeError: Cannot read property 'getMonth' of undefined\n    at MonthYearPickerComponent.ngOnInit (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~81d556dd.js:95:67)\n    at callHook (http://localhost:4200/vendor.js:23608:18)\n    at callHooks (http://localhost:4200/vendor.js:23572:17)\n    at executeInitAndCheckHooks (http://localhost:4200/vendor.js:23512:9)\n    at refreshView (http://localhost:4200/vendor.js:30001:21)\n    at refreshEmbeddedViews (http://localhost:4200/vendor.js:31379:17)\n    at refreshView (http://localhost:4200/vendor.js:30010:9)\n    at refreshComponent (http://localhost:4200/vendor.js:31433:13)\n    at refreshChildComponents (http://localhost:4200/vendor.js:29704:9)\n    at refreshView (http://localhost:4200/vendor.js:30039:13)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:43:47 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:13:50 PM
+
+Message: HandlingInstanceID: 016044cc-697b-473b-8da2-43d0bbd59570
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:13:50
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.","stack":"Error: Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.\n    at MapSubscriber.project (http://localhost:4200/main.js:2798:27)\n    at MapSubscriber._next (http://localhost:4200/vendor.js:84860:35)\n    at MapSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at FilterSubscriber._next (http://localhost:4200/vendor.js:84379:30)\n    at FilterSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at MergeMapSubscriber.notifyNext (http://localhost:4200/vendor.js:85105:26)\n    at InnerSubscriber._next (http://localhost:4200/vendor.js:79660:21)\n    at InnerSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at XMLHttpRequest.onLoad (http://localhost:4200/vendor.js:18797:30)\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:43:50 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:16:02 PM
+
+Message: HandlingInstanceID: 3b079bd5-9de0-4569-b216-7e347d467e4e
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:16:02
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Cannot read property 'getMonth' of undefined","stack":"TypeError: Cannot read property 'getMonth' of undefined\n    at MonthYearPickerComponent.ngOnInit (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~81d556dd.js:95:67)\n    at callHook (http://localhost:4200/vendor.js:23608:18)\n    at callHooks (http://localhost:4200/vendor.js:23572:17)\n    at executeInitAndCheckHooks (http://localhost:4200/vendor.js:23512:9)\n    at refreshView (http://localhost:4200/vendor.js:30001:21)\n    at refreshEmbeddedViews (http://localhost:4200/vendor.js:31379:17)\n    at refreshView (http://localhost:4200/vendor.js:30010:9)\n    at refreshComponent (http://localhost:4200/vendor.js:31433:13)\n    at refreshChildComponents (http://localhost:4200/vendor.js:29704:9)\n    at refreshView (http://localhost:4200/vendor.js:30039:13)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:46:02 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:16:05 PM
+
+Message: HandlingInstanceID: dc36863a-0a07-410a-a444-842a9178e4a6
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:16:05
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.","stack":"Error: Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.\n    at MapSubscriber.project (http://localhost:4200/main.js:2798:27)\n    at MapSubscriber._next (http://localhost:4200/vendor.js:84860:35)\n    at MapSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at FilterSubscriber._next (http://localhost:4200/vendor.js:84379:30)\n    at FilterSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at MergeMapSubscriber.notifyNext (http://localhost:4200/vendor.js:85105:26)\n    at InnerSubscriber._next (http://localhost:4200/vendor.js:79660:21)\n    at InnerSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at XMLHttpRequest.onLoad (http://localhost:4200/vendor.js:18797:30)\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:46:05 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:18:36 PM
+
+Message: HandlingInstanceID: 6de25ce1-a4be-44a0-a6ed-fb0ef2062dfb
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:18:36
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Cannot read property 'getMonth' of undefined","stack":"TypeError: Cannot read property 'getMonth' of undefined\n    at MonthYearPickerComponent.ngOnInit (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~81d556dd.js:95:67)\n    at callHook (http://localhost:4200/vendor.js:23608:18)\n    at callHooks (http://localhost:4200/vendor.js:23572:17)\n    at executeInitAndCheckHooks (http://localhost:4200/vendor.js:23512:9)\n    at refreshView (http://localhost:4200/vendor.js:30001:21)\n    at refreshEmbeddedViews (http://localhost:4200/vendor.js:31379:17)\n    at refreshView (http://localhost:4200/vendor.js:30010:9)\n    at refreshComponent (http://localhost:4200/vendor.js:31433:13)\n    at refreshChildComponents (http://localhost:4200/vendor.js:29704:9)\n    at refreshView (http://localhost:4200/vendor.js:30039:13)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:48:36 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:18:38 PM
+
+Message: HandlingInstanceID: 6230b6a6-6351-40e3-9d41-2fc366138267
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:18:38
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.","stack":"Error: Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.\n    at MapSubscriber.project (http://localhost:4200/main.js:2798:27)\n    at MapSubscriber._next (http://localhost:4200/vendor.js:84860:35)\n    at MapSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at FilterSubscriber._next (http://localhost:4200/vendor.js:84379:30)\n    at FilterSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at MergeMapSubscriber.notifyNext (http://localhost:4200/vendor.js:85105:26)\n    at InnerSubscriber._next (http://localhost:4200/vendor.js:79660:21)\n    at InnerSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at XMLHttpRequest.onLoad (http://localhost:4200/vendor.js:18797:30)\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:48:38 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:20:14 PM
+
+Message: HandlingInstanceID: 6b8fbdc4-8ee8-4042-ad25-cb5d8a5e3cbe
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:20:14
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Cannot read property 'getMonth' of undefined","stack":"TypeError: Cannot read property 'getMonth' of undefined\n    at MonthYearPickerComponent.ngOnInit (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~81d556dd.js:95:67)\n    at callHook (http://localhost:4200/vendor.js:23608:18)\n    at callHooks (http://localhost:4200/vendor.js:23572:17)\n    at executeInitAndCheckHooks (http://localhost:4200/vendor.js:23512:9)\n    at refreshView (http://localhost:4200/vendor.js:30001:21)\n    at refreshEmbeddedViews (http://localhost:4200/vendor.js:31379:17)\n    at refreshView (http://localhost:4200/vendor.js:30010:9)\n    at refreshComponent (http://localhost:4200/vendor.js:31433:13)\n    at refreshChildComponents (http://localhost:4200/vendor.js:29704:9)\n    at refreshView (http://localhost:4200/vendor.js:30039:13)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:50:14 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:20:16 PM
+
+Message: HandlingInstanceID: 4787c4ef-c95c-4461-8bcd-72a374dc1a34
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:20:16
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.","stack":"Error: Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.\n    at MapSubscriber.project (http://localhost:4200/main.js:2798:27)\n    at MapSubscriber._next (http://localhost:4200/vendor.js:84860:35)\n    at MapSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at FilterSubscriber._next (http://localhost:4200/vendor.js:84379:30)\n    at FilterSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at MergeMapSubscriber.notifyNext (http://localhost:4200/vendor.js:85105:26)\n    at InnerSubscriber._next (http://localhost:4200/vendor.js:79660:21)\n    at InnerSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at XMLHttpRequest.onLoad (http://localhost:4200/vendor.js:18797:30)\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:50:16 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:21:21 PM
+
+Message: HandlingInstanceID: 7040f67a-3161-499a-a369-bf42057ea5de
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:21:21
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Cannot read property 'getMonth' of undefined","stack":"TypeError: Cannot read property 'getMonth' of undefined\n    at MonthYearPickerComponent.ngOnInit (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~81d556dd.js:95:67)\n    at callHook (http://localhost:4200/vendor.js:23608:18)\n    at callHooks (http://localhost:4200/vendor.js:23572:17)\n    at executeInitAndCheckHooks (http://localhost:4200/vendor.js:23512:9)\n    at refreshView (http://localhost:4200/vendor.js:30001:21)\n    at refreshEmbeddedViews (http://localhost:4200/vendor.js:31379:17)\n    at refreshView (http://localhost:4200/vendor.js:30010:9)\n    at refreshComponent (http://localhost:4200/vendor.js:31433:13)\n    at refreshChildComponents (http://localhost:4200/vendor.js:29704:9)\n    at refreshView (http://localhost:4200/vendor.js:30039:13)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:51:21 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:21:23 PM
+
+Message: HandlingInstanceID: dbc5aef8-82ea-4e04-9cee-6f07402de3fb
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:21:23
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.","stack":"Error: Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.\n    at MapSubscriber.project (http://localhost:4200/main.js:2798:27)\n    at MapSubscriber._next (http://localhost:4200/vendor.js:84860:35)\n    at MapSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at FilterSubscriber._next (http://localhost:4200/vendor.js:84379:30)\n    at FilterSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at MergeMapSubscriber.notifyNext (http://localhost:4200/vendor.js:85105:26)\n    at InnerSubscriber._next (http://localhost:4200/vendor.js:79660:21)\n    at InnerSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at XMLHttpRequest.onLoad (http://localhost:4200/vendor.js:18797:30)\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:51:23 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:23:14 PM
+
+Message: HandlingInstanceID: 5850d41f-230c-41f0-9adc-a95116abbad4
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:23:14
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Cannot read property 'getMonth' of undefined","stack":"TypeError: Cannot read property 'getMonth' of undefined\n    at MonthYearPickerComponent.ngOnInit (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~81d556dd.js:95:67)\n    at callHook (http://localhost:4200/vendor.js:23608:18)\n    at callHooks (http://localhost:4200/vendor.js:23572:17)\n    at executeInitAndCheckHooks (http://localhost:4200/vendor.js:23512:9)\n    at refreshView (http://localhost:4200/vendor.js:30001:21)\n    at refreshEmbeddedViews (http://localhost:4200/vendor.js:31379:17)\n    at refreshView (http://localhost:4200/vendor.js:30010:9)\n    at refreshComponent (http://localhost:4200/vendor.js:31433:13)\n    at refreshChildComponents (http://localhost:4200/vendor.js:29704:9)\n    at refreshView (http://localhost:4200/vendor.js:30039:13)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:53:14 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:23:16 PM
+
+Message: HandlingInstanceID: 7d30c24d-612d-482e-b1c0-f33064b55085
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:23:16
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.","stack":"Error: Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.\n    at MapSubscriber.project (http://localhost:4200/main.js:2798:27)\n    at MapSubscriber._next (http://localhost:4200/vendor.js:84860:35)\n    at MapSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at FilterSubscriber._next (http://localhost:4200/vendor.js:84379:30)\n    at FilterSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at MergeMapSubscriber.notifyNext (http://localhost:4200/vendor.js:85105:26)\n    at InnerSubscriber._next (http://localhost:4200/vendor.js:79660:21)\n    at InnerSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at XMLHttpRequest.onLoad (http://localhost:4200/vendor.js:18797:30)\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:53:16 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:24:11 PM
+
+Message: HandlingInstanceID: e81a29dc-be5b-4bdb-97cb-5829dc391f7d
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:24:11
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Cannot read property 'getMonth' of undefined","stack":"TypeError: Cannot read property 'getMonth' of undefined\n    at MonthYearPickerComponent.ngOnInit (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~81d556dd.js:95:67)\n    at callHook (http://localhost:4200/vendor.js:23608:18)\n    at callHooks (http://localhost:4200/vendor.js:23572:17)\n    at executeInitAndCheckHooks (http://localhost:4200/vendor.js:23512:9)\n    at refreshView (http://localhost:4200/vendor.js:30001:21)\n    at refreshEmbeddedViews (http://localhost:4200/vendor.js:31379:17)\n    at refreshView (http://localhost:4200/vendor.js:30010:9)\n    at refreshComponent (http://localhost:4200/vendor.js:31433:13)\n    at refreshChildComponents (http://localhost:4200/vendor.js:29704:9)\n    at refreshView (http://localhost:4200/vendor.js:30039:13)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:54:11 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:24:13 PM
+
+Message: HandlingInstanceID: 62d43dcf-9c63-4096-b7a5-522d796f420b
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:24:13
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.","stack":"Error: Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.\n    at MapSubscriber.project (http://localhost:4200/main.js:2798:27)\n    at MapSubscriber._next (http://localhost:4200/vendor.js:84860:35)\n    at MapSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at FilterSubscriber._next (http://localhost:4200/vendor.js:84379:30)\n    at FilterSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at MergeMapSubscriber.notifyNext (http://localhost:4200/vendor.js:85105:26)\n    at InnerSubscriber._next (http://localhost:4200/vendor.js:79660:21)\n    at InnerSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at XMLHttpRequest.onLoad (http://localhost:4200/vendor.js:18797:30)\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:54:13 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:26:44 PM
+
+Message: HandlingInstanceID: c8174246-fc8a-4c7a-a3f9-7ef5fcdf01ca
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:26:44
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Uncaught (in promise): TypeError: Cannot read property 'LoanID' of null\nTypeError: Cannot read property 'LoanID' of null\n    at LoanInfoService.GetChecklistDetails (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~1297461c.js:550:141)\n    at CheckListTabComponent.GetChecklistDetails (http://localhost:4200/loan-loan-module.js:21283:49)\n    at http://localhost:4200/loan-loan-module.js:21214:18\n    at ZoneDelegate.invoke (http://localhost:4200/polyfills.js:377:30)\n    at Object.onInvoke (http://localhost:4200/vendor.js:56711:33)\n    at ZoneDelegate.invoke (http://localhost:4200/polyfills.js:376:36)\n    at Zone.run (http://localhost:4200/polyfills.js:136:47)\n    at http://localhost:4200/polyfills.js:870:40\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)\n    at Object.onInvokeTask (http://localhost:4200/vendor.js:56689:33)","stack":"Error: Uncaught (in promise): TypeError: Cannot read property 'LoanID' of null\nTypeError: Cannot read property 'LoanID' of null\n    at LoanInfoService.GetChecklistDetails (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~1297461c.js:550:141)\n    at CheckListTabComponent.GetChecklistDetails (http://localhost:4200/loan-loan-module.js:21283:49)\n    at http://localhost:4200/loan-loan-module.js:21214:18\n    at ZoneDelegate.invoke (http://localhost:4200/polyfills.js:377:30)\n    at Object.onInvoke (http://localhost:4200/vendor.js:56711:33)\n    at ZoneDelegate.invoke (http://localhost:4200/polyfills.js:376:36)\n    at Zone.run (http://localhost:4200/polyfills.js:136:47)\n    at http://localhost:4200/polyfills.js:870:40\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)\n    at Object.onInvokeTask (http://localhost:4200/vendor.js:56689:33)\n    at resolvePromise (http://localhost:4200/polyfills.js:811:39)\n    at http://localhost:4200/polyfills.js:877:21\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)\n    at Object.onInvokeTask (http://localhost:4200/vendor.js:56689:33)\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:411:40)\n    at Zone.runTask (http://localhost:4200/polyfills.js:180:51)\n    at drainMicroTaskQueue (http://localhost:4200/polyfills.js:582:39)\n    at invokeTask (http://localhost:4200/polyfills.js:497:25)\n    at ZoneTask.invoke (http://localhost:4200/polyfills.js:482:52)\n    at timer (http://localhost:4200/polyfills.js:2565:33)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:56:44 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:26:45 PM
+
+Message: HandlingInstanceID: 186913e3-f1e0-4d2b-9d11-6575b6878d66
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:26:45
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Cannot read property 'getMonth' of undefined","stack":"TypeError: Cannot read property 'getMonth' of undefined\n    at MonthYearPickerComponent.ngOnInit (http://localhost:4200/default~dashboard-dashboard-module~export-export-module~loan-import-loan-import-module~loan-loan-mod~81d556dd.js:95:67)\n    at callHook (http://localhost:4200/vendor.js:23608:18)\n    at callHooks (http://localhost:4200/vendor.js:23572:17)\n    at executeInitAndCheckHooks (http://localhost:4200/vendor.js:23512:9)\n    at refreshView (http://localhost:4200/vendor.js:30001:21)\n    at refreshEmbeddedViews (http://localhost:4200/vendor.js:31379:17)\n    at refreshView (http://localhost:4200/vendor.js:30010:9)\n    at refreshComponent (http://localhost:4200/vendor.js:31433:13)\n    at refreshChildComponents (http://localhost:4200/vendor.js:29704:9)\n    at refreshView (http://localhost:4200/vendor.js:30039:13)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:56:45 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
+
+
+Category: UIErrorLog
+EventID: 4000
+Priority: 0
+Severity: ErrorTitile: Angular UI Exception
+----------------------------------
+Timestamp: 12/22/2020 9:26:48 PM
+
+Message: HandlingInstanceID: ed125354-a152-4a05-9ddc-061c4cd846f5
+An exception of type 'IntellaLend.ExceptionHandler.AngularWebException' occurred and was caught.
+------------------------------------------------------------------------------------------------
+12/22/2020 21:26:48
+Type : IntellaLend.ExceptionHandler.AngularWebException, IntellaLend.ExceptionHandler, Version=2020.12.22.2040, Culture=neutral, PublicKeyToken=null
+Message : {"message":"Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.","stack":"Error: Token is NULL for the request(Loan/CheckLoanPDFExists). Check API for further logs.\n    at MapSubscriber.project (http://localhost:4200/main.js:2798:27)\n    at MapSubscriber._next (http://localhost:4200/vendor.js:84860:35)\n    at MapSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at FilterSubscriber._next (http://localhost:4200/vendor.js:84379:30)\n    at FilterSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at MergeMapSubscriber.notifyNext (http://localhost:4200/vendor.js:85105:26)\n    at InnerSubscriber._next (http://localhost:4200/vendor.js:79660:21)\n    at InnerSubscriber.next (http://localhost:4200/vendor.js:80365:18)\n    at XMLHttpRequest.onLoad (http://localhost:4200/vendor.js:18797:30)\n    at ZoneDelegate.invokeTask (http://localhost:4200/polyfills.js:412:35)"}
+Source : 
+Help link : 
+Data : System.Collections.ListDictionaryInternal
+TargetSite : 
+HResult : -2146233088
+Stack Trace : The stack trace is unavailable.
+Additional Info:
+
+MachineName : MTS0091
+TimeStamp : 12/22/2020 3:56:48 PM
+FullName : Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35
+AppDomainName : /LM/W3SVC/2/ROOT-1-132531234307358378
+ThreadIdentity : 
+WindowsIdentity : MTS0091\mtsuser
 
 
 Category: UIErrorLog

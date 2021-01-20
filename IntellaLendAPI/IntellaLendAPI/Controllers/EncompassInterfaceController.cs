@@ -23,7 +23,7 @@ namespace IntellaLendAPI.Controllers
             try
             {
                 response.token = new JWTToken().CreateJWTToken();
-                new LoanService(req.TableSchema).LoanComplete(req.LoanID, req.CompletedUserRoleID, req.CompletedUserID, req.CompleteNotes);
+                new LoanService(req.TableSchema).LoanComplete(req.LoanID, req.CompletedUserRoleID, req.CompletedUserID,req.CompleteNotes);
             }
             catch (Exception exc)
             {

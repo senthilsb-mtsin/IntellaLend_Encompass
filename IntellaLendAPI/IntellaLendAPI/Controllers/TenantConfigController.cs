@@ -525,6 +525,28 @@ namespace IntellaLendAPI.Controllers
         }
 
         [HttpPost]
+        public TokenResponse GetFannieMaeCustomerConfig(RequestFannieMaeCustomerConfig req)
+        {
+            Logger.WriteTraceLog($"Start GetFannieMaeCustomerConfig()");
+            Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(req)}");
+            TokenResponse response = new TokenResponse();
+            response.ResponseMessage = new ResponseMessage();
+            try
+            {
+                response.token = new JWTToken().CreateJWTToken();
+                response.data = new JWTToken().CreateJWTToken(new TenantConfigService(req.TableSchema).GetFannieMaeCustomerConfig());
+            }
+            catch (Exception exc)
+            {
+                response.token = null;
+                response.ResponseMessage.MessageDesc = exc.Message;
+                MTSExceptionHandler.HandleException(ref exc);
+            }
+            Logger.WriteTraceLog($"End GetFannieMaeCustomerConfig()");
+            return response;
+        }
+
+        [HttpPost]
         public TokenResponse CheckWebHookSubscriptionEventTypeExist(CheckWebHookSubscriptionEventTypeExistRequest req)
         {
             Logger.WriteTraceLog($"Start CheckWebHookSubscriptionEventTypeExist()");
@@ -545,6 +567,7 @@ namespace IntellaLendAPI.Controllers
             Logger.WriteTraceLog($"End CheckWebHookSubscriptionEventTypeExist()");
             return response;
         }
+
 
     }
 }

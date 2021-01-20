@@ -38,7 +38,7 @@ namespace IntellaLend.CommonServices
         }
 
         public bool RetentionPurge(long[] loanIDs, long userID, string username)
-        {            
+        {
             CustomerDataAccess customerDataAccess = new CustomerDataAccess(TableSchema);
             foreach (var loanID in loanIDs)
             {
@@ -54,6 +54,15 @@ namespace IntellaLend.CommonServices
             return false;
         }
 
+        public object GetCustomerImportStaging(Int32 Status, DateTime ImportDateFrom, DateTime ImportDateTo,Int64 AssignType)
+        {
+            return new CustomerDataAccess(TableSchema).GetCustomerImportStaging(Status, ImportDateFrom, ImportDateTo, AssignType);
+        }
+
+        public object GetCustomerImportStagingDetails(Int64 CustomerImportStagingID)
+        {
+            return new CustomerDataAccess(TableSchema).GetCustomerImportStagingDetails(CustomerImportStagingID);
+        }
         #endregion
     }
 }

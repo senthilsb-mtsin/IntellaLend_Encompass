@@ -25,6 +25,7 @@ namespace IntellaLendAPI.Controllers
     {
         private static string[] HeaderParams = { "TableSchema", "UploadFileName", "ReviewType", "LoanType", "UserId", "CustomerID", "DocId", "LoanId", "AuditMonthYear", "PriorityType", "AuditDueDate" };
         private static string filePath = ConfigurationManager.AppSettings["filePath"].ToString();
+        private static string CustomerImportFilePath = ConfigurationManager.AppSettings["CustomerImportFilePath"].ToString();
 
         [HttpPost]
         public async Task<TokenResponse> FileUploader()
@@ -378,6 +379,36 @@ namespace IntellaLendAPI.Controllers
             return response;
 
 
+        }
+
+        [HttpPost]
+        public async Task<TokenResponse> UploadCustomerImportFile()
+        {
+
+            Logger.WriteTraceLog($"Start UploadCustomerImportFile()");
+            TokenResponse response = new TokenResponse();
+            response.ResponseMessage = new ResponseMessage();
+            try
+            {
+                var provider = new MultipartMemoryStreamProvider();
+                await Request.Content.ReadAsMultipartAsync(provider);
+                Dictionary<string, string> paramsValues = GetHeaderValue(Request.Headers);
+                if (paramsValues.Count.Equals(2))
+                {
+                    response.token = new JWTToken().CreateJWTToken();
+                    response.data = new JWTToken().CreateJWTToken(new FileUploadService().UploadCustomerImportFile(paramsValues, CustomerImportFilePath, provider));
+                }
+                else
+                    throw new Exception("Header Parameter Mismatch");
+            }
+            catch (Exception Exc)
+            {
+                response.token = null;
+                response.ResponseMessage.MessageDesc = Exc.Message;
+                MTSExceptionHandler.HandleException(ref Exc);
+            }
+            Logger.WriteTraceLog($"End UploadCustomerImportFile()");
+            return response;
         }
 
         #region Private Methods

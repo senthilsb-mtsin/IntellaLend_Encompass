@@ -40,25 +40,23 @@ namespace IntellaLend.EntityDataHandler
 
         public object AddCustomer(CustomerMaster customerMaster)
         {
-            bool isCustomerNotExist;
+            bool Success = false, CustomerNameExist = false, CustomerCodeExist = false;
             using (var db = new DBConnect(TableSchema))
             {
                 using (var trans = db.Database.BeginTransaction())
                 {
-                    if (!db.CustomerMaster.Any(x => x.CustomerName.Equals(customerMaster.CustomerName)))
+                    CustomerNameExist = db.CustomerMaster.Any(x => x.CustomerName.Equals(customerMaster.CustomerName));
+                    CustomerCodeExist = (!string.IsNullOrEmpty(customerMaster.CustomerCode.Trim()) && db.CustomerMaster.Any(x => x.CustomerCode.Equals(customerMaster.CustomerCode)));
+                    if (!CustomerNameExist && !CustomerCodeExist)
                     {
                         db.CustomerMaster.Add(customerMaster);
                         db.SaveChanges();
                         trans.Commit();
-                        isCustomerNotExist = true;
-                    }
-                    else
-                    {
-                        isCustomerNotExist = false;
+                        Success = true;
                     }
                 }
             }
-            return new { Success = isCustomerNotExist, CustomerID = customerMaster.CustomerID };
+            return new { Success, CustomerNameExist, CustomerCodeExist, CustomerID = customerMaster.CustomerID };
         }
 
         public bool DeleteLoanImages(Int64 loanid)
@@ -143,23 +141,57 @@ namespace IntellaLend.EntityDataHandler
 
         public object EditCustomer(CustomerMaster customerMaster)
         {
+            bool Success = false, CustomerNameExist = false, CustomerCodeExist = false;
             using (var db = new DBConnect(TableSchema))
             {
                 using (var trans = db.Database.BeginTransaction())
                 {
-                    CustomerMaster updateCustomer = db.CustomerMaster.AsNoTracking().Single(u => u.CustomerID == customerMaster.CustomerID);
-                    customerMaster.CreatedOn = updateCustomer.CreatedOn;
-                    customerMaster.ModifiedOn = DateTime.Now;
-                    db.Entry(customerMaster).State = EntityState.Modified;
-                    db.SaveChanges();
-                    //db.Update(customerMaster);
-                    //db.SaveChanges();
-                    trans.Commit();
+
+                    CustomerNameExist = db.CustomerMaster.Any(x => !x.CustomerID.Equals(customerMaster.CustomerID) && x.CustomerName.Equals(customerMaster.CustomerName));
+                    CustomerCodeExist = (!string.IsNullOrEmpty(customerMaster.CustomerCode.Trim()) && db.CustomerMaster.Any(x => !x.CustomerID.Equals(customerMaster.CustomerID) && x.CustomerCode.Equals(customerMaster.CustomerCode)));
+                    if (!CustomerNameExist && !CustomerCodeExist)
+                    {
+                        CustomerMaster updateCustomer = db.CustomerMaster.AsNoTracking().Single(u => u.CustomerID == customerMaster.CustomerID);
+                        customerMaster.CreatedOn = updateCustomer.CreatedOn;
+                        customerMaster.ModifiedOn = DateTime.Now;
+                        db.Entry(customerMaster).State = EntityState.Modified;
+                        db.SaveChanges();
+                        //db.Update(customerMaster);
+                        //db.SaveChanges();
+                        trans.Commit();
+                        Success = true;
+                    }
                 }
             }
-            return true;
+            return new { Success, CustomerNameExist, CustomerCodeExist };
         }
 
+        public object GetCustomerImportStaging(Int32 Status, DateTime ImportDateFrom, DateTime ImportDateTo, Int64 AssignType)
+        {
+            ImportDateTo = ImportDateTo.AddDays(1);
+            List<CustomerImportStaging> customerImportStagingList;
+            using (var db = new DBConnect(TableSchema))
+            {
+                customerImportStagingList = db.CustomerImportStaging.AsNoTracking().Where(
+                    x => (x.Status == Status || Status == 0) && (x.AssignType == AssignType)
+                    && x.CreatedOn >= ImportDateFrom
+                    && x.CreatedOn <= ImportDateTo
+                    ).ToList();
+            }
+            return customerImportStagingList.OrderByDescending(x => x.ModifiedOn).ToList();
+        }
+
+        public object GetCustomerImportStagingDetails(Int64 CustomerImportStagingID)
+        {
+            List<CustomerImportStagingDetail> customerImportStagingDetailsList;
+            using (var db = new DBConnect(TableSchema))
+            {
+                customerImportStagingDetailsList = db.CustomerImportStagingDetail.AsNoTracking().Where(
+                    x => x.CustomerImportStagingID == CustomerImportStagingID
+                    ).ToList();
+            }
+            return customerImportStagingDetailsList.OrderBy(x => x.CreatedOn).ToList();
+        }
         #endregion
 
     }

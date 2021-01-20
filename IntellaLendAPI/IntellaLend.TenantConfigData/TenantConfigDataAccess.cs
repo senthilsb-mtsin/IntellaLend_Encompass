@@ -511,6 +511,17 @@ namespace IntellaLend.EntityDataHandler
             }
             return new { EventTypeExist };
         }
+
+        public object GetFannieMaeCustomerConfig()
+        {
+            bool FannieMaeCustomerConfig;
+            using (var db = new DBConnect(TenantSchema))
+            {
+                CustomerConfig customerConfig = db.CustomerConfig.AsNoTracking().Where(x => x.ConfigKey.Equals("FannieMae")).FirstOrDefault();
+                FannieMaeCustomerConfig = customerConfig != null && customerConfig.ConfigValue.ToLower().Equals("true");
+            }
+            return new { FannieMaeCustomerConfig };
+        }
         #endregion
 
 

@@ -383,5 +383,27 @@ namespace IntellaLendAPI.Controllers
             Logger.WriteTraceLog($"End GetLOSCurrentExportLoanDetail()");
             return response;
         }
+        [HttpPost]
+        public TokenResponse ReExportLosDetail(ReExportLOSDetailRequest req)
+        {
+            Logger.WriteTraceLog($"Start ReExportLosDetail()");
+            Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(req)}");
+            TokenResponse response = new TokenResponse();
+            response.ResponseMessage = new ResponseMessage();
+
+            try
+            {
+                response.token = new JWTToken().CreateJWTToken();
+                response.data = new JWTToken().CreateJWTToken(new LoanService(req.TableSchema).ReExportLosDetail(req.LoanID, req.FileType, req.ID));
+            }
+            catch (Exception ex)
+            {
+                response.token = null;
+                response.ResponseMessage.MessageDesc = ex.Message;
+                MTSExceptionHandler.HandleException(ref ex);
+            }
+            Logger.WriteTraceLog($"End ReExportLosDetail()");
+            return response;
+        }
     }
 }

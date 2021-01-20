@@ -201,6 +201,27 @@ namespace IntellaLend.CommonServices
 
         }
 
+        public async Task<object> UploadCustomerImportFile(Dictionary<string, string> paramsValues, string customerImportFilePath, MultipartMemoryStreamProvider provider)
+        {
+            string fileName = paramsValues["UploadFileName"];
+            string exactPath = Path.Combine(customerImportFilePath);
+            if (!Directory.Exists(exactPath))
+            {
+                Directory.CreateDirectory(exactPath);
+            }                            
+
+            byte[] fileStream = null;
+
+            foreach (var file in provider.Contents)
+            {
+                fileStream = await file.ReadAsByteArrayAsync();
+            }
+
+            File.WriteAllBytes(Path.Combine(exactPath, fileName), fileStream);
+
+            return new { Result = true };
+        }
+
         #endregion
 
         #region Private Methods        
@@ -231,7 +252,6 @@ namespace IntellaLend.CommonServices
         {
             return new FileUploadDataAccess(TableSchema).GetBoxDuplicateUploadFiles(customerID, reviewType, boxItems, UserID, FileFilter);
         }
-
 
         #endregion
     }
