@@ -126,8 +126,10 @@ namespace IL.EncompassFileDownloader
                     _eLookUpFields.Add(EncompassFieldConstant.LOAN_NUMBER);
                     _eLookUpFields.Add(_serviceType.EFetchFieldID);
                     _eLookUpFields = _eLookUpFields.Union(_enLoanSearchFields.Select(x => x.EncompassFieldID).ToList()).Distinct().ToList();
+                    LogMessage($"_eLoanGUID : {_eLoanGUID}");
+                    LogMessage(JsonConvert.SerializeObject(_eLookUpFields));
                     List<EFieldResponse> _enFieldResponse = GetAllFieldValuesFromEncompass(_api, _eLoanGUID, _eLookUpFields.ToArray());
-
+                    LogMessage(JsonConvert.SerializeObject(_enFieldResponse));
                     EFieldResponse _eResponse = _enFieldResponse.Where(x => x.FieldId == _serviceType.EFetchFieldID).FirstOrDefault();
                     LogMessage(JsonConvert.SerializeObject(_eResponse));
 
@@ -174,7 +176,7 @@ namespace IL.EncompassFileDownloader
                                     foreach (var item in _eDocAttachments)
                                     {
                                         string[] _attGUID = item.EntityId.Split('.');
-                                        string _attachmentGUID = _attGUID[0].Replace("attachment-","");
+                                        string _attachmentGUID = _attGUID[0].Replace("attachment-", "");
                                         EAttachment eAttachment = _api.GetAttachment(_eLoanGUID, _attachmentGUID);
                                         _lsEAttachments.Add(eAttachment);
                                     }

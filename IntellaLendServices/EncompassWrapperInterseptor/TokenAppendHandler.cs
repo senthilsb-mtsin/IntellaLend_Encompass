@@ -29,25 +29,32 @@ namespace EncompassWrapperInterseptor
 
         public void GetTokenFromDB(object sender, WebClientArgs e)
         {
+            Logger.WriteTraceLog("on GetTokenGromDB");
+            Logger.WriteTraceLog($"_dataAccess == null : {_dataAccess == null}");
             EncompassAccessToken _token = _dataAccess.GetDBToken();
+            Logger.WriteTraceLog("End GetDBToken");
             List<EncompassConfig> _config = _dataAccess.GetEncompassConfig();
-
+            Logger.WriteTraceLog("End GetEncompassConfig");
+            Logger.WriteTraceLog($"_config.Count : {_config.Count}");
             if (_config.Count == 0)
                 throw new Exception("Encompass Token Configuration not available");
 
             string clientID = _config.Where(c => c.Type.Contains(EncompassConstant.ValidateToken) && c.ConfigKey == EncompassConfigConstant.CLIENT_ID).FirstOrDefault().ConfigValue;
+            Logger.WriteTraceLog($"clientID : {clientID}");
             string clientSecret = _config.Where(c => c.Type.Contains(EncompassConstant.ValidateToken) && c.ConfigKey == EncompassConfigConstant.CLIENT_SECRET).FirstOrDefault().ConfigValue;
-
+            Logger.WriteTraceLog($"clientSecret : {clientSecret}");
             //bool validToken = false;
 
             //if (_token != null)
             //    validToken = CheckValidToken(_token.AccessToken, clientID, clientSecret);
 
-            Logger.WriteTraceLog($" _token not available in Database");
+            //Logger.WriteTraceLog($" _token not available in Database");
 
             if (_token == null)
             {
+                Logger.WriteTraceLog($"_token == null : {_token == null}");
                 EToken newToken = GetToken(_config, clientID, clientSecret);
+                Logger.WriteTraceLog($"After GetToken, newToken != null : {newToken != null}");
                 if (newToken != null)
                 {
                     _dataAccess.UpdateNewToken(newToken.TokenType, newToken.AccessToken);

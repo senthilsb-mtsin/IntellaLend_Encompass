@@ -14,10 +14,8 @@ namespace IntellaLend.CommonServices
         #region Constructor
         private static string TenantSchema;
         private static string SystemSchema = "IL";
-
         public IntellaLendServices()
         { }
-
         public IntellaLendServices(string tenantSchema)
         {
             TenantSchema = tenantSchema;
@@ -37,14 +35,13 @@ namespace IntellaLend.CommonServices
         }
         public object SetMileStoneEvent(string _loanGUID, string _instanceID)
         {
-            return new IntellaLendDataAccess().SetDocumentEvent(_instanceID);
+            return new IntellaLendDataAccess().SetMileStoneEvent(_loanGUID, _instanceID);
         }
 
         public object SetDocumentEvent(string _loanGUID, string _instanceID)
         {
-            return new IntellaLendDataAccess().SetDocumentEvent(_instanceID);
+            return new IntellaLendDataAccess().SetDocumentEvent(_loanGUID, _instanceID);
         }
-
 
         public bool DeleteDocumentField(Int64 FieldID)
         {
@@ -72,7 +69,7 @@ namespace IntellaLend.CommonServices
         }
 
         public object GetLoanTypes(Int64 ReviewTypeID, bool IsAdd)
-        {
+        {  
             return new IntellaLendDataAccess().GetSystemAllLoanTypes(ReviewTypeID, IsAdd);
         }
 
@@ -103,7 +100,7 @@ namespace IntellaLend.CommonServices
         {
             return new IntellaLendDataAccess().GetLosSystemDocFields(docName);
         }
-
+        
 
         public object GetStackingOrder(Int64 LoanTypeID)
         {
@@ -130,6 +127,11 @@ namespace IntellaLend.CommonServices
             return new IntellaLendDataAccess().SetReviewLoanMapping(ReviewTypeID, LoanTypeIDs);
         }
 
+        public object RemoveReviewLoanMapping(Int64 ReviewTypeID, Int64[] LoanTypeIDs)
+        {
+            return new IntellaLendDataAccess().RemoveReviewLoanMapping(ReviewTypeID, LoanTypeIDs);
+        }
+
         public string GetLosValues(string searchValue)
         {
 
@@ -140,10 +142,10 @@ namespace IntellaLend.CommonServices
         {
             return new IntellaLendDataAccess().GetSystemDocuments(LoanTypeID);
         }
-
-        public bool SaveConditionGeneralRule(Int64 DocumentID, string RuleValue, Int64 LoanTypeID)
+      
+        public bool SaveConditionGeneralRule( Int64 DocumentID,string RuleValue,Int64 LoanTypeID)
         {
-            return new IntellaLendDataAccess(TenantSchema).SaveConditionGeneralRule(DocumentID, RuleValue, LoanTypeID);
+            return new IntellaLendDataAccess(TenantSchema).SaveConditionGeneralRule(DocumentID, RuleValue,LoanTypeID);
         }
 
         public bool SetLoanDocTypeMapping(Int64 LoanTypeID, List<DocMappingDetails> DocMappingDetails)
@@ -160,18 +162,18 @@ namespace IntellaLend.CommonServices
         {
             return new IntellaLendDataAccess(TenantSchema).SetCustReverifyDocMapping(CustomerID, ReverificationID, DocTypeIDs);
         }
+        
 
-
-        public object GetMappedTemplate(Int64 TemplateID, Int64 MappingID, Int64 ReverificationID)
+        public object GetMappedTemplate(Int64 TemplateID, Int64 MappingID,Int64 ReverificationID)
         {
             return new IntellaLendDataAccess().GetMappedTemplate(TemplateID, MappingID, ReverificationID);
         }
 
         public object GetCustMappedTemplate(Int64 TemplateID, Int64 MappingID, Int64 ReverificationID)
         {
-            return new IntellaLendDataAccess(TenantSchema).GetCustMappedTemplate(TemplateID, MappingID, ReverificationID);
+            return new IntellaLendDataAccess(TenantSchema).GetCustMappedTemplate(TemplateID, MappingID,ReverificationID);
         }
-
+        
 
         public object GetSystemDocumentTypes()
         {
@@ -186,7 +188,7 @@ namespace IntellaLend.CommonServices
         public List<object> GetCustReverificationMaster()
         {
             return new IntellaLendDataAccess(TenantSchema).GetCustReverificationMaster();
-        }
+        }        
 
         public List<string> GetDocFieldsByName(string DocumentTypeName)
         {
@@ -208,7 +210,7 @@ namespace IntellaLend.CommonServices
         public bool UpdateCustMappingTemplateFields(Int64 MappingID, string TemplateFieldJson)
         {
             return new IntellaLendDataAccess(TenantSchema).UpdateCustMappingTemplateFields(MappingID, TemplateFieldJson);
-        }
+        }        
 
         //public bool SetDocLoanTypeMapping(Int64 DocumentTypeID, Int64[] LoanTypeIDs)
         //{
@@ -254,12 +256,12 @@ namespace IntellaLend.CommonServices
                     Guid LogoGUID = Guid.NewGuid();
                     try
                     {
-                        Int64 ReverificationID = Convert.ToInt64(paramsValues["ReverificationID"]);
-                        string FileName = Convert.ToString(paramsValues["UploadFileName"]);
+                         Int64 ReverificationID = Convert.ToInt64(paramsValues["ReverificationID"]);
+                         string FileName = Convert.ToString(paramsValues["UploadFileName"]);
                         string TenantSchema = Convert.ToString(paramsValues["TableSchema"]);
                         //bool Active = true;
-
-                        data = new IntellaLendDataAccess(TenantSchema).ReverificationFileUploader(ReverificationID, fileStream, LogoGUID, FileName);
+                      
+                        data = new IntellaLendDataAccess(TenantSchema).ReverificationFileUploader(ReverificationID, fileStream, LogoGUID,FileName);
                     }
                     catch (Exception ex)
                     {
@@ -338,7 +340,7 @@ namespace IntellaLend.CommonServices
         {
             return new IntellaLendDataAccess(TenantSchema).UpdateCustReverification(CustomerID, LoanTypeID, ReverificationName, TemplateID, MappingID, ReverificationID, Active);
         }
-
+        
 
         public object GetReverificationMappedDoc(Int64 LoanTypeID, Int64 ReverificationID)
         {
@@ -349,7 +351,7 @@ namespace IntellaLend.CommonServices
         {
             return new IntellaLendDataAccess(TenantSchema).GetCustReverificationMappedDoc(CustomerID, LoanTypeID, ReverificationID);
         }
-
+        
 
         public List<SMTPDETAILS> GetAllSMPTDetails()
         {
@@ -377,6 +379,11 @@ namespace IntellaLend.CommonServices
         public PasswordPolicy SavePasswordPolicy(PasswordPolicy _passwordPolicy)
         {
             return new IntellaLendDataAccess().SavePasswordPolicy(_passwordPolicy);
+        }
+
+        public List<LOSDocumentFields> GetLosDocumentFields(Int64 lOSDocumentId, string fieldSearchWord)
+        {
+            return new IntellaLendDataAccess(TenantSchema).GetLosDocumentFields(lOSDocumentId, fieldSearchWord);
         }
         #endregion
 

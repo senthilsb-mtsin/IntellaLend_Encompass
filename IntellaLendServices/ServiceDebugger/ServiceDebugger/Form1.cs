@@ -59,7 +59,7 @@ namespace ServiceDebugger
             DataTable dtServiceInfo = new DataTable();
             try
             {
-                dtServiceInfo = DataAccess.ExecuteDataTable("[IL].[GETSERVICECONFIGFORSERVICE]", "ILRevampProduct_LOSLoanExport"); //serviceList.Text);
+                dtServiceInfo = DataAccess.ExecuteDataTable("[IL].[GETSERVICECONFIGFORSERVICE]", "CalHFA_ImportToIntellaLend"); //serviceList.Text);
                 string DLLName = dtServiceInfo.Rows[0]["DLLName"].ToString();
                 string ServiceParams = dtServiceInfo.Rows[0]["ServiceParams"].ToString();
                 Assembly ServiceDll = Assembly.LoadFile(Environment.CurrentDirectory + @"\" + DLLName);

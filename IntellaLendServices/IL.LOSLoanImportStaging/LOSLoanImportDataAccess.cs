@@ -5,6 +5,7 @@ using IntellaLend.Model;
 using MTSEntityDataAccess;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 
 namespace IL.LOSLoanImport
@@ -26,11 +27,11 @@ namespace IL.LOSLoanImport
             }
         }
 
-        public CustomerMaster CheckCustomerExists(string _lenderCode)
+        public CustomerMaster CheckCustomerExists(string _lenderCode, string _lenderName)
         {
             using (var db = new DBConnect(TenantSchema))
             {
-                return db.CustomerMaster.AsNoTracking().Where(m => m.CustomerCode == _lenderCode).FirstOrDefault();
+                return db.CustomerMaster.AsNoTracking().Where(m => m.CustomerCode == _lenderCode && m.CustomerName == _lenderName).FirstOrDefault();
             }
         }
 
@@ -80,6 +81,21 @@ namespace IL.LOSLoanImport
                 db.SaveChanges();
 
                 return _import.ID;
+            }
+        }
+
+        public void SetEmailEntry(Int64 TemplateID, string EmailContent)
+        {
+            EmailMaster em = new EmailMaster() { EMAILSP = EmailContent, REQUESTTIME = DateTime.Now, TEMPLATEID = TemplateID, STATUS = 0 };
+
+            using (var db = new DBConnect(SystemSchema))
+            {
+                using (var tran = db.Database.BeginTransaction())
+                {
+                    db.EmailMaster.Add(em);
+                    db.SaveChanges();
+                    tran.Commit();
+                }
             }
         }
 
@@ -187,20 +203,32 @@ namespace IL.LOSLoanImport
         {
             using (var db = new DBConnect(TenantSchema))
             {
-                LOSLoanDetails _detail = new LOSLoanDetails()
+                LOSLoanDetails _detail = db.LOSLoanDetails.AsNoTracking().Where(l => l.LoanID == _loanID).FirstOrDefault();
+
+                if (_detail == null)
                 {
-                    LoanID = _loanID,
-                    LOSDetailJSON = _fannieMaeJSON,
-                    LOSDocumentID = _LOSDocumentID,
-                    Createdon = DateTime.Now,
-                    ModifiedOn = DateTime.Now
-                };
-                db.LOSLoanDetails.Add(_detail);
+                    _detail = new LOSLoanDetails()
+                    {
+                        LoanID = _loanID,
+                        LOSDetailJSON = _fannieMaeJSON,
+                        LOSDocumentID = _LOSDocumentID,
+                        Createdon = DateTime.Now,
+                        ModifiedOn = DateTime.Now
+                    };
+                    db.LOSLoanDetails.Add(_detail);
+                }
+                else
+                {
+                    _detail.LOSDetailJSON = _fannieMaeJSON;
+                    _detail.ModifiedOn = DateTime.Now;
+                    db.Entry(_detail).State = EntityState.Modified;
+                }
+
                 db.SaveChanges();
             }
         }
 
-        public Int64 CreateLoan(Loan loan)
+        public Int64 CreateLoan(Loan loan, string auditDueDate)
         {
             using (var db = new DBConnect(TenantSchema))
             {
@@ -215,7 +243,7 @@ namespace IL.LOSLoanImport
                     if (loan.Priority == 0)
                     {
                         ReviewTypeMaster reviewTypeMaster = db.ReviewTypeMaster.AsNoTracking().Where(a => a.ReviewTypeID == loan.ReviewTypeID).FirstOrDefault();
-                        loan.Priority = reviewTypeMaster != null && reviewTypeMaster.ReviewTypePriority.HasValue ? reviewTypeMaster.ReviewTypePriority.Value : 0;
+                        loan.Priority = reviewTypeMaster != null && reviewTypeMaster.ReviewTypePriority.HasValue ? reviewTypeMaster.ReviewTypePriority.Value : 2;
                     }
                     db.Loan.Add(loan);
                     db.SaveChanges();
@@ -233,7 +261,7 @@ namespace IL.LOSLoanImport
                         _loansearch.Status = loan.Status;
                         _loansearch.ReceivedDate = loan.CreatedOn;
                         _loansearch.ModifiedOn = DateTime.Now;
-                        _loansearch.AuditDueDate = Convert.ToDateTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString(IntellaLend.Constance.DateConstance.AuditDateFormat));
+                        _loansearch.AuditDueDate = string.IsNullOrEmpty(auditDueDate) ? Convert.ToDateTime(DateTime.Now.ToString(DateConstance.AuditDateFormat)) : Convert.ToDateTime(Convert.ToDateTime(auditDueDate).ToString(DateConstance.AuditDateFormat));
                         _loansearch.CreatedOn = DateTime.Now;
                         _loansearch.LoanID = loan.LoanID;
                         db.LoanSearch.Add(_loansearch);

@@ -1,6 +1,7 @@
 ﻿using IntellaLend.Constance;
 using IntellaLend.Model;
 using MTSEntBlocks.LoggerBlock;
+using MTSEntBlocks.UtilsBlock;
 using MTSEntityDataAccess;
 using Newtonsoft.Json;
 using System;
@@ -88,7 +89,7 @@ namespace IL.LOSLoanExport
                 loanDic["Event"] = LOSExportEventConstant.LOS_EXPORT_EVENT;
                 loanDic["EventDescription"] = LOSExportEventConstant.LOS_EXPORT_EVENT_DESC;
                 loanDic["Version"] = ConfigurationManager.AppSettings["AppVersion"];
-                loanDic["LoanURL"] = appURL;
+                loanDic["LoanURL"] = $"{appURL}/view/loandetails/{CommonUtils.EnDecrypt(_loan.LoanGUID.ToString())}";
                 loanDic["Documents"] = _exportDocs;
                 loanDic["Rules"] = _rules;
                 //loanDic["AutoRules"] = _aRuleResult;
@@ -108,6 +109,7 @@ namespace IL.LOSLoanExport
                 {
                     if (loanAutoRules[i].ContainsKey("CheckListName") && loanAutoRules[i]["CheckListName"] == item.RuleName)
                     {
+                        loanAutoRules[i]["CheckListName"] = loanAutoRules[i]["CheckListName"].Replace("\"", "'");
                         ruleEvalItem = loanAutoRules[i];
                     }
                 }
@@ -163,6 +165,7 @@ namespace IL.LOSLoanExport
                     ManualkAnswerJson _ans = JsonConvert.DeserializeObject<ManualkAnswerJson>(item.AnswerJson);
                     if (_ans != null)
                     {
+                        _ans.Answer = JsonConvert.DeserializeObject<AnswersJson>(item.AnswerJson).Answer;
                         _ans.RuleID = item.RuleID;
                         _mAnserJson.Add(_ans);
                     }
@@ -201,11 +204,11 @@ namespace IL.LOSLoanExport
                 _mRuleResult.Add(new RuleResult()
                 {
                     RuleID = item.RuleID,
-                    Notes = _ans != null ? _ans.Notes : string.Empty,
+                    Notes = _ans != null ? _ans.Notes.Replace("\"", "'") : string.Empty,
                     RuleType = "Manual",
-                    RuleName = item.CheckListName,
+                    RuleName = item.CheckListName.Replace("\"", "'"),
                     RuleDescription = item.Question,
-                    SelectedAnswer = _ans != null ? _ans.Ansewer.Select(x => x.ToString()).ToList() : new List<string>(),
+                    SelectedAnswer = _ans != null ? _ans.Answer.Select(x => x.ToString()).ToList() : new List<string>(),
                     Options = OptionVals,
                     DocTypes = _ruleDocs,
                     ErrorMessage = string.Empty,
@@ -238,6 +241,8 @@ namespace IL.LOSLoanExport
                 _eDoc.Reviewed = doc.Reviewed;
                 _eDoc.DocumentExtractionAccuracy = doc.DocumentExtractionAccuracy;
                 _eDoc.Confidence = doc.Confidence;
+                _eDoc.DocumentIdentifier = doc.Identifier;
+                _eDoc.BatchInstanceIdentifier = doc.BatchInstanceIdentifier;
 
                 if (doc.DocumentTypeID == 0)
                     _eDoc.DocumentFile = Path.Combine(ExportPath, $"{doc.Description}_{doc.DocumentTypeID}_{_eDoc.Version}.pdf");
@@ -254,7 +259,7 @@ namespace IL.LOSLoanExport
                 //Logger.WriteTraceLog($"doc.DocumentLevelFields : {doc.DocumentLevelFields.Count}");
 
                 foreach (var item in doc.DocumentLevelFields)
-                    _eDoc.DataFields.Add(new JSONField() { PropertyName = item.Name, PropertyValue = item.Value });
+                    _eDoc.DataFields.Add(new JSONField() { PropertyName = item.Name, PropertyValue = item.Value.Replace("\"", "'") });
 
 
                 //Logger.WriteTraceLog($"_eDoc.DataFields : {_eDoc.DataFields.Count}");
@@ -273,7 +278,7 @@ namespace IL.LOSLoanExport
                     foreach (var itemRow in item.Rows)
                         _table.Rows.Add(new RowData()
                         {
-                            CellValues = itemRow.RowColumns.Select(x => new JSONField() { PropertyName = x.Name, PropertyValue = x.Value }).ToList()
+                            CellValues = itemRow.RowColumns.Select(x => new JSONField() { PropertyName = x.Name, PropertyValue = x.Value.Replace("\"", "'") }).ToList()
                         });
 
                     _eDoc.DataTables.Add(_table);

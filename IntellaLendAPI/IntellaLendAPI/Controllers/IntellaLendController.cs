@@ -225,7 +225,7 @@ namespace IntellaLendAPI.Controllers
         }
 
         [HttpPost]
-        public TokenResponse GetLosSystemDocumentTypes(LosType _losType)
+        public TokenResponse GetLosSystemDocumentTypes(LosTypeName _losType)
         {
             Logger.WriteTraceLog($"Start GetLosSystemDocumentTypes()");
             Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(_losType)}");
@@ -248,7 +248,7 @@ namespace IntellaLendAPI.Controllers
             return response;
         }
         [HttpPost]
-        public TokenResponse GetAssignedDocumentFields(LosType _losType)
+        public TokenResponse GetAssignedDocumentFields(LosTypeName _losType)
         {
             Logger.WriteTraceLog($"Start GetAssignedDocumentFields()");
             Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(_losType)}");
@@ -427,6 +427,28 @@ namespace IntellaLendAPI.Controllers
                 MTSExceptionHandler.HandleException(ref exc);
             }
             Logger.WriteTraceLog($"End SetReviewLoanMapping()");
+            return response;
+        }
+
+        [HttpPost]
+        public TokenResponse RemoveReviewLoanMapping(RequestSaveSystemReviewLoan req)
+        {
+            Logger.WriteTraceLog($"Start RemoveReviewLoanMapping()");
+            Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(req)}");
+            TokenResponse response = new TokenResponse();
+            response.ResponseMessage = new ResponseMessage();
+            try
+            {
+                response.token = new JWTToken().CreateJWTToken();
+                response.data = new JWTToken().CreateJWTToken(new IntellaLendServices().RemoveReviewLoanMapping(req.ReviewTypeID, req.LoanTypeIDs));
+            }
+            catch (Exception exc)
+            {
+                response.token = null;
+                response.ResponseMessage.MessageDesc = exc.Message;
+                MTSExceptionHandler.HandleException(ref exc);
+            }
+            Logger.WriteTraceLog($"End RemoveReviewLoanMapping()");
             return response;
         }
 
@@ -1123,6 +1145,29 @@ namespace IntellaLendAPI.Controllers
                 MTSExceptionHandler.HandleException(ref ex);
             }
             Logger.WriteTraceLog($"End SavePasswordPolicy()");
+            return response;
+        }
+        [HttpPost]
+        public TokenResponse GetLosDocumentFields(LOSDocumentFieldsReq req)
+        {
+            Logger.WriteTraceLog($"Start GetLosDocumentFields()");
+            Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(req)}");
+            TokenResponse response = new TokenResponse();
+            response.ResponseMessage = new ResponseMessage();
+            try
+            {
+                response.token = new JWTToken().CreateJWTToken();
+                response.data = new JWTToken().CreateJWTToken(new IntellaLendServices(req.TableSchema).GetLosDocumentFields(req.LOSDocumentId,req.FieldSearchWord));
+            }
+
+            catch (Exception ex)
+            {
+                response.token = null;
+                response.ResponseMessage.MessageDesc = ex.Message;
+
+                MTSExceptionHandler.HandleException(ref ex);
+            }
+            Logger.WriteTraceLog($"End GetLosDocumentFields()");
             return response;
         }
     }

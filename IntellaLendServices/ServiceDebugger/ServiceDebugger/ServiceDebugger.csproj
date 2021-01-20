@@ -48,6 +48,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="itextsharp, Version=5.5.12.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\iTextSharp.5.5.12\lib\itextsharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
       <Private>True</Private>
@@ -115,6 +119,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\IntellaLendBlocks\IntellaLend.AuditData\IntellaLend.AuditData.csproj">
+      <Project>{263344a0-60a6-44b8-8d6f-9907090754d0}</Project>
+      <Name>IntellaLend.AuditData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\IntellaLendBlocks\IntellaLend.Audit\IntellaLend.Audit.csproj">
+      <Project>{5e3bc39d-0158-4696-a805-4d9e0e06d008}</Project>
+      <Name>IntellaLend.Audit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\IntellaLendBlocks\IntellaLend.Constance\IntellaLend.Constance.csproj">
+      <Project>{a8b652a8-ea6c-4080-9f2b-ddda23e14a51}</Project>
+      <Name>IntellaLend.Constance</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\IntellaLendBlocks\MTSEntBlocks.DataBlock\MTSEntBlocks.DataBlock.csproj">
       <Project>{b8fd6d7d-3700-4daf-a7a1-9ff1d86c1ace}</Project>
       <Name>MTSEntBlocks.DataBlock</Name>
@@ -122,6 +138,18 @@
     <ProjectReference Include="..\..\..\IntellaLendBlocks\MTSEntBlocks.ExceptionBlock\MTSEntBlocks.ExceptionBlock.csproj">
       <Project>{bf640616-4953-47c5-8bec-613a645cfdd1}</Project>
       <Name>MTSEntBlocks.ExceptionBlock</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\IntellaLendBlocks\MTSEntBlocks.LoggerBlock\MTSEntBlocks.LoggerBlock.csproj">
+      <Project>{167d2b19-f361-4093-8e1f-61d5778f5c5d}</Project>
+      <Name>MTSEntBlocks.LoggerBlock</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\IntellaLendBlocks\MTSEntityDataAccess\MTSEntityDataAccess.csproj">
+      <Project>{9980d561-76c0-486f-9744-5d1bf6512b9d}</Project>
+      <Name>MTSEntityDataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\IntellaLendBlocks\UtilsBlock\UtilsBlock.csproj">
+      <Project>{60c51b78-d847-4463-95fd-123d2e8fe1da}</Project>
+      <Name>UtilsBlock</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\IL.BoxFileDownloader\IL.BoxFileDownloader.csproj">
       <Project>{3aa28172-f0bc-42a4-8d4d-fdeaa491ad51}</Project>
@@ -175,7 +203,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties VsiSettingsState="Initialized" VsiUseTimeUtc="UseGlobal" VsiDeltaBaseDate="7/30/2020 4:47:28 PM" VsiUseGlobalBaseDate="True" VsiConfigurationBuildAction="UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal" VsiAutoInformationalVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoFileVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiEnabled="True" BuildVersion_StartDate="2000/1/1" />
+      <UserProperties BuildVersion_StartDate="2000/1/1" VsiEnabled="True" VsiAutoVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoFileVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoInformationalVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiConfigurationBuildAction="UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal" VsiUseGlobalBaseDate="True" VsiDeltaBaseDate="7/30/2020 4:47:28 PM" VsiUseTimeUtc="UseGlobal" VsiSettingsState="Initialized" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

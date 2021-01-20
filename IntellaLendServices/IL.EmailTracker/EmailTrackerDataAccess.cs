@@ -145,6 +145,17 @@ namespace IL.EmailTrackers
                     db.SaveChanges();
             }
         }
+
+        public string GetUserEmail(long UserID)
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
+                var userDetail = db.Users.AsNoTracking().Where(u => u.UserID == UserID).FirstOrDefault();
+                if (userDetail != null)
+                    return userDetail.Email;
+            }
+            return null;
+        }
     }
 
 }

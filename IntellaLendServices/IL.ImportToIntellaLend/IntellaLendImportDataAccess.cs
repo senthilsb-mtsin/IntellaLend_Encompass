@@ -37,7 +37,7 @@ namespace IL.ImportToIntellaLend
         //Update Document id and field id
         public void UpdateDocumentTypeAndFieldType(Batch batchObj)
         {
-            using (var db = new DBConnect(TenantSchema))
+            using (DBConnect db = new DBConnect(TenantSchema), dbs = new DBConnect(SystemSchema))
             {
                 Loan _loan = GetLoanInfo(batchObj.LoanID, db);
 
@@ -45,16 +45,32 @@ namespace IL.ImportToIntellaLend
 
                 foreach (var document in batchObj.Documents)
                 {
+                    document.BatchInstanceIdentifier = batchObj.BatchInstanceIdentifier;
                     var docID = docList.Where(m => m.Name == document.Type).ToList();
                     if (docID.Count > 0)
                         document.DocumentTypeID = docID[0].DocumentTypeID;
 
-                    var fieldList = db.DocumentFieldMaster.AsNoTracking().Where(m => m.DocumentTypeID == document.DocumentTypeID).ToList();
-                    foreach (DocumentLevelFields field in document.DocumentLevelFields)
+                    DocumentTypeMaster documentTypeMaster = null;
+                    List<DocumentFieldMaster> fieldList = new List<DocumentFieldMaster>();
+                    if (document.DocumentTypeID > 0)
                     {
-                        var fieldID = fieldList.Where(m => m.Name == field.Name).ToList();
-                        if (fieldID.Count > 0)
-                            field.FieldID = fieldID[0].FieldID;
+                        fieldList = db.DocumentFieldMaster.AsNoTracking().Where(m => m.DocumentTypeID == document.DocumentTypeID && m.Active == true).ToList();
+                    }
+                    else
+                    {
+                        documentTypeMaster = dbs.DocumentTypeMaster.AsNoTracking().Where(x => x.Name.Equals(document.Description)).FirstOrDefault();
+                        fieldList = documentTypeMaster != null ? dbs.DocumentFieldMaster.AsNoTracking().Where(m => m.DocumentTypeID == documentTypeMaster.DocumentTypeID && m.Active == true).ToList() : fieldList;
+                    }
+                    if (document.DocumentTypeID > 0 || documentTypeMaster != null)
+                    {
+                        foreach (DocumentLevelFields field in document.DocumentLevelFields.ToArray())
+                        {
+                            var fieldID = fieldList.Where(m => m.Name == field.Name).ToList();
+                            if (fieldID.Count > 0)
+                                field.FieldID = fieldID[0].FieldID;
+                            else
+                                document.DocumentLevelFields.Remove(field);
+                        }
                     }
                 }
             }
@@ -504,7 +520,20 @@ namespace IL.ImportToIntellaLend
         {
             using (var db = new DBConnect(TenantSchema))
             {
-                return db.StackingOrderDetailMaster.AsNoTracking().Where(m => m.StackingOrderID == stackingOrderId).OrderBy(m => m.SequenceID).ToList();
+                List<StackingOrderDetailMaster> lsStack = db.StackingOrderDetailMaster.AsNoTracking().Where(m => m.StackingOrderID == stackingOrderId).OrderBy(m => m.SequenceID).ToList();
+                List<StackingOrderDetailMaster> returnStack = new List<StackingOrderDetailMaster>();
+                List<string> returnDocStack = new List<string>();
+                foreach (var item in lsStack)
+                {
+                    DocumentTypeMaster dm = db.DocumentTypeMaster.AsNoTracking().Where(x => x.DocumentTypeID == item.DocumentTypeID).FirstOrDefault();
+                    if (dm != null && !returnDocStack.Contains(dm.Name))
+                    {
+                        returnDocStack.Add(dm.Name);
+                        returnStack.Add(item);
+                    }
+                }
+
+                return returnStack;
             }
         }
         public bool GetIncLoantypeDocs()

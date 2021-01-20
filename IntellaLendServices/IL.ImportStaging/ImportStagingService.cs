@@ -78,11 +78,13 @@ namespace IL.ImportStaging
 
                     ImportStagingDataAccess dataAccess = null;
                     ImportStagings _importStagings = null;
+                    bool _missingDoc = false;
+
                     foreach (TenantMaster _tenant in TenantLists)
                     {
                         dataAccess = new ImportStagingDataAccess(_tenant.TenantSchema);
 
-                        _importStagings = dataAccess.GetLoanDetails(BatchFolderName);
+                        _importStagings = dataAccess.GetLoanDetails(BatchFolderName, ref _missingDoc);
 
                         if (_importStagings != null)
                             break;
@@ -92,6 +94,9 @@ namespace IL.ImportStaging
 
                     if (_importStagings != null)
                     {
+                        if (_missingDoc && !dataAccess.CheckLoanStatus(_importStagings.LoanId))
+                            continue;
+
                         lckpath = Path.ChangeExtension(_xmlFile, LockExt);
                         string imageErrorpath = Path.ChangeExtension(_xmlFile, ImageErrorExt);
                         errorPath = Path.ChangeExtension(_xmlFile, ErrorExt);

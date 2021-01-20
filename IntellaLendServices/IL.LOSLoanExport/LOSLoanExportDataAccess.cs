@@ -75,6 +75,15 @@ namespace IL.LOSLoanExport
 
                 LoanAudit.InsertLoanAudit(db, _loan, auditDescs[0].Replace(AuditConfigConstant.USERNAME, _userName), auditDescs[1].Replace(AuditConfigConstant.USERNAME, _userName));
 
+                IDCFields _idcObj = db.IDCFields.AsNoTracking().Where(l => l.LoanID == LoanID).FirstOrDefault();
+
+                _idcObj.IDCCompletionDate = DateTime.Now;
+                _idcObj.ModifiedOn = DateTime.Now;
+                db.Entry(_idcObj).State = EntityState.Modified;
+                db.SaveChanges();
+
+                LoanAudit.InsertLoanIDCFieldAudit(db, _idcObj, auditDescs[0].Replace(AuditConfigConstant.USERNAME, _userName), auditDescs[1].Replace(AuditConfigConstant.USERNAME, _userName));
+
                 LoanSearch loanSearch = db.LoanSearch.AsNoTracking().Where(l => l.LoanID == LoanID).FirstOrDefault();
 
                 if (loanSearch != null)
@@ -220,7 +229,7 @@ namespace IL.LOSLoanExport
                             db.SaveChanges();
                             _tempStagingDocs.Add(_stageDetail);
                         }
-                        else
+                        else if (jsonStage.Status != LOSExportStatusConstant.LOS_LOAN_PROCESSED)
                         {
                             jsonStage.Status = LOSExportStatusConstant.LOS_LOAN_STAGED;
                             jsonStage.ModifiedOn = DateTime.Now;

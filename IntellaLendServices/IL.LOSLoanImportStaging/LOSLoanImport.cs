@@ -71,6 +71,7 @@ namespace IL.LOSLoanImport
 
                 foreach (var item in files)
                 {
+                    Int64 StagingID = 0;
                     string lckpath = Path.ChangeExtension(item.FullName, LockExt);
                     string inputJSONFileName = Path.GetFileName(item.FullName);
                     string errorFileName = Path.ChangeExtension(inputJSONFileName, ErrorExt);
@@ -91,74 +92,106 @@ namespace IL.LOSLoanImport
                     }
                     catch (Exception ex)
                     {
-                        _dataAccess.UpdateImportStagingTable(item.FullName, _customerID, _reviewTypeID, _loanTypeID, _loanID, false, LOSImportStatusConstant.LOS_IMPORT_FAILED, $"Error while parsing input file '{item.FullName}'. Inner exception : {ex.Message}");
+                        StagingID = _dataAccess.UpdateImportStagingTable(item.FullName, _customerID, _reviewTypeID, _loanTypeID, _loanID, false, LOSImportStatusConstant.LOS_IMPORT_FAILED, $"Error while parsing input file '{item.FullName}'. Inner exception : {ex.Message}");
+                        if (StagingID > 0)
+                        {
+                            string emailContent = $"{_dataAccess.TenantSchema},{ StagingID.ToString()}";
+                            _dataAccess.SetEmailEntry(EmailTemplateConstants.MASJsonEmail, emailContent);
+                        }
                         File.Move(lckpath, Path.Combine(MASLoanImportErrorPath, errorFileName));
                         MTSExceptionHandler.HandleException(ref ex);
                         continue;
                     }
 
-                    CustomerMaster _customer = _dataAccess.CheckCustomerExists(_inputJson.LenderCode.ToString());
-
-                    if (_customer == null)
-                        errorMsg += $"Lender : {_inputJson.LenderName} ({_inputJson.LenderCode.ToString()}) not exist in IntellaLend. ";
-                    else
-                        _customerID = _customer.CustomerID;
-
-                    ReviewTypeMaster _reivewType = _dataAccess.CheckReviewTypeExists(_inputJson.ReviewType.Trim());
-
-                    if (_reivewType == null)
-                        errorMsg += $"ReviewType : {_inputJson.ReviewType} not exist in IntellaLend. ";
-                    else
-                        _reviewTypeID = _reivewType.ReviewTypeID;
-
-                    LoanTypeMaster _loanType = _dataAccess.CheckLoanTypeExists(_inputJson.LoanType.Trim());
-
-                    if (_loanType == null)
-                        errorMsg += $"LoanType : {_inputJson.LoanType} not exist in IntellaLend. ";
-                    else
-                        _loanTypeID = _loanType.LoanTypeID;
-
-
-                    if (_inputJson.Priority > 5)
-                        errorMsg += $"Priority : {_inputJson.Priority} not exist in IntellaLend. ";
-
-                    if (_customerID > 0 && _reviewTypeID > 0 && _loanTypeID > 0)
+                    if (!String.IsNullOrEmpty(_inputJson.LoanID.Trim()))
                     {
-                        bool _mappingExists = _dataAccess.CheckMappingExists(_customerID, _reviewTypeID, _loanTypeID);
-
-                        if (!_mappingExists)
-                            errorMsg += $"Lender, ReviewType and LoanType Mapping not available in IntellaLend.";
-
-                        if (!string.IsNullOrEmpty(_inputJson.FNMFile) && !File.Exists(_inputJson.FNMFile))
-                            errorMsg += $"Fannie Mae file not exists on the mentioned path '{_inputJson.FNMFile}'";
-
-                        if (_inputJson.LoanFiles != null && _inputJson.LoanFiles.Length > 0)
+                        if (String.IsNullOrEmpty(_inputJson.LenderCode.ToString().Trim()) || String.IsNullOrEmpty(_inputJson.LenderName.Trim()))
                         {
-                            foreach (string _loanPDF in _inputJson.LoanFiles)
-                            {
-                                if (!File.Exists(_loanPDF))
-                                    errorMsg += $"Loan media not exists on the mentioned path '{_loanPDF}'";
-                            }
-                        }
-                        else errorMsg += $"Loan not mentioned on the Import file '{item.FullName}";
-
-                        if (string.IsNullOrEmpty(errorMsg))
-                        {
-                            Int64 StagingID = _dataAccess.UpdateImportStagingTable(lckpath, _customerID, _reviewTypeID, _loanTypeID, _loanID, true, LOSImportStatusConstant.LOS_IMPORT_STAGED);
-                            Logger.WriteTraceLog("Loan Processing Started");
-                            ProcessInputJSONFile(_dataAccess, StagingID, _inputJson, _customerID, _reviewTypeID, _loanTypeID, lckpath, errorFileName, donFileName);
-                            Logger.WriteTraceLog("Loan Processing Ended");
+                            errorMsg = $"LenderCode / LenderName is not available";
+                            StagingID = _dataAccess.UpdateImportStagingTable(item.FullName, _customerID, _reviewTypeID, _loanTypeID, _loanID, false, LOSImportStatusConstant.LOS_IMPORT_FAILED, errorMsg);
+                            File.Move(lckpath, Path.Combine(MASLoanImportErrorPath, errorFileName));
                         }
                         else
                         {
-                            _dataAccess.UpdateImportStagingTable(item.FullName, _customerID, _reviewTypeID, _loanTypeID, _loanID, false, LOSImportStatusConstant.LOS_IMPORT_FAILED, errorMsg);
-                            File.Move(lckpath, Path.Combine(MASLoanImportErrorPath, errorFileName));
+                            CustomerMaster _customer = _dataAccess.CheckCustomerExists(_inputJson.LenderCode.ToString(), _inputJson.LenderName);
+
+                            if (_customer == null)
+                                errorMsg += $"Lender : {_inputJson.LenderName} ({_inputJson.LenderCode.ToString()}) not exist in IntellaLend. ";
+                            else
+                                _customerID = _customer.CustomerID;
+
+                            ReviewTypeMaster _reivewType = _dataAccess.CheckReviewTypeExists(_inputJson.ServiceType.Trim());
+
+                            if (_reivewType == null)
+                                errorMsg += $"ServiceType : {_inputJson.ServiceType} not exist in IntellaLend. ";
+                            else
+                                _reviewTypeID = _reivewType.ReviewTypeID;
+
+                            LoanTypeMaster _loanType = _dataAccess.CheckLoanTypeExists(_inputJson.LoanType.Trim());
+
+                            if (_loanType == null)
+                                errorMsg += $"LoanType : {_inputJson.LoanType} not exist in IntellaLend. ";
+                            else
+                                _loanTypeID = _loanType.LoanTypeID;
+
+
+                            if (_inputJson.Priority > 5)
+                                errorMsg += $"Priority : {_inputJson.Priority} not exist in IntellaLend. ";
+
+                            if (_customerID > 0 && _reviewTypeID > 0 && _loanTypeID > 0)
+                            {
+                                bool _mappingExists = _dataAccess.CheckMappingExists(_customerID, _reviewTypeID, _loanTypeID);
+
+                                if (!_mappingExists)
+                                    errorMsg += $"Lender, ServiceType and LoanType Mapping not available in IntellaLend.";
+
+                                if (!string.IsNullOrEmpty(_inputJson.FNMFile) && !File.Exists(_inputJson.FNMFile))
+                                    errorMsg += $"Fannie Mae file not exists on the mentioned path '{_inputJson.FNMFile}'";
+
+                                if (_inputJson.LoanFiles != null && _inputJson.LoanFiles.Length > 0)
+                                {
+                                    foreach (string _loanPDF in _inputJson.LoanFiles)
+                                    {
+                                        if (!File.Exists(_loanPDF))
+                                            errorMsg += $"Loan media not exists on the mentioned path '{_loanPDF}'";
+                                    }
+                                }
+                                else errorMsg += $"Loan not mentioned on the Import file '{item.FullName}";
+
+                                if (string.IsNullOrEmpty(errorMsg))
+                                {
+                                    StagingID = _dataAccess.UpdateImportStagingTable(lckpath, _customerID, _reviewTypeID, _loanTypeID, _loanID, true, LOSImportStatusConstant.LOS_IMPORT_STAGED);
+                                    Logger.WriteTraceLog("Loan Processing Started");
+                                    ProcessInputJSONFile(_dataAccess, StagingID, _inputJson, _customerID, _reviewTypeID, _loanTypeID, lckpath, errorFileName, donFileName);
+                                    Logger.WriteTraceLog("Loan Processing Ended");
+                                }
+                                else
+                                {
+                                    Logger.WriteErrorLog(errorMsg);
+                                    StagingID = _dataAccess.UpdateImportStagingTable(item.FullName, _customerID, _reviewTypeID, _loanTypeID, _loanID, false, LOSImportStatusConstant.LOS_IMPORT_FAILED, errorMsg);
+                                    File.Move(lckpath, Path.Combine(MASLoanImportErrorPath, errorFileName));
+                                }
+                            }
+                            else
+                            {
+                                Logger.WriteErrorLog(errorMsg);
+                                StagingID = _dataAccess.UpdateImportStagingTable(item.FullName, _customerID, _reviewTypeID, _loanTypeID, _loanID, false, LOSImportStatusConstant.LOS_IMPORT_FAILED, errorMsg);
+                                File.Move(lckpath, Path.Combine(MASLoanImportErrorPath, errorFileName));
+                            }
                         }
                     }
                     else
                     {
-                        _dataAccess.UpdateImportStagingTable(item.FullName, _customerID, _reviewTypeID, _loanTypeID, _loanID, false, LOSImportStatusConstant.LOS_IMPORT_FAILED, errorMsg);
+                        errorMsg = $"LoanID is not available";
+                        Logger.WriteErrorLog(errorMsg);
+                        StagingID = _dataAccess.UpdateImportStagingTable(item.FullName, _customerID, _reviewTypeID, _loanTypeID, _loanID, false, LOSImportStatusConstant.LOS_IMPORT_FAILED, errorMsg);
                         File.Move(lckpath, Path.Combine(MASLoanImportErrorPath, errorFileName));
+                    }
+
+                    if (StagingID > 0 && !string.IsNullOrEmpty(errorMsg))
+                    {
+                        string emailContent = $"{_dataAccess.TenantSchema},{ StagingID.ToString()}";
+                        _dataAccess.SetEmailEntry(EmailTemplateConstants.MASJsonEmail, emailContent);
                     }
                 }
             }
@@ -260,6 +293,15 @@ namespace IL.LOSLoanImport
                     }
 
                     File.Move(lckpath, Path.Combine(MASLoanImportDonePath, donFileName));
+
+                    foreach (var item in LoanFiles)
+                    {
+                        if (File.Exists(item))
+                            File.Delete(item);
+                    }
+
+                    if (!string.IsNullOrEmpty(_inputJSON.FNMFile) && File.Exists(_inputJSON.FNMFile))
+                        File.Delete(_inputJSON.FNMFile);
                 }
                 else
                 {
@@ -286,12 +328,12 @@ namespace IL.LOSLoanImport
             loan.LastAccessedUserID = 0;
             loan.UploadType = UploadConstant.LOS;
             loan.CreatedOn = DateTime.Now;
-            loan.AuditMonthYear = Convert.ToDateTime(Convert.ToDateTime(_inputJSON.AuditPeriod).ToString(DateConstance.AuditDateFormat));
+            loan.AuditMonthYear = string.IsNullOrEmpty(_inputJSON.AuditPeriod) ? Convert.ToDateTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString(DateConstance.AuditDateFormat)) : Convert.ToDateTime(Convert.ToDateTime(_inputJSON.AuditPeriod).ToString(DateConstance.AuditDateFormat));
             loan.CreatedOn = DateTime.Now;
             loan.LoanGUID = Guid.NewGuid();
             loan.Priority = _inputJSON.Priority;
 
-            return _dataAccess.CreateLoan(loan);
+            return _dataAccess.CreateLoan(loan, _inputJSON.AuditDueDate);
         }
     }
 }

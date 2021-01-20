@@ -72,11 +72,12 @@ namespace IL.EmailTrackers
                     {
                         int Status = 0;
                         string Message = string.Empty;
+                        string userEmail = _dataAccess.GetUserEmail(_Edata.UserID);
                         try
                         {
                             if (_Edata.TemplateID == 0)
                             {
-                                _template.To = _Edata.To;
+                                _template.To = string.IsNullOrEmpty(userEmail) ? _Edata.To : userEmail; //_Edata.To;
                                 _template.Body = _Edata.Body;
                                 _template.Subject = _Edata.Subject;
                                 Dictionary<string, byte[]> _attachments = _dataAccess.GetEmailAttachment(_Edata.LoanID ,_Edata.Attachments, _Edata.AttachmentsName);
@@ -98,6 +99,7 @@ namespace IL.EmailTrackers
 
                                 string _Content = tenant.TenantSchema +"|" + _Edata.To + "|" + _Edata.Subject + "|" + _Edata.LoanID;
                                 Template templateForSend = template.CreateEmailTemplateAndProcess(_customitemtemplate[0]["HTMLPAGE"].ToString(), _Content);
+                                templateForSend.To = string.IsNullOrEmpty(userEmail) ? _Edata.To : userEmail;
                                 string smtpId = dsEmailTemplates.Tables[0].Select("TemplateId=" + _Edata.TemplateID.ToString())[0]["SMTPID"].ToString();
 
                                      SendCustomMail(templateForSend, smtpId, ref Message, ref Status);

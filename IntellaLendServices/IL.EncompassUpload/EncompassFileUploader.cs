@@ -7,6 +7,7 @@ using MTS.ServiceBase;
 using MTSEntBlocks.ExceptionBlock.Handlers;
 using MTSEntBlocks.LoggerBlock;
 using MTSEntBlocks.UtilsBlock;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -108,6 +109,7 @@ namespace IL.EncompassUpload
                                 if (!dbParkingSpot.Equals(string.Empty))
                                 {
                                     dataAccess.UpdateUploadStaging(_doctype.ID, EncompassUploadStagingConstant.UPLOAD_STAGING_PROCESSING, string.Empty);
+                                    LogMessage($"_doctype.Document : {_doctype.Document}");
                                     List<int> pages = GetPagesFromBatch(_doctype.Document, _doctype.Version, Batchobj);
                                     LogMessage($"pages : {pages.Count}");
                                     if (pages != null)
@@ -243,7 +245,7 @@ namespace IL.EncompassUpload
                                 dataAccess.UpdateEncompassUploadStatus(_eLoan.ID, EncompassUploadConstant.UPLOAD_COMPLETE);
 
                             //remove ELoanAttachmentUpload (header table) data if all details records are successfull
-                            if(dataAccess.IsSuccessfullUpload(_eLoan.ID))
+                            if (dataAccess.IsSuccessfullUpload(_eLoan.ID))
                             {
                                 dataAccess.RemoveUploadStaging(_eLoan.ID);
                             }
@@ -287,8 +289,12 @@ namespace IL.EncompassUpload
 
         public List<int> GetPagesFromBatch(string Document, int Version, Batch Batchobj)
         {
+            LogMessage($"GetPagesFromBatch In");
             List<string> btcPages = Batchobj.Documents.Where(x => (Document.Trim().ToLower().Equals(x.Type.Trim().ToLower())) && Version == x.VersionNumber).Select(x => x.Pages).FirstOrDefault();
 
+            btcPages = btcPages.Select(x => x.Replace("PG", "")).ToList();
+            LogMessage($"btcPages.Count : {btcPages.Count}");
+            LogMessage($"btcPages  : {JsonConvert.SerializeObject(btcPages)}");
             if (btcPages != null)
                 return btcPages.ConvertAll<int>(Convert.ToInt32);
 

@@ -388,6 +388,16 @@ namespace IntellaLend.EntityDataHandler
             return reportMaster;
         }
 
+        public List<LOSDocumentFields> GetLosDocumentFields(long lOSDocumentId, string fieldSearchWord)
+        {
+            List<LOSDocumentFields> losDocFields = new List<LOSDocumentFields>();
+            using (var db = new DBConnect(SystemSchema))
+            {
+                losDocFields = db.LOSDocumentFields.AsNoTracking().Where(a => a.LOSDocumentID == lOSDocumentId && a.FieldName.ToLower().StartsWith(fieldSearchWord.ToLower())).ToList();
+            }
+            return losDocFields;
+        }
+
         public object AddSingleLoanType(SystemLoanTypeMaster loanType)
         {
             bool isLoanTypeAdd = false;
@@ -761,8 +771,106 @@ namespace IntellaLend.EntityDataHandler
                               RuleDocumentTables = db.RuleDocumentTables.AsNoTracking().Where(rd => rd.DocumentID == dms.DocumentTypeID).ToList(),
                               Condition = cl.Condition,
                               CustDocumentLevel = cl.DocumentLevel
-                          }).OrderBy(x => x.Name).ToList();
+                          }).ToList();
+                }
+            }
 
+            return dm.OrderBy(a => a.Name).ToList();
+        }
+
+        public List<DocumentTypeMaster> GetSystemDocumentTypesWithFieldsAll(Int64 loanTypeID)
+        {
+            List<DocumentTypeMaster> dm = null;
+
+            using (var db = new DBConnect(SystemSchema))
+            {
+                List<CustLoanDocMapping> cldm = db.CustLoanDocMapping.AsNoTracking().Where(cld => cld.LoanTypeID == loanTypeID && cld.Active == true).ToList();
+
+                dm = new List<DocumentTypeMaster>();
+
+                if (cldm != null)
+                {
+
+                    dm = (from cl in cldm
+                          join dms in db.DocumentTypeMaster.AsNoTracking() on cl.DocumentTypeID equals dms.DocumentTypeID
+                          where dms.Active == true
+                          select new DocumentTypeMaster()
+                          {
+                              DocumentTypeID = dms.DocumentTypeID,
+                              Name = dms.Name,
+                              DisplayName = dms.DisplayName,
+                              Active = dms.Active,
+                              DocumentLevel = dms.DocumentLevel,
+                              CreatedOn = dms.CreatedOn,
+                              ModifiedOn = dms.ModifiedOn,
+                              DocumentFieldMasters = db.DocumentFieldMaster.AsNoTracking().Where(ld => ld.DocumentTypeID == dms.DocumentTypeID).ToList(),
+                              DocumetTypeTables = db.DocumetTypeTables.AsNoTracking().Where(ld => ld.DocumentTypeID == dms.DocumentTypeID).ToList(),
+                              DocumentLevelDesc = dms.DocumentLevelDesc,
+                              RuleDocumentTables = db.RuleDocumentTables.AsNoTracking().Where(rd => rd.DocumentID == dms.DocumentTypeID).ToList(),
+                              Condition = cl.Condition,
+                              CustDocumentLevel = cl.DocumentLevel
+                          }).ToList();
+                }
+            }
+
+            return dm.OrderBy(a => a.Name).ToList();
+        }
+
+
+        public List<DocumentTypeMaster> GetSystemDocumentTypesAndLosDocumentTypesWithFields(Int64 loanTypeID)
+        {
+            List<DocumentTypeMaster> dm = null;
+
+            using (var db = new DBConnect(SystemSchema))
+            {
+                List<CustLoanDocMapping> cldm = db.CustLoanDocMapping.AsNoTracking().Where(cld => cld.LoanTypeID == loanTypeID && cld.Active == true).ToList();
+
+                dm = new List<DocumentTypeMaster>();
+
+                if (cldm != null)
+                {
+
+                    dm = (from cl in cldm
+                          join dms in db.DocumentTypeMaster.AsNoTracking() on cl.DocumentTypeID equals dms.DocumentTypeID
+                          where dms.Active == true
+                          select new DocumentTypeMaster()
+                          {
+                              DocumentTypeID = dms.DocumentTypeID,
+                              Name = dms.Name,
+                              DisplayName = dms.DisplayName,
+                              Active = dms.Active,
+                              DocumentLevel = dms.DocumentLevel,
+                              CreatedOn = dms.CreatedOn,
+                              ModifiedOn = dms.ModifiedOn,
+                              DocumentFieldMasters = db.DocumentFieldMaster.AsNoTracking().Where(ld => ld.DocumentTypeID == dms.DocumentTypeID && ld.Active == true).ToList(),
+                              DocumetTypeTables = db.DocumetTypeTables.AsNoTracking().Where(ld => ld.DocumentTypeID == dms.DocumentTypeID).ToList(),
+                              DocumentLevelDesc = dms.DocumentLevelDesc,
+                              RuleDocumentTables = db.RuleDocumentTables.AsNoTracking().Where(rd => rd.DocumentID == dms.DocumentTypeID).ToList(),
+                              Condition = cl.Condition,
+                              CustDocumentLevel = cl.DocumentLevel
+                          }).ToList();
+
+                    List<LOSDocument> losd = db.LOSDocument.AsNoTracking().ToList();
+                    foreach (LOSDocument los in losd)
+                    {
+                        DocumentTypeMaster data = new DocumentTypeMaster()
+                        {
+                            DocumentTypeID = los.LOSDocumentID,
+                            Name = los.DocumentName,
+                            DisplayName = los.DocumentDisplayName,
+                            Active = true,
+                            DocumentLevel = 0,
+                            CreatedOn = los.Createdon,
+                            ModifiedOn = los.ModifiedOn,
+                            DocumentFieldMasters = new List<DocumentFieldMaster>(),
+                            DocumetTypeTables = new List<DocumetTypeTables>(),
+                            DocumentLevelDesc = "",
+                            RuleDocumentTables = new List<RuleDocumentTables>(),
+                            Condition = "",
+                            CustDocumentLevel = 0
+                        };
+                        dm.Add(data);
+                    }
                     //foreach (CustLoanDocMapping loanDocMap in cldm)
                     //{
                     //    DocumentTypeMaster doc = db.DocumentTypeMaster.AsNoTracking().Where(ld => ld.DocumentTypeID == loanDocMap.DocumentTypeID && ld.Active == true).FirstOrDefault();
@@ -792,9 +900,8 @@ namespace IntellaLend.EntityDataHandler
                 }
             }
 
-            return dm;
+            return dm.OrderBy(a => a.Name).ToList();
         }
-
 
         public List<string> GetLosSystemDocumentTypesWithDocFields(string losName)
         {
@@ -1191,14 +1298,14 @@ namespace IntellaLend.EntityDataHandler
                              DocVersion = rm.DocVersion,
                              LOSFieldDescription = string.Empty,
                              LOSFieldToEvalRule = cl.LOSFieldToEvalRule,
-                             LOSValue = string.IsNullOrEmpty(cl.LOSValueToEvalRule) ? string.Empty : cl.LOSValueToEvalRule,
+                             LOSValueToEvalRule = string.IsNullOrEmpty(cl.LOSValueToEvalRule) ? string.Empty : cl.LOSValueToEvalRule,
                              RuleType = cl.Rule_Type,
                              LosIsMatched = cl.LosIsMatched
                          }).OrderBy(m => m.SequenceID).ToList();
 
                 foreach (var losGroup in dData)
                 {
-                    if (!string.IsNullOrEmpty(losGroup.LOSValue))
+                    if (!string.IsNullOrEmpty(losGroup.LOSValueToEvalRule))
                     {
                         EncompassFields eField = db.EncompassFields.AsNoTracking().Where(e => e.ID == losGroup.LOSFieldToEvalRule).FirstOrDefault();
                         if (eField != null)
@@ -1854,9 +1961,6 @@ namespace IntellaLend.EntityDataHandler
                                        LoanTypeID = cl.LoanTypeID
                                    }).ToList();
 
-
-
-
                 List<LoanTypeMaster> lsLoanTypeMaster = new List<LoanTypeMaster>();
 
                 foreach (var item in lsLoanTypes)
@@ -1869,13 +1973,15 @@ namespace IntellaLend.EntityDataHandler
 
                 List<CustReviewLoanMapping> mappedLoanTypes = db.CustReviewLoanMapping.AsNoTracking().Where(c => c.ReviewTypeID == ReviewTypeID).ToList();
 
-                var lsMappedLoanTypes = (from map in mappedLoanTypes
-                                         join lt in lsLoanTypeMaster on map.LoanTypeID equals lt.LoanTypeID
-                                         where map.ReviewTypeID == ReviewTypeID
+                var lsMappedLoanTypes = (from lt in lsLoanTypeMaster
+                                         join map in mappedLoanTypes on lt.LoanTypeID equals map.LoanTypeID into rmJoin
+                                         from rmGroup in rmJoin.DefaultIfEmpty()
                                          select new
                                          {
-                                             LoanTypeID = map.LoanTypeID,
-                                             LoanTypeName = lt.LoanTypeName
+                                             LoanTypeID = lt.LoanTypeID,
+                                             LoanTypeName = lt.LoanTypeName,
+                                             Mapped = rmGroup?.LoanTypeID != null,
+                                             DBMapped = rmGroup?.LoanTypeID != null
                                          }).ToList();
 
                 var lsUnMappedLoanTypes = lsLoanTypeMaster
@@ -1899,17 +2005,17 @@ namespace IntellaLend.EntityDataHandler
             {
                 using (var tran = db.Database.BeginTransaction())
                 {
-                    db.CustReviewLoanMapping.RemoveRange(db.CustReviewLoanMapping.Where(r => r.ReviewTypeID == ReviewTypeID));
-                    db.SaveChanges();
-
-                    db.CustReviewLoanCheckMapping.RemoveRange(db.CustReviewLoanCheckMapping.Where(r => r.ReviewTypeID == ReviewTypeID));
-                    db.SaveChanges();
-
-                    db.CustReviewLoanStackMapping.RemoveRange(db.CustReviewLoanStackMapping.Where(r => r.ReviewTypeID == ReviewTypeID));
-                    db.SaveChanges();
-
                     foreach (var _loanTypeID in LoanTypeIDs)
                     {
+                        db.CustReviewLoanMapping.RemoveRange(db.CustReviewLoanMapping.Where(r => r.ReviewTypeID == ReviewTypeID && r.LoanTypeID == _loanTypeID));
+                        db.SaveChanges();
+
+                        db.CustReviewLoanCheckMapping.RemoveRange(db.CustReviewLoanCheckMapping.Where(r => r.ReviewTypeID == ReviewTypeID && r.LoanTypeID == _loanTypeID));
+                        db.SaveChanges();
+
+                        db.CustReviewLoanStackMapping.RemoveRange(db.CustReviewLoanStackMapping.Where(r => r.ReviewTypeID == ReviewTypeID && r.LoanTypeID == _loanTypeID));
+                        db.SaveChanges();
+
                         CustReviewLoanCheckMapping _loanCheck = db.CustReviewLoanCheckMapping.AsNoTracking().Where(r => r.CustomerID == 1 && r.ReviewTypeID == 0 && r.LoanTypeID == _loanTypeID).FirstOrDefault();
                         CustReviewLoanStackMapping _loanStack = db.CustReviewLoanStackMapping.AsNoTracking().Where(r => r.CustomerID == 1 && r.ReviewTypeID == 0 && r.LoanTypeID == _loanTypeID).FirstOrDefault();
 
@@ -1948,6 +2054,52 @@ namespace IntellaLend.EntityDataHandler
                                 CreatedOn = DateTime.Now,
                                 ModifiedOn = DateTime.Now
                             });
+                            db.SaveChanges();
+                        }
+                    }
+                    result = true;
+                    tran.Commit();
+                }
+            }
+
+            return result;
+        }
+
+        public object RemoveReviewLoanMapping(Int64 ReviewTypeID, Int64[] LoanTypeIDs)
+        {
+            bool result = false;
+
+            using (var db = new DBConnect(SystemSchema))
+            {
+                using (var tran = db.Database.BeginTransaction())
+                {
+                    foreach (var _loanTypeID in LoanTypeIDs)
+                    {
+                        CustReviewLoanMapping _CustReviewLoanMapping = db.CustReviewLoanMapping.AsNoTracking().Where(r => r.CustomerID == 1 && r.ReviewTypeID == ReviewTypeID && r.LoanTypeID == _loanTypeID).FirstOrDefault();
+                        CustReviewLoanCheckMapping _loanCheck = db.CustReviewLoanCheckMapping.AsNoTracking().Where(r => r.CustomerID == 1 && r.ReviewTypeID == ReviewTypeID && r.LoanTypeID == _loanTypeID).FirstOrDefault();
+                        CustReviewLoanStackMapping _loanStack = db.CustReviewLoanStackMapping.AsNoTracking().Where(r => r.CustomerID == 1 && r.ReviewTypeID == ReviewTypeID && r.LoanTypeID == _loanTypeID).FirstOrDefault();
+
+                        if (_CustReviewLoanMapping != null)
+                        {
+                            _CustReviewLoanMapping.Active = false;
+                            _CustReviewLoanMapping.ModifiedOn = DateTime.Now;
+                            db.Entry(_CustReviewLoanMapping).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+
+                        if (_loanCheck != null)
+                        {
+                            _loanCheck.Active = false;
+                            _loanCheck.ModifiedOn = DateTime.Now;
+                            db.Entry(_loanCheck).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+
+                        if (_loanStack != null)
+                        {
+                            _loanStack.Active = false;
+                            _loanStack.ModifiedOn = DateTime.Now;
+                            db.Entry(_loanStack).State = EntityState.Modified;
                             db.SaveChanges();
                         }
                     }
@@ -2184,7 +2336,8 @@ namespace IntellaLend.EntityDataHandler
                                 DocumentTypeID = item.DocumentTypeID,
                                 Active = true,
                                 CreatedOn = DateTime.Now,
-                                ModifiedOn = DateTime.Now
+                                ModifiedOn = DateTime.Now,
+                                DocumentLevel = item.DocumentLevel
                             });
                         }
                     }
@@ -3039,7 +3192,7 @@ namespace IntellaLend.EntityDataHandler
 
         private List<List<Dictionary<string, string>>> _queryCombinations = new List<List<Dictionary<string, string>>>();
 
-        public void SetMileStoneEvent(string _loanGUID, string _instanceID)
+        public object SetMileStoneEvent(string _loanGUID, string _instanceID)
         {
             object tokenObject = null;
             List<IntellaAndEncompassFetchFields> _enImportFields = new List<IntellaAndEncompassFetchFields>();
@@ -3074,7 +3227,7 @@ namespace IntellaLend.EntityDataHandler
 
                     HttpRequestObject req = new HttpRequestObject() { Content = new { loanGUID = _loanGUID, fieldIDs = FieldIDs }, REQUESTTYPE = "POST", URL = string.Format(EncompassURLILConstant.GET_PREDEFINED_FIELDVALUES) };
 
-                    IRestResponse result = client.Execute(req);
+                    var result = client.Execute(req);
 
                     if (result.StatusCode == System.Net.HttpStatusCode.OK)
                     {
@@ -3099,10 +3252,11 @@ namespace IntellaLend.EntityDataHandler
                     }
                 }
             }
+            return new { success = true };
         }
 
 
-        public void SetDocumentEvent(string _loanGUID, string _instanceID)
+        public object SetDocumentEvent(string _loanGUID, string _instanceID)
         {
             object tokenObject = null;
             List<IntellaAndEncompassFetchFields> _enImportFields = new List<IntellaAndEncompassFetchFields>();
@@ -3157,6 +3311,8 @@ namespace IntellaLend.EntityDataHandler
                     }
                 }
             }
+
+            return new { success = true };
         }
 
         public object GetEncompassToken(string _instanceID)
@@ -3497,7 +3653,7 @@ namespace IntellaLend.EntityDataHandler
             List<DocumentTypeMaster> lsStackDocTypes = new List<DocumentTypeMaster>();
 
             foreach (StackingOrderDetailMaster sDetail in lsStackingOrderDetailMaster)
-                lsStackDocTypes.Add(new DocumentTypeMaster() { DocumentTypeID = sDetail.DocumentTypeID });
+                lsStackDocTypes.Add(db.DocumentTypeMaster.AsNoTracking().Where(x => x.DocumentTypeID == sDetail.DocumentTypeID).FirstOrDefault());
 
             return lsStackDocTypes.Where(x => !(lsDocMaster.Any(y => x.DocumentTypeID == y.DocumentTypeID))).ToList();
         }
@@ -3739,6 +3895,7 @@ namespace IntellaLend.EntityDataHandler
                                 LoanTypeID = LoanTypeID,
                                 DocumentTypeID = item.DocumentTypeID,
                                 Active = true,
+                                DocumentLevel = item.DocumentLevel,
                                 CreatedOn = DateTime.Now,
                                 ModifiedOn = DateTime.Now
                             });
@@ -3947,6 +4104,26 @@ namespace IntellaLend.EntityDataHandler
             }
             return new { roleid = roletype.RoleID, Success = isRoleAdded };
         }
+        public bool SyncRetainUpdateStagings(Int64 LoanTypeID)
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
+
+                RetainUpdateStaging _syncUpdate = db.RetainUpdateStaging.Where(l => l.LoanTypeID == LoanTypeID).FirstOrDefault();
+                if (_syncUpdate != null)
+                {
+                    _syncUpdate.SyncLevel = 2;
+                    _syncUpdate.ModifiedOn = DateTime.Now;
+                    db.Entry(_syncUpdate).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
         private Int64 AddRoleDetails(DBConnect db, RoleMaster roletype)
         {
             RoleMaster _roletype = db.Roles.AsNoTracking().Where(x => x.RoleName.Equals(roletype.RoleName)).FirstOrDefault();
@@ -4025,9 +4202,8 @@ namespace IntellaLend.EntityDataHandler
                 using (var transaction = db.Database.BeginTransaction())
                 {
                     RoleMaster dbObject = db.Roles.AsNoTracking().Where(l => l.RoleID == roletype.RoleID).FirstOrDefault();
-                    // if (dbObject.RoleName != roletype.RoleName)
-                    /// {
-                    /// 
+                    List<UserRoleMapping> dbUserRoles = db.UserRoleMapping.AsNoTracking().Where(l => l.RoleID == roletype.RoleID).ToList();
+
                     if (dbObject != null)
                     {
                         dbObject.RoleName = roletype.RoleName;
@@ -4043,15 +4219,19 @@ namespace IntellaLend.EntityDataHandler
                         {
                             bool menuaccessid = UpdateMenuAccess(db, roletype.RoleID, menus);
                         }
+                        if (dbUserRoles.Count > 0)
+                        {
+                            foreach (UserRoleMapping item in dbUserRoles)
+                            {
+                                item.RoleName = roletype.RoleName;
+                                db.Entry(item).State = EntityState.Modified;
+                            }
+                            db.SaveChanges();
+                        }
 
                         transaction.Commit();
                     }
-                    // }
-                    //  else
-                    //  {
-                    //   isRoleupdate = false;
-                    //  }
-                    // return true;
+
                 }
             }
             return new { roleid = roletype.RoleID, Success = isRoleupdate };
@@ -4887,6 +5067,20 @@ namespace IntellaLend.EntityDataHandler
         }
 
         #endregion
+
+        #region ImportStagingDetail
+
+        public LOSImportStaging GetLOSImportStagingDetail(Int64 importStagingID)
+        {
+            LOSImportStaging importStaging = null;
+            using (var db = new DBConnect(TenantSchema))
+            {
+                importStaging = db.LOSImportStaging.AsNoTracking().Where(x => x.ID == importStagingID).FirstOrDefault();
+            }
+            return importStaging;
+        }
+
+        #endregion
     }
 
     public class ChecklistDetailOutput
@@ -4907,7 +5101,7 @@ namespace IntellaLend.EntityDataHandler
         public string DocVersion { get; set; }
         public string LOSFieldDescription { get; set; }
         public Int64 LOSFieldToEvalRule { get; set; }
-        public string LOSValue { get; set; }
+        public string LOSValueToEvalRule { get; set; }
         public int RuleType { get; set; }
         public int? LosIsMatched { get; set; }
         public string FirstName { get; set; }
@@ -4924,7 +5118,6 @@ namespace IntellaLend.EntityDataHandler
         public string Value { get; set; }
 
     }
-
     public class DocumentTypeMasterList
     {
         public Int64 DocumentTypeID { get; set; }

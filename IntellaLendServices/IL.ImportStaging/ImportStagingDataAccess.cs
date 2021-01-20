@@ -25,22 +25,33 @@ namespace IL.ImportStaging
             }
         }
 
-        public ImportStagings GetLoanDetails(string _batchFolderName)
+        public bool CheckLoanStatus(Int64 _loanID)
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
+                return db.Loan.AsNoTracking().Any(x => x.LoanID == _loanID && x.Status == StatusConstant.COMPLETE);
+            }
+        }
+
+        public ImportStagings GetLoanDetails(string _batchFolderName, ref bool _missingDoc)
         {
             ImportStagings _importStage = null;
             using (var db = new DBConnect(TenantSchema))
             {
                 Loan _loan = (from idc in db.AuditIDCFields.AsNoTracking()
-                            join l in db.Loan.AsNoTracking() on idc.LoanID equals l.LoanID
-                            where idc.IDCBatchInstanceID == _batchFolderName
-                            select l).FirstOrDefault();
+                              join l in db.Loan.AsNoTracking() on idc.LoanID equals l.LoanID
+                              where idc.IDCBatchInstanceID == _batchFolderName
+                              select l).FirstOrDefault();
 
                 if (_loan == null)
                 {
                     _loan = (from idc in db.AuditLoanMissingDoc.AsNoTracking()
-                                       join l in db.Loan.AsNoTracking() on idc.LoanID equals l.LoanID
-                                       where idc.IDCBatchInstanceID == _batchFolderName
-                                       select l).FirstOrDefault();
+                             join l in db.Loan.AsNoTracking() on idc.LoanID equals l.LoanID
+                             where idc.IDCBatchInstanceID == _batchFolderName
+                             select l).FirstOrDefault();
+
+                    if (_loan != null)
+                        _missingDoc = true;
                 }
 
                 if (_loan != null)
@@ -66,7 +77,7 @@ namespace IL.ImportStaging
                     if (_loan.UploadType == 1)  // if (_loan.FromBox)
                     {
                         BoxDownloadQueue _boxDownloadQueue = db.BoxDownloadQueue.AsNoTracking().Where(l => l.LoanID == _importStage.LoanId).FirstOrDefault();
-                        
+
                         _importStage.Priority = _boxDownloadQueue != null ? _boxDownloadQueue.Priority : _importStage.Priority;
                     }
 
@@ -86,7 +97,7 @@ namespace IL.ImportStaging
         }
 
 
-        
+
     }
 
 }

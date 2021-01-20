@@ -1,5 +1,4 @@
 ﻿using EncompassRequestBody.EResponseModel;
-using EncompassRequestBody.WrapperReponseModel;
 using IntellaLend.Audit;
 using IntellaLend.AuditData;
 using IntellaLend.Constance;
@@ -72,26 +71,26 @@ namespace IL.EncompassFileDownloader
                     db.SaveChanges();
                 }
 
-                EDownloadStaging _fieldUpdateStage = db.EDownloadStaging.AsNoTracking().Where(x => x.DownloadStagingID == _downloadID && x.Step == EncompassDownloadStepConstant.UpdateField && (x.Status == EncompassDownloadStepStatusConstant.Waiting || x.Status == EncompassDownloadStepStatusConstant.Error)).FirstOrDefault();
-                if (_fieldUpdateStage == null)
-                {
-                    EDownloadStaging _stage = new EDownloadStaging()
-                    {
-                        DownloadStagingID = _downloadID,
-                        ELoanGUID = new Guid(_eLoanGUID),
-                        EAttachmentName = "Custom Flag Field Update",
-                        TypeOfDownload = EncompassLoanAttachmentDownloadConstant.Loan,
-                        Status = EncompassDownloadStepStatusConstant.Waiting,
-                        Step = EncompassDownloadStepConstant.UpdateField,
-                        Error = string.Empty,
-                        CreatedOn = DateTime.Now,
-                        ModifiedOn = DateTime.Now,
-                        AttachmentGUID = ""
-                    };
+                //EDownloadStaging _fieldUpdateStage = db.EDownloadStaging.AsNoTracking().Where(x => x.DownloadStagingID == _downloadID && x.Step == EncompassDownloadStepConstant.UpdateField && (x.Status == EncompassDownloadStepStatusConstant.Waiting || x.Status == EncompassDownloadStepStatusConstant.Error)).FirstOrDefault();
+                //if (_fieldUpdateStage == null)
+                //{
+                //    EDownloadStaging _stage = new EDownloadStaging()
+                //    {
+                //        DownloadStagingID = _downloadID,
+                //        ELoanGUID = new Guid(_eLoanGUID),
+                //        EAttachmentName = "Custom Flag Field Update",
+                //        TypeOfDownload = EncompassLoanAttachmentDownloadConstant.Loan,
+                //        Status = EncompassDownloadStepStatusConstant.Waiting,
+                //        Step = EncompassDownloadStepConstant.UpdateField,
+                //        Error = string.Empty,
+                //        CreatedOn = DateTime.Now,
+                //        ModifiedOn = DateTime.Now,
+                //        AttachmentGUID = ""
+                //    };
 
-                    db.EDownloadStaging.Add(_stage);
-                    db.SaveChanges();
-                }
+                //    db.EDownloadStaging.Add(_stage);
+                //    db.SaveChanges();
+                //}
 
                 List<EDownloadStaging> _staged = db.EDownloadStaging.AsNoTracking().Where(x => x.DownloadStagingID == _downloadID).ToList();
 
@@ -308,7 +307,7 @@ namespace IL.EncompassFileDownloader
             }
         }
 
-        public void UpdateEDownloadStatus(Int64 _downloadID, Int64 _status,string LoanNumber, string errMsg = "")
+        public void UpdateEDownloadStatus(Int64 _downloadID, Int64 _status, string LoanNumber, string errMsg = "")
         {
             using (var db = new DBConnect(TenantSchema))
             {
@@ -382,7 +381,7 @@ namespace IL.EncompassFileDownloader
 
                         LoanSearch _loanSearch = db.LoanSearch.AsNoTracking().Where(x => x.LoanID == _eAttachment.LoanID).FirstOrDefault();
                         if (_loanSearch != null)
-                        {                           
+                        {
                             db.Entry(_loanSearch).State = System.Data.Entity.EntityState.Deleted;
                             db.SaveChanges();
 
@@ -486,7 +485,7 @@ namespace IL.EncompassFileDownloader
                 return db.ELoanAttachmentDownload.AsNoTracking().Where(x => x.Status == EncompassStatusConstant.DOWNLOAD_FAILED && x.TypeOfDownload == EncompassLoanAttachmentDownloadConstant.Loan).Select(x => x.ELoanGUID.ToString()).ToList();
             }
         }
-        
+
 
         public List<IntellaAndEncompassFetchFields> GetEncompassLookUpFields(string tenantSchema)
         {

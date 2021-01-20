@@ -25,6 +25,13 @@ namespace IntellaLendAPI.Models
 
     #endregion MAS
 
+    public class GetDocumentStackingOrderRequest : IntellaLendRequest
+    {
+        public string TableSchema { get; set; }
+        public Int64 LoanID { get; set; }
+        public Int64 ConfigID { get; set; }
+    }
+
     public class QCIQDBDetailsRequest : IntellaLendRequest
     {
         public string TableSchema { get; set; }
@@ -52,6 +59,25 @@ namespace IntellaLendAPI.Models
         public string LoanNumber { get; set; }
         public string BorrowerName { get; set; }
     }
+    public class GetADGroupsRequest : IntellaLendRequest
+    {
+        public string TableSchema { get; set; }
+        public string LDAPUrl { get; set; }
+    }
+    public class RequestSaveADConfig : IntellaLendRequest
+    {
+        public string TableSchema { get; set; }
+        public string ADDOMAIN { get; set; }
+        public string LDAPURL { get; set; }
+    }
+
+    public class ADGroupAssignedForRoleRequest : IntellaLendRequest
+    {
+        public string TableSchema { get; set; }
+        public Int64 ADGroupID { get; set; }
+        public Int64 RoleID { get; set; }
+    }
+
 
     public class EphesoftLoanDetailsRequest : IntellaLendRequest
     {
@@ -92,6 +118,11 @@ namespace IntellaLendAPI.Models
         public string EncompassDocPages { get; set; }
     }
 
+    public class StackingOrderDocumentsResponse : IntellaLendResponse
+    {
+        public string stackingOrderDocuments { get; set; }
+    }
+
 
     public class WebExceptionResponse : IntellaLendResponse
     {
@@ -108,6 +139,7 @@ namespace IntellaLendAPI.Models
         public string TableSchema { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
+        public bool ADLogin { get; set; }
     }
 
     public class UserUpdateRequest : IntellaLendRequest
@@ -132,11 +164,15 @@ namespace IntellaLendAPI.Models
         public Int64 LoanID { get; set; }
         public string ServiceTypeName { get; set; }
     }
+
+
+
     public class RoleListRequest : IntellaLendRequest
     {
         public string TableSchema { get; set; }
         public Int64 RoleID { get; set; }
         public Int64 UserID { get; set; }
+        public bool ADLogin { get; set; }
     }
 
     public class UserListRequest : IntellaLendRequest
@@ -217,6 +253,33 @@ namespace IntellaLendAPI.Models
         public Int64 CustomerID { get; set; }
         public Int64 ReviewTypeID { get; set; }
     }
+
+    public class RequestReviewLoanLenderMapping : IntellaLendRequest
+    {
+        public string TableSchema { get; set; }
+        public Int64 ReviewTypeID { get; set; }
+        public Int64 LoanTypeID { get; set; }
+    }
+
+    public class RequestSaveReviewLoanLenderMapping : IntellaLendRequest
+    {
+        public string TableSchema { get; set; }
+        public Int64 ReviewTypeID { get; set; }
+        public Int64 LoanTypeID { get; set; }
+        public Int64[] AllLendersIDs { get; set; }
+        public Int64[] AssignedLendersIDs { get; set; }
+
+        public bool IsAdd { get; set; }
+
+    }
+
+    /*New Model*/
+    public class CustLoantypeMappingUpdateRequest : IntellaLendRequest
+    {
+        public string TableSchema { get; set; }
+        public List<CustLoantypeMapping> lsCustLoanTypeMappings { get; set; }
+    }
+
     public class RequestCustLoanReviewStackMapping : IntellaLendRequest
     {
         public string TableSchema { get; set; }
@@ -367,6 +430,21 @@ namespace IntellaLendAPI.Models
         public string TableSchema { get; set; }
         public long CustomerID { get; set; }
     }
+
+    public class RequestCustomerImportStaging : IntellaLendRequest
+    {
+        public string TableSchema { get; set; }
+        public Int32 Status { get; set; }
+        public DateTime ImportDateFrom { get; set; }
+        public DateTime ImportDateTo { get; set; }
+        public Int64 AssignType { get; set; }
+    }
+
+    public class RequestCustomerImportStagingDetails : IntellaLendRequest
+    {
+        public string TableSchema { get; set; }
+        public Int64 CustomerImportStagingID { get; set; }
+    }
     #endregion
 
     #region Loan Requests
@@ -405,7 +483,11 @@ namespace IntellaLendAPI.Models
         public string TableSchema { get; set; }
         public Int64 LoanID { get; set; }
     }
-
+    public class GetFieldRequest : IntellaLendRequest
+    {
+        public string TableSchema { get; set; }
+        public Int64 LoanID { get; set; }
+    }
     public class LoanAuditRequest : IntellaLendRequest
     {
         public string TableSchema { get; set; }
@@ -468,7 +550,6 @@ namespace IntellaLendAPI.Models
 
         public string resourceRef { get; set; }
     }
-
 
     public class LoanRequest : IntellaLendRequest
     {
@@ -1000,6 +1081,18 @@ namespace IntellaLendAPI.Models
         public Int32 EventType { get; set; }
     }
 
+
+    public class LOSDocumentFieldsReq : IntellaLendRequest
+    {
+        public string TableSchema { get; set; }
+        public Int64 LOSDocumentId { get; set; }
+        public string FieldSearchWord { get; set; }
+    }
+
+    public class RequestFannieMaeCustomerConfig : IntellaLendRequest
+    {
+        public string TableSchema { get; set; }
+    }
     #endregion
 
     #region Document Fields Request
@@ -1166,12 +1259,19 @@ namespace IntellaLendAPI.Models
         public List<ChecklistItemSequence> ChecklistItemSeq { get; set; }
     }
 
-    public class LosType : IntellaLendRequest
+    public class LosTypeName : IntellaLendRequest
     {
         public string LosName { get; set; }
     }
 
     #endregion
+
+    public class DirectLoanRequest : IntellaLendRequest
+    {
+        public string TableSchema { get; set; }
+        public string EncryptedLoanGUID { get; set; }
+    }
+
 
     #region Re-Verification
 
@@ -1329,10 +1429,13 @@ namespace IntellaLendAPI.Models
 
     public class WebConsoleErrorHandlerRequest : IntellaLendRequest
     {
-        public string timeStamp { get; set; }
+        public ErrorObject Error { get; set; }
+    }
+
+    public class ErrorObject
+    {
         public string message { get; set; }
         public string stack { get; set; }
-        public object Error { get; set; }
     }
 
     public class WebRequestErrorHandlerRequest : IntellaLendRequest
@@ -1351,7 +1454,11 @@ namespace IntellaLendAPI.Models
         public RoleMaster roletype { get; set; }
         public List<MenuMaster> menus { get; set; }
     }
-
+    public class SyncLevelRequest : IntellaLendRequest
+    {
+        public string TableSchema { get; set; }
+        public Int64 LoanTypeID { get; set; }
+    }
     public class MenuListRequest : IntellaLendRequest
     {
         public string TableSchema { get; set; }
@@ -1652,14 +1759,18 @@ namespace IntellaLendAPI.Models
             public Exportmodel ExportedDate { get; set; }
 
         }
-
-
         public class CurrentExportLoanRequest : IntellaLendRequest
         {
             public string TableSchema { get; set; }
             public Int64 ID { get; set; }
             public Int64 LoanID { get; set; }
         }
-
+        public class ReExportLOSDetailRequest : IntellaLendRequest
+        {
+            public string TableSchema { get; set; }
+            public Int64 LoanID { get; set; }
+            public Int32 FileType { get; set; }
+            public Int64 ID { get; set; }
+        }
     }
 }

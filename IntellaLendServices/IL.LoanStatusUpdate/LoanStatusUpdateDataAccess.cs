@@ -81,7 +81,17 @@ namespace IL.LoanStatusUpdate
             }
         }
 
-        public void UpdateLoanSubStatus(long loanId, int subStatus, string loanStatusDesc, Int64 DocID)
+        public bool CheckFileNotCreated(Int64 LoanID, Int32 FileType)
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
+                LOSExportFileStaging _stage = db.LOSExportFileStaging.AsNoTracking().Where(l => l.LoanID == LoanID && l.FileType == FileType).FirstOrDefault();
+
+                return _stage == null;
+            }
+        }
+
+        public void UpdateLoanSubStatus(long loanId, int subStatus, string loanStatusDesc, Int64 DocID, ref bool insert)
         {
             using (var db = new DBConnect(TenantSchema))
             {
@@ -97,7 +107,7 @@ namespace IL.LoanStatusUpdate
                         db.SaveChanges();
                         string[] auditDescs = AuditDataAccess.GetAuditDescription(TenantSchema, AuditConfigConstant.STATUS_UPDATED_BY_SYSTEM);
                         LoanAudit.InsertLoanAudit(db, _loan, auditDescs[0].Replace(AuditConfigConstant.LOANSTATUSDESC, loanStatusDesc), auditDescs[1].Replace(AuditConfigConstant.LOANSTATUSDESC, loanStatusDesc));
-
+                        insert = true;
                     }
                 }
                 else
@@ -115,6 +125,7 @@ namespace IL.LoanStatusUpdate
                         _loan.ModifiedOn = DateTime.Now;
                         db.Entry(_loan).State = EntityState.Modified;
                         db.SaveChanges();
+                        insert = true;
                         //string[] auditDescs = AuditDataAccess.GetAuditDescription(TenantSchema, AuditConfigConstant.STATUS_UPDATED_BY_SYSTEM);
                         //LoanAudit.InsertLoanAudit(db, _loan, auditDescs[0].Replace(AuditConfigConstant.LOANSTATUSDESC, loanStatusDesc), auditDescs[1].Replace(AuditConfigConstant.LOANSTATUSDESC, loanStatusDesc));
 
@@ -123,6 +134,7 @@ namespace IL.LoanStatusUpdate
             }
 
         }
+
 
         public void UpdateLoanStatus(Int64 LoanID, Int64 status, Int32 errorCode, string loanStatusDesc, Int64 DocID)
         {

@@ -1,4 +1,5 @@
 ﻿using IL.EmailManager.EmailDataAccess;
+using IntellaLend.Constance;
 using MTS.ServiceBase;
 using MTSEntBlocks.ExceptionBlock.Handlers;
 using System;
@@ -165,8 +166,12 @@ namespace IL.EmailManager
                     EmailTemplate template = new EmailTemplate();
 
                     DataRow[] itemtemplate = dsEmailTemplates.Tables[0].Select("TemplateId=" + itemdata["TemplateId"].ToString());
-
+                    string[] _emailSP = itemdata["EmailSP"].ToString().Split(',');
                     Template templateForSend = template.CreateEmailTemplateAndProcess(itemtemplate[0]["HTMLPAGE"].ToString(), itemdata["EmailSP"].ToString());
+                    if(TemplateId != EmailTemplateConstants.MASJsonEmail.ToString())
+                    {
+                        templateForSend.To = _emailSP[1];
+                    }
                     string smtpId = dsEmailTemplates.Tables[0].Select("TemplateId=" + itemdata["TemplateId"].ToString())[0]["SMTPID"].ToString();
 
                     if (!SendMail(templateForSend, smtpId))
@@ -243,7 +248,6 @@ namespace IL.EmailManager
 
         private int GetTemplateIdFromSchedule(long ScheduleId)
         {
-
             return int.Parse(dataaccess.GetTemplateIDFromSchedule(ScheduleId).ToString());
         }
 
@@ -274,9 +278,9 @@ namespace IL.EmailManager
                     message.To.Add(email.To);
 
                     if (!string.IsNullOrEmpty(email.Cc))
-                        message.To.Add(email.Cc);
+                        message.CC.Add(email.Cc);
                     if (!string.IsNullOrEmpty(email.BCc))
-                        message.To.Add(email.BCc);
+                        message.Bcc.Add(email.BCc);
                 }
 
                 message.Subject = email.Subject;

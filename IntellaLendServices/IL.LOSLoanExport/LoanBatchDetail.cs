@@ -7,6 +7,8 @@ namespace IL.LOSLoanExport
     public class ExportDocuments
     {
         public string DocumentID { get; set; }
+        public string DocumentIdentifier { get; set; }
+        public string BatchInstanceIdentifier { get; set; }
         public Int64 ILDocumentID { get; set; }
         public string DocumentType { get; set; }
         public string DocumentDesc { get; set; }
@@ -44,9 +46,13 @@ namespace IL.LOSLoanExport
     {
         public Int64 RuleID { get; set; }
         public string Notes { get; set; }
-        public List<object> Ansewer { get; set; }
+        public List<object> Answer { get; set; }
     }
-
+    public class AnswersJson
+    {
+        public string Notes { get; set; }
+        public List<object> Answer { get; set; }
+    }
     public class RuleResult
     {
         public Int64 RuleID { get; set; }
