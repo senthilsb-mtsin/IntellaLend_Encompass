@@ -143,11 +143,11 @@ namespace IntellaLend.LOSWorkflow
                     LoanID = LoanID,
                     FileType = LOSExportFileTypeConstant.LOS_LOAN_EXPORT,
                     Status = LOSExportStatusConstant.LOS_LOAN_STAGED,
-                    FileName = $"{loanNumber}_IL_Export_{DateTime.Now.ToString("yyyyMMddhhmmss")}.json",
+                    FileName = $"{loanNumber}_IL_Export_{DateTime.Now.ToString("yyyyMMddhhmmssfff")}.json",
                     FileJson = string.Empty,
                     ErrorMsg = string.Empty,
                     CreatedOn = DateTime.Now,
-                    ModifiedOn = DateTime.Now
+                    ModifiedOn = DateTime.Now,
                 };
 
                 db.LOSExportFileStaging.Add(_lStage);
