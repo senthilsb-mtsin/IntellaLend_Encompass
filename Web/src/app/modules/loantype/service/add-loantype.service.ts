@@ -456,18 +456,18 @@ export class AddLoanTypeService {
   checkDuplicateStackingOrderGrp(newName: string) {
     this._stackinOrderName = newName;
     const stackOrderGrp = this._commonService.GetSysStackingOrderGroup();
-    if (stackOrderGrp.length > 0 && isTruthy(newName)) {
+    if (isTruthy(stackOrderGrp) && stackOrderGrp.length > 0 && isTruthy(newName)) {
       if (stackOrderGrp.filter(x => x.Description.toUpperCase() === newName.toUpperCase() && x.StackingOrderID !== this._stackinOrder.StackingOrderID).length > 0) {
         this._notificationService.showError('Stacking Order Already Exists !');
         return false;
       } else { return true; }
     }
-    return false;
+    return (!isTruthy(stackOrderGrp) || stackOrderGrp.length === 0);
   }
 
   checkDuplicateChecklist(newName: string) {
     const checkListGrp = this._commonService.GetSystemChecklistMaster(true);
-    if (checkListGrp.length > 0 && isTruthy(newName)) {
+    if (isTruthy(checkListGrp) && checkListGrp.length > 0 && isTruthy(newName)) {
       const existCheck = checkListGrp.filter(x => x.CheckListName.toString().toLowerCase() === newName.toLowerCase());
       if (existCheck.length > 0) {
         this._notificationService.showError('Checklist Group Already Exists !');
@@ -476,7 +476,7 @@ export class AddLoanTypeService {
         return true;
       }
     }
-    return false;
+    return (!isTruthy(checkListGrp) || checkListGrp.length === 0);
   }
 
   setSystemChecklist(checkList: { CheckListID: number, CheckListName: string }) {
