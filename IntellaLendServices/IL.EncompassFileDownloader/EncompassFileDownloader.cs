@@ -30,6 +30,9 @@ namespace IL.EncompassFileDownloader
         private static string CurrentReviewTypeName = string.Empty;
         private List<List<Dictionary<string, string>>> _queryCombinations = new List<List<Dictionary<string, string>>>();
         private static string UploadEFolder = string.Empty;
+        private static string LastFinishedMileStone = string.Empty;
+        private static string ServiceTypes = string.Empty;
+        private static string LastFinishedMileStoneFieldID = string.Empty;
 
         public void OnStart(string ServiceParam)
         {
@@ -38,6 +41,9 @@ namespace IL.EncompassFileDownloader
             EncompassWrapperAPIURL = Params.Find(f => f.Key == "EncompassWrapperAPIURL").Value; //http://mts100:8099/
             ProcessedEFolder = Params.Find(f => f.Key == "ProcessedEFolder").Value;
             UploadEFolder = Params.Find(f => f.Key == "UploadEFolder").Value;
+            LastFinishedMileStoneFieldID = Params.Find(f => f.Key == "LastFinishedMileStoneFieldID").Value;
+            LastFinishedMileStone = Params.Find(f => f.Key == "LastFinishedMileStone").Value;
+            ServiceTypes = Params.Find(f => f.Key == "ServiceTypes").Value;
         }
 
         public bool DoTask()
@@ -99,6 +105,11 @@ namespace IL.EncompassFileDownloader
                 dic.Add(item.EncompassFieldID, item.EncompassFieldValue.Split(',').ToList());
                 _eQueryFields.Add(dic);
             }
+
+            Dictionary<string, List<string>> dicMile = new Dictionary<string, List<string>>();
+            dicMile.Add(LastFinishedMileStoneFieldID, LastFinishedMileStone.Split(',').ToList());
+            _eQueryFields.Add(dicMile);
+
             _queryCombinations = new List<List<Dictionary<string, string>>>();
             GetCombinations(_eQueryFields, new List<Dictionary<string, string>>());
             LogMessage(JsonConvert.SerializeObject(_queryCombinations));
@@ -106,7 +117,7 @@ namespace IL.EncompassFileDownloader
 
             List<EWebhookEvents> _eWebHookEvents = dataAccess.GetWebHooksEvent();
 
-            IntellaAndEncompassFetchFields _serviceType = _enImportFields.Where(x => x.FieldType.Contains(LOSFieldType.SERVICETYPE)).FirstOrDefault();
+            //IntellaAndEncompassFetchFields _serviceType = _enImportFields.Where(x => x.FieldType.Contains(LOSFieldType.SERVICETYPE)).FirstOrDefault();
             IntellaAndEncompassFetchFields _updateField = _enImportFields.Where(x => x.FieldType.Contains(LOSFieldType.UPDATE)).FirstOrDefault();
             foreach (var _eWebHookEvent in _eWebHookEvents)
             {
@@ -121,22 +132,22 @@ namespace IL.EncompassFileDownloader
 
                     downloadID = dataAccess.InsertEDownload(new Guid(_eLoanGUID), EncompassStatusConstant.DOWNLOAD_PENDING);
                     LogMessage($"downloadID : {downloadID}");
-                    _enLookupFields.Add(_serviceType);
+                    //_enLookupFields.Add(_serviceType);
                     List<string> _eLookUpFields = _enLookupFields.Select(x => x.EncompassFieldID).ToList();
                     _eLookUpFields.Add(EncompassFieldConstant.LOAN_NUMBER);
-                    _eLookUpFields.Add(_serviceType.EFetchFieldID);
+                    _eLookUpFields.Add(LastFinishedMileStoneFieldID);
                     _eLookUpFields = _eLookUpFields.Union(_enLoanSearchFields.Select(x => x.EncompassFieldID).ToList()).Distinct().ToList();
                     LogMessage($"_eLoanGUID : {_eLoanGUID}");
                     LogMessage(JsonConvert.SerializeObject(_eLookUpFields));
                     List<EFieldResponse> _enFieldResponse = GetAllFieldValuesFromEncompass(_api, _eLoanGUID, _eLookUpFields.ToArray());
                     LogMessage(JsonConvert.SerializeObject(_enFieldResponse));
-                    EFieldResponse _eResponse = _enFieldResponse.Where(x => x.FieldId == _serviceType.EFetchFieldID).FirstOrDefault();
+                    EFieldResponse _eResponse = _enFieldResponse.Where(x => x.FieldId == LastFinishedMileStoneFieldID).FirstOrDefault();
                     LogMessage(JsonConvert.SerializeObject(_eResponse));
 
-                    List<string> _eServiceTypes = _serviceType.EncompassFieldValue.Split(',').ToList();
+                    List<string> _eServiceTypes = LastFinishedMileStone.Split(',').ToList();
                     LogMessage((_eServiceTypes.IndexOf(_eResponse.Value)).ToString());
 
-                    List<string> _iServiceTypes = _serviceType.IntellaMappingValue.Split(',').ToList();
+                    List<string> _iServiceTypes = ServiceTypes.Split(',').ToList();
                     LogMessage(JsonConvert.SerializeObject(_iServiceTypes));
 
                     LoanNumber = _enFieldResponse.Where(e => e.FieldId == EncompassFieldConstant.LOAN_NUMBER).FirstOrDefault().Value;
@@ -271,24 +282,23 @@ namespace IL.EncompassFileDownloader
                                         throw new Exception($"Attachment(s) not found in Encompass {UploadEFolder} folder");
                                     }
 
-                                    EDownloadStaging _fieldUpdate = _steps.Where(s => s.Step == EncompassDownloadStepConstant.UpdateField).FirstOrDefault();
+                                    File.Move(lockFileName, OrgFileName);
+                                    dataAccess.UpdateEDownloadStatus(downloadID, EncompassStatusConstant.DOWNLOAD_SUCCESS, LoanNumber);
+                                    //EDownloadStaging _fieldUpdate = _steps.Where(s => s.Step == EncompassDownloadStepConstant.UpdateField).FirstOrDefault();
 
-                                    if (_fieldUpdate != null)
-                                    {
-                                        try
-                                        {
-                                            _api.UploadProcessFlag(_eLoanGUID, _updateField.EFetchFieldID, _updateField.UpdateFieldValue);
-                                            dataAccess.UpdateDownloadStaging(_fieldUpdate.ID, EncompassDownloadStepStatusConstant.Completed);
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            dataAccess.UpdateDownloadStaging(_fieldUpdate.ID, EncompassDownloadStepStatusConstant.Error, ex.Message);
-                                            throw ex;
-                                        }
-                                        string _donFile = Path.ChangeExtension(OrgFileName,".don");
-                                        File.Move(lockFileName, _donFile);
-                                        dataAccess.UpdateEDownloadStatus(downloadID, EncompassStatusConstant.DOWNLOAD_SUCCESS, LoanNumber);
-                                    }
+                                    //if (_fieldUpdate != null)
+                                    //{
+                                    //    try
+                                    //    {
+                                    //        _api.UploadProcessFlag(_eLoanGUID, _updateField.EFetchFieldID, _updateField.UpdateFieldValue);
+                                    //        dataAccess.UpdateDownloadStaging(_fieldUpdate.ID, EncompassDownloadStepStatusConstant.Completed);
+                                    //    }
+                                    //    catch (Exception ex)
+                                    //    {
+                                    //        dataAccess.UpdateDownloadStaging(_fieldUpdate.ID, EncompassDownloadStepStatusConstant.Error, ex.Message);
+                                    //        throw ex;
+                                    //    }
+                                    //}
                                 }
                             }
                             catch (EncompassWrapperLoanLockException ex)

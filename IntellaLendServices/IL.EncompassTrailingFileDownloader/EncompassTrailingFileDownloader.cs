@@ -150,8 +150,8 @@ namespace IL.EncompassTrailingFileDownloader
                                 missingDocAuditInfo["EDOWNLOADSTAGINGID"] = _elAttachment.ID;
 
                                 dataAccess.MissingDocFileUpload(missingDocAuditInfo);
-                                string _donFile = Path.ChangeExtension(OrgFileName, ".don");
-                                File.Move(lockFileName, _donFile);
+
+                                File.Move(lockFileName, OrgFileName);
                                 dataAccess.UpdateEDownloadStatus(_eLoan.LoanID, _elAttachment.ID, EncompassStatusConstant.DOWNLOAD_SUCCESS);
                             }
                         }
