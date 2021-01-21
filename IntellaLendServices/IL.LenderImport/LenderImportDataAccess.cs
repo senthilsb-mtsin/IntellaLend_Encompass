@@ -282,6 +282,8 @@ namespace IL.LenderImport
                     db.CustReviewLoanMapping.RemoveRange(db.CustReviewLoanMapping.Where(r => r.CustomerID == CustomerID && r.ReviewTypeID == ReviewTypeID && r.LoanTypeID == LoanTypeID));
                     db.SaveChanges();
 
+                    db.CustReviewMapping.RemoveRange(db.CustReviewMapping.Where(r => r.CustomerID == CustomerID && r.ReviewTypeID == ReviewTypeID));
+                    db.SaveChanges();
                     CustReviewLoanCheckMapping _checkList = db.CustReviewLoanCheckMapping.AsNoTracking().Where(r => r.CustomerID == CustomerID && r.ReviewTypeID == ReviewTypeID && r.LoanTypeID == LoanTypeID).FirstOrDefault();
 
                     if (_checkList != null)
@@ -676,6 +678,15 @@ namespace IL.LenderImport
                     });
                     db.SaveChanges();
 
+                    db.CustReviewMapping.Add(new CustReviewMapping()
+                    {
+                        CustomerID = CustomerID,
+                        ReviewTypeID = ReviewTypeID,
+                        Active = true,
+                        CreatedOn = DateTime.Now,
+                        ModifiedOn = DateTime.Now
+                    });
+                    db.SaveChanges();
                     CustLoantypeMapping custLoantypeMapping = db.CustLoantypeMapping.AsNoTracking().Where(x => x.CustomerID == CustomerID && x.LoanTypeID == LoanTypeID).FirstOrDefault();
                     if (custLoantypeMapping == null)
                     {
@@ -695,6 +706,32 @@ namespace IL.LenderImport
                 }
             }
             return result;
+        }
+
+        public void updatecustreviewloanmapping(Int64 CustomerID, Int64 ReviewTypeID, Int64 LoanTypeID)
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
+                CustReviewLoanMapping _custReviewLoanMap = db.CustReviewLoanMapping.AsNoTracking().Where(c => c.ReviewTypeID == ReviewTypeID && c.LoanTypeID == LoanTypeID && c.CustomerID == CustomerID).FirstOrDefault();
+
+                if (_custReviewLoanMap != null && !_custReviewLoanMap.Active)
+                {
+                    _custReviewLoanMap.Active = true;
+                    _custReviewLoanMap.ModifiedOn = DateTime.Now;
+                    db.Entry(_custReviewLoanMap).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+
+                CustReviewMapping _custReviewMap = db.CustReviewMapping.AsNoTracking().Where(c => c.ReviewTypeID == ReviewTypeID && c.CustomerID == CustomerID).FirstOrDefault();
+
+                if (_custReviewMap != null && !_custReviewMap.Active)
+                {
+                    _custReviewMap.Active = true;
+                    _custReviewMap.ModifiedOn = DateTime.Now;
+                    db.Entry(_custReviewMap).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
         }
 
         public void SetCustLoanDocumentStacking(DBConnect db, Int64 CustomerID, Int64 LoanTypeID, IntellaLendDataAccess _ILDataAccess, List<StackingOrderDetailMaster> _stackDetails, List<DocumentTypeMaster> _lsTenantDocs)

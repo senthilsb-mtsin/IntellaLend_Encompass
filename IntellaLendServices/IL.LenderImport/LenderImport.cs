@@ -148,11 +148,13 @@ namespace IL.LenderImport
                             {
                                 string lastErrorMsg = _dataAccess.GetLastErrorMessage(custImportStaging.ID, LenderImportStatusConstant.LENDER_IMPORT_FAILED);
                                 _dataAccess.UpdateLenderStagingStatus(custImportStaging.ID, LenderImportStatusConstant.LENDER_IMPORT_FAILED, lastErrorMsg);
+                                File.Move(lckpath, Path.Combine(LenderImportErrorPath, $"{ fileName}_{DateTime.Now.ToString("MMddyyyyHHmmssFFF")}{ErrorTxt}"));
                             }
                             else if (_dataAccess.CheckLenderImportStagingDetailStatus(custImportStaging.ID, LenderImportStatusConstant.LENDER_IMPORT_PARTILLY_PROCESSED))
                             {
                                 string lastErrorMsg = _dataAccess.GetLastErrorMessage(custImportStaging.ID, LenderImportStatusConstant.LENDER_IMPORT_PARTILLY_PROCESSED);
                                 _dataAccess.UpdateLenderStagingStatus(custImportStaging.ID, LenderImportStatusConstant.LENDER_IMPORT_PARTILLY_PROCESSED, lastErrorMsg);
+                                File.Move(lckpath, Path.Combine(LenderImportErrorPath, $"{ fileName}_{DateTime.Now.ToString("MMddyyyyHHmmssFFF")}{ErrorTxt}"));
                             }
                             else
                             {
@@ -247,7 +249,10 @@ namespace IL.LenderImport
                         _dataAccess.UpdateLenderImportStagingDetailStatus(_importDetail.ID, LenderImportStatusConstant.LENDER_IMPORT_PROCESSED, errorMsg);
                     }
                     else
+                    {
+                        _dataAccess.updatecustreviewloanmapping(_customerID, _reviewTypeID, _loanTypeID);
                         _dataAccess.UpdateLenderImportStagingDetailStatus(_importDetail.ID, LenderImportStatusConstant.LENDER_IMPORT_FAILED, $"Lender : {_importDetail.CustomerName}, ServiceType : {_reivewType.ReviewTypeName}, LoanType : {_loanType.LoanTypeName} mapping already exist");
+                    }
                 }
                 else
                 {
