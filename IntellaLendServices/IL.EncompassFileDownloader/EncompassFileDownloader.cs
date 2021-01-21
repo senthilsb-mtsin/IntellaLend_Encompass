@@ -109,12 +109,10 @@ namespace IL.EncompassFileDownloader
             Dictionary<string, List<string>> dicMile = new Dictionary<string, List<string>>();
             dicMile.Add(LastFinishedMileStoneFieldID, LastFinishedMileStone.Split(',').ToList());
             _eQueryFields.Add(dicMile);
-
             _queryCombinations = new List<List<Dictionary<string, string>>>();
             GetCombinations(_eQueryFields, new List<Dictionary<string, string>>());
             LogMessage(JsonConvert.SerializeObject(_queryCombinations));
             List<string> _lsLoans = new List<string>();
-
             List<EWebhookEvents> _eWebHookEvents = dataAccess.GetWebHooksEvent();
 
             //IntellaAndEncompassFetchFields _serviceType = _enImportFields.Where(x => x.FieldType.Contains(LOSFieldType.SERVICETYPE)).FirstOrDefault();
@@ -123,11 +121,11 @@ namespace IL.EncompassFileDownloader
             {
                 Int64 downloadID = 0;
                 string LoanNumber = string.Empty;
-                dynamic obj = JsonConvert.DeserializeObject(_eWebHookEvent.Response);
-                string _eLoanGUID = obj.loanGUID;
-
+                
                 try
                 {
+                    dynamic obj = JsonConvert.DeserializeObject(_eWebHookEvent.Response);
+                    string _eLoanGUID = obj.loanGUID;
                     dataAccess.UpdateStatusEwebHookEvents(_eWebHookEvent.ID, EWebHookStatusConstant.EWEB_HOOK_PROCESSING);
 
                     downloadID = dataAccess.InsertEDownload(new Guid(_eLoanGUID), EncompassStatusConstant.DOWNLOAD_PENDING);
@@ -277,7 +275,10 @@ namespace IL.EncompassFileDownloader
                                     else
                                     {
                                         if (downloadID > 0)
+                                        {
+                                            dataAccess.UpdateStatusEwebHookEvents(_eWebHookEvent.ID, EWebHookStatusConstant.EWEB_HOOK_ERROR);
                                             dataAccess.UpdateEDownloadStatus(downloadID, EncompassStatusConstant.DOWNLOAD_FAILED, LoanNumber, "Attachment(s) not found in Encompass Unassigned folder");
+                                        }
 
                                         throw new Exception($"Attachment(s) not found in Encompass {UploadEFolder} folder");
                                     }
@@ -321,21 +322,29 @@ namespace IL.EncompassFileDownloader
                                     File.Delete(lockFileName);
 
                                 if (downloadID > 0)
+                                {
                                     dataAccess.UpdateEDownloadStatus(downloadID, EncompassStatusConstant.DOWNLOAD_FAILED, LoanNumber, ex.Message);
-
+                                    dataAccess.UpdateStatusEwebHookEvents(_eWebHookEvent.ID, EWebHookStatusConstant.EWEB_HOOK_ERROR);
+                                }
                                 MTSExceptionHandler.HandleException(ref ex);
                             }
                         }
                         else
                         {
                             if (downloadID > 0)
+                            {
                                 dataAccess.UpdateEDownloadStatus(downloadID, EncompassStatusConstant.DOWNLOAD_FAILED, LoanNumber, $"{CurrentReviewTypeName} service type not assigned to any customer in IntellaLend");
+                                dataAccess.UpdateStatusEwebHookEvents(_eWebHookEvent.ID, EWebHookStatusConstant.EWEB_HOOK_ERROR);
+                            }
                         }
                     }
                     else
                     {
                         if (downloadID > 0)
+                        {
                             dataAccess.UpdateEDownloadStatus(downloadID, EncompassStatusConstant.DOWNLOAD_FAILED, LoanNumber, $"{_eResponse.Value} milestone not mapped to any Service Type in IntellaLend");
+                            dataAccess.UpdateStatusEwebHookEvents(_eWebHookEvent.ID, EWebHookStatusConstant.EWEB_HOOK_ERROR);
+                        }
                     }
                 }
                 catch (EncompassWrapperLoanLockException ex)
@@ -348,9 +357,16 @@ namespace IL.EncompassFileDownloader
                 }
                 catch (Exception ex)
                 {
+                    LogMessage("Download ID : "+ downloadID);
                     if (downloadID > 0)
+                    {
                         dataAccess.UpdateEDownloadStatus(downloadID, EncompassStatusConstant.DOWNLOAD_FAILED, LoanNumber, ex.Message);
-
+                        dataAccess.UpdateStatusEwebHookEvents(_eWebHookEvent.ID, EWebHookStatusConstant.EWEB_HOOK_ERROR);
+                    }
+                    else
+                    {
+                        dataAccess.UpdateStatusEwebHookEvents(_eWebHookEvent.ID, EWebHookStatusConstant.EWEB_HOOK_ERROR);
+                    }
                     MTSExceptionHandler.HandleException(ref ex);
                 }
 
