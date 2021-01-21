@@ -1,0 +1,83 @@
+<div class="col-md-12" [cgBusy]="promise">
+    <div class="m-t-15">
+        <div class="m-t-15">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box">
+                        <div class="box-title">
+                            <div class="box-caption">
+                                <span>Encompass Exceptions</span>
+                            </div>
+                            <div class="box-action">
+                                <div class="col-md-12 pull-right">
+                                    <div class="col-md-7">
+
+                                        <div class="form-group m0">
+
+                                            <ng-daterangepicker id="ocr_daterange" #dateRange [(ngModel)]="datevalue"
+                                                [options]="daterangeoptions"></ng-daterangepicker>
+                                        
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1 pull-right">
+                                        <button class="btn btn-info waves-effect m-r-5 waves-light btn-sm"
+                                            id="db_btnSearch"
+                                            (click)="SearchEncompassDownloadException(dateRange.dateFrom, dateRange.dateTo)"
+                                            type="button" tabindex="7">
+                                            <span class="fa fa-search"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="table-panel">
+                                <div class=" table-responsive">
+                                    <div *ngIf="_btnSearchClick" class="text-center">
+                                        <label>Loading
+                                            <span class="fa fa-spinner fa-pulse fa-fw"></span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <table datatable [dtOptions]="dtOptions"
+                                            class="table table-bordered table-striped table-responsive"
+                                            style="width: 100%;">
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #encompassException="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm" style="width:510px;" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Retry Confirmation
+                    <span class="pull-right" (click)="encompassException.hide()" style="cursor: pointer">
+                        <i class="material-icons"> close</i>
+                    </span>
+                </h5>
+            </div>
+            <hr class="fancy-line">
+            <div class="modal-body">
+                <div>
+                    Do you want to retry the EncompassLoanNumber <span><b>{{retryData.EncompassLoanNumber}}?</b></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success waves-effect waves-light m-l-5"
+                    (click)="RetryEncompassException()">
+                    <i class="material-icons">check_circle</i>&nbsp;&nbsp;Yes</button>
+                <button type="button" class="btn btn-danger waves-effect waves-light" type="button"
+                    (click)="encompassException.hide()">
+                    <i class="material-icons">cancel</i>&nbsp;&nbsp;Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

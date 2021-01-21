@@ -192,6 +192,7 @@ export class ADConfigurationConstant {
 }
 
 export class CustomerImportAssignTypeConstant {
+
   static CUSTOMER_IMPORT = 0;
   static SERVICE_CUSTOMER_IMPORT = 1;
 }
