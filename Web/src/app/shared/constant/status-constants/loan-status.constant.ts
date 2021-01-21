@@ -66,6 +66,7 @@ export class StatusConstant {
     '1002': 'Move to Processing Queue Failed',
     '1003': 'Import to IDC Failed',
     '1001': 'LoanType Unavailable',
+    '900': 'LoanType Unavailable',
     '301': 'Job Export Waiting',
     '302': 'Job Export Processing',
     '303': 'Job Export Failed',

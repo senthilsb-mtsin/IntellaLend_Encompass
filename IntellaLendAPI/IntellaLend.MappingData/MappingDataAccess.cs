@@ -2487,6 +2487,25 @@ namespace IntellaLend.EntityDataHandler
                         db.SaveChanges();
                     }
 
+                    CustReviewLoanCheckMapping _loanCheck = db.CustReviewLoanCheckMapping.AsNoTracking().Where(r => r.CustomerID == _lenderID && r.ReviewTypeID == ReviewTypeID && r.LoanTypeID == LoanTypeID).FirstOrDefault();
+                    if (_loanCheck != null)
+                    {
+                        _loanCheck.Active = true;
+                        _loanCheck.ModifiedOn = DateTime.Now;
+                        db.Entry(_loanCheck).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                    CustReviewLoanStackMapping _loanStack = db.CustReviewLoanStackMapping.AsNoTracking().Where(r => r.CustomerID == _lenderID && r.ReviewTypeID == ReviewTypeID && r.LoanTypeID == LoanTypeID).FirstOrDefault();
+                    if (_loanStack != null)
+                    {
+                        _loanStack.Active = true;
+                        _loanStack.ModifiedOn = DateTime.Now;
+                        db.Entry(_loanStack).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+
                 }
                 if (_lenderCount > 0 && IsAdd)
                 {

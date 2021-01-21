@@ -1,3 +1,5 @@
+import { AppSettings } from '@mts-app-setting';
+
 export class CustomerImportStatusConstants {
     static Processing = 1;
     static PartiallyCompleted = 2;
@@ -26,4 +28,8 @@ export class CustomerImportStatusConstants {
         CustomerImportStatusConstants.Completed,
         CustomerImportStatusConstants.Error
     ];
+    static Type = {
+        '0': AppSettings.AuthorityLabelSingular + ' Import',
+        '1': AppSettings.AuthorityLabelSingular + ' Mapping'
+    };
 }

@@ -2,7 +2,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ServiceTypeComponent } from './pages/service-type/service-type.page';
 import { AddServiceTypeComponent } from './pages/add-service-type/add-service-type.page';
 import { ViewServiceTypeComponent } from './pages/view-service-type/view-service-type.page';
-import { ServiceCustomerImportMonitorComponent } from './pages/service-customer-import-monitor/service-customer-import-monitor.page';
+import { CustomerImportMoniterComponent } from '../customer/pages/customer-import-moniter/customer-import-moniter.page';
 
 const ServiceTypeRoutes: Routes = [
     {
@@ -27,7 +27,7 @@ const ServiceTypeRoutes: Routes = [
     },
     {
         path: 'import',
-        component: ServiceCustomerImportMonitorComponent
+        component: CustomerImportMoniterComponent// ServiceCustomerImportMonitorComponent
     },
 ];
 
