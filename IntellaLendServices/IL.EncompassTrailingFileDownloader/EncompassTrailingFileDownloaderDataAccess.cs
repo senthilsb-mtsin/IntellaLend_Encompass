@@ -3,6 +3,7 @@ using IntellaLend.Audit;
 using IntellaLend.AuditData;
 using IntellaLend.Constance;
 using IntellaLend.Model;
+using IntellaLend.Model.Encompass;
 using MTSEntBlocks.ExceptionBlock.Handlers;
 using MTSEntityDataAccess;
 using Newtonsoft.Json;
@@ -82,6 +83,59 @@ namespace IL.EncompassTrailingFileDownloader
                 return 0;
             }
         }
+
+        public void UpdateEDownloadStatus(Int64 _downloadID, Int64 _status, string LoanNumber, string errMsg = "")
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
+                ELoanAttachmentDownload _eAttachment = db.ELoanAttachmentDownload.AsNoTracking().Where(x => x.ID == _downloadID && x.TypeOfDownload == EncompassLoanAttachmentDownloadConstant.TrailingDocuments).FirstOrDefault();
+
+                if (_eAttachment != null)
+                {
+                    Loan _loan = null;
+                    if (_eAttachment.LoanID > 0)
+                        _loan = db.Loan.AsNoTracking().Where(x => x.LoanID == _eAttachment.LoanID).FirstOrDefault();
+
+                    if (_loan != null)
+                    {
+                        Int64 loanStatus = StatusConstant.READY_FOR_IDC;
+                        string AuditMsg = "Attachment Downloaded From Encompass";
+
+                        if (_status == EncompassStatusConstant.DOWNLOAD_FAILED)
+                        {
+                            loanStatus = StatusConstant.FAILED_ENCOMPASS_DOWNLOAD;
+                            AuditMsg = "Attachment Download Failed From Encompass";
+                        }
+
+                        _loan.Status = loanStatus;
+                        _loan.ModifiedOn = DateTime.Now;
+                        db.Entry(_loan).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+
+                        LoanAudit.InsertLoanAudit(db, _loan, AuditMsg, AuditMsg);
+
+                        LoanSearch _loanSearch = db.LoanSearch.AsNoTracking().Where(x => x.LoanID == _eAttachment.LoanID).FirstOrDefault();
+                        if (_loanSearch != null)
+                        {
+                            _loanSearch.Status = loanStatus;
+                            _loanSearch.ModifiedOn = DateTime.Now;
+                            db.Entry(_loanSearch).State = System.Data.Entity.EntityState.Modified;
+                            db.SaveChanges();
+
+                            LoanAudit.InsertLoanSearchAudit(db, _loanSearch, AuditMsg, AuditMsg);
+                        }
+                    }
+
+                    _eAttachment.Status = _status;
+                    _eAttachment.ELoanNumber = LoanNumber;
+                    _eAttachment.ModifiedOn = DateTime.Now;
+                    _eAttachment.Error = errMsg;
+                    db.Entry(_eAttachment).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+        }
+
 
         public void UpdateEDownloadStatus(Int64 _downloadID, string ExceptionMsg)
         {
@@ -246,72 +300,98 @@ namespace IL.EncompassTrailingFileDownloader
 
         }
 
-        public void updateLoanCompleteStatus(Int64 loanid, string tenantSchema)
+        public void updateLoanCompleteStatus(string encompassGUID, string tenantSchema, Int64 EventID)
         {
             using (var db = new DBConnect(TenantSchema))
             {
-                //need to change this code
-                List<AuditLoanMissingDoc> auditLoanMissingDoc = db.AuditLoanMissingDoc.AsNoTracking().Where(x => (x.LoanID == loanid) && (x.Status != StatusConstant.OCR_COMPLETED)).ToList();
-
-                if (auditLoanMissingDoc.Count == 0)
+                Guid _eGUID = new Guid(encompassGUID);
+                Loan _loan = db.Loan.AsNoTracking().Where(x => x.EnCompassLoanGUID == _eGUID).FirstOrDefault();
+                if (_loan != null)
                 {
-                    //need to call api functionality to auditcomplete
+                    Int64 loanid = _loan.LoanID;
 
-                    LoanCompleteRequest loanReq = new LoanCompleteRequest();
-                    loanReq.LoanID = loanid;
-                    loanReq.TableSchema = tenantSchema;
-                    loanReq.UserName = "";
-                    using (HttpClient client = new HttpClient())
+                    //need to change this code
+                    List<AuditLoanMissingDoc> auditLoanMissingDoc = db.AuditLoanMissingDoc.AsNoTracking().Where(x => (x.LoanID == loanid) && (x.Status != StatusConstant.OCR_COMPLETED)).ToList();
+                    List<EWebhookEvents> _events = db.EWebhookEvents.AsNoTracking().Where(x => x.Response.Contains(encompassGUID) && x.EventType == EWebHookEventsLogConstant.DOCUMENT_LOG && x.IsTrailing == true && (x.Status == EncompassDownloadStepStatusConstant.Waiting || x.Status == EncompassDownloadStepStatusConstant.Processing)).ToList();
+
+                    if (auditLoanMissingDoc.Count == 0 && _events.Count == 0)
                     {
-                        string json = JsonConvert.SerializeObject(loanReq);
-                        client.BaseAddress = new Uri(this.baseUri);
-                        var requestContent = new StringContent(json, Encoding.UTF8, "application/json");
+                        //need to call api functionality to auditcomplete
 
-                        try
+                        LoanCompleteRequest loanReq = new LoanCompleteRequest();
+                        loanReq.LoanID = loanid;
+                        loanReq.TableSchema = tenantSchema;
+                        loanReq.UserName = "";
+                        using (HttpClient client = new HttpClient())
                         {
-                            var response = client.PostAsync("EncompassInterface/LoanComplete", requestContent).Result;
-                            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                            string json = JsonConvert.SerializeObject(loanReq);
+                            client.BaseAddress = new Uri(this.baseUri);
+                            var requestContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+                            try
                             {
-                                var resultBody = response.Content.ReadAsStringAsync();
-                                var jsonres = resultBody.Result;
+                                var response = client.PostAsync("EncompassInterface/LoanComplete", requestContent).Result;
+                                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                                {
+                                    var resultBody = response.Content.ReadAsStringAsync();
+                                    DeleteWebHookEvents(EventID);
+                                    var jsonres = resultBody.Result;
+                                }
+                                else
+                                    UpdateStatusEwebHookEvents(EventID, EWebHookStatusConstant.EWEB_HOOK_ERROR);
+                            }
+                            catch (Exception ex)
+                            {
+                                UpdateStatusEwebHookEvents(EventID, EWebHookStatusConstant.EWEB_HOOK_ERROR);
+                                MTSExceptionHandler.HandleException(ref ex);
+                                throw ex;
                             }
                         }
-                        catch (Exception ex)
-                        {
-                            MTSExceptionHandler.HandleException(ref ex);
-                            throw ex;
-                        }
-                    }
 
+                    }
                 }
             }
         }
-
-        public List<LoanDownload> GetDBLoans()
+        public List<EWebhookEvents> GetWebHooksEvent()
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
+                return db.EWebhookEvents.AsNoTracking().Where(r => r.EventType == EWebHookEventsLogConstant.MILESTONELOG && r.Status == EWebHookStatusConstant.EWEB_HOOK_STAGED).ToList();
+            }
+        }
+        public List<LoanDownload> GetEventLoans()
         {
             try
             {
                 List<LoanDownload> _lsLoans = new List<LoanDownload>();
+
                 using (var db = new DBConnect(TenantSchema))
                 {
-                    //use left join 
-                    _lsLoans = (from l in db.Loan.AsNoTracking()
-                                where (l.UploadType == UploadConstant.ENCOMPASS) && (
-                                l.Status == StatusConstant.PENDING_IDC ||
-                                l.Status == StatusConstant.IDC_COMPLETE ||
-                                l.Status == StatusConstant.READY_FOR_IDC ||
-                                l.Status == StatusConstant.IDC_ERROR ||
-                                l.Status == StatusConstant.MOVE_TO_PROCESSING_QUEUE ||
-                                l.Status == StatusConstant.PENDING_AUDIT)
-                                select new LoanDownload()
-                                {
-                                    LoanID = l.LoanID,
-                                    EnCompassLoanGUID = l.EnCompassLoanGUID,
-                                    DownloadID = 0,
-                                    RetryFlag = false
-                                }).OrderByDescending(l => l.LoanID).ToList();
+                    List<EWebhookEvents> _events = db.EWebhookEvents.AsNoTracking().Where(x => x.EventType == EWebHookEventsLogConstant.DOCUMENT_LOG && x.IsTrailing == true && x.Status == EncompassDownloadStepStatusConstant.Waiting).ToList();
+
+                    foreach (EWebhookEvents item in _events)
+                    {
+                        EventEncompassLoanGUID _guid = JsonConvert.DeserializeObject<EventEncompassLoanGUID>(item.Response);
+
+                        Guid _eGUID = new Guid(_guid.loanGUID);
+
+                        Loan _loan = db.Loan.AsNoTracking().Where(x => x.EnCompassLoanGUID == _eGUID).FirstOrDefault();
+
+                        if (_loan != null)
+                        {
+                            _lsLoans.Add(new LoanDownload()
+                            {
+                                LoanID = _loan.LoanID,
+                                EnCompassLoanGUID = _eGUID,
+                                DownloadID = 0,
+                                RetryFlag = false,
+                                WebEventID = item.ID
+                            });
+                        }
+                    }
                 }
-                return _lsLoans;
+
+                return _lsLoans.OrderByDescending(l => l.LoanID).ToList();
             }
             catch (Exception ex)
             {
@@ -320,6 +400,57 @@ namespace IL.EncompassTrailingFileDownloader
             }
         }
 
+        public void UpdateStatusEwebHookEvents(Int64 _id, Int32 status)
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
+                EWebhookEvents _loan = db.EWebhookEvents.AsNoTracking().Where(x => x.ID == _id).FirstOrDefault();
+                if (_loan != null)
+                {
+                    _loan.Status = status;
+                    //_loan.ModifiedOn = DateTime.Now;
+                    db.Entry(_loan).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+
+            }
+        }
+        public void DeleteStaginDetails(Guid? eLoanGuid)
+        {
+
+            using (var db = new DBConnect(TenantSchema))
+            {
+                EDownloadStaging _stage = db.EDownloadStaging.AsNoTracking().Where(x => x.ELoanGUID == eLoanGuid).FirstOrDefault();
+                if (_stage != null)
+                {
+                    db.Entry(_stage).State = System.Data.Entity.EntityState.Deleted;
+
+                }
+                ELoanAttachmentDownload _eloans = db.ELoanAttachmentDownload.AsNoTracking().Where(l => l.ELoanGUID == eLoanGuid).FirstOrDefault();
+                if (_eloans != null)
+                {
+                    db.Entry(_eloans).State = System.Data.Entity.EntityState.Deleted;
+
+                }
+                db.SaveChanges();
+
+
+            }
+        }
+        public void DeleteWebHookEvents(Int64 ID)
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
+                EWebhookEvents _eWebevents = db.EWebhookEvents.AsNoTracking().Where(x => x.ID == ID).FirstOrDefault();
+                if (_eWebevents != null)
+                {
+                    db.Entry(_eWebevents).State = System.Data.Entity.EntityState.Deleted;
+
+                }
+
+                db.SaveChanges();
+            }
+        }
         public List<LoanDownload> GetRetryTrailingLoans()
         {
             try
@@ -348,5 +479,10 @@ namespace IL.EncompassTrailingFileDownloader
                 throw ex;
             }
         }
+    }
+
+    class EventEncompassLoanGUID
+    {
+        public string loanGUID { get; set; }
     }
 }

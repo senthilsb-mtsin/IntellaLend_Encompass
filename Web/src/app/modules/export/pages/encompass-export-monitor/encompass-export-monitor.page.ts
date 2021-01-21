@@ -82,7 +82,12 @@ export class EncompassExportMonitorComponent implements OnInit, AfterViewInit, O
         {
           'aTargets': [9],
           'mRender': function (data, type, row) {
-            return '<span style=\'cursor: pointer;\' class=\'viewEUpload material-icons txt-info\'>pageview</span>';
+            if(row.Status !== 2){
+              return '<span style=\'cursor: pointer;\' class=\'viewEUpload material-icons txt-info\'>pageview</span>';
+            }
+            else{
+              return '';
+            }
           }
         },
         {

@@ -313,7 +313,11 @@ namespace EncompassAPIHelper
 
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return JsonConvert.DeserializeObject<AddContainerResponse>(res);
+                List<AddContainerResponse> _response = JsonConvert.DeserializeObject<List<AddContainerResponse>>(res);
+                if (_response.Count > 0)
+                    return _response[0];
+                else
+                    return null;
             }
             if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {

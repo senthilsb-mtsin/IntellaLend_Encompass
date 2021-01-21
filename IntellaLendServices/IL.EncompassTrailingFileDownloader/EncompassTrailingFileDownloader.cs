@@ -3,10 +3,12 @@ using EncompassRequestBody.EResponseModel;
 using EncompassRequestBody.WrapperReponseModel;
 using IntellaLend.Constance;
 using IntellaLend.Model;
+using IntellaLend.Model.Encompass;
 using MTS.ServiceBase;
 using MTSEntBlocks.ExceptionBlock.Handlers;
 using MTSEntBlocks.LoggerBlock;
 using MTSEntBlocks.UtilsBlock;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,14 +22,16 @@ namespace IL.EncompassTrailingFileDownloader
         private static string IntellaLendLoanUploadPath = string.Empty;
         private static string EncompassWrapperAPIURL = string.Empty;
         private static string CurrentReviewTypeName = string.Empty;
-        private static string ProcessedParkingSpot = string.Empty;
+        private static string ProcessedEFolder = string.Empty;
+        private static string UploadEFolder = string.Empty;
 
         public void OnStart(string ServiceParam)
         {
             var Params = XDocument.Parse(ServiceParam).Descendants("add").Select(z => new { Key = z.Attribute("key").Value, Value = z.Value }).ToList();
             IntellaLendLoanUploadPath = Params.Find(f => f.Key == "IntellaLendLoanUploadPath").Value;
-            EncompassWrapperAPIURL = Params.Find(f => f.Key == "EncompassWrapperAPIURL").Value; //http://mts100:8099/
-            ProcessedParkingSpot = Params.Find(f => f.Key == "ProcessedParkingSpot").Value;
+            EncompassWrapperAPIURL = Params.Find(f => f.Key == "EncompassWrapperAPIURL").Value;
+            ProcessedEFolder = Params.Find(f => f.Key == "ProcessedEFolder").Value;
+            UploadEFolder = Params.Find(f => f.Key == "UploadEFolder").Value;
         }
 
         public bool DoTask()
@@ -53,139 +57,192 @@ namespace IL.EncompassTrailingFileDownloader
 
         private void DownloadFromEncompass(EncompassWrapperAPI _api, EncompassTrailingFileDownloaderDataAccess dataAccess)
         {
-            List<LoanDownload> _retryLoanList = dataAccess.GetRetryTrailingLoans();
-            List<LoanDownload> _dbLoanList = dataAccess.GetDBLoans();
-            List<LoanDownload> _loanList = _retryLoanList.Union(_dbLoanList).ToList();
+            List<LoanDownload> _loanList = dataAccess.GetEventLoans();
 
             foreach (var _eLoan in _loanList)
             {
-                IntellaAndEncompassFetchFields _importField = dataAccess.GetEncompassImportFields();
+                dataAccess.UpdateStatusEwebHookEvents(_eLoan.WebEventID, EWebHookStatusConstant.EWEB_HOOK_PROCESSING);
 
-                if (_importField != null)
+                string _eLoanGUID = _eLoan.EnCompassLoanGUID.ToString();
+                List<byte[]> _pdfBytes = new List<byte[]>();
+                PDFMerger merger = null;
+                string lockFileName = string.Empty;
+                bool _docAssigned = false;
+
+                ELoanAttachmentDownload _elAttachment = dataAccess.AddOrUpdateEDownloadStatus(_eLoan.LoanID, _eLoan.DownloadID, EncompassStatusConstant.DOWNLOAD_PENDING, _eLoan.RetryFlag); // user Retry and DownloadID to check
+
+                try
                 {
-                    string[] _enFieldValue = _importField.EncompassFieldValue.Split(',');
-                    //Getting milestone and custom field values from Encompass
-                    string[] _enFieldLookup = new List<string>() { _importField.EFetchFieldID }.ToArray();
-                    Logger.WriteTraceLog($"{_eLoan.EnCompassLoanGUID.ToString()}, {string.Join(",", _enFieldLookup)}");
-                    List<EFieldResponse> _enFieldResponse = _api.GetPredefinedFieldValues(_eLoan.EnCompassLoanGUID.ToString(), _enFieldLookup);
-                    EFieldResponse field = _enFieldResponse.Where(e => e.FieldId == _importField.EFetchFieldID).FirstOrDefault();
-                    string lastCompletedMilestone = field != null ? field.Value : "";
-                    Logger.WriteTraceLog($"{lastCompletedMilestone}");
-                    if (_enFieldValue.Any(x => x.Trim().ToLower().Equals(lastCompletedMilestone.Trim().ToLower()))) //string.equals use
+                    CheckAttachment:
+
+                    List<EContainer> eContainers = _api.GetAllLoanDocuments(_eLoanGUID);
+
+                    EContainer uploadContainer = eContainers.Where(x => x.Title == UploadEFolder).FirstOrDefault();
+
+                    if (uploadContainer != null)
                     {
-                        //if already exist EncompassStatusConstant.DOWNLOAD_PENDING
-                        ELoanAttachmentDownload _elAttachment = null;
-                        List<byte[]> _pdfBytes = new List<byte[]>();
-                        PDFMerger merger = null;
-                        string lockFileName = string.Empty;
-                        try
+                        List<EDocumentAttachment> _eDocAttachments = uploadContainer.Attachments;
+
+                        if (_eDocAttachments.Count == 0)
+                            goto BreakAttachmentLoop;
+
+                        List<EAttachment> _lsEAttachments = new List<EAttachment>();
+
+                        foreach (var item in _eDocAttachments)
                         {
-                            List<EAttachment> _eAttachments = _api.GetUnassignedAttachments(_eLoan.EnCompassLoanGUID.ToString());
-                            if (_eAttachments.Count > 0)
+                            string[] _attGUID = item.EntityId.Split('.');
+                            string _attachmentGUID = _attGUID[0].Replace("attachment-", "");
+                            EAttachment eAttachment = _api.GetAttachment(_eLoanGUID, _attachmentGUID);
+                            _lsEAttachments.Add(eAttachment);
+                        }
+
+                        List<EDownloadStaging> _steps = dataAccess.SetDownloadSteps(_lsEAttachments, _elAttachment.ID, _eLoanGUID);
+                        List<EDownloadStaging> _movedFiles = new List<EDownloadStaging>();
+                        foreach (EDownloadStaging item in _steps.Where(s => s.Step == EncompassDownloadStepConstant.LoanAttachment).ToArray())
+                        {
+                            try
                             {
-                                _elAttachment = dataAccess.AddOrUpdateEDownloadStatus(_eLoan.LoanID, _eLoan.DownloadID, EncompassStatusConstant.DOWNLOAD_PENDING, _eLoan.RetryFlag); // user Retry and DownloadID to check
-
-                                List<EDownloadStaging> _steps = dataAccess.SetDownloadSteps(_eAttachments, _elAttachment.ID, _elAttachment.ELoanGUID.ToString());
-
-                                //Download the attachments...                          
-                                foreach (EDownloadStaging item in _steps)
-                                {
-                                    byte[] _fileArrary = _api.DownloadAttachment(_eLoan.EnCompassLoanGUID.GetValueOrDefault().ToString(), item.AttachmentGUID, item.EAttachmentName);
-                                    _pdfBytes.Add(_fileArrary);
-                                    dataAccess.UpdateDownloadSteps(item.ID, EncompassDownloadStepStatusConstant.Completed);
-                                }
-
-                                //AuditLoanMissingDoc auditLoanMissingDoc
-                                int auditLoanMissingDocCount = dataAccess.GetAuditLoanMissingDocCount(_eLoan.LoanID);
-
-                                string exactPath = Path.Combine(IntellaLendLoanUploadPath, dataAccess.TenantSchema, "Input", DateTime.Now.ToString("yyyyMMdd"));
-
-                                string newFileName = dataAccess.TenantSchema + "_" + _eLoan.LoanID.ToString() + "_" + (auditLoanMissingDocCount + 1) + ".lck";
-
-                                try
-                                {
-                                    if (!Directory.Exists(exactPath))
-                                        Directory.CreateDirectory(exactPath);
-
-                                    lockFileName = Path.Combine(exactPath, newFileName);
-
-                                    merger = new PDFMerger(lockFileName);
-                                    merger.OpenDocument();
-                                    for (int j = 0; j < _pdfBytes.Count; j++)
-                                    {
-                                        merger.AppendPDF(_pdfBytes[j]);
-                                    }
-                                    merger.SaveDocument();
-                                }
-                                catch (Exception ex)
-                                {
-                                    throw new Exception("Error while creating Trailing Document Loan PDF", ex);
-                                }
-
-                                string OrgFileName = Path.ChangeExtension(lockFileName, ".pdf");
-
-                                List<string> attachmentGUIDs = _eAttachments.Select(a => a.AttachmentID).ToList();
-
-                                //code to move MTSProcessed parking spot
-                                List<EContainer> _eLoanDocuments = _api.GetAllLoanDocuments(_eLoan.EnCompassLoanGUID.ToString());
-                                //need to check mtsprocess
-                                EContainer eContainer = _eLoanDocuments.Where(e => e.Title == ProcessedParkingSpot).FirstOrDefault();
-                                if (eContainer != null)
-                                {
-                                    _api.AssignDocumentAttachments(_eLoan.EnCompassLoanGUID.ToString(), eContainer.DocumentId, attachmentGUIDs, ProcessedParkingSpot);
-
-                                }
-                                else
-                                {
-                                    AddContainerResponse res = _api.AddDocument(_eLoan.EnCompassLoanGUID.ToString(), ProcessedParkingSpot);
-                                    _api.AssignDocumentAttachments(_eLoan.EnCompassLoanGUID.ToString(), res.DocumentID, attachmentGUIDs, ProcessedParkingSpot);
-                                }
-
-                                //insert into auditloanmissingdoc
-                                Dictionary<string, object> missingDocAuditInfo = new Dictionary<string, object>();
-                                missingDocAuditInfo["LOANID"] = _eLoan.LoanID;
-                                missingDocAuditInfo["DOCID"] = 0;
-                                missingDocAuditInfo["USERID"] = 0;
-                                missingDocAuditInfo["FILENAME"] = newFileName;
-                                missingDocAuditInfo["EDOWNLOADSTAGINGID"] = _elAttachment.ID;
-
-                                dataAccess.MissingDocFileUpload(missingDocAuditInfo);
-
-                                File.Move(lockFileName, OrgFileName);
-                                dataAccess.UpdateEDownloadStatus(_eLoan.LoanID, _elAttachment.ID, EncompassStatusConstant.DOWNLOAD_SUCCESS);
+                                LogMessage($"Loan GUID : {_eLoanGUID}, AttachmentGUID : {item.AttachmentGUID}, EAttachmentName : {item.EAttachmentName}");
+                                dataAccess.UpdateDownloadSteps(item.ID, EncompassDownloadStepStatusConstant.Processing);
+                                byte[] _fileArrary = _api.DownloadAttachment(_eLoanGUID, item.AttachmentGUID, item.EAttachmentName);
+                                _pdfBytes.Add(_fileArrary);
+                                dataAccess.UpdateDownloadSteps(item.ID, EncompassDownloadStepStatusConstant.Completed);
+                                _movedFiles.Add(item);
+                            }
+                            catch (EncompassWrapperLoanLockException ex)
+                            {
+                                throw ex;
+                            }
+                            catch (Exception ex)
+                            {
+                                dataAccess.UpdateDownloadSteps(item.ID, EncompassDownloadStepStatusConstant.Error, ex.Message);
+                                throw ex;
                             }
                         }
-                        catch (EncompassWrapperLoanLockException ex)
-                        {
-                            if (_elAttachment.ID > 0)
-                                dataAccess.UpdateEDownloadStatus(_elAttachment.ID, "Loan Locked");
 
-                            Exception exe = new Exception("Loan Locked", ex);
-                            MTSExceptionHandler.HandleException(ref exe);
+                        List<string> attachmentGUIDs = _movedFiles.Select(a => a.AttachmentGUID).ToList();
+
+                        //Remove Attachments from MTS Upload Container
+                        if (attachmentGUIDs.Count > 0)
+                            _api.RemoveDocumentAttachments(_eLoanGUID, uploadContainer.DocumentId, attachmentGUIDs, UploadEFolder);
+
+                        //Assign Attachments to Processed folder
+                        EContainer eContainer = eContainers.Where(e => e.Title == ProcessedEFolder).FirstOrDefault();
+
+                        if (eContainer != null)
+                        {
+                            _docAssigned = _api.AssignDocumentAttachments(_eLoanGUID, eContainer.DocumentId, attachmentGUIDs, ProcessedEFolder);
+                        }
+                        else
+                        {
+                            AddContainerResponse res = _api.AddDocument(_eLoanGUID, ProcessedEFolder);
+                            _docAssigned = _api.AssignDocumentAttachments(_eLoanGUID, res.DocumentID, attachmentGUIDs, ProcessedEFolder);
+                        }
+
+                        goto CheckAttachment;
+                    }
+
+                    BreakAttachmentLoop:
+
+                    string OrgFileName = string.Empty;
+                    string newFileName = string.Empty;
+                    if (_pdfBytes.Count > 0)
+                    {
+
+                        //AuditLoanMissingDoc auditLoanMissingDoc
+                        int auditLoanMissingDocCount = dataAccess.GetAuditLoanMissingDocCount(_eLoan.LoanID);
+
+                        string exactPath = Path.Combine(IntellaLendLoanUploadPath, dataAccess.TenantSchema, "Input", DateTime.Now.ToString("yyyyMMdd"));
+
+                        newFileName = dataAccess.TenantSchema + "_" + _eLoan.LoanID.ToString() + "_" + (auditLoanMissingDocCount + 1) + ".lck";
+
+
+                        try
+                        {
+                            if (!Directory.Exists(exactPath))
+                                Directory.CreateDirectory(exactPath);
+
+                            lockFileName = Path.Combine(exactPath, newFileName);
+
+                            merger = new PDFMerger(lockFileName);
+                            merger.OpenDocument();
+                            for (int j = 0; j < _pdfBytes.Count; j++)
+                            {
+                                merger.AppendPDF(_pdfBytes[j]);
+                            }
+                            merger.SaveDocument();
                         }
                         catch (Exception ex)
                         {
-                            if (merger != null)
-                            {
-                                merger.SaveDocument();
-                            }
+                            throw new Exception("Error while creating Loan PDF", ex);
+                        }
 
-                            if (File.Exists(lockFileName))
-                                File.Delete(lockFileName);
-
-                            //need to update some fields
-                            dataAccess.UpdateEDownloadStatus(_eLoan.LoanID, _elAttachment.ID, EncompassStatusConstant.DOWNLOAD_FAILED, ex.Message);
-
-                            //Exception exc = new Exception($"Error while Creating PDF with Encompass attachment. Encompass LoanGUID : {_eLoan.EnCompassLoanGUID.ToString()}", ex);
-                            MTSExceptionHandler.HandleException(ref ex);
+                        if (_docAssigned)
+                        {
+                            dataAccess.DeleteStaginDetails(_eLoan.EnCompassLoanGUID);
+                            dataAccess.DeleteWebHookEvents(_eLoan.WebEventID);
+                        }
+                        else
+                        {
+                            dataAccess.UpdateStatusEwebHookEvents(_eLoan.WebEventID, EWebHookStatusConstant.EWEB_HOOK_ERROR);
+                            dataAccess.UpdateEDownloadStatus(_eLoan.LoanID, _elAttachment.ID, EncompassStatusConstant.DOWNLOAD_FAILED);
                         }
                     }
-                    else if (lastCompletedMilestone != "")
+                    else
                     {
-                        //update downloadedcomplete flag from loans table to 1(Yes)
-                        dataAccess.updateLoanCompleteStatus(_eLoan.LoanID, dataAccess.TenantSchema);
+                        if (_elAttachment.ID > 0)
+                        {
+                            dataAccess.UpdateStatusEwebHookEvents(_eLoan.WebEventID, EWebHookStatusConstant.EWEB_HOOK_ERROR);
+                            dataAccess.UpdateEDownloadStatus(_eLoan.LoanID, _elAttachment.ID, EncompassStatusConstant.DOWNLOAD_FAILED, "Attachment(s) not found in Encompass Unassigned folder");
+                        }
+
+                        throw new Exception($"Attachment(s) not found in Encompass {UploadEFolder} folder");
                     }
+
+                    Dictionary<string, object> missingDocAuditInfo = new Dictionary<string, object>();
+                    missingDocAuditInfo["LOANID"] = _eLoan.LoanID;
+                    missingDocAuditInfo["DOCID"] = 0;
+                    missingDocAuditInfo["USERID"] = 0;
+                    missingDocAuditInfo["FILENAME"] = newFileName;
+                    missingDocAuditInfo["EDOWNLOADSTAGINGID"] = _elAttachment.ID;
+
+                    dataAccess.MissingDocFileUpload(missingDocAuditInfo);
+
+                    File.Move(lockFileName, OrgFileName);
+                    dataAccess.UpdateEDownloadStatus(_eLoan.LoanID, _elAttachment.ID, EncompassStatusConstant.DOWNLOAD_SUCCESS);
                 }
+                catch (EncompassWrapperLoanLockException ex)
+                {
+                    if (_elAttachment.ID > 0)
+                        dataAccess.UpdateEDownloadStatus(_elAttachment.ID, "Loan Locked");
+
+                    Exception exe = new Exception("Loan Locked", ex);
+                    MTSExceptionHandler.HandleException(ref exe);
+                }
+                catch (Exception ex)
+                {
+                    if (merger != null)
+                    {
+                        merger.SaveDocument();
+                    }
+
+                    if (File.Exists(lockFileName))
+                        File.Delete(lockFileName);
+
+                    //need to update some fields
+                    dataAccess.UpdateEDownloadStatus(_eLoan.LoanID, _elAttachment.ID, EncompassStatusConstant.DOWNLOAD_FAILED, ex.Message);
+
+                    //Exception exc = new Exception($"Error while Creating PDF with Encompass attachment. Encompass LoanGUID : {_eLoan.EnCompassLoanGUID.ToString()}", ex);
+                    MTSExceptionHandler.HandleException(ref ex);
+                }
+            }
+
+            List<EWebhookEvents> _eWebHookEvents = dataAccess.GetWebHooksEvent();
+            foreach (var item in _eWebHookEvents)
+            {
+                EventEncompassLoanGUID _guid = JsonConvert.DeserializeObject<EventEncompassLoanGUID>(item.Response);
+                dataAccess.UpdateStatusEwebHookEvents(item.ID, EWebHookStatusConstant.EWEB_HOOK_PROCESSING);
+                dataAccess.updateLoanCompleteStatus(_guid.ToString(), dataAccess.TenantSchema, item.ID);
             }
         }
 
@@ -209,7 +266,10 @@ namespace IL.EncompassTrailingFileDownloader
             return _enFieldResponse;
 
         }
-
+        private void LogMessage(string _msg)
+        {
+            Logger.WriteTraceLog(_msg);
+        }
 
 
     }
@@ -219,6 +279,7 @@ namespace IL.EncompassTrailingFileDownloader
         public Int64 LoanID { get; set; }
         public Guid? EnCompassLoanGUID { get; set; }
         public Int64 DownloadID { get; set; }
+        public Int64 WebEventID { get; set; }
         public bool RetryFlag { get; set; }
     }
 }

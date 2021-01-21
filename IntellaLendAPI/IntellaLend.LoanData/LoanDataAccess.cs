@@ -4,6 +4,7 @@ using IntellaLend.AuditData;
 using IntellaLend.Constance;
 using IntellaLend.MinIOWrapper;
 using IntellaLend.Model;
+using IntellaLend.Model.Encompass;
 using IntellaLend.RuleEngine;
 using MTSEntBlocks.DataBlock;
 using MTSEntBlocks.UtilsBlock;
@@ -4881,6 +4882,32 @@ namespace IntellaLend.EntityDataHandler
                     }
                 }
 
+                List<ELoanAttachmentUpload> _eLoanAttachmentSuccess = db.ELoanAttachmentUpload.AsNoTracking().Where(x => x.Status == EncompassUploadConstant.UPLOAD_COMPLETE).ToList();
+                foreach (var eLoanAttachment in _eLoanAttachmentSuccess)
+                {
+
+                    Loan eloan = db.Loan.AsNoTracking().Where(l => l.LoanID == eLoanAttachment.LoanID).FirstOrDefault();
+                    if (eloan != null)
+                    {
+                        CustomerMaster _custDetail = db.CustomerMaster.AsNoTracking().Where(c => c.CustomerID == eloan.CustomerID).FirstOrDefault();
+                        if (_custDetail != null)
+                        {
+                            _eLoan.Add(new EUploadDetails()
+                            {
+                                ID = 0,
+                                ELoanGUID = eLoanAttachment.ELoanGUID,
+                                TypeOfUpload = EncompassLoanAttachmentDownloadConstant.Loan,
+                                CustomerName = _custDetail.CustomerName,
+                                LoanID = eLoanAttachment.LoanID,
+                                LoanNumber = eloan.LoanNumber,
+                                Status = EncompassUploadConstant.UPLOAD_COMPLETE,
+                                Error = string.Empty,
+                                CreatedOn = eLoanAttachment.ModifiedOn
+                            });
+                        }
+                    }
+
+                }
 
 
                 //if ((customerId != 0) && (Status != 5 && FromDate != null && ToDate != null))
@@ -5183,7 +5210,17 @@ namespace IntellaLend.EntityDataHandler
 
                 if (_eFailedLoans != null)
                 {
+                    EWebhookEvents eWebhookEvents = db.EWebhookEvents.AsNoTracking().Where(x => x.Response.ToUpper().Contains(_eFailedLoans.ELoanGUID.ToString().ToUpper())).FirstOrDefault();
+                    
+                    if(eWebhookEvents != null)
+                    {
+                        eWebhookEvents.Status = EWebHookStatusConstant.EWEB_HOOK_STAGED;
+                        db.Entry(eWebhookEvents).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
                     _eFailedLoans.Status = EncompassStatusConstant.DOWNLOAD_RETRY;
+                    _eFailedLoans.Error = string.Empty;
                     _eFailedLoans.ModifiedOn = DateTime.Now;
                     db.Entry(_eFailedLoans).State = EntityState.Modified;
                     db.SaveChanges();
