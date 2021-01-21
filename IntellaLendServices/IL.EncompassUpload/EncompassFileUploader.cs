@@ -68,6 +68,8 @@ namespace IL.EncompassUpload
                 List<ELoanAttachmentUpload> WaitingLoans = dataAccess.GetUploadWaitingandRetryLoans();
                 foreach (var _eLoan in WaitingLoans)
                 {
+                    Int64 currentDocID = 0;
+                    string CurrentEParkingSpotName = "";
                     try
                     {
                         Batch Batchobj = dataAccess.GetBatchDetails(_eLoan.LoanID);
@@ -103,7 +105,10 @@ namespace IL.EncompassUpload
                         {
                             foreach (var _doctype in _eUploadStaging)
                             {
+                                currentDocID = 0;
+                                CurrentEParkingSpotName = "";
                                 LogMessage($"_doctype.Document : {_doctype.Document}");
+                                currentDocID = _doctype.ID;
                                 string dbParkingSpot = dataAccess.GetParkingSpotName(_doctype.Document);
                                 LogMessage($"dbParkingSpot : {dbParkingSpot}");
                                 if (!dbParkingSpot.Equals(string.Empty))
@@ -118,6 +123,7 @@ namespace IL.EncompassUpload
                                         EContainer EParkingSpot = allDocs.Where(x => x.Title.Trim().ToLower() == dbParkingSpot.Trim().ToLower()).FirstOrDefault();
                                         if (EParkingSpot != null && pdfBytes.Length > 0)
                                         {
+                                            CurrentEParkingSpotName = EParkingSpot.Title;
                                             string Filename = $"{_doctype.Document}-V{_doctype.Version}.pdf";
                                             EUploadResponse uploadDetails = _api.UploadAttachment(_eLoan.ELoanGUID.ToString(), Filename, Filename, pdfBytes);
                                             if (uploadDetails.Status)
@@ -270,11 +276,17 @@ namespace IL.EncompassUpload
                     {
                         dataAccess.UpdateEncompassUploadStatus(_eLoan.ID, EncompassUploadConstant.UPLOAD_RETRY, ex.Message);
 
+                        if (currentDocID > 0)
+                            dataAccess.UpdateUploadStaging(currentDocID, EncompassUploadStagingConstant.UPLOAD_STAGING_FAILED, CurrentEParkingSpotName, ex.Message);
+
                         Exception exe = new Exception("Loan Locked", ex);
                         MTSExceptionHandler.HandleException(ref exe);
                     }
                     catch (Exception ex)
                     {
+                        if (currentDocID > 0)
+                            dataAccess.UpdateUploadStaging(currentDocID, EncompassUploadStagingConstant.UPLOAD_STAGING_FAILED, CurrentEParkingSpotName, ex.Message);
+
                         dataAccess.UpdateEncompassUploadStatus(_eLoan.ID, EncompassUploadConstant.UPLOAD_FAILED, ex.Message);
                         throw ex;
                     }
