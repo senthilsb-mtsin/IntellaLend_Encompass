@@ -38,14 +38,6 @@ export class AssignLenderComponent implements OnInit, OnDestroy {
 
     //#region  Public Methods
     ngOnInit(): void {
-        this._addServiceTypeService.getAssignedLenders();
-        this.resetPageData();
-        this.dragService.dropModel().subscribe((value) => {
-            this.onDropModel(value);
-        });
-    }
-
-    resetPageData() {
         this.subscriptions.push(this._addServiceTypeService.allLenders$.subscribe((res: any[]) => {
             this.AllLenders = res;
             this.FilterAllLenders = res;
@@ -53,6 +45,14 @@ export class AssignLenderComponent implements OnInit, OnDestroy {
         this.subscriptions.push(this._addServiceTypeService.allAssignedLenders.subscribe((res: any[]) => {
             this.AssignedLenders = res;
         }));
+        this.dragService.dropModel().subscribe((value) => {
+            this.onDropModel(value);
+        });
+        this.resetPageData();
+    }
+
+    resetPageData() {
+        this._addServiceTypeService.getAssignedLenders();
     }
 
     MoveAllLenderToAssignedLender() {

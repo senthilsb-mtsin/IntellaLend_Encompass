@@ -172,11 +172,22 @@ namespace IntellaLend.EntityDataHandler
             List<CustomerImportStaging> customerImportStagingList;
             using (var db = new DBConnect(TableSchema))
             {
-                customerImportStagingList = db.CustomerImportStaging.AsNoTracking().Where(
-                    x => (x.Status == Status || Status == 0) && (x.AssignType == AssignType)
-                    && x.CreatedOn >= ImportDateFrom
-                    && x.CreatedOn <= ImportDateTo
-                    ).ToList();
+                if (AssignType == -1)
+                {
+                    customerImportStagingList = db.CustomerImportStaging.AsNoTracking().Where(
+                                                x => (x.Status == Status || Status == 0)
+                                                && x.CreatedOn >= ImportDateFrom
+                                                && x.CreatedOn <= ImportDateTo
+                                                ).ToList();
+                }
+                else
+                {
+                    customerImportStagingList = db.CustomerImportStaging.AsNoTracking().Where(
+                                                x => (x.Status == Status || Status == 0) && (x.AssignType == AssignType)
+                                                && x.CreatedOn >= ImportDateFrom
+                                                && x.CreatedOn <= ImportDateTo
+                                                ).ToList();
+                }
             }
             return customerImportStagingList.OrderByDescending(x => x.ModifiedOn).ToList();
         }

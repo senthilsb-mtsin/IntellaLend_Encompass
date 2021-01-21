@@ -190,7 +190,7 @@ export class LoanImportMonitorComponent implements OnInit, OnDestroy, AfterViewI
                 return '<label title="' + row['ErrorMsg'] + '" class="bcEllipsis label ' + StatusConstant.STATUS_COLOR[row['Status']] + ' label-table">' + StatusConstant.STATUS_DESCRIPTION[row['Status']] + '</label>';
               } else if (data === LOSImportStatusConstant.LOS_IMPORT_FAILED) {
                 return '<label title="' + row['ErrorMsg'] + '" class="bcEllipsis label ' + LOSImportStatusConstant.LOS_IMPORT_STATUS_COLOR[row['Status']] + ' label-table">' + LOSImportStatusConstant.LOS_IMPORT_STATUS_DESCRIPTION[row['Status']] + '</label>';
-              } else if (data === StatusConstant.IDC_ERROR && row['SubStatus'] === 1001) {
+              } else if (data === StatusConstant.IDC_ERROR && (row['SubStatus'] === StatusConstant.LOANTYPE_UNAVAILABLE || row['SubStatus'] === StatusConstant.LOAN_TYPE_NOT_FOUND)) {
                 return '<label title="' + StatusConstant.STATUS_DESCRIPTION[row['SubStatus']] + '" class="bcEllipsis label ' + StatusConstant.STATUS_COLOR[row['Status']] + ' label-table">' + StatusConstant.STATUS_DESCRIPTION[row['Status']] + '</label>';
               } else {
                 return '<label title="' + StatusConstant.STATUS_DESCRIPTION[row['Status']] + '" class="bcEllipsis label ' + StatusConstant.STATUS_COLOR[row['Status']] + ' label-table">' + StatusConstant.STATUS_DESCRIPTION[row['Status']] + '</label>';

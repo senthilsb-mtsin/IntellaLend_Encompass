@@ -8,7 +8,9 @@ import { SessionHelper } from '@mts-app-session';
 import { isTruthy } from '@mts-functions/is-truthy.function';
 import { AddServiceTypeService } from '../../service/add-service-type.service';
 import { ServiceTypeModel } from '../../models/service-type.model';
-import { AppSettings } from '@mts-app-setting';
+import { AppSettings, CustImportAssignTypeConstant, CustomerImportAssignTypeConstant } from '@mts-app-setting';
+import { CustomerService } from '../../../customer/services/customer.service';
+import { CommonService } from 'src/app/shared/common';
 
 @Component({
   selector: 'mts-service-type',
@@ -31,7 +33,7 @@ export class ServiceTypeComponent implements OnInit, AfterViewInit {
   //#endregion Public Variables
 
   //#region Constructor
-  constructor(private _serviceTypeService: ServiceTypeService, private _addServiceTypeService: AddServiceTypeService, private _route: Router) {
+  constructor(private _serviceTypeService: ServiceTypeService, private _commonservice: CommonService, private _addServiceTypeService: AddServiceTypeService, private _route: Router) {
     this.checkPermission('AddBtn', 0);
     this.checkPermission('EditBtn', 1);
     this.checkPermission('ViewBtn', 2);
@@ -60,7 +62,6 @@ export class ServiceTypeComponent implements OnInit, AfterViewInit {
       this.dTable.rows.add(res);
       this.dTable.draw();
     }));
-
     this.dtOptions = {
       aaData: [],
       'select': {
@@ -168,7 +169,9 @@ export class ServiceTypeComponent implements OnInit, AfterViewInit {
       this._serviceTypeService.setServiceType({ Type: 'View', ServiceTypeID: this.ReviewTypeID, ServiceTypeName: this.ReviewTypeName });
       this._route.navigate(['view/reviewtype/viewreviewtype']);
     } else if (modalType === 3) {
-      this._route.navigate(['view/reviewtype/import']);
+    this._commonservice.setCustomerImportType(CustomerImportAssignTypeConstant.SERVICE_CUSTOMER_IMPORT);
+    this._commonservice.setCustImportType(CustImportAssignTypeConstant.SERVICE_CUSTOMER_IMPORT);
+      this._route.navigate(['view/customer/import']);
     }
   }
 

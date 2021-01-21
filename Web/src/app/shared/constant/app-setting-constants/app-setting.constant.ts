@@ -191,7 +191,12 @@ export class ADConfigurationConstant {
   static LDAPURL = 'LDAP_url';
 }
 
-export class CustomerImportAssignTypeConstant{
-  static LENDER_IMPORT = 0;
-  static SERVICE_LENDER_IMPORT = 1;
+export class CustomerImportAssignTypeConstant {
+  static CUSTOMER_IMPORT = 0;
+  static SERVICE_CUSTOMER_IMPORT = 1;
+}
+
+export class CustImportAssignTypeConstant {
+  static CUSTOMER_IMPORT = AppSettings.AuthorityLabelSingular + ' Import';
+  static SERVICE_CUSTOMER_IMPORT = AppSettings.AuthorityLabelSingular + ' Mapping';
 }
