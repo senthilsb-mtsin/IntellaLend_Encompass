@@ -3,7 +3,7 @@ export class CustomerImportStagingRequestModel {
     Status: number;
     ImportDateFrom: Date;
     ImportDateTo: Date;
-    AssignType: number
+    AssignType: number;
 
     constructor(
         TableSchema: string,

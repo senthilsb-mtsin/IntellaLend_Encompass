@@ -19,6 +19,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { SessionHelper } from '@mts-app-session';
 import { NotificationService } from '@mts-notification';
 import { Location } from '@angular/common';
+import { CustomerImportTypeConstants } from 'src/app/shared/constant/status-constants/customer-import-type-constants';
+import { CommonService } from 'src/app/shared/common';
 
 const jwtHelper = new JwtHelperService();
 @Component({
@@ -35,10 +37,14 @@ export class CustomerImportMoniterComponent implements OnInit, OnDestroy, AfterV
     AuthorityLabelSingular: string = AppSettings.AuthorityLabelSingular;
     SelectedCustomerImportStatus = 0;
     CustomerImportStatusDropdown: any = [];
+    CustomerImportTypeDropdown: any = [];
     CustomerImportStagingDataTable: any = [];
     CustomerImportStagingDetailsDataTable: any = [];
     uploader: FileUploader;
     target: any;
+    SelectedCustomerImportType = -1;
+    SelectedCustImportType = '';
+    islenderimport: boolean;
 
     @ViewChild(NgDateRangePickerComponent) ImportDate: NgDateRangePickerComponent;
     @ViewChildren(DataTableDirective) dataTableElement: QueryList<DataTableDirective>;
@@ -46,7 +52,8 @@ export class CustomerImportMoniterComponent implements OnInit, OnDestroy, AfterV
 
     constructor(
         private _upsertCustomerService: UpsertCustomerService,
-        private _customerService: CustomerService,
+        private _custService: CustomerService,
+        private _commonservice: CommonService,
         private _notificationService: NotificationService,
         private location: Location
     ) {
@@ -65,6 +72,7 @@ export class CustomerImportMoniterComponent implements OnInit, OnDestroy, AfterV
     };
 
     ngOnInit(): void {
+        this.SelectedCustImportType = this._commonservice.getCustImportType();
         this.Dateoptions = {
             theme: 'default',
             previousIsDisable: false,
@@ -86,24 +94,30 @@ export class CustomerImportMoniterComponent implements OnInit, OnDestroy, AfterV
             'aLengthMenu': [[5, 10, 25, 50, -1], [5, 10, 25, 50, 'All']],
             aoColumns: [
                 { mData: 'ID', sTitle: 'ID', sClass: 'text-left', bVisible: false },
-                { mData: 'FilePath', sTitle: 'File path', sClass: 'text-left', sWidth: '35%' },
-                { mData: 'ImportCount', sTitle: 'Import count', sClass: 'text-right', sWidth: '15%' },
+                { mData: 'ModifiedOn', sTitle: 'Start Date/Time', sClass: 'text-center', sWidth: '13%' },
+                { mData: 'AssignType', sTitle: 'Type', sClass: 'text-right', sWidth: '12%'},
+                { mData: 'ImportCount', sTitle: 'Setup count', sClass: 'text-center', sWidth: '10%' },
+                { mData: 'FilePath', sTitle: 'File path', sClass: 'text-center', sWidth: '15%' },
                 { mData: 'CreatedOn', sTitle: 'Created on', sClass: 'text-center', bVisible: false },
-                { mData: 'ModifiedOn', sTitle: 'Imported on', sClass: 'text-center', sWidth: '10%' },
-                { mData: 'ErrorMsg', sTitle: 'Error message', sClass: 'text-left', sWidth: '20%' },
+                { mData: 'ErrorMsg', sTitle: 'Status message', sClass: 'text-left', sWidth: '40%' },
                 { mData: 'Status', sTitle: 'Status', sClass: 'text-center', sWidth: '15%' },
-                { mData: 'AssignType', sTitle: 'Assign Type', sClass: 'text-right', sWidth: '15%', bVisible: false },
-                { mData: 'ID', sTitle: 'Details', sClass: 'text-center', sWidth: '10%' }
+                { mData: 'ID', sTitle: 'Details', sClass: 'text-center', sWidth: '5%' }
             ],
             aoColumnDefs: [
                 {
-                    'aTargets': [3, 4],
+                    'aTargets': [2],
+                    'mRender': function (data, type, row) {
+                        return '<label class=\'label ' + CustomerImportTypeConstants.StatusColor[data] + ' label-table\'>' + CustomerImportStatusConstants.Type[data] + '</label>';
+                    }
+                },
+                {
+                    'aTargets': [1, 5],
                     'mRender': function (data, type, row) {
                         return isTruthy(data) ? convertDateTimewithTime(data) : '';
                     }
                 },
                 {
-                    'aTargets': [6],
+                    'aTargets': [7],
                     'mRender': function (data, type, row) {
                         return '<label class=\'label ' + CustomerImportStatusConstants.StatusColor[data] + ' label-table\'>' + CustomerImportStatusConstants.Description[data] + '</label>';
                     }
@@ -113,6 +127,19 @@ export class CustomerImportMoniterComponent implements OnInit, OnDestroy, AfterV
                     'mRender': function (data, type, row) {
                         return '<span class="ViewCustomerImportStagingDetails material-icons txt-info">pageview</span>';
                     }
+                },
+                {
+                    'aTargets': [4],
+                    'mRender': function (data, type, row) {
+                        const filepath = data;
+                        let filename = '';
+                        if (filepath !== '') {
+                            const _arr = filepath.split('\\');
+                            filename = _arr[_arr.length - 1];
+                        }
+                        return '<label style="font-size: 13px !important; font-weight: 500 !important; color: #808080;" title = ' + filepath + '\>' + filename + '</label>';
+                    }
+
                 }
             ],
             rowCallback: (row: Node, data: any, index: number) => {
@@ -122,7 +149,6 @@ export class CustomerImportMoniterComponent implements OnInit, OnDestroy, AfterV
                 $('td .ViewCustomerImportStagingDetails', row).bind('click', () => {
                     self.GetCustomerImportStagingDetails(data['ID']);
                 });
-
                 return row;
             }
         };
@@ -143,7 +169,7 @@ export class CustomerImportMoniterComponent implements OnInit, OnDestroy, AfterV
                 { mData: 'LoanType', sTitle: 'Loan Type', sClass: 'text-left', sWidth: '10%' },
                 { mData: 'CreatedOn', sTitle: 'Created on', sClass: 'text-center', bVisible: false },
                 { mData: 'ModifiedOn', sTitle: 'Imported on', sClass: 'text-center', bVisible: false },
-                { mData: 'ErrorMsg', sTitle: 'Error Message', sClass: 'text-left', sWidth: '10%' },
+                { mData: 'ErrorMsg', sTitle: 'Status Message', sClass: 'text-left', sWidth: '10%' },
                 { mData: 'Status', sTitle: 'Status', sClass: 'text-center', sWidth: '10%' },
 
             ],
@@ -213,6 +239,10 @@ export class CustomerImportMoniterComponent implements OnInit, OnDestroy, AfterV
         CustomerImportStatusConstants.StatusDropdown.forEach((element) => {
             this.CustomerImportStatusDropdown.push({ Value: element, Text: CustomerImportStatusConstants.Description[element] });
         });
+        CustomerImportTypeConstants.TypeDropdown.forEach((element) => {
+            this.CustomerImportTypeDropdown.push({ Value: element, Text: CustomerImportTypeConstants.Type[element] });
+        });
+
     }
     GotoPrevious() {
         this.location.back();
@@ -234,13 +264,18 @@ export class CustomerImportMoniterComponent implements OnInit, OnDestroy, AfterV
 
     }
 
+    TypeChanged(event) {
+        this._commonservice.setCustomerImportType(this.SelectedCustomerImportType);
+    }
+
     SearchCustomerImportStaging() {
+        this.SelectedCustomerImportType = this._commonservice.getCustomerImportType();
         const req: CustomerImportStagingRequestModel = new CustomerImportStagingRequestModel(
             AppSettings.TenantSchema,
             this.SelectedCustomerImportStatus,
             this.ImportDate.dateFrom,
             this.ImportDate.dateTo,
-            CustomerImportAssignTypeConstant.LENDER_IMPORT
+            this.SelectedCustomerImportType
             );
 
         this.promise = this._upsertCustomerService.GetCustomeImportStaging(req);

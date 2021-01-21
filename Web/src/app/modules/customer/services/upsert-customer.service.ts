@@ -42,6 +42,7 @@ export class UpsertCustomerService {
     CustomerConfig$ = new Subject<{ ConfigID: number, CustomerID: number, CustomerName: string, Configkey: string, ConfigValue: string, Active: boolean }[]>();
     CustomerImportStagingDatatable$ = new Subject<any[]>();
     CustomerImportStagingDetailsDatatable$ = new Subject<any[]>();
+    SelectedCustomerImportType$ = new Subject<number>();
 
     constructor(
         private _customerData: CustomerData,
