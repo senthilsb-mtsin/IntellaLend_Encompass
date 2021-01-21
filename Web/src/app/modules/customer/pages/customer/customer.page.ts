@@ -1,5 +1,5 @@
 import { Component, ViewChild, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
-import { AppSettings } from '@mts-app-setting';
+import { AppSettings, CustImportAssignTypeConstant, CustomerImportAssignTypeConstant } from '@mts-app-setting';
 import { CustomerService } from '../../services/customer.service';
 import { Subscription } from 'rxjs';
 import { CustomerDatatableModel } from '../../models/customer-datatable.model';
@@ -8,6 +8,7 @@ import { SessionHelper } from '@mts-app-session';
 import { Router } from '@angular/router';
 import { isTruthy } from '@mts-functions/is-truthy.function';
 import { convertDateTimewithTime } from '@mts-functions/convert-datetime.function';
+import { CommonService } from 'src/app/shared/common';
 
 @Component({
     selector: 'mts-customer',
@@ -25,6 +26,7 @@ export class CustomerComponent implements OnInit, OnDestroy, AfterViewInit {
 
     constructor(
         private _customerService: CustomerService,
+        private _commonservice: CommonService,
         private _route: Router
     ) {
         this.checkPermission('AddBtn', 0);
@@ -42,7 +44,6 @@ export class CustomerComponent implements OnInit, OnDestroy, AfterViewInit {
             this.dTable.rows.add(res);
             this.dTable.draw();
         }));
-
         this.dtOptions = {
             displayLength: 10,
             'select': {
@@ -120,6 +121,8 @@ export class CustomerComponent implements OnInit, OnDestroy, AfterViewInit {
         } else if (modalType === 1) {
             this._route.navigate(['view/customer/editcustomer']);
         } else if (modalType === 2) {
+        this._commonservice.setCustomerImportType(CustomerImportAssignTypeConstant.CUSTOMER_IMPORT);
+        this._commonservice.setCustImportType(CustImportAssignTypeConstant.CUSTOMER_IMPORT);
             this._route.navigate(['view/customer/import']);
         } else if (modalType === 3) {
             this._route.navigate(['view/customer/syncconfig']);

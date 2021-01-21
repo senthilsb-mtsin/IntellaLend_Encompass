@@ -1971,7 +1971,7 @@ namespace IntellaLend.EntityDataHandler
                         lsLoanTypeMaster.Add(lType);
                 }
 
-                List<CustReviewLoanMapping> mappedLoanTypes = db.CustReviewLoanMapping.AsNoTracking().Where(c => c.ReviewTypeID == ReviewTypeID).ToList();
+                List<CustReviewLoanMapping> mappedLoanTypes = db.CustReviewLoanMapping.AsNoTracking().Where(c => c.ReviewTypeID == ReviewTypeID && c.Active == true).ToList();
 
                 var lsMappedLoanTypes = (from lt in lsLoanTypeMaster
                                          join map in mappedLoanTypes on lt.LoanTypeID equals map.LoanTypeID into rmJoin
@@ -2229,6 +2229,7 @@ namespace IntellaLend.EntityDataHandler
                                 LoanTypeID = LoanTypeID,
                                 DocumentTypeID = item.DocumentTypeID,
                                 Active = true,
+                                DocumentLevel = item.DocumentLevel,
                                 CreatedOn = DateTime.Now,
                                 ModifiedOn = DateTime.Now
                             });
@@ -3636,10 +3637,7 @@ namespace IntellaLend.EntityDataHandler
 
             List<DocumentTypeMaster> lsCheckDocTypes = new List<DocumentTypeMaster>();
 
-            foreach (string item in lsDocIDs)
-            {
-                lsCheckDocTypes.Add(new DocumentTypeMaster() { DocumentTypeID = Convert.ToInt64(item) });
-            }
+            lsCheckDocTypes.AddRange(db.DocumentTypeMaster.AsNoTracking().Where(x => lsDocIDs.Contains(x.DocumentTypeID.ToString())).ToList());
 
             return lsCheckDocTypes.Where(x => !(lsDocMaster.Any(y => x.DocumentTypeID == y.DocumentTypeID))).ToList();
         }
@@ -3787,6 +3785,7 @@ namespace IntellaLend.EntityDataHandler
                                 LoanTypeID = LoanTypeID,
                                 DocumentTypeID = item.DocumentTypeID,
                                 Active = true,
+                                DocumentLevel = item.DocumentLevel,
                                 CreatedOn = DateTime.Now,
                                 ModifiedOn = DateTime.Now
                             });

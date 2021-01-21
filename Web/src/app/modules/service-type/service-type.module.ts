@@ -18,11 +18,12 @@ import { LoanTypeSearchPipe } from './pipes/loantypesearch.pipe';
 import { MalihuScrollbarModule } from 'ngx-malihu-scrollbar';
 import { ViewServiceTypeComponent } from './pages/view-service-type/view-service-type.page';
 import { AssignLenderComponent } from './helper-components/assign-lender/assign-lender.component';
-import { ServiceCustomerImportMonitorComponent } from './pages/service-customer-import-monitor/service-customer-import-monitor.page';
 import { NgDateRangePickerModule } from '@mts-daterangepicker/ng-daterangepicker.module';
 import { CheckListItemNamePipe } from '../loantype/pipes';
 import { LenderSearchService } from './service/lender-search.service';
 import { LenderSearchPipe } from './pipes/lendersearch.pipe';
+import { CustomerService } from 'src/app/modules/customer/services/customer.service';
+import { CustomerData } from '../customer/customer.data';
 
 @NgModule({
     imports: [
@@ -45,7 +46,9 @@ import { LenderSearchPipe } from './pipes/lendersearch.pipe';
         CommonService,
         CheckListItemNamePipe,
         DatePipe,
-        LenderSearchService
+        LenderSearchService,
+        CustomerService,
+        CustomerData
     ],
     declarations: [
         ServiceTypeComponent,
@@ -54,9 +57,7 @@ import { LenderSearchPipe } from './pipes/lendersearch.pipe';
         AssignLoanTypesComponent,
         LoanTypeSearchPipe,
         LenderSearchPipe,
-        AssignLenderComponent,
-        ServiceCustomerImportMonitorComponent
-
+        AssignLenderComponent
     ]
 })
 

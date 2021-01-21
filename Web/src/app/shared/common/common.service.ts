@@ -24,9 +24,12 @@ export class CommonService {
   UserItems = new Subject<any[]>();
   RoleItems = new Subject<any[]>();
   reviewTypeList = new Subject<any[]>();
+  SelectedCustomerImportType$ = new Subject<number>();
 
   SystemDocumentTypeFieldMaster = new Subject<any[]>();
   constructor(private _commonData: CommonDataAccess, private _route: Router) { }
+  private static selectedCustImportType = -1;
+  private static selectedCustomerImportType = '';
 
   private _sysChecklist: any[] = [];
   private _sysStackingOrder: any[] = [];
@@ -38,7 +41,6 @@ export class CommonService {
   private _sysActiveCustomers: any[] = [];
   private _sysLoantypeMasters: any[] = [];
   private _reviewTypeList: ReviewTypeModel[] = [];
-
   private _customerItems: any[] = [];
   private _roleItems: any[] = [];
   private _sysLoanTypes: any[] = [];
@@ -246,6 +248,18 @@ export class CommonService {
       }
     });
   }
+  setCustomerImportType(type: number) {
+    CommonService.selectedCustImportType = type;
+}
+getCustomerImportType() {
+    return CommonService.selectedCustImportType;
+}
+setCustImportType(type: string) {
+  CommonService.selectedCustomerImportType = type;
+}
+getCustImportType() {
+  return CommonService.selectedCustomerImportType;
+}
 
   private GetAllSysCheckListCategories() {
     const req = { Tableschema: AppSettings.TenantSchema };
