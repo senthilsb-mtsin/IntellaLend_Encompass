@@ -260,11 +260,14 @@ namespace EncompassAPIHelper
             //form.Add(new StringContent(fileNameWithExtension), "fileNameWithExtension");
             //form.Add(new ByteArrayContent(file, 0, file.Length), "file", fileNameWithExtension);
 
-            var req = new HttpRequestObject() { Content = new { FileName = fileName }, FileStream = file, REQUESTTYPE = "POST", URL = string.Format(EncompassURLConstant.UPLOAD_ATTACHMENT, loanGUID, fileName), RequestContentType = "multipart/form-data" };
+            var req = new HttpRequestObject() { Content = new { FileName = fileName }, FileStream = file, REQUESTTYPE = "POST", URL = string.Format(EncompassURLConstant.UPLOAD_ATTACHMENT, loanGUID, fileName.Replace(".pdf", "")), RequestContentType = "multipart/form-data" };
 
             IRestResponse result = client.Execute(req);
 
             string res = result.Content;
+
+            LogMessage($"res : {res} , result.StatusCode : {result.StatusCode}");
+
 
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {

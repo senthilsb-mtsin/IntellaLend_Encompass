@@ -50,6 +50,8 @@ namespace EncompassConnectorAPI.Controllers
                     List<EContainer> _docs = JsonConvert.DeserializeObject<List<EContainer>>(responseStream);
                     return Ok(_docs);
                 }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    return Unauthorized();
                 else
                 {
                     _badRequest = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);
@@ -90,6 +92,8 @@ namespace EncompassConnectorAPI.Controllers
                     EContainer _docs = JsonConvert.DeserializeObject<EContainer>(responseStream);
                     return Ok(_docs);
                 }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    return Unauthorized();
                 else
                 {
                     _badRequest = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);
@@ -130,6 +134,8 @@ namespace EncompassConnectorAPI.Controllers
                     List<EContainer> _docs = JsonConvert.DeserializeObject<List<EContainer>>(responseStream);
                     return Ok(_docs);
                 }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    return Unauthorized();
                 else
                 {
                     _badRequest = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);
@@ -178,6 +184,8 @@ namespace EncompassConnectorAPI.Controllers
                     else
                         throw new Exception($"Document '{documentID}' not found");
                 }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    return Unauthorized();
                 else
                 {
                     _badRequest = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);
@@ -234,13 +242,15 @@ namespace EncompassConnectorAPI.Controllers
 
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        List<EIDResponse> eIDs = JsonConvert.DeserializeObject<List<EIDResponse>>(responseStream);
+                        EIDResponse eIDs = JsonConvert.DeserializeObject<EIDResponse>(responseStream);
                         List<AddContainerResponse> _res = new List<AddContainerResponse>();
-                        foreach (var item in eIDs)
-                            _res.Add(new AddContainerResponse() { DocumentID = item.ID, DocumentName = item.Title });
+                        //foreach (var item in eIDs)
+                        _res.Add(new AddContainerResponse() { DocumentID = eIDs.ID, DocumentName = eIDs.Title });
 
                         return Ok(_res);
                     }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                        return Unauthorized();
                     else
                         _badRequest = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);
                 }
@@ -303,6 +313,8 @@ namespace EncompassConnectorAPI.Controllers
 
                     if (response.StatusCode == HttpStatusCode.NoContent)
                         return Ok("Documents Removed");
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                        return Unauthorized();
                     else
                         _badRequest = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);
                 }
@@ -373,6 +385,8 @@ namespace EncompassConnectorAPI.Controllers
                     {
                         return Ok(new EAddRemoveAttachmentResponse() { Status = true, Message = ResponseConstant.REMOVED_SUCCESSFULLY });
                     }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                        return Unauthorized();
                     else
                     {
                         _eRequest = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);
@@ -443,6 +457,8 @@ namespace EncompassConnectorAPI.Controllers
                     {
                         return Ok(new EAddRemoveAttachmentResponse() { Status = true, Message = ResponseConstant.ASSIGNED_SUCCESSFULLY });
                     }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                        return Unauthorized();
                     else
                     {
                         _eRequest = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);

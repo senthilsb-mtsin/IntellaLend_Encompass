@@ -120,7 +120,10 @@ namespace MTS.Web.Helpers
                     restRequest.AddOrUpdateParameter(httpRequestObject.RequestContentType, string.Join("&", param), ParameterType.RequestBody);
                 }
                 else if (httpRequestObject.RequestContentType == "multipart/form-data")
-                    restRequest.AddFileBytes(httpRequestObject.Content.FileName, httpRequestObject.FileStream, httpRequestObject.Content.FileName);
+                {
+                    string _fileName = (JsonConvert.DeserializeObject(JsonConvert.SerializeObject(httpRequestObject.Content)))["FileName"];
+                    restRequest.AddFileBytes(_fileName, httpRequestObject.FileStream, _fileName);
+                }
             }
         }
 

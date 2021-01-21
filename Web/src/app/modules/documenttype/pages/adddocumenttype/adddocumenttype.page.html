@@ -42,31 +42,31 @@
                                                     </div>
                                                 </div>
 
-                                            <!-- </div>
+                                                <!-- </div>
 
                                         <div class="col-md-12"> -->
-                                            <div class="col-md-4 m-t-20 m-r-5">
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control mandatory" name="DocumentDisplayName" [(ngModel)]="DocumentDisplayName" required="">
-                                                    <label class="control-label" for="input">Document Display
+                                                <div class="col-md-4 m-t-20 m-r-5">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control mandatory" name="DocumentDisplayName" [(ngModel)]="DocumentDisplayName" required="">
+                                                        <label class="control-label" for="input">Document Display
                                                         Name</label>
-                                                    <i class="bar" style="text-align: center;"></i>
+                                                        <i class="bar" style="text-align: center;"></i>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-4 m-t-20 m-r-5" style="display:none">
-                                                <div class="form-group">
-                                                    <select id="select" [(ngModel)]="ParrkingSpot">
+                                                <div class="col-md-4 m-t-20 m-r-5">
+                                                    <div class="form-group">
+                                                        <select id="select" [(ngModel)]="ParrkingSpot">
                                                         <option value="0">-- Select EFolder Name -- </option>
                                                         <option *ngFor="let item of _parkingSpotItems"
                                                             [value]="item.ID">
                                                             {{item.ParkingSpotName}}</option>
                                                     </select>
-                                                    <label class="control-label" for="input">EFolder Name</label><i class="bar"></i>
+                                                        <label class="control-label" for="input">EFolder Name</label><i class="bar"></i>
+                                                    </div>
                                                 </div>
-                                            </div>
 
+                                            </div>
                                         </div>
-                                    </div>
                                     </div>
 
                                     <div *ngSwitchCase="AddDocTypeSteps.Documentfields">

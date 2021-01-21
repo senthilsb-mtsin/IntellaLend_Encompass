@@ -282,7 +282,12 @@ namespace IL.EncompassFileDownloader
                                         throw new Exception($"Attachment(s) not found in Encompass {UploadEFolder} folder");
                                     }
 
-                                    File.Move(lockFileName, OrgFileName);
+                                    Logger.WriteTraceLog($"lockFileName : {lockFileName}");
+                                    Logger.WriteTraceLog($"OrgFileName : {OrgFileName}");
+
+                                    if (File.Exists(lockFileName))
+                                        File.Move(lockFileName, OrgFileName);
+
                                     dataAccess.UpdateEDownloadStatus(downloadID, EncompassStatusConstant.DOWNLOAD_SUCCESS, LoanNumber);
                                     //EDownloadStaging _fieldUpdate = _steps.Where(s => s.Step == EncompassDownloadStepConstant.UpdateField).FirstOrDefault();
 

@@ -52,6 +52,8 @@ namespace EncompassConnectorAPI.Controllers
                     responseStream = response.Content;
                     return Ok(responseStream);
                 }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    return Unauthorized();
                 else
                 {
                     _error = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);
@@ -74,6 +76,7 @@ namespace EncompassConnectorAPI.Controllers
         [HttpPost, Route("api/v1/field/predefined")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(List<EFieldResponse>))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
+        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "Unauthorized Request")]
         public IHttpActionResult GetPreDefinedFieldValues(FieldGetRequest _res)
         {
             ErrorResponse _error = new ErrorResponse();
@@ -90,6 +93,8 @@ namespace EncompassConnectorAPI.Controllers
                     responseStream = response.Content;
                     return Ok(JsonConvert.DeserializeObject<List<EFieldResponse>>(responseStream));
                 }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    return Unauthorized();
                 else
                 {
                     _error = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);
@@ -142,6 +147,8 @@ namespace EncompassConnectorAPI.Controllers
                         EIDResponse _loans = JsonConvert.DeserializeObject<EIDResponse>(responseStream);
                         return Ok(_loans);
                     }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                        return Unauthorized();
                     else
                     {
                         _badRes = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);

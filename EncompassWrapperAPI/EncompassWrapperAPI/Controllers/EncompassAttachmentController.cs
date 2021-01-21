@@ -6,6 +6,7 @@ using EncompassRequestBody.WrapperRequestModel;
 using EncompassWrapperConstants;
 using MTS.Web.Helpers;
 using MTSEntBlocks.ExceptionBlock.Handlers;
+using MTSEntBlocks.LoggerBlock;
 using Newtonsoft.Json;
 using RestSharp;
 using Swagger.Net.Annotations;
@@ -51,6 +52,10 @@ namespace EncompassConnectorAPI.Controllers
                     EAttachment _attachment = JsonConvert.DeserializeObject<EAttachment>(responseStream);
                     return Ok(_attachment);
                 }
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return Unauthorized();
+                }
                 else
                 {
                     _badRequest = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);
@@ -91,6 +96,10 @@ namespace EncompassConnectorAPI.Controllers
                     _eAttachments = JsonConvert.DeserializeObject<List<EAttachment>>(responseStream);
 
                     return Ok(_eAttachments);
+                }
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return Unauthorized();
                 }
                 else
                 {
@@ -133,6 +142,10 @@ namespace EncompassConnectorAPI.Controllers
 
                     return Ok(_eAttachments);
                 }
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return Unauthorized();
+                }
                 else
                 {
                     _badRes = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);
@@ -174,6 +187,10 @@ namespace EncompassConnectorAPI.Controllers
                     _eAttachments = _eAttachments.Where(a => a.Document == null).ToList();
 
                     return Ok(_eAttachments);
+                }
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return Unauthorized();
                 }
                 else
                 {
@@ -219,6 +236,9 @@ namespace EncompassConnectorAPI.Controllers
 
                 if (response.StatusCode == HttpStatusCode.NoContent)
                     return Ok("Attachments Removed");
+
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    return Unauthorized();
                 else
                     _badRequest = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);
             }
@@ -321,12 +341,14 @@ namespace EncompassConnectorAPI.Controllers
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
         public IHttpActionResult UploadAttachment(string loanGUID, string fileName)
         {
+            fileName = fileName + ".pdf";
+            Logger.WriteErrorLog($"UploadAttachment In : {loanGUID}, {fileName}");
             LockResourceModel lockResource = null;
             ErrorResponse _badRequest = new ErrorResponse();
             try
             {
-                var provider = new MultipartMemoryStreamProvider();
-                Request.Content.ReadAsMultipartAsync(provider);
+                var provider = Request.Content.ReadAsMultipartAsync().Result;
+
                 byte[] fileStream = null;
                 foreach (var file in provider.Contents)
                 {
@@ -334,7 +356,7 @@ namespace EncompassConnectorAPI.Controllers
                 }
 
                 lockResource = LoanResource.LockLoan(_client, loanGUID);
-
+                Logger.WriteErrorLog($"After Lock");
                 if (lockResource.Status)
                 {
                     EUploadRequest _uploadReq = new EUploadRequest() { File = new EFileEntities() { Name = fileName, ContentType = ContentTypeConstant.PDF, Size = fileStream.Length }, Title = Path.GetFileNameWithoutExtension(fileName) };
@@ -344,7 +366,7 @@ namespace EncompassConnectorAPI.Controllers
                     IRestResponse response = _client.Execute(reqObj);
 
                     //var response = base._client.PostAsJsonAsync(string.Format(EncompassURLConstant.UPLOAD_ATTACHMENT_REQUEST, request.LoanGUID), _uploadReq).Result;
-
+                    Logger.WriteErrorLog($"After Requwest");
                     string responseStream = response.Content;
 
                     if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Created || response.StatusCode == HttpStatusCode.NoContent)
@@ -376,6 +398,8 @@ namespace EncompassConnectorAPI.Controllers
                             _badRequest.ErrorCode = HttpStatusCode.NotFound.ToString();
                         }
                     }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                        return Unauthorized();
                     else
                     {
                         _badRequest = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);

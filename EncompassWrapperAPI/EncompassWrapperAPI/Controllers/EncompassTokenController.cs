@@ -67,6 +67,8 @@ namespace EncompassConnectorAPI.Controllers
                     _eToken = JsonConvert.DeserializeObject<ETokenResponse>(responseStream);
                     return Ok(_eToken);
                 }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    return Unauthorized();
                 else
                 {
                     TokenInvalidModel res = JsonConvert.DeserializeObject<TokenInvalidModel>(responseStream);
@@ -116,6 +118,8 @@ namespace EncompassConnectorAPI.Controllers
                     _eToken = JsonConvert.DeserializeObject<ETokenResponse>(responseStream);
                     return Ok(_eToken);
                 }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    return Unauthorized();
                 else
                 {
                     TokenInvalidModel res = JsonConvert.DeserializeObject<TokenInvalidModel>(responseStream);

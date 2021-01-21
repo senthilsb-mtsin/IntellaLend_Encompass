@@ -56,7 +56,7 @@ export class EncompassParkingspotComponent
       ],
       aoColumns: [
         { sTitle: 'ID', mData: 'ID', bVisible: false },
-        { sTitle: 'Parking SpotName', mData: 'ParkingSpotName' },
+        { sTitle: 'EFolder Name', mData: 'ParkingSpotName' },
         { sTitle: 'Active/Inactive', mData: 'Active' },
       ],
       aoColumnDefs: [

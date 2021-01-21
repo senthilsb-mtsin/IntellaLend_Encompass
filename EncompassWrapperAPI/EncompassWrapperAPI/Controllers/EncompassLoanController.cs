@@ -100,6 +100,8 @@ namespace EncompassConnectorAPI.Controllers
                     responseStream = response.Content;
                     return Ok(responseStream);
                 }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    return Unauthorized();
                 else
                 {
                     _error = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);
@@ -303,6 +305,8 @@ namespace EncompassConnectorAPI.Controllers
                         responseStream = response.Content;
                         return Ok("Success");
                     }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                        return Unauthorized();
                     else
                     {
                         _badRes = JsonConvert.DeserializeObject<ErrorResponse>(responseStream);
