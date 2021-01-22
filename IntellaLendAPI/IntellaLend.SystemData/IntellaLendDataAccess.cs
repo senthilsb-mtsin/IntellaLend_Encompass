@@ -3193,9 +3193,10 @@ namespace IntellaLend.EntityDataHandler
 
         private List<List<Dictionary<string, string>>> _queryCombinations = new List<List<Dictionary<string, string>>>();
 
+
         public object SetMileStoneEvent(string _loanGUID, string _instanceID)
         {
-            object tokenObject = null;
+            EToken tokenObject = null;
             List<IntellaAndEncompassFetchFields> _enImportFields = new List<IntellaAndEncompassFetchFields>();
             bool loanExists = false;
             using (var db = new DBConnect(SystemSchema))
@@ -3206,7 +3207,7 @@ namespace IntellaLend.EntityDataHandler
 
                 foreach (var tenant in _tenants)
                 {
-                    loanExists = db.Loan.AsNoTracking().Any(x => x.EnCompassLoanGUID.GetValueOrDefault() == loanGUIDValue);
+                    loanExists = db.Loan.AsNoTracking().Any(x => x.EnCompassLoanGUID == loanGUIDValue);
 
                     if (loanExists)
                     {
@@ -3227,6 +3228,9 @@ namespace IntellaLend.EntityDataHandler
                     RestWebClient client = new RestWebClient(ConfigurationManager.AppSettings["EncompassConnectorURL"]);
 
                     HttpRequestObject req = new HttpRequestObject() { Content = new { loanGUID = _loanGUID, fieldIDs = FieldIDs }, REQUESTTYPE = "POST", URL = string.Format(EncompassURLILConstant.GET_PREDEFINED_FIELDVALUES) };
+
+                    client.AddDefaultHeader("Token", tokenObject.accessToken);
+                    client.AddDefaultHeader("TokenType", tokenObject.tokenType);
 
                     var result = client.Execute(req);
 
@@ -3260,7 +3264,7 @@ namespace IntellaLend.EntityDataHandler
 
         public object SetDocumentEvent(string _loanGUID, string _instanceID)
         {
-            object tokenObject = null;
+            EToken tokenObject = null;
             List<IntellaAndEncompassFetchFields> _enImportFields = new List<IntellaAndEncompassFetchFields>();
             bool loanExists = false;
             using (var db = new DBConnect(SystemSchema))
@@ -3276,7 +3280,7 @@ namespace IntellaLend.EntityDataHandler
                     _enImportFields = db.IntellaAndEncompassFetchFields.AsNoTracking().Where(m => m.Active && m.TenantSchema == tenant.TenantSchema).ToList();
 
 
-                    loanExists = db.Loan.AsNoTracking().Any(x => x.EnCompassLoanGUID.GetValueOrDefault() == loanGUIDValue);
+                    loanExists = db.Loan.AsNoTracking().Any(x => x.EnCompassLoanGUID == loanGUIDValue);
 
                     if (tokenObject != null)
                         break;
@@ -3288,6 +3292,9 @@ namespace IntellaLend.EntityDataHandler
                 RestWebClient client = new RestWebClient(ConfigurationManager.AppSettings["EncompassConnectorURL"]);
 
                 HttpRequestObject req = new HttpRequestObject() { Content = new { loanGUID = _loanGUID, fieldIDs = FieldIDs }, REQUESTTYPE = "POST", URL = string.Format(EncompassURLILConstant.GET_PREDEFINED_FIELDVALUES) };
+
+                client.AddDefaultHeader("Token", tokenObject.accessToken);
+                client.AddDefaultHeader("TokenType", tokenObject.tokenType);
 
                 IRestResponse result = client.Execute(req);
 
@@ -3324,7 +3331,7 @@ namespace IntellaLend.EntityDataHandler
             return new { success = true };
         }
 
-        public object GetEncompassToken(string _instanceID)
+        public EToken GetEncompassToken(string _instanceID)
         {
             using (var db = new DBConnect(SystemSchema))
             {
@@ -3332,7 +3339,7 @@ namespace IntellaLend.EntityDataHandler
 
                 foreach (var tenant in _tenants)
                 {
-                    object tokenObject = GetEncompassTokenFromTenant(tenant);
+                    EToken tokenObject = GetEncompassTokenFromTenant(tenant);
 
                     if (tokenObject != null)
                         return tokenObject;
@@ -3342,7 +3349,7 @@ namespace IntellaLend.EntityDataHandler
             }
         }
 
-        public object GetEncompassTokenFromTenant(TenantMaster tenant)
+        public EToken GetEncompassTokenFromTenant(TenantMaster tenant)
         {
             using (var db = new DBConnect(tenant.TenantSchema))
             {
@@ -3354,7 +3361,7 @@ namespace IntellaLend.EntityDataHandler
 
                     if (token != null)
                     {
-                        return new { accessToken = token.AccessToken, tokenType = token.TokenType };
+                        return new EToken() { accessToken = token.AccessToken, tokenType = token.TokenType };
                     }
                     else
                     {
@@ -3362,7 +3369,7 @@ namespace IntellaLend.EntityDataHandler
                         if (newToken != null)
                         {
                             UpdateNewToken(db, newToken.TokenType, newToken.Token);
-                            return new { accessToken = newToken.Token, tokenType = newToken.TokenType };
+                            return new EToken() { accessToken = newToken.Token, tokenType = newToken.TokenType };
                         }
                     }
                 }
@@ -5124,6 +5131,12 @@ namespace IntellaLend.EntityDataHandler
         [JsonProperty(PropertyName = "value")]
         public string Value { get; set; }
 
+    }
+
+    public class EToken
+    {
+        public string accessToken { get; set; }
+        public string tokenType { get; set; }
     }
     public class DocumentTypeMasterList
     {

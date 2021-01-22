@@ -92,7 +92,7 @@ namespace IL.EncompassFileDownloader
                 //    db.SaveChanges();
                 //}
 
-                List<EDownloadStaging> _staged = db.EDownloadStaging.AsNoTracking().Where(x => x.DownloadStagingID == _downloadID).ToList();
+                List<EDownloadStaging> _staged = db.EDownloadStaging.AsNoTracking().Where(x => x.DownloadStagingID == _downloadID && x.Status == EncompassDownloadStepStatusConstant.Waiting).ToList();
 
                 return _staged;
             }
@@ -576,7 +576,7 @@ namespace IL.EncompassFileDownloader
         {
             using (var db = new DBConnect(TenantSchema))
             {
-                return db.EWebhookEvents.AsNoTracking().Where(r => r.EventType == EWebHookEventsLogConstant.DOCUMENT_LOG && r.Status == EWebHookStatusConstant.EWEB_HOOK_STAGED).ToList();
+                return db.EWebhookEvents.AsNoTracking().Where(r => r.EventType == EWebHookEventsLogConstant.DOCUMENT_LOG && r.Status == EWebHookStatusConstant.EWEB_HOOK_STAGED && r.IsTrailing == false).ToList();
             }
         }
     }
