@@ -4,6 +4,7 @@ using IntellaLend.AuditData;
 using IntellaLend.Constance;
 using IntellaLend.MinIOWrapper;
 using IntellaLend.Model;
+using IntellaLend.Model.Encompass;
 using IntellaLend.RuleEngine;
 using MTSEntBlocks.DataBlock;
 using MTSEntBlocks.UtilsBlock;
@@ -5209,7 +5210,17 @@ namespace IntellaLend.EntityDataHandler
 
                 if (_eFailedLoans != null)
                 {
+                    EWebhookEvents eWebhookEvents = db.EWebhookEvents.AsNoTracking().Where(x => x.Response.ToUpper().Contains(_eFailedLoans.ELoanGUID.ToString().ToUpper())).FirstOrDefault();
+                    
+                    if(eWebhookEvents != null)
+                    {
+                        eWebhookEvents.Status = EWebHookStatusConstant.EWEB_HOOK_STAGED;
+                        db.Entry(eWebhookEvents).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
                     _eFailedLoans.Status = EncompassStatusConstant.DOWNLOAD_RETRY;
+                    _eFailedLoans.Error = string.Empty;
                     _eFailedLoans.ModifiedOn = DateTime.Now;
                     db.Entry(_eFailedLoans).State = EntityState.Modified;
                     db.SaveChanges();
