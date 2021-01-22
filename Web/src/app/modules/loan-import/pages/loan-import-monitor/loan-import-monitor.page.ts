@@ -181,15 +181,15 @@ export class LoanImportMonitorComponent implements OnInit, OnDestroy, AfterViewI
               } else if (data === StatusConstant.PENDING_IDC && row['SubStatus'] > 0) {
                 return '<label title="' + StatusConstant.STATUS_DESCRIPTION[row['SubStatus']] + '" class="bcEllipsis label ' + StatusConstant.STATUS_COLOR[row['SubStatus']] + ' label-table">' + StatusConstant.STATUS_DESCRIPTION[row['SubStatus']] + '</label>';
               } else if (data === StatusConstant.FAILED_ENCOMPASS_DOWNLOAD) {
-                return '<label title="' + row['ErrorMsg'] + '" class="bcEllipsis label ' + StatusConstant.STATUS_COLOR[row['Status']] + ' label-table">' + StatusConstant.STATUS_DESCRIPTION[row['Status']] + '</label>';
+                return '<label title="' + StatusConstant.STATUS_DESCRIPTION[row['Status']] + '" class="bcEllipsis label ' + StatusConstant.STATUS_COLOR[row['Status']] + ' label-table">' + StatusConstant.STATUS_DESCRIPTION[row['Status']] + '</label>';
               } else if (data === LOSImportStatusConstant.LOS_IMPORT_STAGED) {
                 return '<label title="' + LOSImportStatusConstant.LOS_IMPORT_STATUS_DESCRIPTION[row['Status']] + '" class="bcEllipsis label ' + LOSImportStatusConstant.LOS_IMPORT_STATUS_COLOR[row['Status']] + ' label-table">' + LOSImportStatusConstant.LOS_IMPORT_STATUS_DESCRIPTION[row['Status']] + '</label>';
               } else if (data === LOSImportStatusConstant.LOS_IMPORT_PROCESSING && row.LoanID === 0) {
                 return '<label title="' + LOSImportStatusConstant.LOS_IMPORT_STATUS_DESCRIPTION[row['Status']] + '" class="bcEllipsis label ' + LOSImportStatusConstant.LOS_IMPORT_STATUS_COLOR[row['Status']] + ' label-table">' + LOSImportStatusConstant.LOS_IMPORT_STATUS_DESCRIPTION[row['Status']] + '</label>';
               } else if (data === StatusConstant.FAILED_ENCOMPASS_DOWNLOAD) {
-                return '<label title="' + row['ErrorMsg'] + '" class="bcEllipsis label ' + StatusConstant.STATUS_COLOR[row['Status']] + ' label-table">' + StatusConstant.STATUS_DESCRIPTION[row['Status']] + '</label>';
+                return '<label title="' + StatusConstant.STATUS_DESCRIPTION[row['Status']]  + '" class="bcEllipsis label ' + StatusConstant.STATUS_COLOR[row['Status']] + ' label-table">' + StatusConstant.STATUS_DESCRIPTION[row['Status']] + '</label>';
               } else if (data === LOSImportStatusConstant.LOS_IMPORT_FAILED) {
-                return '<label title="' + row['ErrorMsg'] + '" class="bcEllipsis label ' + LOSImportStatusConstant.LOS_IMPORT_STATUS_COLOR[row['Status']] + ' label-table">' + LOSImportStatusConstant.LOS_IMPORT_STATUS_DESCRIPTION[row['Status']] + '</label>';
+                return '<label title="' +LOSImportStatusConstant.LOS_IMPORT_STATUS_DESCRIPTION[row['Status']] + '" class="bcEllipsis label ' + LOSImportStatusConstant.LOS_IMPORT_STATUS_COLOR[row['Status']] + ' label-table">' + LOSImportStatusConstant.LOS_IMPORT_STATUS_DESCRIPTION[row['Status']] + '</label>';
               } else if (data === StatusConstant.IDC_ERROR && (row['SubStatus'] === StatusConstant.LOANTYPE_UNAVAILABLE || row['SubStatus'] === StatusConstant.LOAN_TYPE_NOT_FOUND)) {
                 return '<label title="' + StatusConstant.STATUS_DESCRIPTION[row['SubStatus']] + '" class="bcEllipsis label ' + StatusConstant.STATUS_COLOR[row['Status']] + ' label-table">' + StatusConstant.STATUS_DESCRIPTION[row['Status']] + '</label>';
               } else {
