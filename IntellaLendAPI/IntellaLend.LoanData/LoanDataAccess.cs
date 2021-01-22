@@ -4881,6 +4881,32 @@ namespace IntellaLend.EntityDataHandler
                     }
                 }
 
+                List<ELoanAttachmentUpload> _eLoanAttachmentSuccess = db.ELoanAttachmentUpload.AsNoTracking().Where(x => x.Status == EncompassUploadConstant.UPLOAD_COMPLETE).ToList();
+                foreach (var eLoanAttachment in _eLoanAttachmentSuccess)
+                {
+
+                    Loan eloan = db.Loan.AsNoTracking().Where(l => l.LoanID == eLoanAttachment.LoanID).FirstOrDefault();
+                    if (eloan != null)
+                    {
+                        CustomerMaster _custDetail = db.CustomerMaster.AsNoTracking().Where(c => c.CustomerID == eloan.CustomerID).FirstOrDefault();
+                        if (_custDetail != null)
+                        {
+                            _eLoan.Add(new EUploadDetails()
+                            {
+                                ID = 0,
+                                ELoanGUID = eLoanAttachment.ELoanGUID,
+                                TypeOfUpload = EncompassLoanAttachmentDownloadConstant.Loan,
+                                CustomerName = _custDetail.CustomerName,
+                                LoanID = eLoanAttachment.LoanID,
+                                LoanNumber = eloan.LoanNumber,
+                                Status = EncompassUploadConstant.UPLOAD_COMPLETE,
+                                Error = string.Empty,
+                                CreatedOn = eLoanAttachment.ModifiedOn
+                            });
+                        }
+                    }
+
+                }
 
 
                 //if ((customerId != 0) && (Status != 5 && FromDate != null && ToDate != null))
