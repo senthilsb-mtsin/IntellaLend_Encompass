@@ -5161,9 +5161,7 @@ namespace IntellaLend.EntityDataHandler
                         List<EUploadStaging> _eUploadStagingLoans = db.EUploadStaging.Where(x => x.UploadStagingID == _Loans.ID && x.LoanID == _Loans.LoanID && x.Status == EncompassUploadStagingConstant.UPLOAD_STAGING_FAILED).ToList();
                         foreach (EUploadStaging _eUplod in _eUploadStagingLoans)
                         {
-                            _eUplod.Status = EncompassUploadStagingConstant.UPLOAD_STAGING_RETRY;
-                            _eUplod.ModifiedOn = DateTime.Now;
-                            db.Entry(_eUplod).State = EntityState.Modified;
+                            db.Entry(_eUplod).State = EntityState.Deleted;
                             db.SaveChanges();
                         }
                         db.SaveChanges();
