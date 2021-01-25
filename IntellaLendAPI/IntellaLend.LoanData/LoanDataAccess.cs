@@ -4831,7 +4831,7 @@ namespace IntellaLend.EntityDataHandler
                 var _eLoanData = (from upload in db.EUploadStaging.AsNoTracking()
                                   join loan in db.Loan.AsNoTracking() on upload.LoanID equals loan.LoanID
                                   join cus in db.CustomerMaster.AsNoTracking() on loan.CustomerID equals cus.CustomerID
-                                  where (upload.CreatedOn >= FromDate && upload.ModifiedOn < ToDate)
+                                  where (upload.ModifiedOn >= FromDate && upload.ModifiedOn < ToDate)
                                   && (StatusID == 5 || upload.Status == StatusID)
                                   && (customerId == 0 || cus.CustomerID == customerId)
                                   select new
@@ -4882,14 +4882,16 @@ namespace IntellaLend.EntityDataHandler
                     }
                 }
 
-                List<ELoanAttachmentUpload> _eLoanAttachmentSuccess = db.ELoanAttachmentUpload.AsNoTracking().Where(x => x.Status == EncompassUploadConstant.UPLOAD_COMPLETE).ToList();
+                List<ELoanAttachmentUpload> _eLoanAttachmentSuccess = db.ELoanAttachmentUpload.AsNoTracking()
+                    .Where(x => x.Status == EncompassUploadConstant.UPLOAD_COMPLETE && (StatusID == 5 || StatusID == EncompassUploadConstant.UPLOAD_COMPLETE) && x.ModifiedOn >= FromDate && x.ModifiedOn < ToDate)
+                    .ToList();
                 foreach (var eLoanAttachment in _eLoanAttachmentSuccess)
                 {
 
                     Loan eloan = db.Loan.AsNoTracking().Where(l => l.LoanID == eLoanAttachment.LoanID).FirstOrDefault();
                     if (eloan != null)
                     {
-                        CustomerMaster _custDetail = db.CustomerMaster.AsNoTracking().Where(c => c.CustomerID == eloan.CustomerID).FirstOrDefault();
+                        CustomerMaster _custDetail = db.CustomerMaster.AsNoTracking().Where(c => c.CustomerID == eloan.CustomerID && (c.CustomerID == customerId || customerId == 0)).FirstOrDefault();
                         if (_custDetail != null)
                         {
                             _eLoan.Add(new EUploadDetails()

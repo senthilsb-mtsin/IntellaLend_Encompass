@@ -121,6 +121,7 @@ export class EncompassExportStatusConstant {
   static UPLOAD_SUCCESS = 2;
   static UPLOAD_FAILED = -1;
   static UPLOAD_RETRY = 3;
+  static IMPORT_WAITING = -99;
 
   static ENCOMPASS_EXPORT_STATUS_DESCRIPTION = {
     '0': 'Export Waiting',
@@ -128,6 +129,7 @@ export class EncompassExportStatusConstant {
     '2': 'Export Success',
     '-1': 'Export Error',
     '3': 'Export Retry',
+    '-99': 'Import waiting'
   };
 
   static ENCOMPASS_EXPORT_LOAN_STATUS_COLOR = {
@@ -136,6 +138,7 @@ export class EncompassExportStatusConstant {
     '2': 'label-success',
     '-1': 'label-danger',
     '3': 'label-default',
+    '-99': 'label-info'
   };
 
   static STATUS_LABEL_ICON = {
@@ -144,6 +147,7 @@ export class EncompassExportStatusConstant {
     '2': 'label label-success',
     '-1': 'label label-danger',
     '3': 'label label-default',
+    '-99': 'label label-info'
   };
 }
 export class EncompassUploadStagingConstant {
