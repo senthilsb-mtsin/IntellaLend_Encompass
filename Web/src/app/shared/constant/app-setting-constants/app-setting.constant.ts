@@ -129,7 +129,7 @@ export class EncompassExportStatusConstant {
     '2': 'Export Success',
     '-1': 'Export Error',
     '3': 'Export Retry',
-    '-99': 'Import waiting'
+    '-99': 'Import Waiting'
   };
 
   static ENCOMPASS_EXPORT_LOAN_STATUS_COLOR = {
