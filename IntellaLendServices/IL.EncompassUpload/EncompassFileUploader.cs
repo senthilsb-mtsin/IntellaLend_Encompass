@@ -17,7 +17,7 @@ namespace IL.EncompassUpload
 {
     public class EncompassFileUploader : IMTSServiceBase
     {
-        private static string EvaluatedResultParkingSpotName = string.Empty;
+        private static string EvaluatedResultEFolderName = string.Empty;
         private static string EncompassWrapperAPIURL = string.Empty;
 
 
@@ -25,7 +25,7 @@ namespace IL.EncompassUpload
         public void OnStart(string ServiceParam)
         {
             var Params = XDocument.Parse(ServiceParam).Descendants("add").Select(z => new { Key = z.Attribute("key").Value, Value = z.Value }).ToList();
-            EvaluatedResultParkingSpotName = Params.Find(f => f.Key == "EvaluatedResultParkingSpotName").Value;
+            EvaluatedResultEFolderName = Params.Find(f => f.Key == "EvaluatedResultEFolderName").Value;
             EncompassWrapperAPIURL = Params.Find(f => f.Key == "EncompassWrapperAPIURL").Value;
         }
 
@@ -40,7 +40,7 @@ namespace IL.EncompassUpload
                 {
                     EncompassFileUploaderDataAccess _encompassFileUploaderDataAccess = new EncompassFileUploaderDataAccess(tenant.TenantSchema);
                     EncompassWrapperAPI _api = new EncompassWrapperAPI(EncompassWrapperAPIURL, tenant.TenantSchema);
-                    UploadToEncompass(_api, _encompassFileUploaderDataAccess, EvaluatedResultParkingSpotName);
+                    UploadToEncompass(_api, _encompassFileUploaderDataAccess, EvaluatedResultEFolderName);
                     _api.Dispose();
 
                 }
@@ -82,7 +82,7 @@ namespace IL.EncompassUpload
 
                         LogMessage($"_eUploadStaging.count : {_eUploadStaging.Count}");
 
-                        dataAccess.UpdateEncompassUploadStatus(_eLoan.LoanID, EncompassUploadConstant.UPLOAD_PROCESSING);
+                        dataAccess.UpdateEncompassUploadStatus(_eLoan.ID, EncompassUploadConstant.UPLOAD_PROCESSING);
 
                         List<EContainer> allDocs = _api.GetAllLoanDocuments(_eLoan.ELoanGUID.ToString());
 

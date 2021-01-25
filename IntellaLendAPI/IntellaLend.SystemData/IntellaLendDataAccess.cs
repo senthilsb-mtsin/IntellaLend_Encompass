@@ -3197,6 +3197,7 @@ namespace IntellaLend.EntityDataHandler
         public object SetMileStoneEvent(string _loanGUID, string _instanceID)
         {
             EToken tokenObject = null;
+            string tentantSchema = string.Empty;
             List<IntellaAndEncompassFetchFields> _enImportFields = new List<IntellaAndEncompassFetchFields>();
             bool loanExists = false;
             using (var db = new DBConnect(SystemSchema))
@@ -3216,7 +3217,10 @@ namespace IntellaLend.EntityDataHandler
                         _enImportFields = db.IntellaAndEncompassFetchFields.AsNoTracking().Where(m => m.Active && m.TenantSchema == tenant.TenantSchema).ToList();
 
                         if (tokenObject != null)
+                        {
+                            tentantSchema = tenant.TenantSchema;
                             break;
+                        }
                     }
                 }
 
@@ -3245,15 +3249,19 @@ namespace IntellaLend.EntityDataHandler
 
                         if (loanExists && !(_serviceType.EncompassFieldValue.Split(',').Contains(_eServiceType.Value)))
                         {
-                            db.EWebhookEvents.Add(new EWebhookEvents()
+                            using (var tdb = new DBConnect(tentantSchema))
                             {
-                                CreatedOn = DateTime.Now,
-                                EventType = EWebHookEventsLogConstant.MILESTONELOG,
-                                Status = EWebHookStatusConstant.EWEB_HOOK_STAGED,
-                                Response = JsonConvert.SerializeObject(new { loanGUID = loanGUIDValue }),
-                                IsTrailing = false
-                            });
-                            db.SaveChanges();
+                                tdb.EWebhookEvents.Add(new EWebhookEvents()
+                                {
+                                    CreatedOn = DateTime.Now,
+                                    EventType = EWebHookEventsLogConstant.MILESTONELOG,
+                                    Status = EWebHookStatusConstant.EWEB_HOOK_STAGED,
+                                    Response = JsonConvert.SerializeObject(new { loanGUID = loanGUIDValue }),
+                                    IsTrailing = false
+                                });
+                                tdb.SaveChanges();
+                            }
+
                         }
                     }
                 }
@@ -3265,6 +3273,7 @@ namespace IntellaLend.EntityDataHandler
         public object SetDocumentEvent(string _loanGUID, string _instanceID)
         {
             EToken tokenObject = null;
+            string tentantSchema = string.Empty;
             List<IntellaAndEncompassFetchFields> _enImportFields = new List<IntellaAndEncompassFetchFields>();
             bool loanExists = false;
             using (var db = new DBConnect(SystemSchema))
@@ -3283,7 +3292,10 @@ namespace IntellaLend.EntityDataHandler
                     loanExists = db.Loan.AsNoTracking().Any(x => x.EnCompassLoanGUID == loanGUIDValue);
 
                     if (tokenObject != null)
+                    {
+                        tentantSchema = tenant.TenantSchema;
                         break;
+                    }
                 }
 
 
@@ -3309,21 +3321,24 @@ namespace IntellaLend.EntityDataHandler
 
                     if (_serviceType.EncompassFieldValue.Split(',').Contains(_eServiceType.Value))
                     {
-                        EWebhookEvents _events = db.EWebhookEvents.AsNoTracking().Where(l => l.Response.Contains(loanGUIDValue.ToString())).FirstOrDefault();
-
-                        if (_events == null)
+                        using (var tdb = new DBConnect(tentantSchema))
                         {
+                            EWebhookEvents _events = tdb.EWebhookEvents.AsNoTracking().Where(l => l.Response.Contains(loanGUIDValue.ToString())).FirstOrDefault();
 
-                            db.EWebhookEvents.Add(new EWebhookEvents()
+                            if (_events == null)
                             {
-                                CreatedOn = DateTime.Now,
-                                EventType = EWebHookEventsLogConstant.DOCUMENT_LOG,
-                                Status = EWebHookStatusConstant.EWEB_HOOK_STAGED,
-                                Response = JsonConvert.SerializeObject(new { loanGUID = loanGUIDValue }),
-                                IsTrailing = loanExists
-                            });
-                            db.SaveChanges();
-                        }
+
+                                tdb.EWebhookEvents.Add(new EWebhookEvents()
+                                {
+                                    CreatedOn = DateTime.Now,
+                                    EventType = EWebHookEventsLogConstant.DOCUMENT_LOG,
+                                    Status = EWebHookStatusConstant.EWEB_HOOK_STAGED,
+                                    Response = JsonConvert.SerializeObject(new { loanGUID = loanGUIDValue }),
+                                    IsTrailing = loanExists
+                                });
+                                tdb.SaveChanges();
+                            }
+                        }                        
                     }
                 }
             }
