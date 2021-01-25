@@ -4831,7 +4831,7 @@ namespace IntellaLend.EntityDataHandler
                 var _eLoanData = (from upload in db.EUploadStaging.AsNoTracking()
                                   join loan in db.Loan.AsNoTracking() on upload.LoanID equals loan.LoanID
                                   join cus in db.CustomerMaster.AsNoTracking() on loan.CustomerID equals cus.CustomerID
-                                  where (upload.CreatedOn >= FromDate && upload.ModifiedOn < ToDate)
+                                  where (upload.CreatedOn >= FromDate && upload.CreatedOn < ToDate)
                                   && (StatusID == 5 || upload.Status == StatusID)
                                   && (customerId == 0 || cus.CustomerID == customerId)
                                   select new
