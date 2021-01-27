@@ -58,7 +58,7 @@ namespace IL.EncompassTrailingFileDownloader
         private void DownloadFromEncompass(EncompassWrapperAPI _api, EncompassTrailingFileDownloaderDataAccess dataAccess)
         {
             List<LoanDownload> _loanList = dataAccess.GetEventLoans();
-
+            Logger.WriteTraceLog($"_loanList : {_loanList.Count}");
             foreach (var _eLoan in _loanList)
             {
                 dataAccess.UpdateStatusEwebHookEvents(_eLoan.WebEventID, EWebHookStatusConstant.EWEB_HOOK_PROCESSING);
@@ -83,7 +83,7 @@ namespace IL.EncompassTrailingFileDownloader
                     {
                         List<EDocumentAttachment> _eDocAttachments = uploadContainer.Attachments;
 
-                        if (_eDocAttachments.Count == 0)
+                        if (_eDocAttachments == null || _eDocAttachments.Count == 0)
                             goto BreakAttachmentLoop;
 
                         List<EAttachment> _lsEAttachments = new List<EAttachment>();
@@ -122,12 +122,16 @@ namespace IL.EncompassTrailingFileDownloader
 
                         List<string> attachmentGUIDs = _movedFiles.Select(a => a.AttachmentGUID).ToList();
 
+                        EContainer eContainer = eContainers.Where(e => e.Title == ProcessedEFolder).FirstOrDefault();
+
+                        AddContainerResponse res = null;
+
+                        if (eContainer == null)
+                            res = _api.AddDocument(_eLoanGUID, ProcessedEFolder);
+
                         //Remove Attachments from MTS Upload Container
                         if (attachmentGUIDs.Count > 0)
                             _api.RemoveDocumentAttachments(_eLoanGUID, uploadContainer.DocumentId, attachmentGUIDs, UploadEFolder);
-
-                        //Assign Attachments to Processed folder
-                        EContainer eContainer = eContainers.Where(e => e.Title == ProcessedEFolder).FirstOrDefault();
 
                         if (eContainer != null)
                         {
@@ -135,7 +139,6 @@ namespace IL.EncompassTrailingFileDownloader
                         }
                         else
                         {
-                            AddContainerResponse res = _api.AddDocument(_eLoanGUID, ProcessedEFolder);
                             _docAssigned = _api.AssignDocumentAttachments(_eLoanGUID, res.DocumentID, attachmentGUIDs, ProcessedEFolder);
                         }
 
@@ -156,6 +159,8 @@ namespace IL.EncompassTrailingFileDownloader
 
                         newFileName = dataAccess.TenantSchema + "_" + _eLoan.LoanID.ToString() + "_" + (auditLoanMissingDocCount + 1) + ".lck";
 
+                        Logger.WriteTraceLog($"newFileName : {newFileName}");
+                        Logger.WriteTraceLog($"exactPath : {exactPath}");
 
                         try
                         {
@@ -163,6 +168,10 @@ namespace IL.EncompassTrailingFileDownloader
                                 Directory.CreateDirectory(exactPath);
 
                             lockFileName = Path.Combine(exactPath, newFileName);
+                            OrgFileName = Path.ChangeExtension(lockFileName, ".pdf");
+
+                            Logger.WriteTraceLog($"lockFileName : {lockFileName}");
+                            Logger.WriteTraceLog($"OrgFileName : {OrgFileName}");
 
                             merger = new PDFMerger(lockFileName);
                             merger.OpenDocument();
@@ -242,7 +251,7 @@ namespace IL.EncompassTrailingFileDownloader
             {
                 EventEncompassLoanGUID _guid = JsonConvert.DeserializeObject<EventEncompassLoanGUID>(item.Response);
                 dataAccess.UpdateStatusEwebHookEvents(item.ID, EWebHookStatusConstant.EWEB_HOOK_PROCESSING);
-                dataAccess.updateLoanCompleteStatus(_guid.ToString(), dataAccess.TenantSchema, item.ID);
+                dataAccess.updateLoanCompleteStatus(_guid.loanGUID.ToString(), dataAccess.TenantSchema, item.ID);
             }
         }
 

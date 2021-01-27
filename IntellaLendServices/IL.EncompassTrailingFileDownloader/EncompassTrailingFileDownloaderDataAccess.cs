@@ -5,6 +5,7 @@ using IntellaLend.Constance;
 using IntellaLend.Model;
 using IntellaLend.Model.Encompass;
 using MTSEntBlocks.ExceptionBlock.Handlers;
+using MTSEntBlocks.LoggerBlock;
 using MTSEntityDataAccess;
 using Newtonsoft.Json;
 using System;
@@ -312,7 +313,7 @@ namespace IL.EncompassTrailingFileDownloader
 
                     //need to change this code
                     List<AuditLoanMissingDoc> auditLoanMissingDoc = db.AuditLoanMissingDoc.AsNoTracking().Where(x => (x.LoanID == loanid) && (x.Status != StatusConstant.OCR_COMPLETED)).ToList();
-                    List<EWebhookEvents> _events = db.EWebhookEvents.AsNoTracking().Where(x => x.Response.Contains(encompassGUID) && x.EventType == EWebHookEventsLogConstant.DOCUMENT_LOG && x.IsTrailing == true && (x.Status == EncompassDownloadStepStatusConstant.Waiting || x.Status == EncompassDownloadStepStatusConstant.Processing)).ToList();
+                    List<EWebhookEvents> _events = db.EWebhookEvents.AsNoTracking().Where(x => x.Response.Contains(encompassGUID) && x.EventType == EWebHookEventsLogConstant.DOCUMENT_LOG && x.IsTrailing == true && (x.Status == EWebHookStatusConstant.EWEB_HOOK_STAGED || x.Status == EWebHookStatusConstant.EWEB_HOOK_PROCESSING)).ToList();
 
                     if (auditLoanMissingDoc.Count == 0 && _events.Count == 0)
                     {
@@ -367,15 +368,19 @@ namespace IL.EncompassTrailingFileDownloader
 
                 using (var db = new DBConnect(TenantSchema))
                 {
-                    List<EWebhookEvents> _events = db.EWebhookEvents.AsNoTracking().Where(x => x.EventType == EWebHookEventsLogConstant.DOCUMENT_LOG && x.IsTrailing == true && x.Status == EncompassDownloadStepStatusConstant.Waiting).ToList();
+                    List<EWebhookEvents> _events = db.EWebhookEvents.AsNoTracking().Where(x => x.EventType == EWebHookEventsLogConstant.DOCUMENT_LOG && x.IsTrailing == true && x.Status == EWebHookStatusConstant.EWEB_HOOK_STAGED).ToList();
+
+                    Logger.WriteTraceLog($" _events.count : {_events.Count}");
 
                     foreach (EWebhookEvents item in _events)
                     {
                         EventEncompassLoanGUID _guid = JsonConvert.DeserializeObject<EventEncompassLoanGUID>(item.Response);
 
-                        Guid _eGUID = new Guid(_guid.loanGUID);
-
+                        Guid _eGUID = new Guid(_guid.loanGUID.ToUpper());
+                        Logger.WriteTraceLog($" _eGUID : {_eGUID.ToString()}");
                         Loan _loan = db.Loan.AsNoTracking().Where(x => x.EnCompassLoanGUID == _eGUID).FirstOrDefault();
+
+                        Logger.WriteTraceLog($" (_loan != null) : {(_loan != null)}");
 
                         if (_loan != null)
                         {
