@@ -3215,7 +3215,7 @@ namespace IntellaLend.EntityDataHandler
 
                     if (loanExists)
                     {
-                        tokenObject = GetEncompassTokenFromTenant(tenant);
+                        tokenObject = GetEncompassTokenFromTenant(tenant, _instanceID);
 
                         _enImportFields = db.IntellaAndEncompassFetchFields.AsNoTracking().Where(m => m.Active && m.TenantSchema == tenant.TenantSchema).ToList();
 
@@ -3298,7 +3298,7 @@ namespace IntellaLend.EntityDataHandler
                 foreach (var tenant in _tenants)
                 {
                     tenantDB = new DBConnect(tenant.TenantSchema);
-                    tokenObject = GetEncompassTokenFromTenant(tenant);
+                    tokenObject = GetEncompassTokenFromTenant(tenant, _instanceID);
 
                     _enImportFields = db.IntellaAndEncompassFetchFields.AsNoTracking().Where(m => m.Active && m.TenantSchema == tenant.TenantSchema).ToList();
 
@@ -3390,7 +3390,7 @@ namespace IntellaLend.EntityDataHandler
             }
         }
 
-        public EToken GetEncompassTokenFromTenant(TenantMaster tenant)
+        public EToken GetEncompassTokenFromTenant(TenantMaster tenant, string _instanceID)
         {
             using (var db = new DBConnect(tenant.TenantSchema))
             {
@@ -3398,19 +3398,22 @@ namespace IntellaLend.EntityDataHandler
 
                 if (_encompassConfig != null)
                 {
-                    EncompassAccessToken token = db.EncompassAccessToken.AsNoTracking().FirstOrDefault();
+                    if (_instanceID == _encompassConfig.ConfigValue)
+                    {
+                        EncompassAccessToken token = db.EncompassAccessToken.AsNoTracking().FirstOrDefault();
 
-                    if (token != null)
-                    {
-                        return new EToken() { accessToken = token.AccessToken, tokenType = token.TokenType };
-                    }
-                    else
-                    {
-                        dynamic newToken = GetToken(db.EncompassConfig.AsNoTracking().ToList());
-                        if (newToken != null)
+                        if (token != null)
                         {
-                            UpdateNewToken(db, newToken.TokenType, newToken.Token);
-                            return new EToken() { accessToken = newToken.Token, tokenType = newToken.TokenType };
+                            return new EToken() { accessToken = token.AccessToken, tokenType = token.TokenType };
+                        }
+                        else
+                        {
+                            dynamic newToken = GetToken(db.EncompassConfig.AsNoTracking().ToList());
+                            if (newToken != null)
+                            {
+                                UpdateNewToken(db, newToken.TokenType, newToken.Token);
+                                return new EToken() { accessToken = newToken.Token, tokenType = newToken.TokenType };
+                            }
                         }
                     }
                 }
