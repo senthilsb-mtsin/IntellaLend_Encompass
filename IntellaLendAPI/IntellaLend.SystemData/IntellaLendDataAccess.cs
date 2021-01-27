@@ -3228,6 +3228,8 @@ namespace IntellaLend.EntityDataHandler
 
                 if (loanExists)
                 {
+                    RequestAgain:
+
                     string[] FieldIDs = _enImportFields.Select(x => x.EncompassFieldID).ToArray();
 
                     RestWebClient client = new RestWebClient(ConfigurationManager.AppSettings["EncompassConnectorURL"]);
@@ -3260,6 +3262,17 @@ namespace IntellaLend.EntityDataHandler
                             });
                             tenantDB.SaveChanges();
                         }
+                    }
+
+                    if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        dynamic newToken = GetToken(tenantDB.EncompassConfig.AsNoTracking().ToList());
+                        if (newToken != null)
+                        {
+                            UpdateNewToken(tenantDB, newToken.TokenType, newToken.Token);
+                            tokenObject = new EToken() { accessToken = newToken.Token, tokenType = newToken.TokenType };
+                        }
+                        goto RequestAgain;
                     }
                 }
                 tenantDB.Dispose();
@@ -3300,6 +3313,8 @@ namespace IntellaLend.EntityDataHandler
 
                 if (tokenObject != null)
                 {
+                    RequestAgain:
+
                     string[] FieldIDs = _enImportFields.Select(x => x.EncompassFieldID).ToArray();
 
                     RestWebClient client = new RestWebClient(ConfigurationManager.AppSettings["EncompassConnectorURL"]);
@@ -3338,6 +3353,17 @@ namespace IntellaLend.EntityDataHandler
                                 tenantDB.SaveChanges();
                             }
                         }
+                    }
+
+                    if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        dynamic newToken = GetToken(tenantDB.EncompassConfig.AsNoTracking().ToList());
+                        if (newToken != null)
+                        {
+                            UpdateNewToken(tenantDB, newToken.TokenType, newToken.Token);
+                            tokenObject = new EToken() { accessToken = newToken.Token, tokenType = newToken.TokenType };
+                        }
+                        goto RequestAgain;
                     }
                 }
                 tenantDB.Dispose();
