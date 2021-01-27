@@ -3380,7 +3380,7 @@ namespace IntellaLend.EntityDataHandler
 
                 foreach (var tenant in _tenants)
                 {
-                    EToken tokenObject = GetEncompassTokenFromTenant(tenant);
+                    EToken tokenObject = GetEncompassTokenFromTenant(tenant, _instanceID);
 
                     if (tokenObject != null)
                         return tokenObject;
