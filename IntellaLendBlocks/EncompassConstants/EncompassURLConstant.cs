@@ -60,7 +60,7 @@
         public const string GET_LOAN_ALL_DOCUMENTS = "encompass/v3/loans/{0}/documents";
         public const string GET_LOAN_ALL_DOCUMENT_WITH_ATTACHMENTS = "encompass/v3/loans/{0}/documents?requireActiveAttachments=true";
         public const string GET_LOAN_DOCUMENT = "encompass/v3/loans/{0}/documents/{1}";
-        public const string ADD_DOCUMENT = "encompass/v3/loans/{0}/documents?action=add&lockId={1}&view=id";
+        public const string ADD_DOCUMENT = "encompass/v3/loans/{0}/documents?action=add&lockId={1}&view=entity";
         public const string REMOVE_DOCUMENT = "encompass/v3/loans/{0}/documents?action=remove&lockId={1}&view=id";
 
         #endregion

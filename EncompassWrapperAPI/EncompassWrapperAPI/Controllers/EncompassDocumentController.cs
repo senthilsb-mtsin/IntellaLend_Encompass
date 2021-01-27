@@ -43,7 +43,7 @@ namespace EncompassConnectorAPI.Controllers
 
                 IRestResponse response = _client.Execute(reqObj);
 
-                responseStream = response.Content;
+                responseStream = response.Content; Logger.WriteTraceLog($"response.Content : {response.Content}");
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -85,7 +85,7 @@ namespace EncompassConnectorAPI.Controllers
 
                 IRestResponse response = _client.Execute(reqObj);
 
-                responseStream = response.Content;
+                responseStream = response.Content; Logger.WriteTraceLog($"response.Content : {response.Content}");
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -127,7 +127,7 @@ namespace EncompassConnectorAPI.Controllers
 
                 IRestResponse response = _client.Execute(reqObj);
 
-                responseStream = response.Content;
+                responseStream = response.Content; Logger.WriteTraceLog($"response.Content : {response.Content}");
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -169,7 +169,7 @@ namespace EncompassConnectorAPI.Controllers
 
                 IRestResponse response = _client.Execute(reqObj);
 
-                responseStream = response.Content;
+                responseStream = response.Content; Logger.WriteTraceLog($"response.Content : {response.Content}");
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -238,14 +238,15 @@ namespace EncompassConnectorAPI.Controllers
 
                     IRestResponse response = _client.Execute(reqObj);
 
-                    responseStream = response.Content;
+                    responseStream = response.Content; Logger.WriteTraceLog($"response.Content : {response.Content}");
+
 
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        EIDResponse eIDs = JsonConvert.DeserializeObject<EIDResponse>(responseStream);
+                        List<EIDResponse> eIDs = JsonConvert.DeserializeObject<List<EIDResponse>>(responseStream);
                         List<AddContainerResponse> _res = new List<AddContainerResponse>();
                         //foreach (var item in eIDs)
-                        _res.Add(new AddContainerResponse() { DocumentID = eIDs.ID, DocumentName = _addReq[0].title });
+                        _res.Add(new AddContainerResponse() { DocumentID = eIDs[0].ID, DocumentName = _addReq[0].title });
 
                         return Ok(_res);
                     }
@@ -309,7 +310,7 @@ namespace EncompassConnectorAPI.Controllers
 
                     IRestResponse response = _client.Execute(reqObj);
 
-                    responseStream = response.Content;
+                    responseStream = response.Content; Logger.WriteTraceLog($"response.Content : {response.Content}");
 
                     if (response.StatusCode == HttpStatusCode.NoContent)
                         return Ok("Documents Removed");
@@ -379,7 +380,7 @@ namespace EncompassConnectorAPI.Controllers
 
                     //var response = base._client.PatchAsync(string.Format(EncompassURLConstant.REMOVE_DOCUMENT_ATTACHMENT, _req.LoanGUID, _req.DocumentGUID), new ObjectContent(typeof(List<EAddRemoveAttachment>), _eAddRemove, new JsonMediaTypeFormatter())).Result;
 
-                    responseStream = response.Content;
+                    responseStream = response.Content; Logger.WriteTraceLog($"response.Content : {response.Content}");
 
                     if (response.StatusCode == HttpStatusCode.NoContent || response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Created)
                     {
@@ -451,7 +452,7 @@ namespace EncompassConnectorAPI.Controllers
 
                     //var response = base._client.PatchAsync(string.Format(EncompassURLConstant.ADD_DOCUMENT_ATTACHMENT, _req.LoanGUID, _req.DocumentGUID), new ObjectContent(typeof(List<EAddRemoveAttachment>), _eAddRemove, new JsonMediaTypeFormatter())).Result;
 
-                    responseStream = response.Content;
+                    responseStream = response.Content; Logger.WriteTraceLog($"response.Content : {response.Content}");
 
                     if (response.StatusCode == HttpStatusCode.NoContent || response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Created)
                     {

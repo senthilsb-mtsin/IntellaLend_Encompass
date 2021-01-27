@@ -33,6 +33,7 @@ namespace IL.EncompassFileDownloader
         private static string LastFinishedMileStone = string.Empty;
         private static string ServiceTypes = string.Empty;
         private static string LastFinishedMileStoneFieldID = string.Empty;
+        private static string EvaluatedResultParkingSpotName = string.Empty;
 
         public void OnStart(string ServiceParam)
         {
@@ -41,6 +42,7 @@ namespace IL.EncompassFileDownloader
             EncompassWrapperAPIURL = Params.Find(f => f.Key == "EncompassWrapperAPIURL").Value; //http://mts100:8099/
             ProcessedEFolder = Params.Find(f => f.Key == "ProcessedEFolder").Value;
             UploadEFolder = Params.Find(f => f.Key == "UploadEFolder").Value;
+            EvaluatedResultParkingSpotName = Params.Find(f => f.Key == "EvaluatedResultEFolder").Value;
             LastFinishedMileStoneFieldID = Params.Find(f => f.Key == "LastFinishedMileStoneFieldID").Value;
             LastFinishedMileStone = Params.Find(f => f.Key == "LastFinishedMileStone").Value;
             ServiceTypes = Params.Find(f => f.Key == "ServiceTypes").Value;
@@ -178,6 +180,16 @@ namespace IL.EncompassFileDownloader
                                 CheckAttachment:
 
                                 List<EContainer> eContainers = _api.GetAllLoanDocuments(_eLoanGUID);
+                                EContainer processedContainer = eContainers.Where(x => x.Title == ProcessedEFolder).FirstOrDefault();
+                                if (processedContainer == null)
+                                {
+                                    AddContainerResponse _res = _api.AddDocument(_eLoanGUID, ProcessedEFolder);
+                                    eContainers.Add(new EContainer() { Title = ProcessedEFolder, DocumentId = _res.DocumentID });
+                                }
+
+                                EContainer resultContainer = eContainers.Where(x => x.Title == EvaluatedResultParkingSpotName).FirstOrDefault();
+                                if (resultContainer == null)
+                                    _api.AddDocument(_eLoanGUID, EvaluatedResultParkingSpotName);
 
                                 EContainer uploadContainer = eContainers.Where(x => x.Title == UploadEFolder).FirstOrDefault();
 
@@ -185,7 +197,7 @@ namespace IL.EncompassFileDownloader
                                 {
                                     List<EDocumentAttachment> _eDocAttachments = uploadContainer.Attachments;
 
-                                    if (_eDocAttachments.Count == 0)
+                                    if (_eDocAttachments == null || _eDocAttachments.Count == 0)
                                         goto BreakAttachmentLoop;
 
                                     List<EAttachment> _lsEAttachments = new List<EAttachment>();
@@ -224,12 +236,18 @@ namespace IL.EncompassFileDownloader
 
                                     List<string> attachmentGUIDs = _movedFiles.Select(a => a.AttachmentGUID).ToList();
 
+                                    //Assign Attachments to Processed folder
+                                    EContainer eContainer = eContainers.Where(e => e.Title == ProcessedEFolder).FirstOrDefault();
+
+                                    AddContainerResponse res = null;
+
+                                    if (eContainer == null)
+                                        res = _api.AddDocument(_eLoanGUID, ProcessedEFolder);
+
                                     //Remove Attachments from MTS Upload Container
                                     if (attachmentGUIDs.Count > 0)
                                         _api.RemoveDocumentAttachments(_eLoanGUID, uploadContainer.DocumentId, attachmentGUIDs, UploadEFolder);
 
-                                    //Assign Attachments to Processed folder
-                                    EContainer eContainer = eContainers.Where(e => e.Title == ProcessedEFolder).FirstOrDefault();
 
                                     if (eContainer != null)
                                     {
@@ -237,7 +255,6 @@ namespace IL.EncompassFileDownloader
                                     }
                                     else
                                     {
-                                        AddContainerResponse res = _api.AddDocument(_eLoanGUID, ProcessedEFolder);
                                         _docAssigned = _api.AssignDocumentAttachments(_eLoanGUID, res.DocumentID, attachmentGUIDs, ProcessedEFolder);
                                     }
 

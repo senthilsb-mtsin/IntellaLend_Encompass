@@ -60,7 +60,7 @@ namespace EncompassAPIHelper
 
             IRestResponse result = client.Execute(req);
 
-            string res = result.Content;
+            string res = result.Content; Logger.WriteTraceLog($"result.Content : {result.Content}");
 
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -90,7 +90,7 @@ namespace EncompassAPIHelper
 
             IRestResponse result = client.Execute(req);
 
-            string res = result.Content;
+            string res = result.Content; Logger.WriteTraceLog($"result.Content : {result.Content}");
 
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -125,7 +125,7 @@ namespace EncompassAPIHelper
 
             IRestResponse result = client.Execute(req);
 
-            string res = result.Content;
+            string res = result.Content; Logger.WriteTraceLog($"result.Content : {result.Content}");
 
             if (result.StatusCode != System.Net.HttpStatusCode.OK)
             {
@@ -203,7 +203,7 @@ namespace EncompassAPIHelper
 
             IRestResponse result = client.Execute(req);
 
-            string res = result.Content;
+            string res = result.Content; Logger.WriteTraceLog($"result.Content : {result.Content}");
 
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -231,7 +231,7 @@ namespace EncompassAPIHelper
 
             IRestResponse result = client.Execute(req);
 
-            string res = result.Content;
+            string res = result.Content; Logger.WriteTraceLog($"result.Content : {result.Content}");
 
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -264,7 +264,7 @@ namespace EncompassAPIHelper
 
             IRestResponse result = client.Execute(req);
 
-            string res = result.Content;
+            string res = result.Content; Logger.WriteTraceLog($"result.Content : {result.Content}");
 
             LogMessage($"res : {res} , result.StatusCode : {result.StatusCode}");
 
@@ -309,7 +309,7 @@ namespace EncompassAPIHelper
 
             IRestResponse result = client.Execute(req);
 
-            string res = result.Content;
+            string res = result.Content; Logger.WriteTraceLog($"result.Content : {result.Content}");
 
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -347,7 +347,7 @@ namespace EncompassAPIHelper
 
             IRestResponse result = client.Execute(req);
 
-            string res = result.Content;
+            string res = result.Content; Logger.WriteTraceLog($"result.Content : {result.Content}");
 
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -383,7 +383,7 @@ namespace EncompassAPIHelper
 
             IRestResponse result = client.Execute(req);
 
-            string res = result.Content;
+            string res = result.Content; Logger.WriteTraceLog($"result.Content : {result.Content}");
 
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -417,7 +417,7 @@ namespace EncompassAPIHelper
 
             var result = client.Execute(req);
 
-            string res = result.Content;
+            string res = result.Content; Logger.WriteTraceLog($"result.Content : {result.Content}");
 
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
