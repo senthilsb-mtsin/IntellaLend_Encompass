@@ -251,10 +251,10 @@ namespace IL.EncompassUpload
                                 dataAccess.UpdateEncompassUploadStatus(_eLoan.ID, EncompassUploadConstant.UPLOAD_COMPLETE);
 
                             //remove ELoanAttachmentUpload (header table) data if all details records are successfull
-                            if (dataAccess.IsSuccessfullUpload(_eLoan.ID))
-                            {
-                                dataAccess.RemoveUploadStaging(_eLoan.ID);
-                            }
+                            //if (dataAccess.IsSuccessfullUpload(_eLoan.ID))
+                            //{
+                            //    dataAccess.RemoveUploadStaging(_eLoan.ID);
+                            //}
                         }
                         catch (EncompassWrapperLoanLockException ex)
                         {
