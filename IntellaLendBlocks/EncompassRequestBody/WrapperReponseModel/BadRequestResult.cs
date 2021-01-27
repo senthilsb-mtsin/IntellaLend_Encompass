@@ -14,4 +14,10 @@ namespace EncompassRequestBody.WrapperReponseModel
         public string ErrorCode { get; set; }
 
     }
+
+    public class BadErrorResponse
+    {
+        [JsonProperty(PropertyName = "Message")]
+        public ErrorResponse Message { get; set; }
+    }
 }

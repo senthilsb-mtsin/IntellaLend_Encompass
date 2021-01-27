@@ -73,12 +73,12 @@ namespace EncompassAPIHelper
                 goto RequestAgain;
             }
 
-            ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(res);
+            BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
 
-            if (_error.Details.Contains("read-only mode"))
-                throw new EncompassWrapperLoanLockException(_error.Details);
+            if (_error.Message.Details.Contains("read-only mode"))
+                throw new EncompassWrapperLoanLockException(_error.Message.Details);
 
-            throw new EncompassWrapperException($"Unable to get loan(s) from Encompass. Message : {_error.Details}");
+            throw new EncompassWrapperException($"Unable to get loan(s) from Encompass. Message : {_error.Message.Details}");
         }
 
         public List<EAttachment> GetUnassignedAttachments(string loanGUID)
@@ -101,12 +101,12 @@ namespace EncompassAPIHelper
                 _token.SetToken();
                 goto RequestAgain;
             }
-            ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(res);
+            BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
 
-            if (_error.Details.Contains("read-only mode"))
-                throw new EncompassWrapperLoanLockException(_error.Details);
+            if (_error.Message.Details.Contains("read-only mode"))
+                throw new EncompassWrapperLoanLockException(_error.Message.Details);
 
-            throw new EncompassWrapperException($"Unable to get loan attachment(s) for the loan('{loanGUID}') from Encompass. Message : {_error.Details}");
+            throw new EncompassWrapperException($"Unable to get loan attachment(s) for the loan('{loanGUID}') from Encompass. Message : {_error.Message.Details}");
         }
 
         public void UploadProcessFlag(string loanGUID, string fieldID, string fieldValue)
@@ -135,12 +135,12 @@ namespace EncompassAPIHelper
                     goto RequestAgain;
                 }
 
-                ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(res);
+                BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
 
-                if (_error.Details.Contains("read-only mode"))
-                    throw new EncompassWrapperLoanLockException(_error.Details);
+                if (_error.Message.Details.Contains("read-only mode"))
+                    throw new EncompassWrapperLoanLockException(_error.Message.Details);
 
-                throw new EncompassWrapperException($"Unable to update the download complete flag in Encompass. Field ID : '{fieldID}', FieldValue: '{fieldValue}'.Message : {_error.Details}");
+                throw new EncompassWrapperException($"Unable to update the download complete flag in Encompass. Field ID : '{fieldID}', FieldValue: '{fieldValue}'.Message : {_error.Message.Details}");
             }
         }
 
@@ -169,12 +169,12 @@ namespace EncompassAPIHelper
                 _token.SetToken();
                 goto RequestAgain;
             }
-            ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(result.Content);
+            BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(result.Content);
 
-            if (_error.Details.Contains("read-only mode"))
-                throw new EncompassWrapperLoanLockException(_error.Details);
+            if (_error.Message.Details.Contains("read-only mode"))
+                throw new EncompassWrapperLoanLockException(_error.Message.Details);
 
-            throw new EncompassWrapperException($"Error while downloading from Unassigned folder. Attachment : {AttachmentName}. Message : {_error.Details}");
+            throw new EncompassWrapperException($"Error while downloading from Unassigned folder. Attachment : {AttachmentName}. Message : {_error.Message.Details}");
         }
 
 
@@ -214,12 +214,12 @@ namespace EncompassAPIHelper
                 _token.SetToken();
                 goto RequestAgain;
             }
-            ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(res);
+            BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
 
-            if (_error.Details.Contains("read-only mode"))
-                throw new EncompassWrapperLoanLockException(_error.Details);
+            if (_error.Message.Details.Contains("read-only mode"))
+                throw new EncompassWrapperLoanLockException(_error.Message.Details);
 
-            throw new EncompassWrapperException($"Error while fetching EFolder(s) in Encompass. Message : {_error.Details}");
+            throw new EncompassWrapperException($"Error while fetching EFolder(s) in Encompass. Message : {_error.Message.Details}");
         }
 
         public EAttachment GetAttachment(string loanGUID, string attachmentID)
@@ -242,12 +242,12 @@ namespace EncompassAPIHelper
                 _token.SetToken();
                 goto RequestAgain;
             }
-            ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(res);
+            BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
 
-            if (_error.Details.Contains("read-only mode"))
-                throw new EncompassWrapperLoanLockException(_error.Details);
+            if (_error.Message.Details.Contains("read-only mode"))
+                throw new EncompassWrapperLoanLockException(_error.Message.Details);
 
-            throw new EncompassWrapperException($"Error while fetching Attachment(s) in Encompass. Message : {_error.Details}");
+            throw new EncompassWrapperException($"Error while fetching Attachment(s) in Encompass. Message : {_error.Message.Details}");
         }
 
         public EUploadResponse UploadAttachment(string loanGUID, string fileName, string fileNameWithExtension, byte[] file)
@@ -287,12 +287,12 @@ namespace EncompassAPIHelper
                 _token.SetToken();
                 goto RequestAgain;
             }
-            ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(res);
+            BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
 
-            if (_error.Details.Contains("read-only mode"))
-                throw new EncompassWrapperLoanLockException(_error.Details);
+            if (_error.Message.Details.Contains("read-only mode"))
+                throw new EncompassWrapperLoanLockException(_error.Message.Details);
 
-            throw new EncompassWrapperException($"Unable to upload the attachment ('{fileName}'). Message : {_error.Details}");
+            throw new EncompassWrapperException($"Unable to upload the attachment ('{fileName}'). Message : {_error.Message.Details}");
         }
 
 
@@ -324,12 +324,12 @@ namespace EncompassAPIHelper
                 _token.SetToken();
                 goto RequestAgain;
             }
-            ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(res);
+            BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
 
-            if (_error.Details.Contains("read-only mode"))
-                throw new EncompassWrapperLoanLockException(_error.Details);
+            if (_error.Message.Details.Contains("read-only mode"))
+                throw new EncompassWrapperLoanLockException(_error.Message.Details);
 
-            throw new EncompassWrapperException($"Unable to create the processed folder '{documentName}' in Encompass. Message : {_error.Details}");
+            throw new EncompassWrapperException($"Unable to create the processed folder '{documentName}' in Encompass. Message : {_error.Message.Details}");
         }
 
         public bool AssignDocumentAttachments(string loanGUID, string documentGuid, List<string> attachmentGUIDs, string FolderName)
@@ -360,12 +360,12 @@ namespace EncompassAPIHelper
                 _token.SetToken();
                 goto RequestAgain;
             }
-            ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(res);
+            BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
 
-            if (_error.Details.Contains("read-only mode"))
-                throw new EncompassWrapperLoanLockException(_error.Details);
+            if (_error.Message.Details.Contains("read-only mode"))
+                throw new EncompassWrapperLoanLockException(_error.Message.Details);
 
-            throw new EncompassWrapperException($"Could not move the attachment(s) from Unassigned folder to processed folder '{FolderName}'. Message : {_error.Details}");
+            throw new EncompassWrapperException($"Could not move the attachment(s) from Unassigned folder to processed folder '{FolderName}'. Message : {_error.Message.Details}");
         }
 
         public bool RemoveDocumentAttachments(string loanGUID, string documentGuid, List<string> attachmentGUIDs, string FolderName)
@@ -396,12 +396,12 @@ namespace EncompassAPIHelper
                 _token.SetToken();
                 goto RequestAgain;
             }
-            ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(res);
+            BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
 
-            if (_error.Details.Contains("read-only mode"))
-                throw new EncompassWrapperLoanLockException(_error.Details);
+            if (_error.Message.Details.Contains("read-only mode"))
+                throw new EncompassWrapperLoanLockException(_error.Message.Details);
 
-            throw new EncompassWrapperException($"Could not remove the attachment(s) from Upload folder '{FolderName}'. Message : {_error.Details}");
+            throw new EncompassWrapperException($"Could not remove the attachment(s) from Upload folder '{FolderName}'. Message : {_error.Message.Details}");
         }
 
         public List<EFieldResponse> GetPredefinedFieldValues(string loanGUID, string[] fieldIds)
@@ -428,12 +428,12 @@ namespace EncompassAPIHelper
                 _token.SetToken();
                 goto RequestAgain;
             }
-            ErrorResponse _error = JsonConvert.DeserializeObject<ErrorResponse>(res);
+            BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
 
-            if (_error.Details.Contains("read-only mode"))
-                throw new EncompassWrapperLoanLockException(_error.Details);
+            if (_error.Message.Details.Contains("read-only mode"))
+                throw new EncompassWrapperLoanLockException(_error.Message.Details);
 
-            throw new EncompassWrapperException($"Cannot able to get field values from encompass. Fields : {string.Join(",", fieldIds)}. Message : {_error.Details}");
+            throw new EncompassWrapperException($"Cannot able to get field values from encompass. Fields : {string.Join(",", fieldIds)}. Message : {_error.Message.Details}");
         }
 
         private void LogMessage(string _msg)
