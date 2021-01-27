@@ -3,6 +3,7 @@ using IntellaLend.MinIOWrapper;
 using IntellaLend.Model;
 using IntellaLend.Model.Encompass;
 using MTS.Web.Helpers;
+using MTSEntBlocks.LoggerBlock;
 using MTSEntityDataAccess;
 using Newtonsoft.Json;
 using RestSharp;
@@ -3299,27 +3300,27 @@ namespace IntellaLend.EntityDataHandler
 
                 if (tokenObject != null)
                 {
-                string[] FieldIDs = _enImportFields.Select(x => x.EncompassFieldID).ToArray();
+                    string[] FieldIDs = _enImportFields.Select(x => x.EncompassFieldID).ToArray();
 
-                RestWebClient client = new RestWebClient(ConfigurationManager.AppSettings["EncompassConnectorURL"]);
+                    RestWebClient client = new RestWebClient(ConfigurationManager.AppSettings["EncompassConnectorURL"]);
 
-                HttpRequestObject req = new HttpRequestObject() { Content = new { loanGUID = _loanGUID, fieldIDs = FieldIDs }, REQUESTTYPE = "POST", URL = string.Format(EncompassURLILConstant.GET_PREDEFINED_FIELDVALUES) };
+                    HttpRequestObject req = new HttpRequestObject() { Content = new { loanGUID = _loanGUID, fieldIDs = FieldIDs }, REQUESTTYPE = "POST", URL = string.Format(EncompassURLILConstant.GET_PREDEFINED_FIELDVALUES) };
 
-                client.AddDefaultHeader("Token", tokenObject.accessToken);
-                client.AddDefaultHeader("TokenType", tokenObject.tokenType);
+                    client.AddDefaultHeader("Token", tokenObject.accessToken);
+                    client.AddDefaultHeader("TokenType", tokenObject.tokenType);
 
-                IRestResponse result = client.Execute(req);
+                    IRestResponse result = client.Execute(req);
 
-                if (result.StatusCode == System.Net.HttpStatusCode.OK)
-                {
-                    string res = result.Content;
-                    List<EFieldResponse> _eResponse = JsonConvert.DeserializeObject<List<EFieldResponse>>(res);
+                    if (result.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        string res = result.Content;
+                        List<EFieldResponse> _eResponse = JsonConvert.DeserializeObject<List<EFieldResponse>>(res);
 
-                    IntellaAndEncompassFetchFields _serviceType = _enImportFields.Where(x => x.FieldType.Contains(LOSFieldType.SERVICETYPE)).FirstOrDefault();
+                        IntellaAndEncompassFetchFields _serviceType = _enImportFields.Where(x => x.FieldType.Contains(LOSFieldType.SERVICETYPE)).FirstOrDefault();
 
-                    EFieldResponse _eServiceType = _eResponse.Where(x => x.FieldId == _serviceType.EncompassFieldID).FirstOrDefault();
+                        EFieldResponse _eServiceType = _eResponse.Where(x => x.FieldId == _serviceType.EncompassFieldID).FirstOrDefault();
 
-                    if (_serviceType.EncompassFieldValue.Split(',').Contains(_eServiceType.Value))
+                        if (_serviceType.EncompassFieldValue.Split(',').Contains(_eServiceType.Value))
                         {
                             EWebhookEvents _events = tenantDB.EWebhookEvents.AsNoTracking().Where(l => l.Response.Contains(loanGUIDValue.ToString())).FirstOrDefault();
                             Logger.WriteTraceLog($"_events == null : {_events == null}");

@@ -36,7 +36,7 @@ namespace EncompassConnectorAPI.Controllers
         ///<Summary>
         /// Get Document Resource WebHook Callback Event
         ///</Summary>
-        [HttpGet, Route("api/v1/callback/document")]
+        [HttpPost, Route("api/v1/callback/document")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success")]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request")]
         public IHttpActionResult DocumentCallBack(ECallBack res)
@@ -74,7 +74,7 @@ namespace EncompassConnectorAPI.Controllers
         ///<Summary>
         /// Get Milestone Resource WebHook Callback Event
         ///</Summary>
-        [HttpGet, Route("api/v1/callback/milestone")]
+        [HttpPost, Route("api/v1/callback/milestone")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success")]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request")]
         public IHttpActionResult MileStoneCallBack(ECallBack res)

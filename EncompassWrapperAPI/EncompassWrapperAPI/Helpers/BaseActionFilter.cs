@@ -47,17 +47,17 @@ namespace EncompassConnectorAPI.Helpers
         /// <param name="actionContext"></param>
         private void ActionExecuting(HttpActionContext actionContext)
         {
-            baseController = (BaseController)actionContext.ControllerContext.Controller;
-
-            IEnumerable<string> _token = new List<string>();
-            IEnumerable<string> _tokenType = new List<string>();
-            actionContext.ControllerContext.Request.Headers.TryGetValues(HeaderConstant.TokenHeader, out _token);
-            actionContext.ControllerContext.Request.Headers.TryGetValues(HeaderConstant.TokenTypeHeader, out _tokenType);
-            webConnectorSession.Token = _token.FirstOrDefault();
-            webConnectorSession.TokenType = _tokenType.FirstOrDefault();
-
             try
             {
+                baseController = (BaseController)actionContext.ControllerContext.Controller;
+
+                IEnumerable<string> _token = new List<string>();
+                IEnumerable<string> _tokenType = new List<string>();
+                actionContext.ControllerContext.Request.Headers.TryGetValues(HeaderConstant.TokenHeader, out _token);
+                actionContext.ControllerContext.Request.Headers.TryGetValues(HeaderConstant.TokenTypeHeader, out _tokenType);
+                webConnectorSession.Token = _token.FirstOrDefault();
+                webConnectorSession.TokenType = _tokenType.FirstOrDefault();
+
                 //Check connection
                 if (baseController.EncompassWebConnectorSession == null)
                 {

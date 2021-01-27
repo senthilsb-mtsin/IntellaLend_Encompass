@@ -245,7 +245,7 @@ namespace EncompassConnectorAPI.Controllers
                         EIDResponse eIDs = JsonConvert.DeserializeObject<EIDResponse>(responseStream);
                         List<AddContainerResponse> _res = new List<AddContainerResponse>();
                         //foreach (var item in eIDs)
-                        _res.Add(new AddContainerResponse() { DocumentID = eIDs.ID, DocumentName = eIDs.Title });
+                        _res.Add(new AddContainerResponse() { DocumentID = eIDs.ID, DocumentName = _addReq[0].title });
 
                         return Ok(_res);
                     }

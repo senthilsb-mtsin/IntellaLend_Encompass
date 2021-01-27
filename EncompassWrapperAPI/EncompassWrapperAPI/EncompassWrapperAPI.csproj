@@ -258,6 +258,7 @@
     <Compile Include="Controllers\EncompassLoanController.cs" />
     <Compile Include="Controllers\EncompassTokenController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TestRequestController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

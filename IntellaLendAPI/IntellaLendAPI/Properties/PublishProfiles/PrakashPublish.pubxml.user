@@ -5,7 +5,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <_PublishTargetUrl>D:\Prakash\GitHub\Product_ECalHFA\IntellaLendAPI\IntellaLendAPI\..\..\BuildFiles\API2</_PublishTargetUrl>
+    <_PublishTargetUrl>D:\Prakash\GitHub\EncompassRepo\IntellaLendAPI\IntellaLendAPI\..\..\BuildFiles\API2</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="App_Browsers/qt.browser">
@@ -165,16 +165,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/19/2019 16:44:09</publishTime>
     </File>
     <File Include="bin/EncompassConsoleConnector.dll">
-      <publishTime>01/12/2021 15:29:38</publishTime>
+      <publishTime>01/27/2021 11:45:26</publishTime>
     </File>
     <File Include="bin/EncompassConsoleConnector.pdb">
-      <publishTime>01/12/2021 15:29:38</publishTime>
+      <publishTime>01/27/2021 11:45:26</publishTime>
     </File>
     <File Include="bin/EncompassObjects.dll">
       <publishTime>10/25/2018 11:08:52</publishTime>
     </File>
     <File Include="bin/EncompassRequest.dll">
-      <publishTime>01/12/2021 15:29:36</publishTime>
+      <publishTime>01/27/2021 11:44:33</publishTime>
     </File>
     <File Include="bin/EncompassWrapper.dll">
       <publishTime>12/20/2018 21:09:17</publishTime>
@@ -213,16 +213,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/20/2018 10:28:56</publishTime>
     </File>
     <File Include="bin/IntellaLend.ADServices.dll">
-      <publishTime>01/12/2021 15:29:43</publishTime>
+      <publishTime>01/27/2021 11:46:03</publishTime>
     </File>
     <File Include="bin/IntellaLend.ADServices.dll.config">
       <publishTime>01/12/2021 15:28:32</publishTime>
     </File>
     <File Include="bin/IntellaLend.ADServices.pdb">
-      <publishTime>01/12/2021 15:29:43</publishTime>
+      <publishTime>01/27/2021 11:46:03</publishTime>
     </File>
     <File Include="bin/IntellaLend.Audit.dll">
-      <publishTime>01/12/2021 15:29:37</publishTime>
+      <publishTime>01/27/2021 11:44:35</publishTime>
     </File>
     <File Include="bin/IntellaLend.Audit.dll.config">
       <publishTime>07/30/2020 09:56:35</publishTime>
@@ -231,10 +231,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/12/2021 15:29:05</publishTime>
     </File>
     <File Include="bin/IntellaLend.AuditData.dll">
-      <publishTime>01/12/2021 15:29:37</publishTime>
+      <publishTime>01/27/2021 11:44:36</publishTime>
     </File>
     <File Include="bin/IntellaLend.BoxWrapper.dll">
-      <publishTime>01/12/2021 15:29:38</publishTime>
+      <publishTime>01/27/2021 11:45:27</publishTime>
     </File>
     <File Include="bin/IntellaLend.BoxWrapper.dll.config">
       <publishTime>07/30/2020 10:03:10</publishTime>
@@ -243,28 +243,28 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/12/2021 15:29:06</publishTime>
     </File>
     <File Include="bin/IntellaLend.CheckListItemData.dll">
-      <publishTime>01/12/2021 15:29:41</publishTime>
+      <publishTime>01/27/2021 11:46:03</publishTime>
     </File>
     <File Include="bin/IntellaLend.CheckListItemData.dll.config">
       <publishTime>01/12/2021 15:28:32</publishTime>
     </File>
     <File Include="bin/IntellaLend.CommonServices.dll">
-      <publishTime>01/12/2021 15:29:44</publishTime>
+      <publishTime>01/27/2021 11:46:05</publishTime>
     </File>
     <File Include="bin/IntellaLend.CommonServices.dll.config">
       <publishTime>01/12/2021 15:28:32</publishTime>
     </File>
     <File Include="bin/IntellaLend.Constance.dll">
-      <publishTime>01/12/2021 15:29:36</publishTime>
+      <publishTime>01/27/2021 11:44:33</publishTime>
     </File>
     <File Include="bin/IntellaLend.Constance.pdb">
       <publishTime>01/12/2021 15:29:02</publishTime>
     </File>
     <File Include="bin/IntellaLend.CustomerData.dll">
-      <publishTime>01/12/2021 15:29:38</publishTime>
+      <publishTime>01/27/2021 11:45:29</publishTime>
     </File>
     <File Include="bin/IntellaLend.DashboardData.dll">
-      <publishTime>01/12/2021 15:29:41</publishTime>
+      <publishTime>01/27/2021 11:46:03</publishTime>
     </File>
     <File Include="bin/IntellaLend.DashboardData.dll.config">
       <publishTime>01/12/2021 15:28:32</publishTime>
@@ -273,43 +273,43 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/19/2019 16:44:11</publishTime>
     </File>
     <File Include="bin/IntellaLend.ExceptionHandler.dll">
-      <publishTime>01/12/2021 15:29:37</publishTime>
+      <publishTime>01/27/2021 11:45:24</publishTime>
     </File>
     <File Include="bin/IntellaLend.Hashing.dll">
-      <publishTime>01/12/2021 15:29:38</publishTime>
+      <publishTime>01/27/2021 11:45:25</publishTime>
     </File>
     <File Include="bin/IntellaLend.License.dll">
-      <publishTime>01/12/2021 15:29:39</publishTime>
+      <publishTime>01/27/2021 11:45:30</publishTime>
     </File>
     <File Include="bin/IntellaLend.License.dll.config">
       <publishTime>07/30/2020 10:15:19</publishTime>
     </File>
     <File Include="bin/IntellaLend.LoanData.dll">
-      <publishTime>01/12/2021 15:29:42</publishTime>
+      <publishTime>01/27/2021 11:46:03</publishTime>
     </File>
     <File Include="bin/IntellaLend.LoanData.dll.config">
       <publishTime>01/12/2021 15:28:32</publishTime>
     </File>
     <File Include="bin/IntellaLend.LogInData.dll">
-      <publishTime>01/12/2021 15:29:43</publishTime>
+      <publishTime>01/27/2021 11:46:04</publishTime>
     </File>
     <File Include="bin/IntellaLend.LogInData.dll.config">
       <publishTime>01/12/2021 15:28:32</publishTime>
     </File>
     <File Include="bin/IntellaLend.MappingData.dll">
-      <publishTime>01/12/2021 15:29:41</publishTime>
+      <publishTime>01/27/2021 11:46:02</publishTime>
     </File>
     <File Include="bin/IntellaLend.MappingData.dll.config">
       <publishTime>01/12/2021 15:28:32</publishTime>
     </File>
     <File Include="bin/IntellaLend.MasterData.dll">
-      <publishTime>01/12/2021 15:29:41</publishTime>
+      <publishTime>01/27/2021 11:46:02</publishTime>
     </File>
     <File Include="bin/IntellaLend.MasterData.dll.config">
       <publishTime>01/12/2021 15:28:32</publishTime>
     </File>
     <File Include="bin/IntellaLend.MinIOWrapper.dll">
-      <publishTime>01/12/2021 15:29:38</publishTime>
+      <publishTime>01/27/2021 11:44:36</publishTime>
     </File>
     <File Include="bin/IntellaLend.MinIOWrapper.dll.config">
       <publishTime>07/30/2020 10:10:02</publishTime>
@@ -318,7 +318,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/12/2021 15:29:05</publishTime>
     </File>
     <File Include="bin/IntellaLend.Model.dll">
-      <publishTime>01/12/2021 15:29:37</publishTime>
+      <publishTime>01/27/2021 11:44:33</publishTime>
     </File>
     <File Include="bin/IntellaLend.Model.dll.config">
       <publishTime>07/30/2020 10:04:17</publishTime>
@@ -327,49 +327,49 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/12/2021 15:29:02</publishTime>
     </File>
     <File Include="bin/IntellaLend.QCIQData.dll">
-      <publishTime>01/12/2021 15:29:40</publishTime>
+      <publishTime>01/27/2021 11:45:28</publishTime>
     </File>
     <File Include="bin/IntellaLend.ReportData.dll">
-      <publishTime>01/12/2021 15:29:41</publishTime>
+      <publishTime>01/27/2021 11:46:03</publishTime>
     </File>
     <File Include="bin/IntellaLend.ReportData.dll.config">
       <publishTime>01/12/2021 15:28:31</publishTime>
     </File>
     <File Include="bin/IntellaLend.ReportingService.dll">
-      <publishTime>01/12/2021 15:29:42</publishTime>
+      <publishTime>01/27/2021 11:46:04</publishTime>
     </File>
     <File Include="bin/IntellaLend.ReportingService.dll.config">
       <publishTime>01/12/2021 15:28:31</publishTime>
     </File>
     <File Include="bin/IntellaLend.RuleEngine.dll">
-      <publishTime>01/12/2021 15:29:40</publishTime>
+      <publishTime>01/27/2021 11:45:33</publishTime>
     </File>
     <File Include="bin/IntellaLend.RuleEngine.dll.config">
       <publishTime>11/23/2020 11:28:18</publishTime>
     </File>
     <File Include="bin/IntellaLend.StackingOrderData.dll">
-      <publishTime>01/12/2021 15:29:38</publishTime>
+      <publishTime>01/27/2021 11:45:28</publishTime>
     </File>
     <File Include="bin/IntellaLend.SystemData.dll">
-      <publishTime>01/12/2021 15:29:40</publishTime>
+      <publishTime>01/27/2021 11:46:01</publishTime>
     </File>
     <File Include="bin/IntellaLend.SystemData.dll.config">
       <publishTime>01/12/2021 15:28:31</publishTime>
     </File>
     <File Include="bin/IntellaLend.TenantConfigData.dll">
-      <publishTime>01/12/2021 15:29:38</publishTime>
+      <publishTime>01/27/2021 11:45:27</publishTime>
     </File>
     <File Include="bin/IntellaLend.UploadData.dll">
-      <publishTime>01/12/2021 15:29:42</publishTime>
+      <publishTime>01/27/2021 11:46:02</publishTime>
     </File>
     <File Include="bin/IntellaLend.UploadData.dll.config">
       <publishTime>01/12/2021 15:28:31</publishTime>
     </File>
     <File Include="bin/IntellaLend.UserData.dll">
-      <publishTime>01/12/2021 15:29:38</publishTime>
+      <publishTime>01/27/2021 11:45:29</publishTime>
     </File>
     <File Include="bin/IntellaLend.WFProxy.dll">
-      <publishTime>01/12/2021 15:29:38</publishTime>
+      <publishTime>01/27/2021 11:44:36</publishTime>
     </File>
     <File Include="bin/IntellaLend.WFProxy.dll.config">
       <publishTime>07/30/2020 10:04:37</publishTime>
@@ -378,10 +378,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/12/2021 15:29:09</publishTime>
     </File>
     <File Include="bin/IntellaLendAPI.dll">
-      <publishTime>01/12/2021 15:29:49</publishTime>
+      <publishTime>01/27/2021 11:46:10</publishTime>
     </File>
     <File Include="bin/IntellaLendJWTToken.dll">
-      <publishTime>01/12/2021 15:29:36</publishTime>
+      <publishTime>01/27/2021 11:45:24</publishTime>
     </File>
     <File Include="bin/itextsharp.dll">
       <publishTime>08/22/2017 17:39:42</publishTime>
@@ -483,7 +483,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/22/2005 10:45:24</publishTime>
     </File>
     <File Include="bin/Minio.dll">
-      <publishTime>05/28/2020 21:44:42</publishTime>
+      <publishTime>01/18/2021 10:48:25</publishTime>
     </File>
     <File Include="bin/MiniProfiler.dll">
       <publishTime>08/26/2015 08:57:06</publishTime>
@@ -501,40 +501,40 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/26/2015 08:57:06</publishTime>
     </File>
     <File Include="bin/MTS.Web.Helpers.dll">
-      <publishTime>01/12/2021 15:29:38</publishTime>
+      <publishTime>01/27/2021 11:44:37</publishTime>
     </File>
     <File Include="bin/MTS.Web.Helpers.dll.config">
-      <publishTime>12/01/2020 11:59:00</publishTime>
+      <publishTime>01/18/2021 10:54:07</publishTime>
     </File>
     <File Include="bin/MTS.Web.Helpers.pdb">
-      <publishTime>01/12/2021 15:29:38</publishTime>
+      <publishTime>01/27/2021 11:44:37</publishTime>
     </File>
     <File Include="bin/MTSEntBlocks.DataBlock.dll">
-      <publishTime>01/12/2021 15:29:38</publishTime>
+      <publishTime>01/27/2021 11:44:37</publishTime>
     </File>
     <File Include="bin/MTSEntBlocks.DataBlock.pdb">
-      <publishTime>01/12/2021 15:29:38</publishTime>
+      <publishTime>01/27/2021 11:44:37</publishTime>
     </File>
     <File Include="bin/MTSEntBlocks.ExceptionBlock.dll">
-      <publishTime>01/07/2021 14:12:12</publishTime>
+      <publishTime>01/27/2021 11:44:33</publishTime>
     </File>
     <File Include="bin/MTSEntBlocks.ExceptionBlock.pdb">
-      <publishTime>01/07/2021 14:12:12</publishTime>
+      <publishTime>01/27/2021 11:44:33</publishTime>
     </File>
     <File Include="bin/MTSEntBlocks.LoggerBlock.dll">
-      <publishTime>01/12/2021 15:29:37</publishTime>
+      <publishTime>01/27/2021 11:44:35</publishTime>
     </File>
     <File Include="bin/MTSEntBlocks.LoggerBlock.pdb">
-      <publishTime>01/12/2021 15:29:37</publishTime>
+      <publishTime>01/27/2021 11:44:35</publishTime>
     </File>
     <File Include="bin/MTSEntBlocks.UtilsBlock.dll">
-      <publishTime>01/12/2021 15:29:38</publishTime>
+      <publishTime>01/27/2021 11:44:35</publishTime>
     </File>
     <File Include="bin/MTSEntBlocks.UtilsBlock.pdb">
       <publishTime>01/12/2021 15:29:04</publishTime>
     </File>
     <File Include="bin/MTSEntityDataAccess.dll">
-      <publishTime>01/12/2021 15:29:37</publishTime>
+      <publishTime>01/27/2021 11:44:34</publishTime>
     </File>
     <File Include="bin/MTSEntityDataAccess.dll.config">
       <publishTime>07/30/2020 10:04:50</publishTime>
@@ -543,7 +543,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/12/2021 15:29:04</publishTime>
     </File>
     <File Include="bin/MTSRuleEngine.dll">
-      <publishTime>01/12/2021 15:29:39</publishTime>
+      <publishTime>01/27/2021 11:45:30</publishTime>
     </File>
     <File Include="bin/MTSRuleEngine.dll.config">
       <publishTime>11/23/2020 11:28:18</publishTime>
@@ -1017,7 +1017,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>04/28/2020 15:44:48</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>01/12/2021 15:29:50</publishTime>
+      <publishTime>01/22/2021 13:35:34</publishTime>
     </File>
   </ItemGroup>
 </Project>
