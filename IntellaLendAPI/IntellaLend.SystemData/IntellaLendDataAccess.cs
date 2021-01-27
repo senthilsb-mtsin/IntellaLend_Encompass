@@ -3197,7 +3197,6 @@ namespace IntellaLend.EntityDataHandler
         public object SetMileStoneEvent(string _loanGUID, string _instanceID)
         {
             EToken tokenObject = null;
-            string tentantSchema = string.Empty;
             List<IntellaAndEncompassFetchFields> _enImportFields = new List<IntellaAndEncompassFetchFields>();
             bool loanExists = false;
             using (var db = new DBConnect(SystemSchema))
@@ -3205,10 +3204,13 @@ namespace IntellaLend.EntityDataHandler
                 List<TenantMaster> _tenants = db.TenantMaster.AsNoTracking().ToList();
 
                 Guid loanGUIDValue = new Guid(_loanGUID);
+                DBConnect tenantDB = null;
 
                 foreach (var tenant in _tenants)
                 {
-                    loanExists = db.Loan.AsNoTracking().Any(x => x.EnCompassLoanGUID == loanGUIDValue);
+                    tenantDB = new DBConnect(tenant.TenantSchema);
+
+                    loanExists = tenantDB.Loan.AsNoTracking().Any(x => x.EnCompassLoanGUID == loanGUIDValue);
 
                     if (loanExists)
                     {
@@ -3217,11 +3219,9 @@ namespace IntellaLend.EntityDataHandler
                         _enImportFields = db.IntellaAndEncompassFetchFields.AsNoTracking().Where(m => m.Active && m.TenantSchema == tenant.TenantSchema).ToList();
 
                         if (tokenObject != null)
-                        {
-                            tentantSchema = tenant.TenantSchema;
                             break;
-                        }
                     }
+
                 }
 
 
@@ -3249,22 +3249,19 @@ namespace IntellaLend.EntityDataHandler
 
                         if (loanExists && !(_serviceType.EncompassFieldValue.Split(',').Contains(_eServiceType.Value)))
                         {
-                            using (var tdb = new DBConnect(tentantSchema))
+                            tenantDB.EWebhookEvents.Add(new EWebhookEvents()
                             {
-                                tdb.EWebhookEvents.Add(new EWebhookEvents()
-                                {
-                                    CreatedOn = DateTime.Now,
-                                    EventType = EWebHookEventsLogConstant.MILESTONELOG,
-                                    Status = EWebHookStatusConstant.EWEB_HOOK_STAGED,
-                                    Response = JsonConvert.SerializeObject(new { loanGUID = loanGUIDValue }),
-                                    IsTrailing = false
-                                });
-                                tdb.SaveChanges();
-                            }
-
+                                CreatedOn = DateTime.Now,
+                                EventType = EWebHookEventsLogConstant.MILESTONELOG,
+                                Status = EWebHookStatusConstant.EWEB_HOOK_STAGED,
+                                Response = JsonConvert.SerializeObject(new { loanGUID = loanGUIDValue }),
+                                IsTrailing = false
+                            });
+                            tenantDB.SaveChanges();
                         }
                     }
                 }
+                tenantDB.Dispose();
             }
             return new { success = true };
         }
@@ -3273,7 +3270,6 @@ namespace IntellaLend.EntityDataHandler
         public object SetDocumentEvent(string _loanGUID, string _instanceID)
         {
             EToken tokenObject = null;
-            string tentantSchema = string.Empty;
             List<IntellaAndEncompassFetchFields> _enImportFields = new List<IntellaAndEncompassFetchFields>();
             bool loanExists = false;
             using (var db = new DBConnect(SystemSchema))
@@ -3282,23 +3278,27 @@ namespace IntellaLend.EntityDataHandler
 
                 Guid loanGUIDValue = new Guid(_loanGUID);
 
+                string tenantSchema = string.Empty;
+                DBConnect tenantDB = null;
+
                 foreach (var tenant in _tenants)
                 {
+                    tenantDB = new DBConnect(tenant.TenantSchema);
                     tokenObject = GetEncompassTokenFromTenant(tenant);
 
                     _enImportFields = db.IntellaAndEncompassFetchFields.AsNoTracking().Where(m => m.Active && m.TenantSchema == tenant.TenantSchema).ToList();
 
+                    loanExists = tenantDB.Loan.AsNoTracking().Any(x => x.EnCompassLoanGUID == loanGUIDValue);
 
-                    loanExists = db.Loan.AsNoTracking().Any(x => x.EnCompassLoanGUID == loanGUIDValue);
+                    tenantSchema = tenant.TenantSchema;
 
                     if (tokenObject != null)
-                    {
-                        tentantSchema = tenant.TenantSchema;
                         break;
-                    }
+
                 }
 
-
+                if (tokenObject != null)
+                {
                 string[] FieldIDs = _enImportFields.Select(x => x.EncompassFieldID).ToArray();
 
                 RestWebClient client = new RestWebClient(ConfigurationManager.AppSettings["EncompassConnectorURL"]);
@@ -3320,15 +3320,13 @@ namespace IntellaLend.EntityDataHandler
                     EFieldResponse _eServiceType = _eResponse.Where(x => x.FieldId == _serviceType.EncompassFieldID).FirstOrDefault();
 
                     if (_serviceType.EncompassFieldValue.Split(',').Contains(_eServiceType.Value))
-                    {
-                        using (var tdb = new DBConnect(tentantSchema))
                         {
-                            EWebhookEvents _events = tdb.EWebhookEvents.AsNoTracking().Where(l => l.Response.Contains(loanGUIDValue.ToString())).FirstOrDefault();
-
+                            EWebhookEvents _events = tenantDB.EWebhookEvents.AsNoTracking().Where(l => l.Response.Contains(loanGUIDValue.ToString())).FirstOrDefault();
+                            Logger.WriteTraceLog($"_events == null : {_events == null}");
                             if (_events == null)
                             {
 
-                                tdb.EWebhookEvents.Add(new EWebhookEvents()
+                                tenantDB.EWebhookEvents.Add(new EWebhookEvents()
                                 {
                                     CreatedOn = DateTime.Now,
                                     EventType = EWebHookEventsLogConstant.DOCUMENT_LOG,
@@ -3336,11 +3334,12 @@ namespace IntellaLend.EntityDataHandler
                                     Response = JsonConvert.SerializeObject(new { loanGUID = loanGUIDValue }),
                                     IsTrailing = loanExists
                                 });
-                                tdb.SaveChanges();
+                                tenantDB.SaveChanges();
                             }
-                        }                        
+                        }
                     }
                 }
+                tenantDB.Dispose();
             }
 
             return new { success = true };
