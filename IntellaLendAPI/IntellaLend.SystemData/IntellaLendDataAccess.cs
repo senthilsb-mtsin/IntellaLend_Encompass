@@ -3228,7 +3228,7 @@ namespace IntellaLend.EntityDataHandler
 
                 if (loanExists)
                 {
-                    RequestAgain:
+                RequestAgain:
 
                     string[] FieldIDs = _enImportFields.Select(x => x.EncompassFieldID).ToArray();
 
@@ -3313,7 +3313,7 @@ namespace IntellaLend.EntityDataHandler
 
                 if (tokenObject != null)
                 {
-                    RequestAgain:
+                RequestAgain:
 
                     string[] FieldIDs = _enImportFields.Select(x => x.EncompassFieldID).ToArray();
 
@@ -3360,7 +3360,7 @@ namespace IntellaLend.EntityDataHandler
                         dynamic newToken = GetToken(tenantDB.EncompassConfig.AsNoTracking().ToList());
                         if (newToken != null)
                         {
-                            UpdateNewToken(tenantDB, newToken.TokenType, newToken.Token);
+                            UpdateNewToken(tenantDB, newToken.TokenType.ToString(), newToken.Token.ToString());
                             tokenObject = new EToken() { accessToken = newToken.Token, tokenType = newToken.TokenType };
                         }
                         goto RequestAgain;
@@ -3481,8 +3481,8 @@ namespace IntellaLend.EntityDataHandler
             {
                 object _res = new
                 {
-                    ClientID = _clientID,
-                    ClientSecret = _clientSecret,
+                    ClientID = _clientID.ConfigValue,
+                    ClientSecret = _clientSecret.ConfigValue,
                     GrantType = grantType,
                     Scope = scope,
                     InstanceID = instanctID != null ? instanctID.ConfigValue : string.Empty
@@ -3496,7 +3496,7 @@ namespace IntellaLend.EntityDataHandler
             {
                 string res = result.Content;
                 dynamic resObject = JsonConvert.DeserializeObject<dynamic>(res);
-                return new { Token = resObject.accessToken, TokenType = resObject.tokenType };
+                return new { Token = resObject.access_token, TokenType = resObject.token_type };
             }
 
             return null;
