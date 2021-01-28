@@ -4884,6 +4884,7 @@ namespace IntellaLend.EntityDataHandler
 
                 List<ELoanAttachmentUpload> _eLoanAttachmentSuccess = db.ELoanAttachmentUpload.AsNoTracking()
                     .Where(x => x.Status == EncompassUploadConstant.UPLOAD_COMPLETE && (StatusID == 5 || StatusID == EncompassUploadConstant.UPLOAD_COMPLETE) && x.ModifiedOn >= FromDate && x.ModifiedOn < ToDate)
+                    .Where(y => !db.ELoanAttachmentUpload.Any(z => !y.ID.Equals(z.ID) && y.LoanID.Equals(z.LoanID) && y.ModifiedOn < z.ModifiedOn && z.Status.Equals(EncompassUploadConstant.UPLOAD_COMPLETE)))
                     .ToList();
                 foreach (var eLoanAttachment in _eLoanAttachmentSuccess)
                 {
