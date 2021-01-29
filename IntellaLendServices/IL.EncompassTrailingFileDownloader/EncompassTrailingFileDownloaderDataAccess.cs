@@ -315,41 +315,41 @@ namespace IL.EncompassTrailingFileDownloader
                     List<AuditLoanMissingDoc> auditLoanMissingDoc = db.AuditLoanMissingDoc.AsNoTracking().Where(x => (x.LoanID == loanid) && (x.Status != StatusConstant.OCR_COMPLETED)).ToList();
                     List<EWebhookEvents> _events = db.EWebhookEvents.AsNoTracking().Where(x => x.Response.Contains(encompassGUID) && x.EventType == EWebHookEventsLogConstant.DOCUMENT_LOG && x.IsTrailing == true && (x.Status == EWebHookStatusConstant.EWEB_HOOK_STAGED || x.Status == EWebHookStatusConstant.EWEB_HOOK_PROCESSING)).ToList();
 
-                    if (auditLoanMissingDoc.Count == 0 && _events.Count == 0)
+                    //if (auditLoanMissingDoc.Count == 0 && _events.Count == 0)
+                    //{
+                    //need to call api functionality to auditcomplete
+
+                    LoanCompleteRequest loanReq = new LoanCompleteRequest();
+                    loanReq.LoanID = loanid;
+                    loanReq.TableSchema = tenantSchema;
+                    loanReq.UserName = "";
+                    using (HttpClient client = new HttpClient())
                     {
-                        //need to call api functionality to auditcomplete
+                        string json = JsonConvert.SerializeObject(loanReq);
+                        client.BaseAddress = new Uri(this.baseUri);
+                        var requestContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-                        LoanCompleteRequest loanReq = new LoanCompleteRequest();
-                        loanReq.LoanID = loanid;
-                        loanReq.TableSchema = tenantSchema;
-                        loanReq.UserName = "";
-                        using (HttpClient client = new HttpClient())
+                        try
                         {
-                            string json = JsonConvert.SerializeObject(loanReq);
-                            client.BaseAddress = new Uri(this.baseUri);
-                            var requestContent = new StringContent(json, Encoding.UTF8, "application/json");
-
-                            try
+                            var response = client.PostAsync("EncompassInterface/LoanComplete", requestContent).Result;
+                            if (response.StatusCode == System.Net.HttpStatusCode.OK)
                             {
-                                var response = client.PostAsync("EncompassInterface/LoanComplete", requestContent).Result;
-                                if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                                {
-                                    var resultBody = response.Content.ReadAsStringAsync();
-                                    DeleteWebHookEvents(EventID);
-                                    var jsonres = resultBody.Result;
-                                }
-                                else
-                                    UpdateStatusEwebHookEvents(EventID, EWebHookStatusConstant.EWEB_HOOK_ERROR);
+                                var resultBody = response.Content.ReadAsStringAsync();
+                                DeleteWebHookEvents(EventID);
+                                var jsonres = resultBody.Result;
                             }
-                            catch (Exception ex)
-                            {
+                            else
                                 UpdateStatusEwebHookEvents(EventID, EWebHookStatusConstant.EWEB_HOOK_ERROR);
-                                MTSExceptionHandler.HandleException(ref ex);
-                                throw ex;
-                            }
                         }
-
+                        catch (Exception ex)
+                        {
+                            UpdateStatusEwebHookEvents(EventID, EWebHookStatusConstant.EWEB_HOOK_ERROR);
+                            MTSExceptionHandler.HandleException(ref ex);
+                            throw ex;
+                        }
                     }
+
+                    //}
                 }
             }
         }

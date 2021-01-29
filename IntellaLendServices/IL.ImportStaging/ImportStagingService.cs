@@ -94,8 +94,8 @@ namespace IL.ImportStaging
 
                     if (_importStagings != null)
                     {
-                        if (_missingDoc && !dataAccess.CheckLoanStatus(_importStagings.LoanId))
-                            continue;
+                        //if (_missingDoc && !dataAccess.CheckLoanStatus(_importStagings.LoanId))
+                        //    continue;
 
                         lckpath = Path.ChangeExtension(_xmlFile, LockExt);
                         string imageErrorpath = Path.ChangeExtension(_xmlFile, ImageErrorExt);
