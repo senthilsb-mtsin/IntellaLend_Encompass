@@ -344,6 +344,9 @@ namespace MTSEntityDataAccess
         public DbSet<LoanStipulation> LoanStipulation { get { return this.Set<LoanStipulation>(); } }
         public DbSet<LoanLOSFields> LoanLOSFields { get { return this.Set<LoanLOSFields>(); } }
         public DbSet<EncompassDownloadExceptions> EncompassDownloadExceptions { get { return this.Set<EncompassDownloadExceptions>(); } }
+
+        public DbSet<AuditEWebhookEvents> AuditEWebhookEvents { get { return this.Set<AuditEWebhookEvents>(); } }
+
         public DbSet<ELoanAttachmentUpload> ELoanAttachmentUpload { get { return this.Set<ELoanAttachmentUpload>(); } }
         public DbSet<EUploadStaging> EUploadStaging { get { return this.Set<EUploadStaging>(); } }
 
@@ -399,7 +402,7 @@ namespace MTSEntityDataAccess
         public DbSet<RetainUpdateStagingDetails> RetainUpdateStagingDetails { get { return this.Set<RetainUpdateStagingDetails>(); } }
         public DbSet<CustReviewLoanUploadPath> CustReviewLoanUploadPath { get { return this.Set<CustReviewLoanUploadPath>(); } }
         public DbSet<CustLoantypeMapping> CustLoantypeMapping { get { return this.Set<CustLoantypeMapping>(); } }
-        
+
         #endregion
 
         #region IntellaLend Tables
@@ -684,7 +687,7 @@ namespace MTSEntityDataAccess
 
                 modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<CustLoantypeMapping>()
                   .ToTable("CustLoantypeMapping");
-                
+
 
                 #endregion
 
@@ -695,6 +698,9 @@ namespace MTSEntityDataAccess
 
                 modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<IntellaAndEncompassFetchFields>()
                        .ToTable("IntellaAndEncompassFetchFields");
+
+                modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<AuditEWebhookEvents>()
+                       .ToTable("AuditEWebhookEvents");
 
                 modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<EncompassDownloadExceptions>()
                        .ToTable("EncompassDownloadExceptions");

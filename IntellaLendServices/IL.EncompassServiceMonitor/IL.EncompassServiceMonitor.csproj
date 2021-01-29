@@ -12,6 +12,14 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <ShouldCreateLogs>True</ShouldCreateLogs>
+    <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
+    <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
+    <UpdateAssemblyFileVersion>False</UpdateAssemblyFileVersion>
+    <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
+    <UpdatePackageVersion>False</UpdatePackageVersion>
+    <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
+    <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -81,7 +89,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties VsiEnabled="True" VsiAutoVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoFileVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoInformationalVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiConfigurationBuildAction="UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal" VsiUseGlobalBaseDate="True" VsiDeltaBaseDate="7/30/2020 4:47:29 PM" VsiUseTimeUtc="UseGlobal" VsiSettingsState="Initialized" />
+      <UserProperties VsiSettingsState="Initialized" VsiUseTimeUtc="UseGlobal" VsiDeltaBaseDate="7/30/2020 4:47:29 PM" VsiUseGlobalBaseDate="True" VsiConfigurationBuildAction="UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal" VsiAutoInformationalVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoFileVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiEnabled="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

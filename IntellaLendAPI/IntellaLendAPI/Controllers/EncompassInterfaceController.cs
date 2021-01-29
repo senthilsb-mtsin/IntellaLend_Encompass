@@ -23,7 +23,7 @@ namespace IntellaLendAPI.Controllers
             try
             {
                 response.token = new JWTToken().CreateJWTToken();
-                new LoanService(req.TableSchema).LoanComplete(req.LoanID, req.CompletedUserRoleID, req.CompletedUserID,req.CompleteNotes);
+                new LoanService(req.TableSchema).LoanComplete(req.LoanID, req.CompletedUserRoleID, req.CompletedUserID, req.CompleteNotes);
             }
             catch (Exception exc)
             {
@@ -65,7 +65,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                //response.token = new JWTToken().CreateJWTToken();
                 response.data = JsonConvert.SerializeObject(new IntellaLendServices().SetDocumentEvent(req.meta.resourceId, req.meta.instanceId));
             }
             catch (Exception exc)
@@ -87,7 +87,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                // response.token = new JWTToken().CreateJWTToken();
                 response.data = JsonConvert.SerializeObject(new IntellaLendServices().SetMileStoneEvent(req.meta.resourceId, req.meta.instanceId));
             }
             catch (Exception exc)

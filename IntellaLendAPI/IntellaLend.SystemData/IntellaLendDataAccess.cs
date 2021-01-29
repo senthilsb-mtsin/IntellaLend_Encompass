@@ -2,14 +2,10 @@
 using IntellaLend.MinIOWrapper;
 using IntellaLend.Model;
 using IntellaLend.Model.Encompass;
-using MTS.Web.Helpers;
-using MTSEntBlocks.LoggerBlock;
 using MTSEntityDataAccess;
 using Newtonsoft.Json;
-using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
 
@@ -3192,316 +3188,272 @@ namespace IntellaLend.EntityDataHandler
 
         #region EncompassToken
 
-        private List<List<Dictionary<string, string>>> _queryCombinations = new List<List<Dictionary<string, string>>>();
+        //private List<List<Dictionary<string, string>>> _queryCombinations = new List<List<Dictionary<string, string>>>();
 
 
         public object SetMileStoneEvent(string _loanGUID, string _instanceID)
         {
-            EToken tokenObject = null;
-            List<IntellaAndEncompassFetchFields> _enImportFields = new List<IntellaAndEncompassFetchFields>();
-            bool loanExists = false;
+            bool result = false;
+
             using (var db = new DBConnect(SystemSchema))
             {
                 List<TenantMaster> _tenants = db.TenantMaster.AsNoTracking().ToList();
 
                 Guid loanGUIDValue = new Guid(_loanGUID);
+
                 DBConnect tenantDB = null;
 
                 foreach (var tenant in _tenants)
                 {
                     tenantDB = new DBConnect(tenant.TenantSchema);
 
-                    loanExists = tenantDB.Loan.AsNoTracking().Any(x => x.EnCompassLoanGUID == loanGUIDValue);
+                    bool isTenantFound = FindTenantSchema(tenant, _instanceID);
 
-                    if (loanExists)
+                    if (isTenantFound)
                     {
-                        tokenObject = GetEncompassTokenFromTenant(tenant, _instanceID);
-
-                        _enImportFields = db.IntellaAndEncompassFetchFields.AsNoTracking().Where(m => m.Active && m.TenantSchema == tenant.TenantSchema).ToList();
-
-                        if (tokenObject != null)
-                            break;
+                        tenantDB.AuditEWebhookEvents.Add(new AuditEWebhookEvents()
+                        {
+                            CreatedOn = DateTime.Now,
+                            ModifiedOn = DateTime.Now,
+                            EventType = EWebHookEventsLogConstant.MILESTONELOG,
+                            Response = JsonConvert.SerializeObject(new { loanGUID = loanGUIDValue }),
+                            IsTrailing = false,
+                            Processed = false
+                        });
+                        tenantDB.SaveChanges();
+                        result = true;
+                        break;
                     }
-
                 }
 
 
-                if (loanExists)
-                {
-                RequestAgain:
-
-                    string[] FieldIDs = _enImportFields.Select(x => x.EncompassFieldID).ToArray();
-
-                    RestWebClient client = new RestWebClient(ConfigurationManager.AppSettings["EncompassConnectorURL"]);
-
-                    HttpRequestObject req = new HttpRequestObject() { Content = new { loanGUID = _loanGUID, fieldIDs = FieldIDs }, REQUESTTYPE = "POST", URL = string.Format(EncompassURLILConstant.GET_PREDEFINED_FIELDVALUES) };
-
-                    client.AddDefaultHeader("Token", tokenObject.accessToken);
-                    client.AddDefaultHeader("TokenType", tokenObject.tokenType);
-
-                    var result = client.Execute(req);
-
-                    if (result.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        string res = result.Content;
-                        List<EFieldResponse> _eResponse = JsonConvert.DeserializeObject<List<EFieldResponse>>(res);
-
-                        IntellaAndEncompassFetchFields _serviceType = _enImportFields.Where(x => x.FieldType.Contains(LOSFieldType.SERVICETYPE)).FirstOrDefault();
-
-                        EFieldResponse _eServiceType = _eResponse.Where(x => x.FieldId == _serviceType.EncompassFieldID).FirstOrDefault();
-
-                        if (loanExists && !(_serviceType.EncompassFieldValue.Split(',').Contains(_eServiceType.Value)))
-                        {
-                            tenantDB.EWebhookEvents.Add(new EWebhookEvents()
-                            {
-                                CreatedOn = DateTime.Now,
-                                EventType = EWebHookEventsLogConstant.MILESTONELOG,
-                                Status = EWebHookStatusConstant.EWEB_HOOK_STAGED,
-                                Response = JsonConvert.SerializeObject(new { loanGUID = loanGUIDValue }),
-                                IsTrailing = false
-                            });
-                            tenantDB.SaveChanges();
-                        }
-                    }
-
-                    if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                    {
-                        dynamic newToken = GetToken(tenantDB.EncompassConfig.AsNoTracking().ToList());
-                        if (newToken != null)
-                        {
-                            UpdateNewToken(tenantDB, newToken.TokenType, newToken.Token);
-                            tokenObject = new EToken() { accessToken = newToken.Token, tokenType = newToken.TokenType };
-                        }
-                        goto RequestAgain;
-                    }
-                }
-                tenantDB.Dispose();
+                //if (loanExists)
+                //{
+                //    RequestAgain:
+                //    string[] FieldIDs = _enImportFields.Select(x => x.EncompassFieldID).ToArray();
+                //    RestWebClient client = new RestWebClient(ConfigurationManager.AppSettings["EncompassConnectorURL"]);
+                //    HttpRequestObject req = new HttpRequestObject() { Content = new { loanGUID = _loanGUID, fieldIDs = FieldIDs }, REQUESTTYPE = "POST", URL = string.Format(EncompassURLILConstant.GET_PREDEFINED_FIELDVALUES) };
+                //    client.AddDefaultHeader("Token", tokenObject.accessToken);
+                //    client.AddDefaultHeader("TokenType", tokenObject.tokenType);
+                //    var result = client.Execute(req);
+                //    if (result.StatusCode == System.Net.HttpStatusCode.OK)
+                //    {
+                //        string res = result.Content;
+                //        List<EFieldResponse> _eResponse = JsonConvert.DeserializeObject<List<EFieldResponse>>(res);
+                //        IntellaAndEncompassFetchFields _serviceType = _enImportFields.Where(x => x.FieldType.Contains(LOSFieldType.SERVICETYPE)).FirstOrDefault();
+                //        EFieldResponse _eServiceType = _eResponse.Where(x => x.FieldId == _serviceType.EncompassFieldID).FirstOrDefault();
+                //        if (loanExists && !(_serviceType.EncompassFieldValue.Split(',').Contains(_eServiceType.Value)))
+                //        {
+                //            tenantDB.EWebhookEvents.Add(new EWebhookEvents()
+                //            {
+                //                CreatedOn = DateTime.Now,
+                //                EventType = EWebHookEventsLogConstant.MILESTONELOG,
+                //                Status = EWebHookStatusConstant.EWEB_HOOK_STAGED,
+                //                Response = JsonConvert.SerializeObject(new { loanGUID = loanGUIDValue }),
+                //                IsTrailing = false
+                //            });
+                //            tenantDB.SaveChanges();
+                //        }
+                //    }
+                //    if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                //    {
+                //        dynamic newToken = GetToken(tenantDB.EncompassConfig.AsNoTracking().ToList());
+                //        if (newToken != null)
+                //        {
+                //            UpdateNewToken(tenantDB, newToken.TokenType, newToken.Token);
+                //            tokenObject = new EToken() { accessToken = newToken.Token, tokenType = newToken.TokenType };
+                //        }
+                //        goto RequestAgain;
+                //    }
+                //}
+                //tenantDB.Dispose();
             }
-            return new { success = true };
+            return new { Success = result };
         }
 
 
         public object SetDocumentEvent(string _loanGUID, string _instanceID)
         {
-            EToken tokenObject = null;
-            List<IntellaAndEncompassFetchFields> _enImportFields = new List<IntellaAndEncompassFetchFields>();
-            bool loanExists = false;
+            bool result = false;
+
             using (var db = new DBConnect(SystemSchema))
             {
                 List<TenantMaster> _tenants = db.TenantMaster.AsNoTracking().ToList();
 
                 Guid loanGUIDValue = new Guid(_loanGUID);
 
-                string tenantSchema = string.Empty;
                 DBConnect tenantDB = null;
 
                 foreach (var tenant in _tenants)
                 {
                     tenantDB = new DBConnect(tenant.TenantSchema);
-                    tokenObject = GetEncompassTokenFromTenant(tenant, _instanceID);
 
-                    _enImportFields = db.IntellaAndEncompassFetchFields.AsNoTracking().Where(m => m.Active && m.TenantSchema == tenant.TenantSchema).ToList();
+                    bool isTenantFound = FindTenantSchema(tenant, _instanceID);
 
-                    loanExists = tenantDB.Loan.AsNoTracking().Any(x => x.EnCompassLoanGUID == loanGUIDValue);
+                    if (isTenantFound)
+                    {
+                        bool loanExists = tenantDB.Loan.AsNoTracking().Any(x => x.EnCompassLoanGUID == loanGUIDValue);
 
-                    tenantSchema = tenant.TenantSchema;
-
-                    if (tokenObject != null)
+                        tenantDB.AuditEWebhookEvents.Add(new AuditEWebhookEvents()
+                        {
+                            CreatedOn = DateTime.Now,
+                            ModifiedOn = DateTime.Now,
+                            EventType = EWebHookEventsLogConstant.DOCUMENT_LOG,
+                            Response = JsonConvert.SerializeObject(new { loanGUID = loanGUIDValue }),
+                            IsTrailing = loanExists,
+                            Processed = false
+                        });
+                        tenantDB.SaveChanges();
+                        result = true;
                         break;
-
-                }
-
-                if (tokenObject != null)
-                {
-                RequestAgain:
-
-                    string[] FieldIDs = _enImportFields.Select(x => x.EncompassFieldID).ToArray();
-
-                    RestWebClient client = new RestWebClient(ConfigurationManager.AppSettings["EncompassConnectorURL"]);
-
-                    HttpRequestObject req = new HttpRequestObject() { Content = new { loanGUID = _loanGUID, fieldIDs = FieldIDs }, REQUESTTYPE = "POST", URL = string.Format(EncompassURLILConstant.GET_PREDEFINED_FIELDVALUES) };
-
-                    client.AddDefaultHeader("Token", tokenObject.accessToken);
-                    client.AddDefaultHeader("TokenType", tokenObject.tokenType);
-
-                    IRestResponse result = client.Execute(req);
-
-                    if (result.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        string res = result.Content;
-                        List<EFieldResponse> _eResponse = JsonConvert.DeserializeObject<List<EFieldResponse>>(res);
-
-                        IntellaAndEncompassFetchFields _serviceType = _enImportFields.Where(x => x.FieldType.Contains(LOSFieldType.SERVICETYPE)).FirstOrDefault();
-
-                        EFieldResponse _eServiceType = _eResponse.Where(x => x.FieldId == _serviceType.EncompassFieldID).FirstOrDefault();
-
-                        if (_serviceType.EncompassFieldValue.Split(',').Contains(_eServiceType.Value))
-                        {
-                            EWebhookEvents _events = tenantDB.EWebhookEvents.AsNoTracking().Where(l => l.Response.Contains(loanGUIDValue.ToString())).FirstOrDefault();
-                            Logger.WriteTraceLog($"_events == null : {_events == null}");
-                            if (_events == null)
-                            {
-
-                                tenantDB.EWebhookEvents.Add(new EWebhookEvents()
-                                {
-                                    CreatedOn = DateTime.Now,
-                                    EventType = EWebHookEventsLogConstant.DOCUMENT_LOG,
-                                    Status = EWebHookStatusConstant.EWEB_HOOK_STAGED,
-                                    Response = JsonConvert.SerializeObject(new { loanGUID = loanGUIDValue }),
-                                    IsTrailing = loanExists
-                                });
-                                tenantDB.SaveChanges();
-                            }
-                        }
-                    }
-
-                    if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                    {
-                        dynamic newToken = GetToken(tenantDB.EncompassConfig.AsNoTracking().ToList());
-                        if (newToken != null)
-                        {
-                            UpdateNewToken(tenantDB, newToken.TokenType.ToString(), newToken.Token.ToString());
-                            tokenObject = new EToken() { accessToken = newToken.Token, tokenType = newToken.TokenType };
-                        }
-                        goto RequestAgain;
                     }
                 }
-                tenantDB.Dispose();
             }
 
-            return new { success = true };
+            return new { Success = result };
         }
 
-        public EToken GetEncompassToken(string _instanceID)
-        {
-            using (var db = new DBConnect(SystemSchema))
-            {
-                List<TenantMaster> _tenants = db.TenantMaster.AsNoTracking().ToList();
+        //public EToken GetEncompassToken(string _instanceID)
+        //{
+        //    using (var db = new DBConnect(SystemSchema))
+        //    {
+        //        List<TenantMaster> _tenants = db.TenantMaster.AsNoTracking().ToList();
 
-                foreach (var tenant in _tenants)
-                {
-                    EToken tokenObject = GetEncompassTokenFromTenant(tenant, _instanceID);
+        //        foreach (var tenant in _tenants)
+        //        {
+        //            EToken tokenObject = GetEncompassTokenFromTenant(tenant, _instanceID);
 
-                    if (tokenObject != null)
-                        return tokenObject;
-                }
+        //            if (tokenObject != null)
+        //                return tokenObject;
+        //        }
 
-                return null;
-            }
-        }
+        //        return null;
+        //    }
+        //}
 
-        public EToken GetEncompassTokenFromTenant(TenantMaster tenant, string _instanceID)
+        public bool FindTenantSchema(TenantMaster tenant, string _instanceID)
         {
             using (var db = new DBConnect(tenant.TenantSchema))
             {
                 EncompassConfig _encompassConfig = db.EncompassConfig.AsNoTracking().Where(x => x.ConfigKey == EncompassConfigConstant.INSTANCE_ID).FirstOrDefault();
 
-                if (_encompassConfig != null)
-                {
-                    if (_instanceID == _encompassConfig.ConfigValue)
-                    {
-                        EncompassAccessToken token = db.EncompassAccessToken.AsNoTracking().FirstOrDefault();
-
-                        if (token != null)
-                        {
-                            return new EToken() { accessToken = token.AccessToken, tokenType = token.TokenType };
-                        }
-                        else
-                        {
-                            dynamic newToken = GetToken(db.EncompassConfig.AsNoTracking().ToList());
-                            if (newToken != null)
-                            {
-                                UpdateNewToken(db, newToken.TokenType, newToken.Token);
-                                return new EToken() { accessToken = newToken.Token, tokenType = newToken.TokenType };
-                            }
-                        }
-                    }
-                }
-
-                return null;
+                return (_encompassConfig != null && _instanceID.Trim().ToUpper() == _encompassConfig.ConfigValue.Trim().ToUpper());
             }
         }
 
-        public void UpdateNewToken(DBConnect db, string tokenType, string token)
-        {
-            EncompassAccessToken _accessToken = db.EncompassAccessToken.AsNoTracking().Where(m => m.Active == true).FirstOrDefault();
-            if (_accessToken != null)
-            {
-                _accessToken.AccessToken = token;
-                _accessToken.TokenType = tokenType;
-                _accessToken.ModifiedOn = DateTime.Now;
 
-                db.Entry(_accessToken).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
-            else
-            {
-                _accessToken = new EncompassAccessToken()
-                {
-                    AccessToken = token,
-                    Active = true,
-                    TokenType = tokenType,
-                    CreatedOn = DateTime.Now,
-                    ModifiedOn = DateTime.Now
-                };
-                db.EncompassAccessToken.Add(_accessToken);
-                db.SaveChanges();
-            }
-        }
+        //public EToken GetEncompassTokenFromTenant(TenantMaster tenant, string _instanceID)
+        //{
+        //    using (var db = new DBConnect(tenant.TenantSchema))
+        //    {
+        //        EncompassConfig _encompassConfig = db.EncompassConfig.AsNoTracking().Where(x => x.ConfigKey == EncompassConfigConstant.INSTANCE_ID).FirstOrDefault();
 
-        private object GetToken(List<EncompassConfig> _config)
-        {
-            string grantType = _config.Where(c => c.Type.Contains(EncompassConstant.RequestToken) && c.ConfigKey == EncompassConfigConstant.GRANT_TYPE).FirstOrDefault().ConfigValue;
-            string scope = _config.Where(c => c.Type.Contains(EncompassConstant.RequestToken) && c.ConfigKey == EncompassConfigConstant.SCOPE).FirstOrDefault().ConfigValue;
-            EncompassConfig instanctID = _config.Where(c => c.Type.Contains(EncompassConstant.RequestToken) && c.ConfigKey == EncompassConfigConstant.INSTANCE_ID).FirstOrDefault();
-            EncompassConfig userName = _config.Where(c => c.Type.Contains(EncompassConstant.RequestToken) && c.ConfigKey == EncompassConfigConstant.USERNAME).FirstOrDefault();
-            EncompassConfig password = _config.Where(c => c.Type.Contains(EncompassConstant.RequestToken) && c.ConfigKey == EncompassConfigConstant.PASSWORD).FirstOrDefault();
-            EncompassConfig _clientID = _config.Where(c => c.Type.Contains(EncompassConstant.RequestToken) && c.ConfigKey == EncompassConfigConstant.CLIENT_ID).FirstOrDefault();
-            EncompassConfig _clientSecret = _config.Where(c => c.Type.Contains(EncompassConstant.RequestToken) && c.ConfigKey == EncompassConfigConstant.CLIENT_SECRET).FirstOrDefault();
+        //        if (_encompassConfig != null)
+        //        {
+        //            if (_instanceID == _encompassConfig.ConfigValue)
+        //            {
+        //                EncompassAccessToken token = db.EncompassAccessToken.AsNoTracking().FirstOrDefault();
 
-            RestWebClient client = new RestWebClient(ConfigurationManager.AppSettings["EncompassConnectorURL"]);
+        //                if (token != null)
+        //                {
+        //                    return new EToken() { accessToken = token.AccessToken, tokenType = token.TokenType };
+        //                }
+        //                else
+        //                {
+        //                    dynamic newToken = GetToken(db.EncompassConfig.AsNoTracking().ToList());
+        //                    if (newToken != null)
+        //                    {
+        //                        UpdateNewToken(db, newToken.TokenType, newToken.Token);
+        //                        return new EToken() { accessToken = newToken.Token, tokenType = newToken.TokenType };
+        //                    }
+        //                }
+        //            }
+        //        }
 
-            HttpRequestObject req = null;
-            if (grantType == "password")
-            {
-                object _res = new
-                {
-                    ClientID = _clientID.ConfigValue,
-                    ClientSecret = _clientSecret.ConfigValue,
-                    GrantType = grantType,
-                    Scope = scope,
-                    InstanceID = instanctID != null ? instanctID.ConfigValue : string.Empty,
-                    UserName = userName != null ? userName.ConfigValue : string.Empty,
-                    Password = password != null ? password.ConfigValue : string.Empty
-                };
+        //        return null;
+        //    }
+        //}
 
-                req = new HttpRequestObject() { Content = _res, REQUESTTYPE = "POST", URL = string.Format(EncompassURLILConstant.GET_TOKEN_WITH_USER) };
-            }
-            else
-            {
-                object _res = new
-                {
-                    ClientID = _clientID.ConfigValue,
-                    ClientSecret = _clientSecret.ConfigValue,
-                    GrantType = grantType,
-                    Scope = scope,
-                    InstanceID = instanctID != null ? instanctID.ConfigValue : string.Empty
-                };
-                req = new HttpRequestObject() { Content = _res, REQUESTTYPE = "POST", URL = string.Format(EncompassURLILConstant.GET_TOKEN) };
-            }
+        //public void UpdateNewToken(DBConnect db, string tokenType, string token)
+        //{
+        //    EncompassAccessToken _accessToken = db.EncompassAccessToken.AsNoTracking().Where(m => m.Active == true).FirstOrDefault();
+        //    if (_accessToken != null)
+        //    {
+        //        _accessToken.AccessToken = token;
+        //        _accessToken.TokenType = tokenType;
+        //        _accessToken.ModifiedOn = DateTime.Now;
 
-            IRestResponse result = client.Execute(req);
+        //        db.Entry(_accessToken).State = System.Data.Entity.EntityState.Modified;
+        //        db.SaveChanges();
+        //    }
+        //    else
+        //    {
+        //        _accessToken = new EncompassAccessToken()
+        //        {
+        //            AccessToken = token,
+        //            Active = true,
+        //            TokenType = tokenType,
+        //            CreatedOn = DateTime.Now,
+        //            ModifiedOn = DateTime.Now
+        //        };
+        //        db.EncompassAccessToken.Add(_accessToken);
+        //        db.SaveChanges();
+        //    }
+        //}
 
-            if (result.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                string res = result.Content;
-                dynamic resObject = JsonConvert.DeserializeObject<dynamic>(res);
-                return new { Token = resObject.access_token, TokenType = resObject.token_type };
-            }
+        //private object GetToken(List<EncompassConfig> _config)
+        //{
+        //    string grantType = _config.Where(c => c.Type.Contains(EncompassConstant.RequestToken) && c.ConfigKey == EncompassConfigConstant.GRANT_TYPE).FirstOrDefault().ConfigValue;
+        //    string scope = _config.Where(c => c.Type.Contains(EncompassConstant.RequestToken) && c.ConfigKey == EncompassConfigConstant.SCOPE).FirstOrDefault().ConfigValue;
+        //    EncompassConfig instanctID = _config.Where(c => c.Type.Contains(EncompassConstant.RequestToken) && c.ConfigKey == EncompassConfigConstant.INSTANCE_ID).FirstOrDefault();
+        //    EncompassConfig userName = _config.Where(c => c.Type.Contains(EncompassConstant.RequestToken) && c.ConfigKey == EncompassConfigConstant.USERNAME).FirstOrDefault();
+        //    EncompassConfig password = _config.Where(c => c.Type.Contains(EncompassConstant.RequestToken) && c.ConfigKey == EncompassConfigConstant.PASSWORD).FirstOrDefault();
+        //    EncompassConfig _clientID = _config.Where(c => c.Type.Contains(EncompassConstant.RequestToken) && c.ConfigKey == EncompassConfigConstant.CLIENT_ID).FirstOrDefault();
+        //    EncompassConfig _clientSecret = _config.Where(c => c.Type.Contains(EncompassConstant.RequestToken) && c.ConfigKey == EncompassConfigConstant.CLIENT_SECRET).FirstOrDefault();
 
-            return null;
+        //    RestWebClient client = new RestWebClient(ConfigurationManager.AppSettings["EncompassConnectorURL"]);
 
-        }
+        //    HttpRequestObject req = null;
+        //    if (grantType == "password")
+        //    {
+        //        object _res = new
+        //        {
+        //            ClientID = _clientID.ConfigValue,
+        //            ClientSecret = _clientSecret.ConfigValue,
+        //            GrantType = grantType,
+        //            Scope = scope,
+        //            InstanceID = instanctID != null ? instanctID.ConfigValue : string.Empty,
+        //            UserName = userName != null ? userName.ConfigValue : string.Empty,
+        //            Password = password != null ? password.ConfigValue : string.Empty
+        //        };
+
+        //        req = new HttpRequestObject() { Content = _res, REQUESTTYPE = "POST", URL = string.Format(EncompassURLILConstant.GET_TOKEN_WITH_USER) };
+        //    }
+        //    else
+        //    {
+        //        object _res = new
+        //        {
+        //            ClientID = _clientID.ConfigValue,
+        //            ClientSecret = _clientSecret.ConfigValue,
+        //            GrantType = grantType,
+        //            Scope = scope,
+        //            InstanceID = instanctID != null ? instanctID.ConfigValue : string.Empty
+        //        };
+        //        req = new HttpRequestObject() { Content = _res, REQUESTTYPE = "POST", URL = string.Format(EncompassURLILConstant.GET_TOKEN) };
+        //    }
+
+        //    IRestResponse result = client.Execute(req);
+
+        //    if (result.StatusCode == System.Net.HttpStatusCode.OK)
+        //    {
+        //        string res = result.Content;
+        //        dynamic resObject = JsonConvert.DeserializeObject<dynamic>(res);
+        //        return new { Token = resObject.access_token, TokenType = resObject.token_type };
+        //    }
+
+        //    return null;
+
+        //}
 
 
         #endregion
