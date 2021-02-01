@@ -72,9 +72,27 @@ namespace IL.EncompassEventMonitor
             }
         }
 
+        public void UpdateAuditEwebhookEvents(Int64 _auditID, bool processed)
+        {
+            using (var tenantDB = new DBConnect(TenantSchema))
+            {
+
+                AuditEWebhookEvents _events = tenantDB.AuditEWebhookEvents.Where(x => x.ID == _auditID).FirstOrDefault();
+
+                if (_events != null)
+                {
+                    _events.Processed = processed;
+                    _events.ModifiedOn = DateTime.Now;
+                    tenantDB.Entry(_events).State = System.Data.Entity.EntityState.Modified;
+                    tenantDB.SaveChanges();
+                }
+            }
+        }
+
+
         public List<IntellaAndEncompassFetchFields> GetIntellaAndEncompassFetchFields()
         {
-            using (var db = new DBConnect(TenantSchema))
+            using (var db = new DBConnect(SystemSchema))
             {
                 return db.IntellaAndEncompassFetchFields.AsNoTracking().Where(m => m.Active && m.TenantSchema == TenantSchema).ToList();
             }

@@ -82,6 +82,8 @@ namespace IL.EncompassEventMonitor
             {
                 dataAccess.SetEWebhookEvents(_auditID, _eLoanGUID, EWebHookEventsLogConstant.MILESTONELOG);
             }
+
+            dataAccess.UpdateAuditEwebhookEvents(_auditID, true);
         }
 
         private void CheckDocumentEvent(Int64 _auditID, EncompassWrapperAPI _api, string _eLoanGUID, List<IntellaAndEncompassFetchFields> _enImportFields, EncompassEventMonitorDataAccess dataAccess)
@@ -102,6 +104,8 @@ namespace IL.EncompassEventMonitor
             {
                 dataAccess.SetEWebhookEvents(_auditID, _eLoanGUID, EWebHookEventsLogConstant.DOCUMENT_LOG, loanExists);
             }
+
+            dataAccess.UpdateAuditEwebhookEvents(_auditID, true);
         }
     }
 }
