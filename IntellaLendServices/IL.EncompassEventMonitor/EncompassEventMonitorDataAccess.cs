@@ -49,7 +49,7 @@ namespace IL.EncompassEventMonitor
             {
                 Guid _loanGUID = new Guid(_eLoanGUID);
                 Loan _loan = db.Loan.AsNoTracking().Where(x => x.EnCompassLoanGUID == _loanGUID).FirstOrDefault();
-                List<AuditLoanMissingDoc> auditLoanMissingDoc = db.AuditLoanMissingDoc.AsNoTracking().Where(x => (x.LoanID == _loan.LoanID) && (x.Status != StatusConstant.OCR_COMPLETED)).ToList();
+                List<AuditLoanMissingDoc> auditLoanMissingDoc = db.AuditLoanMissingDoc.AsNoTracking().Where(x => (x.LoanID == _loan.LoanID) && (x.Status != StatusConstant.IDC_COMPLETE)).ToList();
                 List<EWebhookEvents> _events = db.EWebhookEvents.AsNoTracking().Where(x => x.Response.Contains(_eLoanGUID) && x.EventType == EWebHookEventsLogConstant.DOCUMENT_LOG && x.IsTrailing == true && (x.Status == EWebHookStatusConstant.EWEB_HOOK_STAGED || x.Status == EWebHookStatusConstant.EWEB_HOOK_PROCESSING)).ToList();
                 return auditLoanMissingDoc.Count == 0 && _events.Count == 0;
             }
