@@ -3,6 +3,7 @@ using Newtonsoft.Json.Serialization;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -122,9 +123,26 @@ namespace MTS.Web.Helpers
                 else if (httpRequestObject.RequestContentType == "multipart/form-data")
                 {
                     string _fileName = (JsonConvert.DeserializeObject(JsonConvert.SerializeObject(httpRequestObject.Content)))["FileName"];
-                    restRequest.AddFileBytes(_fileName, httpRequestObject.FileStream, _fileName);
+                    //restRequest.AddFileBytes(_fileName, httpRequestObject.FileStream, _fileName);
+                    restRequest.Files.Add(new FileParameter()
+                    {
+                        Name = "file",
+                        Writer = (s) =>
+                        {
+                            var stream = GetStream(httpRequestObject.FileStream);
+                            stream.CopyTo(s);
+                            stream.Dispose();
+                        },
+                        FileName = _fileName,
+                        // ContentType = httpRequestObject.RequestContentType,
+                        ContentLength = httpRequestObject.FileStream.Length
+                    });
                 }
             }
+        }
+        private Stream GetStream(byte[] _file)
+        {
+            return new MemoryStream(_file);
         }
 
         public RestSharp.IRestResponse<T> Execute<T>(HttpRequestObject requestObject)

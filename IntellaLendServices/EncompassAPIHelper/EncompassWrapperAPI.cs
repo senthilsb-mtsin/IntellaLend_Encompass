@@ -72,8 +72,14 @@ namespace EncompassAPIHelper
                 _token.SetToken();
                 goto RequestAgain;
             }
-
-            BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
+            BadErrorResponse _error = new BadErrorResponse();
+            if (!res.Contains("Message"))
+            {
+                ErrorResponse _errorRes = JsonConvert.DeserializeObject<ErrorResponse>(res);
+                _error.Message = _errorRes;
+            }
+            else
+                _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
 
             if (_error.Message.Details.Contains("read-only mode"))
                 throw new EncompassWrapperLoanLockException(_error.Message.Details);
@@ -101,7 +107,14 @@ namespace EncompassAPIHelper
                 _token.SetToken();
                 goto RequestAgain;
             }
-            BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
+            BadErrorResponse _error = new BadErrorResponse();
+            if (!res.Contains("Message"))
+            {
+                ErrorResponse _errorRes = JsonConvert.DeserializeObject<ErrorResponse>(res);
+                _error.Message = _errorRes;
+            }
+            else
+                _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
 
             if (_error.Message.Details.Contains("read-only mode"))
                 throw new EncompassWrapperLoanLockException(_error.Message.Details);
@@ -134,8 +147,14 @@ namespace EncompassAPIHelper
                     _token.SetToken();
                     goto RequestAgain;
                 }
-
-                BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
+                BadErrorResponse _error = new BadErrorResponse();
+                if (!res.Contains("Message"))
+                {
+                    ErrorResponse _errorRes = JsonConvert.DeserializeObject<ErrorResponse>(res);
+                    _error.Message = _errorRes;
+                }
+                else
+                    _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
 
                 if (_error.Message.Details.Contains("read-only mode"))
                     throw new EncompassWrapperLoanLockException(_error.Message.Details);
@@ -169,7 +188,14 @@ namespace EncompassAPIHelper
                 _token.SetToken();
                 goto RequestAgain;
             }
-            BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(result.Content);
+            BadErrorResponse _error = new BadErrorResponse();
+            if (!result.Content.Contains("Message"))
+            {
+                ErrorResponse _errorRes = JsonConvert.DeserializeObject<ErrorResponse>(result.Content);
+                _error.Message = _errorRes;
+            }
+            else
+                _error = JsonConvert.DeserializeObject<BadErrorResponse>(result.Content);
 
             if (_error.Message.Details.Contains("read-only mode"))
                 throw new EncompassWrapperLoanLockException(_error.Message.Details);
@@ -214,7 +240,14 @@ namespace EncompassAPIHelper
                 _token.SetToken();
                 goto RequestAgain;
             }
-            BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
+            BadErrorResponse _error = new BadErrorResponse();
+            if (!res.Contains("Message"))
+            {
+                ErrorResponse _errorRes = JsonConvert.DeserializeObject<ErrorResponse>(res);
+                _error.Message = _errorRes;
+            }
+            else
+                _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
 
             if (_error.Message.Details.Contains("read-only mode"))
                 throw new EncompassWrapperLoanLockException(_error.Message.Details);
@@ -242,7 +275,14 @@ namespace EncompassAPIHelper
                 _token.SetToken();
                 goto RequestAgain;
             }
-            BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
+            BadErrorResponse _error = new BadErrorResponse();
+            if (!res.Contains("Message"))
+            {
+                ErrorResponse _errorRes = JsonConvert.DeserializeObject<ErrorResponse>(res);
+                _error.Message = _errorRes;
+            }
+            else
+                _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
 
             if (_error.Message.Details.Contains("read-only mode"))
                 throw new EncompassWrapperLoanLockException(_error.Message.Details);
@@ -268,7 +308,6 @@ namespace EncompassAPIHelper
 
             LogMessage($"res : {res} , result.StatusCode : {result.StatusCode}");
 
-
             if (result.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 EUploadResponse _upload_res = JsonConvert.DeserializeObject<EUploadResponse>(res);
@@ -287,7 +326,14 @@ namespace EncompassAPIHelper
                 _token.SetToken();
                 goto RequestAgain;
             }
-            BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
+            BadErrorResponse _error = new BadErrorResponse();
+            if (!res.Contains("Message"))
+            {
+                ErrorResponse _errorRes = JsonConvert.DeserializeObject<ErrorResponse>(res);
+                _error.Message = _errorRes;
+            }
+            else
+                _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
 
             if (_error.Message.Details.Contains("read-only mode"))
                 throw new EncompassWrapperLoanLockException(_error.Message.Details);
@@ -324,7 +370,14 @@ namespace EncompassAPIHelper
                 _token.SetToken();
                 goto RequestAgain;
             }
-            BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
+            BadErrorResponse _error = new BadErrorResponse();
+            if (!res.Contains("Message"))
+            {
+                ErrorResponse _errorRes = JsonConvert.DeserializeObject<ErrorResponse>(res);
+                _error.Message = _errorRes;
+            }
+            else
+                _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
 
             if (_error.Message.Details.Contains("read-only mode"))
                 throw new EncompassWrapperLoanLockException(_error.Message.Details);
@@ -360,7 +413,14 @@ namespace EncompassAPIHelper
                 _token.SetToken();
                 goto RequestAgain;
             }
-            BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
+            BadErrorResponse _error = new BadErrorResponse();
+            if (!res.Contains("Message"))
+            {
+                ErrorResponse _errorRes = JsonConvert.DeserializeObject<ErrorResponse>(res);
+                _error.Message = _errorRes;
+            }
+            else
+                _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
 
             if (_error.Message.Details.Contains("read-only mode"))
                 throw new EncompassWrapperLoanLockException(_error.Message.Details);
@@ -396,7 +456,14 @@ namespace EncompassAPIHelper
                 _token.SetToken();
                 goto RequestAgain;
             }
-            BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
+            BadErrorResponse _error = new BadErrorResponse();
+            if (!res.Contains("Message"))
+            {
+                ErrorResponse _errorRes = JsonConvert.DeserializeObject<ErrorResponse>(res);
+                _error.Message = _errorRes;
+            }
+            else
+                _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
 
             if (_error.Message.Details.Contains("read-only mode"))
                 throw new EncompassWrapperLoanLockException(_error.Message.Details);
@@ -428,7 +495,14 @@ namespace EncompassAPIHelper
                 _token.SetToken();
                 goto RequestAgain;
             }
-            BadErrorResponse _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
+            BadErrorResponse _error = new BadErrorResponse();
+            if (!res.Contains("Message"))
+            {
+                ErrorResponse _errorRes = JsonConvert.DeserializeObject<ErrorResponse>(res);
+                _error.Message = _errorRes;
+            }
+            else
+                _error = JsonConvert.DeserializeObject<BadErrorResponse>(res);
 
             if (_error.Message.Details.Contains("read-only mode"))
                 throw new EncompassWrapperLoanLockException(_error.Message.Details);

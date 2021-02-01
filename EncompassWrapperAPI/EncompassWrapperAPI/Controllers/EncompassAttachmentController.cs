@@ -343,20 +343,27 @@ namespace EncompassConnectorAPI.Controllers
         {
             fileName = fileName + ".pdf";
             Logger.WriteErrorLog($"UploadAttachment In : {loanGUID}, {fileName}");
+
             LockResourceModel lockResource = null;
             ErrorResponse _badRequest = new ErrorResponse();
+            Logger.WriteErrorLog($"Before Lock");
             try
             {
+                Logger.WriteErrorLog($"Before provider");
                 var provider = Request.Content.ReadAsMultipartAsync().Result;
-
+                Logger.WriteErrorLog($"provider == null : {provider == null}");
+                Logger.WriteErrorLog($"provider.Contents != null {provider.Contents != null} && provider.Contents.Count > 0 : {provider.Contents.Count > 0}");
                 byte[] fileStream = null;
+                Logger.WriteErrorLog($"After provider");
                 foreach (var file in provider.Contents)
                 {
+                    Logger.WriteErrorLog($"Inside Loop provider");
                     fileStream = file.ReadAsByteArrayAsync().Result;
                 }
-
+                Logger.WriteErrorLog($"Before Lock");
                 lockResource = LoanResource.LockLoan(_client, loanGUID);
                 Logger.WriteErrorLog($"After Lock");
+                Logger.WriteErrorLog($"lockResource : {JsonConvert.SerializeObject(lockResource)}");
                 if (lockResource.Status)
                 {
                     EUploadRequest _uploadReq = new EUploadRequest() { File = new EFileEntities() { Name = fileName, ContentType = ContentTypeConstant.PDF, Size = fileStream.Length }, Title = Path.GetFileNameWithoutExtension(fileName) };
