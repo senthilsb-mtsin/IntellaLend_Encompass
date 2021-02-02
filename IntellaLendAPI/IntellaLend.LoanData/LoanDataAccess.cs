@@ -4846,7 +4846,7 @@ namespace IntellaLend.EntityDataHandler
 
                 foreach (var item in _eLoanData)
                 {
-                    List<ELoanAttachmentUpload> _stg = db.ELoanAttachmentUpload.AsNoTracking().Where(x => x.LoanID == item.LoanID).ToList();
+                    List<ELoanAttachmentUpload> _stg = db.ELoanAttachmentUpload.AsNoTracking().Where(x => x.LoanID == item.LoanID && x.Status != EncompassUploadConstant.UPLOAD_COMPLETE).ToList();
 
                     Int64 status = EncompassUploadConstant.UPLOAD_COMPLETE;
                     string ErrorMsg = string.Empty;
@@ -4861,25 +4861,27 @@ namespace IntellaLend.EntityDataHandler
                         status = EncompassUploadConstant.UPLOAD_PROCESSING;
 
 
-                    ELoanAttachmentUpload _stgVal = _stg.Where(x => x.Error != null && x.Error != "" && x.Status == status).OrderByDescending(x => x.ModifiedOn).FirstOrDefault();
+                    ELoanAttachmentUpload _stgVal = _stg.Where(x => x.Error != null && x.Error != "" && x.Status == status && x.Status != EncompassUploadConstant.UPLOAD_COMPLETE).OrderByDescending(x => x.ModifiedOn).FirstOrDefault();
                     if (_stgVal != null)
-                        ErrorMsg = _stgVal.Error;
-
-                    if (StatusID == status || StatusID == 5)
                     {
-                        _eLoan.Add(new EUploadDetails()
+                        ErrorMsg = _stgVal.Error;
+                        if (StatusID == status || StatusID == 5)
                         {
-                            ID = 0,
-                            ELoanGUID = item.ELoanGUID.GetValueOrDefault(),
-                            TypeOfUpload = EncompassLoanAttachmentDownloadConstant.Loan,
-                            CustomerName = item.CustomerName,
-                            LoanID = item.LoanID,
-                            LoanNumber = item.LoanNumber,
-                            Status = status,
-                            Error = ErrorMsg,
-                            CreatedOn = _stg.OrderByDescending(x => x.ModifiedOn).FirstOrDefault().ModifiedOn
-                        });
+                            _eLoan.Add(new EUploadDetails()
+                            {
+                                ID = 0,
+                                ELoanGUID = item.ELoanGUID.GetValueOrDefault(),
+                                TypeOfUpload = EncompassLoanAttachmentDownloadConstant.Loan,
+                                CustomerName = item.CustomerName,
+                                LoanID = item.LoanID,
+                                LoanNumber = item.LoanNumber,
+                                Status = status,
+                                Error = ErrorMsg,
+                                CreatedOn = _stg.OrderByDescending(x => x.ModifiedOn).FirstOrDefault().ModifiedOn
+                            });
+                        }
                     }
+
                 }
 
                 List<ELoanAttachmentUpload> _eLoanAttachmentSuccess = db.ELoanAttachmentUpload.AsNoTracking()
@@ -5164,7 +5166,9 @@ namespace IntellaLend.EntityDataHandler
                         List<EUploadStaging> _eUploadStagingLoans = db.EUploadStaging.Where(x => x.UploadStagingID == _Loans.ID && x.LoanID == _Loans.LoanID && x.Status == EncompassUploadStagingConstant.UPLOAD_STAGING_FAILED).ToList();
                         foreach (EUploadStaging _eUplod in _eUploadStagingLoans)
                         {
-                            db.Entry(_eUplod).State = EntityState.Deleted;
+                            _eUplod.Status = EncompassUploadConstant.UPLOAD_RETRY;
+                            _eUplod.ModifiedOn = DateTime.Now;
+                            db.Entry(_eUplod).State = EntityState.Modified;
                             db.SaveChanges();
                         }
                         db.SaveChanges();
