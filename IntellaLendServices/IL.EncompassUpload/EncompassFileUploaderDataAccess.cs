@@ -133,7 +133,7 @@ namespace IL.EncompassUpload
 
             using (var db = new DBConnect(TenantSchema))
             {
-                RetryLoans = db.EUploadStaging.AsNoTracking().Where(x => x.UploadStagingID == ID && x.TypeOfUpload == typeOfUpload && (x.Status == EncompassUploadStagingConstant.UPLOAD_STAGING_RETRY) && x.TypeOfUpload != EncompassLoanAttachmentDownloadConstant.RuleResult).ToList();
+                RetryLoans = db.EUploadStaging.AsNoTracking().Where(x => x.UploadStagingID == ID && x.TypeOfUpload == typeOfUpload && (x.Status == EncompassUploadStagingConstant.UPLOAD_STAGING_RETRY || x.Status == EncompassUploadStagingConstant.UPLOAD_STAGING_WAITING) && x.TypeOfUpload != EncompassLoanAttachmentDownloadConstant.RuleResult).ToList();
             }
             return RetryLoans;
         }
