@@ -41,6 +41,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -54,6 +55,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\IntellaLendBlocks\EncompassRequestBody\EncompassRequestBody.csproj">
+      <Project>{29819FFE-7E45-49B9-9A60-0031C48EF9CA}</Project>
+      <Name>EncompassRequestBody</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\IntellaLendBlocks\IntellaLend.Constance\IntellaLend.Constance.csproj">
       <Project>{a8b652a8-ea6c-4080-9f2b-ddda23e14a51}</Project>
       <Name>IntellaLend.Constance</Name>
@@ -74,6 +79,10 @@
       <Project>{9980d561-76c0-486f-9744-5d1bf6512b9d}</Project>
       <Name>MTSEntityDataAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\IntellaLendServices\EncompassAPIHelper\EncompassAPIHelper.csproj">
+      <Project>{35AADAC3-866B-4E35-AD92-D7076ADB2930}</Project>
+      <Name>EncompassAPIHelper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IntellaLend.SystemData\IntellaLend.SystemData.csproj">
       <Project>{b1e28a99-bf1a-4623-8553-d3d4442d66a6}</Project>
       <Name>IntellaLend.SystemData</Name>
@@ -86,7 +95,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties VsiSettingsState="Initialized" VsiUseTimeUtc="UseGlobal" VsiDeltaBaseDate="7/30/2020 3:13:46 PM" VsiUseGlobalBaseDate="True" VsiConfigurationBuildAction="UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal" VsiAutoInformationalVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoFileVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiEnabled="True" BuildVersion_BuildVersioningStyle="YearStamp.MonthStamp.DayStamp.TimeStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_StartDate="2000/1/1" BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" BuildVersion_UseGlobalSettings="True" BuildVersion_UseUniversalClock="True" />
+      <UserProperties BuildVersion_UseUniversalClock="True" BuildVersion_UseGlobalSettings="True" BuildVersion_AssemblyInfoFilename="Properties\AssemblyInfo.cs" BuildVersion_StartDate="2000/1/1" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="YearStamp.MonthStamp.DayStamp.TimeStamp" VsiEnabled="True" VsiAutoVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoFileVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiAutoInformationalVersion="UseGlobalSettings.UseGlobalSettings.UseGlobalSettings.UseGlobalSettings" VsiConfigurationBuildAction="UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal.UseGlobal" VsiUseGlobalBaseDate="True" VsiDeltaBaseDate="7/30/2020 3:13:46 PM" VsiUseTimeUtc="UseGlobal" VsiSettingsState="Initialized" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
