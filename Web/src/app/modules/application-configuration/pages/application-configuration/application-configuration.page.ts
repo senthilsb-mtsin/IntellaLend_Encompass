@@ -9,7 +9,7 @@ import {
 import { AppSettings, WebHookSubscriptionEventTypesConstants } from '@mts-app-setting';
 
 import { ConfigTypeModel } from '../../models/config-type.model';
-import { CheckWebHookEventTypeExistModel } from '../../models/webhook-subscription';
+import { CheckWebHookEventTypeExistModel, CreateWebHookEventTypeModel, DeleteWebHookEventTypeModel } from '../../models/webhook-subscription';
 @Component({
   selector: 'mts-application-configuration',
   templateUrl: './application-configuration.page.html',
@@ -135,11 +135,15 @@ export class ApplicationConfigurationComponent
    * Function to create WebHook subscription for selected Event type
    */
   createWebHookSubscription() {
+    const req: CreateWebHookEventTypeModel = new CreateWebHookEventTypeModel(AppSettings.TenantSchema, this.SelectedEventType);
+    this._appconfigservice.CreateWebHookSubscriptionEventType(req);
   }
   /**
    * Function to delete WebHook Subscription for selected Event type
    */
   deleteWebHookSubscription() {
+    const req: DeleteWebHookEventTypeModel = new DeleteWebHookEventTypeModel(AppSettings.TenantSchema, this.SelectedEventType);
+    this._appconfigservice.DeleteWebHookSubscriptionEventType(req);
   }
   //#endregion
   ngOnDestroy() {

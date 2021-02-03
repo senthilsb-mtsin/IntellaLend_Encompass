@@ -4,7 +4,9 @@ import { ApplicationConfigDataAccess } from './../application-configuration.data
 import { Injectable } from '@angular/core';
 import { ConfigTypeModel } from '../models/config-type.model';
 import { ConfigAllRequestModel } from '../models/get-all-configtype-request.model';
-import { CheckWebHookEventTypeExistModel } from '../models/webhook-subscription';
+import { CheckWebHookEventTypeExistModel, CreateWebHookEventTypeModel, DeleteWebHookEventTypeModel } from '../models/webhook-subscription';
+import { isTruthy } from '@mts-functions/is-truthy.function';
+import { NotificationService } from '@mts-notification';
 const jwtHelper = new JwtHelperService();
 @Injectable()
 export class ApplicationConfigService {
@@ -17,8 +19,10 @@ export class ApplicationConfigService {
   addStipluation$ = new Subject();
   addCategory$ = new Subject();
   addReport$ = new Subject();
-  WebHookSubscriptionEventTypeExist$ = new Subject();
-  constructor(private _appconfigdata: ApplicationConfigDataAccess) { }
+  WebHookSubscriptionEventTypeExist$ = new Subject<boolean>();
+  constructor(
+    private _appconfigdata: ApplicationConfigDataAccess,
+    private _notificationservice: NotificationService) { }
   private GetAllTenantConfig: ConfigAllRequestModel;
   SetConfigType(inputs: ConfigTypeModel) {
     this.configTypevalue$.next(inputs);
@@ -79,6 +83,44 @@ export class ApplicationConfigService {
         if (res !== null) {
           const Result = jwtHelper.decodeToken(res.Data)['data'];
           this.WebHookSubscriptionEventTypeExist$.next(Result.EventTypeExist);
+        }
+      }
+    );
+  }
+  /**
+   * Function to `create` selected `WebHook Event type`
+   * @param req Parameter of type `CreateWebHookEventTypeModel`
+   */
+  CreateWebHookSubscriptionEventType(req: CreateWebHookEventTypeModel) {
+    return this._appconfigdata.CreateWebHookSubscriptionEventType(req).subscribe(
+      (res) => {
+        if (isTruthy(res)) {
+          const Result = jwtHelper.decodeToken(res.Data)['data'];
+          if(Result.Success) {
+            this._notificationservice.showError("WebHook subscription for the Event type was created successfully");
+            this.WebHookSubscriptionEventTypeExist$.next(true);
+          } else {
+            this._notificationservice.showError("Unable to create WebHook subscription for the Event type");
+          }
+        }
+      }
+    );
+  }
+  /**
+   * Function to `delete` selected `WebHook Event type`
+   * @param req Parameter of type `DeleteWebHookEventTypeModel`
+   */
+  DeleteWebHookSubscriptionEventType(req: DeleteWebHookEventTypeModel) {
+    return this._appconfigdata.DeleteWebHookSubscriptionEventType(req).subscribe(
+      (res) => {
+        if (isTruthy(res)) {
+          const Result = jwtHelper.decodeToken(res.Data)['data'];
+          if(Result.Success) {
+            this._notificationservice.showError("WebHook subscription for the Event type was deleted successfully");
+            this.WebHookSubscriptionEventTypeExist$.next(false);
+          } else {
+            this._notificationservice.showError("Unable to delete WebHook subscription for the Event type");
+          }
         }
       }
     );
