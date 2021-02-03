@@ -1336,5 +1336,54 @@ namespace IntellaLendAPI.Controllers
             return response;
         }
         #endregion
+
+
+        #region Encompass Webhook
+
+        [HttpPost]
+        public TokenResponse CreateWebhookSubscription(WebHookSubscriptionRequest request)
+        {
+            Logger.WriteTraceLog($"Start CreateWebhookSubscription()");
+            Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(request)}");
+            TokenResponse response = new TokenResponse();
+            response.ResponseMessage = new ResponseMessage();
+            try
+            {
+                response.token = new JWTToken().CreateJWTToken();
+                response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).CreateWebHookSubscription(request.WebHookType));
+            }
+            catch (Exception ex)
+            {
+                response.token = null;
+                response.ResponseMessage.MessageDesc = ex.Message;
+                MTSExceptionHandler.HandleException(ref ex);
+            }
+            Logger.WriteTraceLog($"End CreateWebhookSubscription()");
+            return response;
+        }
+
+        [HttpPost]
+        public TokenResponse DeleteWebhookSubscription(WebHookSubscriptionRequest request)
+        {
+            Logger.WriteTraceLog($"Start DeleteWebhookSubscription()");
+            Logger.WriteTraceLog($"Request Body : {JsonConvert.SerializeObject(request)}");
+            TokenResponse response = new TokenResponse();
+            response.ResponseMessage = new ResponseMessage();
+            try
+            {
+                response.token = new JWTToken().CreateJWTToken();
+                response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).DeleteWebhookSubscription(request.WebHookType));
+            }
+            catch (Exception ex)
+            {
+                response.token = null;
+                response.ResponseMessage.MessageDesc = ex.Message;
+                MTSExceptionHandler.HandleException(ref ex);
+            }
+            Logger.WriteTraceLog($"End DeleteWebhookSubscription()");
+            return response;
+        }
+
+        #endregion
     }
 }

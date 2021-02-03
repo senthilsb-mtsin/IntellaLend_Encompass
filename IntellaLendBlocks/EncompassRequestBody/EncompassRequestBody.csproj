@@ -93,12 +93,14 @@
     <Compile Include="WrapperReponseModel\EUploadResponse.cs" />
     <Compile Include="WrapperReponseModel\LockRequest.cs" />
     <Compile Include="WrapperReponseModel\LockResponse.cs" />
+    <Compile Include="WrapperReponseModel\WebHookSubscriptions.cs" />
     <Compile Include="WrapperRequestModel\AddRemoveContainerRequest.cs" />
     <Compile Include="WrapperRequestModel\AssignAttachmentRequest.cs" />
     <Compile Include="WrapperRequestModel\EFieldUpdateRequest.cs" />
     <Compile Include="WrapperRequestModel\TokenValidateRequest.cs" />
     <Compile Include="WrapperRequestModel\UpdateCustomFieldRequest.cs" />
     <Compile Include="WrapperRequestModel\UploadRequest.cs" />
+    <Compile Include="WrapperRequestModel\WebHookRequestModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

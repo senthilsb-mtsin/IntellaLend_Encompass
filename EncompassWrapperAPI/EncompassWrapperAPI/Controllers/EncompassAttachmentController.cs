@@ -17,6 +17,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace EncompassConnectorAPI.Controllers
@@ -339,7 +340,7 @@ namespace EncompassConnectorAPI.Controllers
         [HttpPost, Route("api/v1/attachment/upload/{loanGUID}/{fileName}")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success", typeof(EUploadResponse))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request", typeof(ErrorResponse))]
-        public IHttpActionResult UploadAttachment(string loanGUID, string fileName)
+        public async Task<IHttpActionResult> UploadAttachment(string loanGUID, string fileName)
         {
             fileName = fileName + ".pdf";
             Logger.WriteErrorLog($"UploadAttachment In : {loanGUID}, {fileName}");
@@ -349,8 +350,13 @@ namespace EncompassConnectorAPI.Controllers
             Logger.WriteErrorLog($"Before Lock");
             try
             {
+                if (!Request.Content.IsMimeMultipartContent())
+                    throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+
                 Logger.WriteErrorLog($"Before provider");
-                var provider = Request.Content.ReadAsMultipartAsync().Result;
+
+                MultipartMemoryStreamProvider provider = await Request.Content.ReadAsMultipartAsync();
+
                 Logger.WriteErrorLog($"provider == null : {provider == null}");
                 Logger.WriteErrorLog($"provider.Contents != null {provider.Contents != null} && provider.Contents.Count > 0 : {provider.Contents.Count > 0}");
                 byte[] fileStream = null;
