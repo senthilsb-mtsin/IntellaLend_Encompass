@@ -64,6 +64,14 @@
         public const string REMOVE_DOCUMENT = "encompass/v3/loans/{0}/documents?action=remove&lockId={1}&view=id";
 
         #endregion
+
+        #region WebHook Controller
+
+        public const string GET_ALL_WEBHOOK_SUBSCIPTIONS = "webhook/v1/subscriptions";
+        public const string CREATE_WEBHOOK_SUBSCIPTION = "webhook/v1/subscriptions";
+        public const string DELETE_WEBHOOK_SUBSCIPTION = "webhook/v1/subscriptions/{0}";
+
+        #endregion
     }
 
 }

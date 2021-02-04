@@ -91,6 +91,94 @@ namespace EncompassAPIHelper
             throw new EncompassWrapperException($"Unable to get loan(s) from Encompass. Message : {_error.Message.Details}");
         }
 
+        public bool CreateWebhookSubscription(object reqBody)
+        {
+            RequestAgain:
+            LogMessage($"CreateWebhookSubscription ");
+
+            var req = new HttpRequestObject() { REQUESTTYPE = "POST", URL = string.Format(EncompassURLConstant.WEBHOOK_CREATE), Content = reqBody };
+
+            IRestResponse result = client.Execute(req);
+
+            string res = result.Content; Logger.WriteTraceLog($"result.Content : {result.Content}");
+
+            if (result.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return true;
+            }
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                _token.SetToken();
+                goto RequestAgain;
+            }
+
+            return false;
+        }
+
+        public bool DeleteWebhookSubscription(object reqBody)
+        {
+            RequestAgain:
+            LogMessage($"DeleteWebhookSubscription ");
+
+            var req = new HttpRequestObject() { REQUESTTYPE = "POST", URL = string.Format(EncompassURLConstant.WEBHOOK_DELETE), Content = reqBody };
+
+            IRestResponse result = client.Execute(req);
+
+            string res = result.Content; Logger.WriteTraceLog($"result.Content : {result.Content}");
+
+            if (result.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return true;
+            }
+
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                _token.SetToken();
+                goto RequestAgain;
+            }
+
+            return false;
+        }
+
+        public List<WebHookSubscriptions> GetWebhookSubscriptions()
+        {
+            RequestAgain:
+            LogMessage($"GetWebhookSubscriptions ");
+
+            var req = new HttpRequestObject() { REQUESTTYPE = "GET", URL = string.Format(EncompassURLConstant.WEBHOOK_GETALL_SUBSCRIPTION) };
+
+            IRestResponse result = client.Execute(req);
+
+            string res = result.Content; Logger.WriteTraceLog($"result.Content : {result.Content}");
+
+            if (result.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return (JsonConvert.DeserializeObject<List<WebHookSubscriptions>>(res));
+            }
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                _token.SetToken();
+                goto RequestAgain;
+            }
+            BadErrorResponse _error = new BadErrorResponse();
+            if (!res.Contains("Message"))
+            {
+                ErrorResponse _errorRes = JsonConvert.DeserializeObject<ErrorResponse>(res);
+                _error.Message = _errorRes;
+            }
+            else
+            {
+                BadStringErrorResponse _errorStr = JsonConvert.DeserializeObject<BadStringErrorResponse>(result.Content);
+                ErrorResponse _errorRes = JsonConvert.DeserializeObject<ErrorResponse>(_errorStr.Message);
+                _error.Message = _errorRes;
+            }
+
+            if (_error.Message.Details.Contains("read-only mode"))
+                throw new EncompassWrapperLoanLockException(_error.Message.Details);
+
+            throw new EncompassWrapperException($"Unable to get loan(s) from Encompass. Message : {_error.Message.Details}");
+        }
+
         public List<EAttachment> GetUnassignedAttachments(string loanGUID)
         {
             RequestAgain:

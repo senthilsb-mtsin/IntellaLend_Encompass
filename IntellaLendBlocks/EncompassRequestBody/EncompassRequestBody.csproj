@@ -81,6 +81,7 @@
     <Compile Include="EResponseModel\EIDResponse.cs" />
     <Compile Include="EResponseModel\EncompassAttachmentUploadURL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WrapperReponseModel\WebHookSubscriptions.cs" />
     <Compile Include="WrapperReponseModel\AddContainerResponse.cs" />
     <Compile Include="WrapperReponseModel\BadRequestResult.cs" />
     <Compile Include="WrapperReponseModel\EAddRemoveAttachmentResponse.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="WrapperRequestModel\TokenValidateRequest.cs" />
     <Compile Include="WrapperRequestModel\UpdateCustomFieldRequest.cs" />
     <Compile Include="WrapperRequestModel\UploadRequest.cs" />
+    <Compile Include="WrapperRequestModel\WebHookRequestModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

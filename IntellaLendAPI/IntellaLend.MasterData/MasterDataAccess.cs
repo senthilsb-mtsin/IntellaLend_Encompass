@@ -1,10 +1,13 @@
-﻿using IntellaLend.Constance;
+﻿using EncompassAPIHelper;
+using EncompassRequestBody.WrapperReponseModel;
+using IntellaLend.Constance;
 using IntellaLend.Model;
 using MTSEntBlocks.ExceptionBlock.Handlers;
 using MTSEntBlocks.LoggerBlock;
 using MTSEntityDataAccess;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
 
@@ -886,6 +889,82 @@ namespace IntellaLend.EntityDataHandler
 
                 return new { AvailableGroup = _groups.Select(x => x.ADGroupName).ToList(), NewGroups = newGroups };
             }
+        }
+
+        #endregion
+
+        #region WebHook
+
+        public AppConfig GetAppConfig(string _configKey)
+        {
+            using (var db = new DBConnect(SystemSchema))
+            {
+                return db.AppConfig.AsNoTracking().Where(x => x.ConfigKey == _configKey).FirstOrDefault();
+            }
+        }
+
+        public object CreateWebHookSubscription(int _eventType)
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
+                EWebhookEventCreation _req = new EWebhookEventCreation()
+                {
+                    events = new List<string>() { "change" },
+                    resource = "Loan",
+                    signingkey = ConfigurationManager.AppSettings["EWebhookSigningKey"],
+                };
+
+                if (_eventType == EWebHookEventsLogConstant.DOCUMENT_LOG)
+                {
+                    _req.filters = new EWebHookFilter() { attributes = new List<string>() { EWebHookEventAttribute.DocumentAttribute } };
+                    _req.endpoint = ConfigurationManager.AppSettings["EncompassConnectorURL"] + GetAppConfig(ConfigConstant.WEBHOOK_DOCUMENT_CALLBACK).ConfigValue;
+                }
+                else if (_eventType == EWebHookEventsLogConstant.MILESTONELOG)
+                {
+                    _req.filters = new EWebHookFilter() { attributes = new List<string>() { EWebHookEventAttribute.MileStoneAttribute } };
+                    _req.endpoint = ConfigurationManager.AppSettings["EncompassConnectorURL"] + GetAppConfig(ConfigConstant.WEBHOOK_MILESTONE_CALLBACK).ConfigValue;
+                }
+
+                EncompassWrapperAPI _api = new EncompassWrapperAPI(ConfigurationManager.AppSettings["EncompassConnectorURL"], TenantSchema.ToUpper());
+
+                bool result = _api.CreateWebhookSubscription(_req);
+
+                if (result)
+                {
+                    List<WebHookSubscriptions> _subscriptions = _api.GetWebhookSubscriptions();
+                    WebHookSubscriptions _sub = _subscriptions.Where(x => x.Endpoint == _req.endpoint).FirstOrDefault();
+                    if (_sub != null)
+                    {
+                        db.EWebhookSubscription.Add(new EWebhookSubscription() { SubscriptionID = _sub.SubscriptionID, EventType = _eventType, CreatedOn = DateTime.Now });
+                        db.SaveChanges();
+                    }
+                    else
+                        result = false;
+
+                }
+
+                return new { Success = result };
+            }
+        }
+
+        public object DeleteWebhookSubscription(int _eventType)
+        {
+            using (var db = new DBConnect(TenantSchema))
+            {
+                EWebhookSubscription _event = db.EWebhookSubscription.AsNoTracking().Where(x => x.EventType == _eventType).FirstOrDefault();
+                if (_event != null)
+                {
+                    EncompassWrapperAPI _api = new EncompassWrapperAPI(ConfigurationManager.AppSettings["EncompassConnectorURL"], TenantSchema.ToUpper());
+                    bool result = _api.DeleteWebhookSubscription(_event.SubscriptionID);
+                    if (result)
+                    {
+                        db.Entry(_event).State = EntityState.Deleted;
+                        db.SaveChanges();
+                        return new { Success = true };
+                    }
+                }
+            }
+            return new { Success = false };
         }
 
         #endregion

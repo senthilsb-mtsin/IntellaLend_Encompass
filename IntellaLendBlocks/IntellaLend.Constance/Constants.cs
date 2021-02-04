@@ -888,6 +888,8 @@ namespace IntellaLend.Constance
         public static string PDFFOOTER = "PDF_Footer";
         public static string ADDOMAIN = "AD_Domain";
         public static string LDAPURL = "LDAP_url";
+        public static string WEBHOOK_DOCUMENT_CALLBACK = "WEBHOOK_DOCUMENT_CALLBACK";
+        public static string WEBHOOK_MILESTONE_CALLBACK = "WEBHOOK_MILESTONE_CALLBACK";
     }
 
     public class ReportConstant
@@ -1005,6 +1007,12 @@ namespace IntellaLend.Constance
             return Status[StatusID];
         }
 
+    }
+
+    public class EWebHookEventAttribute
+    {
+        public const string DocumentAttribute = "/documentLogs/*";
+        public const string MileStoneAttribute = "/milestoneLogs/*/doneIndicator";
     }
 
     public class EWebHookEventsLogConstant

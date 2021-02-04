@@ -1660,6 +1660,13 @@ namespace IntellaLendAPI.Models
     }
     #endregion
 
+    public class WebHookSubscriptionRequest : IntellaLendRequest
+    {
+        public string TableSchema { get; set; }
+        public int WebHookType { get; set; }
+    }
+
+
     #region Encompass Parking Spot
     public class AddParkingSpot
     {

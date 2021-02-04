@@ -31,6 +31,14 @@ namespace IntellaLend.CommonServices
         {
             return new MasterDataAccess(TenantSchema).GetAllRoleMasterList();
         }
+        public object CreateWebHookSubscription(int eventType)
+        {
+            return new MasterDataAccess(TenantSchema).CreateWebHookSubscription(eventType);
+        }
+        public object DeleteWebhookSubscription(int eventType)
+        {
+            return new MasterDataAccess(TenantSchema).DeleteWebhookSubscription(eventType);
+        }
 
         public List<ADGroupMasters> GetAllADGroupMasterList()
         {
