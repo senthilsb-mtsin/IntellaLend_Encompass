@@ -158,7 +158,7 @@ namespace IntellaLendAPI.App_Start
             if (request.Content == null)
                 LogMessage($"Request Has NO Content");
 
-            if (request.RequestUri.LocalPath.Contains("/api/Login/LoginSubmit") || request.RequestUri.LocalPath.Contains("/api/Image/") || request.RequestUri.LocalPath.Contains("ErrorHandler"))
+            if (request.RequestUri.LocalPath.Contains("/api/Login/LoginSubmit") || request.RequestUri.LocalPath.Contains("api/v1/token") || request.RequestUri.LocalPath.Contains("/api/Image/") || request.RequestUri.LocalPath.Contains("ErrorHandler"))
             {
                 return base.SendAsync(request, cancellationToken);
             }
