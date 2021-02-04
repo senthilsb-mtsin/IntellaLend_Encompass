@@ -32,6 +32,7 @@ export class ApplicationConfigurationComponent
   /**Selected Event type -- number */
   SelectedEventType: number;
   //#endregion
+  promise: Subscription;
   constructor(private _appconfigservice: ApplicationConfigService,
   ) { }
   private subscription: Subscription[] = [];
@@ -129,21 +130,21 @@ export class ApplicationConfigurationComponent
    */
   onChangeEventType() {
     const req: CheckWebHookEventTypeExistModel = new CheckWebHookEventTypeExistModel(AppSettings.TenantSchema, this.SelectedEventType);
-    this._appconfigservice.CheckWebHookSubscriptionEventTypeExist(req);
+    this.promise = this._appconfigservice.CheckWebHookSubscriptionEventTypeExist(req);
   }
   /**
    * Function to create WebHook subscription for selected Event type
    */
   createWebHookSubscription() {
     const req: CreateWebHookEventTypeModel = new CreateWebHookEventTypeModel(AppSettings.TenantSchema, this.SelectedEventType);
-    this._appconfigservice.CreateWebHookSubscriptionEventType(req);
+    this.promise = this._appconfigservice.CreateWebHookSubscriptionEventType(req);
   }
   /**
    * Function to delete WebHook Subscription for selected Event type
    */
   deleteWebHookSubscription() {
     const req: DeleteWebHookEventTypeModel = new DeleteWebHookEventTypeModel(AppSettings.TenantSchema, this.SelectedEventType);
-    this._appconfigservice.DeleteWebHookSubscriptionEventType(req);
+    this.promise = this._appconfigservice.DeleteWebHookSubscriptionEventType(req);
   }
   //#endregion
   ngOnDestroy() {

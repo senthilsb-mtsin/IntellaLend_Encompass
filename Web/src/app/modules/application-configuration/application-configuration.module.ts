@@ -20,6 +20,7 @@ import { BoxSettingsComponent } from './helper-components/box-settings/box-setti
 import { ReportMasterComponent } from './helper-components/report-master/report-master.component';
 import { ConfigSettingsComponent } from './helper-components/config-settings/config-settings.component';
 import { ADConfigurationComponent } from './helper-components/ad-configuration/ad-configuration.component';
+import { NgBusyModule } from '@mts-busy/ng-busy.module';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { ADConfigurationComponent } from './helper-components/ad-configuration/a
     ModalModule.forRoot(),
     MentionModule,
     appconfigrouting,
+    NgBusyModule
   ],
   providers: [
     ApplicationConfigService,

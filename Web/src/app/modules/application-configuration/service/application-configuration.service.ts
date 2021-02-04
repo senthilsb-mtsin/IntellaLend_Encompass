@@ -98,7 +98,7 @@ export class ApplicationConfigService {
         if (isTruthy(res)) {
           const Result = jwtHelper.decodeToken(res.Data)['data'];
           if(Result.Success) {
-            this._notificationservice.showError("WebHook subscription for the Event type was created successfully");
+            this._notificationservice.showSuccess("WebHook subscription for " + WebHookSubscriptionEventTypesConstants.EventTypesDescription[req.WebHookType] + " was created successfully");
             this.WebHookSubscriptionEventTypeExist$.next(true);
           } else {
             this._notificationservice.showError("Unable to create WebHook subscription for " + WebHookSubscriptionEventTypesConstants.EventTypesDescription[req.WebHookType]);
@@ -117,7 +117,7 @@ export class ApplicationConfigService {
         if (isTruthy(res)) {
           const Result = jwtHelper.decodeToken(res.Data)['data'];
           if(Result.Success) {
-            this._notificationservice.showError("WebHook subscription for the Event type was deleted successfully");
+            this._notificationservice.showSuccess("WebHook subscription for " + WebHookSubscriptionEventTypesConstants.EventTypesDescription[req.WebHookType] + " was deleted successfully");
             this.WebHookSubscriptionEventTypeExist$.next(false);
           } else {
             this._notificationservice.showError("Unable to delete WebHook subscription for " + WebHookSubscriptionEventTypesConstants.EventTypesDescription[req.WebHookType]);
