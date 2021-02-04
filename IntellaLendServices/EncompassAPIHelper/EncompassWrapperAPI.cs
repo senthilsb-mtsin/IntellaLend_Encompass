@@ -21,6 +21,7 @@ namespace EncompassAPIHelper
         private string HEADER = string.Empty;
         private TokenAppendHandler _token = null;
         private RestWebClient client;
+        private Int16 maxRetry = 3;
 
         public EncompassWrapperAPI(string _apiURL, string _header)
         {
@@ -33,6 +34,7 @@ namespace EncompassAPIHelper
 
         public List<string> GetLoans(List<Dictionary<string, string>> _eFields)
         {
+            Int16 retryCount = 0;
             RequestAgain:
 
             List<Fields> fieldList = new List<Fields>();
@@ -67,7 +69,7 @@ namespace EncompassAPIHelper
                 return (JsonConvert.DeserializeObject<List<EPipelineLoans>>(res)).Select(x => x.LoanGuid).ToList();
             }
 
-            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized && retryCount++ < this.maxRetry)
             {
                 _token.SetToken();
                 goto RequestAgain;
@@ -93,6 +95,7 @@ namespace EncompassAPIHelper
 
         public bool CreateWebhookSubscription(object reqBody)
         {
+            Int16 retryCount = 0;
             RequestAgain:
             LogMessage($"CreateWebhookSubscription ");
 
@@ -106,7 +109,7 @@ namespace EncompassAPIHelper
             {
                 return true;
             }
-            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized && retryCount++ < this.maxRetry)
             {
                 _token.SetToken();
                 goto RequestAgain;
@@ -117,6 +120,7 @@ namespace EncompassAPIHelper
 
         public bool DeleteWebhookSubscription(object reqBody)
         {
+            Int16 retryCount = 0;
             RequestAgain:
             LogMessage($"DeleteWebhookSubscription ");
 
@@ -131,7 +135,7 @@ namespace EncompassAPIHelper
                 return true;
             }
 
-            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized && retryCount++ < this.maxRetry)
             {
                 _token.SetToken();
                 goto RequestAgain;
@@ -142,6 +146,7 @@ namespace EncompassAPIHelper
 
         public List<WebHookSubscriptions> GetWebhookSubscriptions()
         {
+            Int16 retryCount = 0;
             RequestAgain:
             LogMessage($"GetWebhookSubscriptions ");
 
@@ -155,7 +160,7 @@ namespace EncompassAPIHelper
             {
                 return (JsonConvert.DeserializeObject<List<WebHookSubscriptions>>(res));
             }
-            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized && retryCount++ < this.maxRetry)
             {
                 _token.SetToken();
                 goto RequestAgain;
@@ -181,6 +186,7 @@ namespace EncompassAPIHelper
 
         public List<EAttachment> GetUnassignedAttachments(string loanGUID)
         {
+            Int16 retryCount = 0;
             RequestAgain:
             LogMessage($"GetUnassignedAttachments : {loanGUID}");
 
@@ -194,7 +200,7 @@ namespace EncompassAPIHelper
             {
                 return JsonConvert.DeserializeObject<List<EAttachment>>(res);
             }
-            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized && retryCount++ < this.maxRetry)
             {
                 _token.SetToken();
                 goto RequestAgain;
@@ -220,6 +226,7 @@ namespace EncompassAPIHelper
 
         public void UploadProcessFlag(string loanGUID, string fieldID, string fieldValue)
         {
+            Int16 retryCount = 0;
             RequestAgain:
             UpdateCustomFieldRequest _req = new UpdateCustomFieldRequest()
             {
@@ -238,7 +245,7 @@ namespace EncompassAPIHelper
 
             if (result.StatusCode != System.Net.HttpStatusCode.OK)
             {
-                if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized && retryCount++ < this.maxRetry)
                 {
                     _token.SetToken();
                     goto RequestAgain;
@@ -266,6 +273,7 @@ namespace EncompassAPIHelper
 
         public byte[] DownloadAttachment(string loanGUID, string attachmentGUID, string AttachmentName)
         {
+            Int16 retryCount = 0;
             RequestAgain:
             LogMessage($"DownloadAttachment : {loanGUID}, {attachmentGUID}");
 
@@ -283,7 +291,7 @@ namespace EncompassAPIHelper
             {
                 return result.RawBytes;
             }
-            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized && retryCount++ < this.maxRetry)
             {
                 _token.SetToken();
                 goto RequestAgain;
@@ -326,6 +334,7 @@ namespace EncompassAPIHelper
         //added by mani
         public List<EContainer> GetAllLoanDocuments(string loanGUID)
         {
+            Int16 retryCount = 0;
             RequestAgain:
             LogMessage($"GetAllLoanDocuments : {loanGUID}");
 
@@ -339,7 +348,7 @@ namespace EncompassAPIHelper
             {
                 return JsonConvert.DeserializeObject<List<EContainer>>(res);
             }
-            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized && retryCount++ < this.maxRetry)
             {
                 _token.SetToken();
                 goto RequestAgain;
@@ -365,6 +374,7 @@ namespace EncompassAPIHelper
 
         public EAttachment GetAttachment(string loanGUID, string attachmentID)
         {
+            Int16 retryCount = 0;
             RequestAgain:
             LogMessage($"GetAttachments : {loanGUID},{attachmentID}");
 
@@ -378,7 +388,7 @@ namespace EncompassAPIHelper
             {
                 return JsonConvert.DeserializeObject<EAttachment>(res);
             }
-            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized && retryCount++ < this.maxRetry)
             {
                 _token.SetToken();
                 goto RequestAgain;
@@ -404,6 +414,7 @@ namespace EncompassAPIHelper
 
         public EUploadResponse UploadAttachment(string loanGUID, string fileName, string fileNameWithExtension, byte[] file)
         {
+            Int16 retryCount = 0;
             RequestAgain:
             //MultipartFormDataContent form = new MultipartFormDataContent();
             LogMessage($"UploadAttachment : {loanGUID}, Filename : {fileName}, FileLength : {file.Length}");
@@ -433,7 +444,7 @@ namespace EncompassAPIHelper
                     throw new EncompassWrapperException($"Unable to upload the attachment ('{fileName}'). Message : {_upload_res.Message}");
                 }
             }
-            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized && retryCount++ < this.maxRetry)
             {
                 _token.SetToken();
                 goto RequestAgain;
@@ -460,6 +471,7 @@ namespace EncompassAPIHelper
 
         public AddContainerResponse AddDocument(string loanGUID, string documentName)
         {
+            Int16 retryCount = 0;
             RequestAgain:
             AddContainerRequest _req = new AddContainerRequest()
             {
@@ -481,7 +493,7 @@ namespace EncompassAPIHelper
                 else
                     return null;
             }
-            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized && retryCount++ < this.maxRetry)
             {
                 _token.SetToken();
                 goto RequestAgain;
@@ -507,6 +519,7 @@ namespace EncompassAPIHelper
 
         public bool AssignDocumentAttachments(string loanGUID, string documentGuid, List<string> attachmentGUIDs, string FolderName)
         {
+            Int16 retryCount = 0;
             RequestAgain:
             AssignAttachmentRequest _req = new AssignAttachmentRequest()
             {
@@ -528,7 +541,7 @@ namespace EncompassAPIHelper
                 if (_res.Status)
                     return _res.Status;
             }
-            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized && retryCount++ < this.maxRetry)
             {
                 _token.SetToken();
                 goto RequestAgain;
@@ -554,6 +567,7 @@ namespace EncompassAPIHelper
 
         public bool RemoveDocumentAttachments(string loanGUID, string documentGuid, List<string> attachmentGUIDs, string FolderName)
         {
+            Int16 retryCount = 0;
             RequestAgain:
             AssignAttachmentRequest _req = new AssignAttachmentRequest()
             {
@@ -575,7 +589,7 @@ namespace EncompassAPIHelper
                 if (_res.Status)
                     return _res.Status;
             }
-            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized && retryCount++ < this.maxRetry)
             {
                 _token.SetToken();
                 goto RequestAgain;
@@ -601,6 +615,7 @@ namespace EncompassAPIHelper
 
         public List<EFieldResponse> GetPredefinedFieldValues(string loanGUID, string[] fieldIds)
         {
+            Int16 retryCount = 0;
             RequestAgain:
             FieldGetRequest _req = new FieldGetRequest()
             {
@@ -618,7 +633,7 @@ namespace EncompassAPIHelper
             {
                 return JsonConvert.DeserializeObject<List<EFieldResponse>>(res);
             }
-            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            if (result.StatusCode == System.Net.HttpStatusCode.Unauthorized && retryCount++ < this.maxRetry)
             {
                 _token.SetToken();
                 goto RequestAgain;

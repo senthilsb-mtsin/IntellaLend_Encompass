@@ -7,6 +7,7 @@ import { ConfigAllRequestModel } from '../models/get-all-configtype-request.mode
 import { CheckWebHookEventTypeExistModel, CreateWebHookEventTypeModel, DeleteWebHookEventTypeModel } from '../models/webhook-subscription';
 import { isTruthy } from '@mts-functions/is-truthy.function';
 import { NotificationService } from '@mts-notification';
+import { WebHookSubscriptionEventTypesConstants } from '@mts-app-setting';
 const jwtHelper = new JwtHelperService();
 @Injectable()
 export class ApplicationConfigService {
@@ -100,7 +101,7 @@ export class ApplicationConfigService {
             this._notificationservice.showError("WebHook subscription for the Event type was created successfully");
             this.WebHookSubscriptionEventTypeExist$.next(true);
           } else {
-            this._notificationservice.showError("Unable to create WebHook subscription for the Event type");
+            this._notificationservice.showError("Unable to create WebHook subscription for " + WebHookSubscriptionEventTypesConstants.EventTypesDescription[req.WebHookType]);
           }
         }
       }
@@ -119,7 +120,7 @@ export class ApplicationConfigService {
             this._notificationservice.showError("WebHook subscription for the Event type was deleted successfully");
             this.WebHookSubscriptionEventTypeExist$.next(false);
           } else {
-            this._notificationservice.showError("Unable to delete WebHook subscription for the Event type");
+            this._notificationservice.showError("Unable to delete WebHook subscription for " + WebHookSubscriptionEventTypesConstants.EventTypesDescription[req.WebHookType]);
           }
         }
       }

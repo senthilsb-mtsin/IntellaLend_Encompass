@@ -29,7 +29,7 @@ namespace EncompassConnectorAPI.Controllers
         ///</Summary>
         public EncompassWebHookController()
         {
-            _client = new RestWebClient(ConfigurationManager.AppSettings["IntellaLendAPIURL"]);
+            _client = new RestWebClient(ConfigurationManager.AppSettings["EncompassURL"]);
         }
 
         #endregion
