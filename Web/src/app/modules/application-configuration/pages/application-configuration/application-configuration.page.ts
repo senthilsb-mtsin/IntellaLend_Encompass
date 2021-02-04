@@ -57,7 +57,7 @@ export class ApplicationConfigurationComponent
         }
       )
     );
-    this.SelectedEventType = WebHookSubscriptionEventTypesConstants.MilestoneLog;
+    this.SelectedEventType = WebHookSubscriptionEventTypesConstants.DocumentLog;
     this.onChangeEventType();
   }
 
