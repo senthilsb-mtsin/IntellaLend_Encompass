@@ -199,6 +199,21 @@ namespace IntellaLendAPI.Models
         public string data { get; set; }
     }
 
+    public class ExternalTokenResponse
+    {
+        public string Token { get; set; }
+        public string Type { get; set; }
+        public string ErroMessage { get; set; }
+    }
+
+    public class CreateTokenRequest
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public DateTime UTCTime { get; set; }
+        public Int32 TokenExpireTime { get; set; }
+    }
+
     public class UserSecurityQuestionRequest : IntellaLendRequest
     {
         public string TableSchema { get; set; }

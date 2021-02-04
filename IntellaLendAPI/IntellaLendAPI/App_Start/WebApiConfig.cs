@@ -19,7 +19,7 @@ namespace IntellaLendAPI
             });
 
             // Web API routes
-            //config.MapHttpAttributeRoutes();
+            config.MapHttpAttributeRoutes();
 
             //config.Routes.MapHttpRoute(
             //    name: "CustomApi",
@@ -30,6 +30,7 @@ namespace IntellaLendAPI
             //    name: "CustomApi",
             //    routeTemplate: "api/{controller}/{action}"
             //);
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{action}/{id}",
@@ -38,7 +39,7 @@ namespace IntellaLendAPI
 
 
             //To Trace 
-           // unSecuredRoute.EnableSystemDiagnosticsTracing();
+            // unSecuredRoute.EnableSystemDiagnosticsTracing();
             config.EnableSystemDiagnosticsTracing();
         }
     }
