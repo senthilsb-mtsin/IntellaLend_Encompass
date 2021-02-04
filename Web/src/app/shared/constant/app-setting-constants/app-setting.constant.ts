@@ -177,17 +177,17 @@ export class EncompassUploadStagingConstant {
   };
 }// tslint:disable-next-line: max-classes-per-file
 export class WebHookSubscriptionEventTypesConstants {
-  static MilestoneLog = 1;
-  static DocumentLog = 2;
+  static DocumentLog = 1;
+  static MilestoneLog = 2;
 
   static EventTypesDescription = {
-    '1': 'Milestone Log',
-    '2': 'Document Log'
+    '1': 'Document Log',
+    '2': 'Milestone Log'
   };
 
   static EventTypesDropdown = [
-    WebHookSubscriptionEventTypesConstants.MilestoneLog,
-    WebHookSubscriptionEventTypesConstants.DocumentLog
+    WebHookSubscriptionEventTypesConstants.DocumentLog,
+    WebHookSubscriptionEventTypesConstants.MilestoneLog
   ];
 }
 export class ADConfigurationConstant {

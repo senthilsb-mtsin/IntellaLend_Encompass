@@ -38,6 +38,8 @@ export class AppConfigApiUrlConstant {
 
   // WebHook Subscription
   static CHECK_WEBHOOK_SUBSCRIPTION_EVENTTYPE_EXIST = 'TenantConfig/CheckWebHookSubscriptionEventTypeExist';
+  static CREATE_WEBHOOK_SUBSCRIPTION_EVENTTYPE = 'Master/CreateWebhookSubscription';
+  static DELETE_WEBHOOK_SUBSCRIPTION_EVENTTYPE = 'Master/DeleteWebhookSubscription';
 
   // AD-Configuration
   static GET_ADGroups = 'AD/GetADGroups';

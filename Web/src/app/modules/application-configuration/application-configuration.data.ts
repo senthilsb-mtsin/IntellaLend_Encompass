@@ -17,7 +17,7 @@ import {
 } from './models/box-setting.model';
 import { ConfigAllRequestModel } from './models/get-all-configtype-request.model';
 import { SaveCategorymodel, UpdateCategorymodel } from './models/category-list.model';
-import { CheckWebHookEventTypeExistModel } from './models/webhook-subscription';
+import { CheckWebHookEventTypeExistModel, CreateWebHookEventTypeModel, DeleteWebHookEventTypeModel } from './models/webhook-subscription';
 @Injectable()
 export class ApplicationConfigDataAccess {
   constructor(private _apiService: APIService) { }
@@ -230,5 +230,23 @@ export class ApplicationConfigDataAccess {
     return this._apiService.authHttpPost(
       AppConfigApiUrlConstant.CHECK_WEBHOOK_SUBSCRIPTION_EVENTTYPE_EXIST, req
       );
+  }
+  /**
+   * Function to `create` selected `WebHook Event type`
+   * @param req Parameter of type `CreateWebHookEventTypeModel`
+   */
+  CreateWebHookSubscriptionEventType(req: CreateWebHookEventTypeModel) {
+    return this._apiService.authHttpPost(
+      AppConfigApiUrlConstant.CREATE_WEBHOOK_SUBSCRIPTION_EVENTTYPE, req
+    )
+  }
+  /**
+   * Function to `delete` selected `WebHook Event type`
+   * @param req Parameter of type `DeleteWebHookEventTypeModel`
+   */
+  DeleteWebHookSubscriptionEventType(req: DeleteWebHookEventTypeModel) {
+    return this._apiService.authHttpPost(
+      AppConfigApiUrlConstant.DELETE_WEBHOOK_SUBSCRIPTION_EVENTTYPE, req
+    )
   }
 }
