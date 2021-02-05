@@ -64,14 +64,16 @@ export class DocumentTypeService {
         this.DocumentTypeData.next(this._documentTypeRowData);
     }
     CheckDocumentAvailable(_req: AddDocumentTypeRequestModel) {
-        const input = { DocumentTypeName: _req.DocumentTypeName };
+        const input = { DocumentTypeID: 0, DocumentTypeName: _req.DocumentTypeName, ParkingSpotID: _req.ParkingSpotID };
         return this._documentDataAccess.CheckDocumentExistForEdit(JSON.stringify(input)).subscribe(res => {
             if (isTruthy(res)) {
                 const data = jwtHelper.decodeToken(res.Data)['data'];
-                if (data.length === 0) {
+                if (!data.DocumentAlreadyExists && !data.EFolderAlreadyMapped) {
                     this.AddDocumentType(_req);
-                } else {
+                } else if(data.DocumentAlreadyExists) {
                     this._notificationService.showError('Document Already Available');
+                } else if(data.EFolderAlreadyMapped) {
+                    this._notificationService.showError('EFolder already mapped to other document');
                 }
             }
         });
@@ -116,21 +118,16 @@ export class DocumentTypeService {
             });
     }
     CheckDocumentAvailableForEdit(_req: any) {
-        const input = { DocumentTypeName: _req.documentType.Name };
+        const input = { DocumentTypeID: _req.documentType.DocumentTypeID, DocumentTypeName: _req.documentType.Name, ParkingSpotID: _req.ParkingSpotID };
         return this._documentDataAccess.CheckDocumentExistForEdit(JSON.stringify(input)).subscribe(res => {
             if (isTruthy(res)) {
                 const data = jwtHelper.decodeToken(res.Data)['data'];
-                if (data.length === 1) {
-                    if (data[0].DocumentTypeID === _req.documentType.DocumentTypeID) {
-                        this.EditDocumentType(_req);
-                    } else {
-                        this._notificationService.showError('Document Already Available');
-                    }
-
-                } else if (data.length === 0) {
+                if (!data.DocumentAlreadyExists && !data.EFolderAlreadyMapped) {
                     this.EditDocumentType(_req);
-                } else {
+                } else if(data.DocumentAlreadyExists) {
                     this._notificationService.showError('Document Already Available');
+                } else if(data.EFolderAlreadyMapped) {
+                    this._notificationService.showError('EFolder already mapped to other document');
                 }
             }
         });

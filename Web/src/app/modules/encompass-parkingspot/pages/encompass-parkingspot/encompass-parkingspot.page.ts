@@ -48,7 +48,7 @@ export class EncompassParkingspotComponent
         info: false,
         selector: 'td:not(:last-child)',
       },
-      order: [[0, 'desc']],
+      order: [[1, 'asc']],
       iDisplayLength: 10,
       aLengthMenu: [
         [5, 10, 25, 50, -1],

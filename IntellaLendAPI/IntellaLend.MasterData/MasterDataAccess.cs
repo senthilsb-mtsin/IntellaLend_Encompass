@@ -81,7 +81,7 @@ namespace IntellaLend.EntityDataHandler
             List<EncompassParkingSpot> EncompassParkingSpot = null;
             using (var db = new DBConnect(SystemSchema))
             {
-                EncompassParkingSpot = db.EncompassParkingSpot.AsNoTracking().ToList();
+                EncompassParkingSpot = db.EncompassParkingSpot.AsNoTracking().OrderBy(x => x.ParkingSpotName).ToList();
             }
             return EncompassParkingSpot;
         }
@@ -751,12 +751,13 @@ namespace IntellaLend.EntityDataHandler
             }
             return docTypeMasters;
         }
-        public List<DocumentTypeMaster> CheckDocumentDupForEdit(string DocumentTypeName)
+        public object CheckDocumentDupForEdit(Int64 DocumentTypeID, string DocumentTypeName, Int64 ParkingSpotID)
         {
             using (var db = new DBConnect(SystemSchema))
             {
-                List<DocumentTypeMaster> _doc = db.DocumentTypeMaster.AsNoTracking().Where(d => d.Name == DocumentTypeName).ToList();
-                return _doc;
+                DocumentTypeMaster _doc = db.DocumentTypeMaster.AsNoTracking().Where(d => d.Name == DocumentTypeName && (DocumentTypeID == 0 || d.DocumentTypeID != DocumentTypeID)).FirstOrDefault();
+                EncompassParkingSpot encompassParkingSpot = db.EncompassParkingSpot.AsNoTracking().Where(x => x.ID == ParkingSpotID && x.DocumentTypeID.HasValue && x.DocumentTypeID.Value != 0 && x.DocumentTypeID.Value != DocumentTypeID).FirstOrDefault();
+                return new { DocumentAlreadyExists = _doc != null, EFolderAlreadyMapped = encompassParkingSpot != null };
             }
         }
 

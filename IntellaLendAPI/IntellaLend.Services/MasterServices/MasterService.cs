@@ -164,9 +164,9 @@ namespace IntellaLend.CommonServices
         {
             return new MasterDataAccess().CheckDocumentDup(DocumentTypeName);
         }
-        public List<DocumentTypeMaster> CheckDocumentDupForEdit(string DocumentTypeName)
+        public object CheckDocumentDupForEdit(Int64 DocumentTypeID, string DocumentTypeName, Int64 ParkingSpotID)
         {
-            return new MasterDataAccess().CheckDocumentDupForEdit(DocumentTypeName);
+            return new MasterDataAccess().CheckDocumentDupForEdit(DocumentTypeID, DocumentTypeName, ParkingSpotID);
         }
 
         public Int64 AddDocumentType(string DocumentTypeName, string DocumentDisplayName, Int32 DocumentLevel, Int32 EncompassParkingSpotID)
