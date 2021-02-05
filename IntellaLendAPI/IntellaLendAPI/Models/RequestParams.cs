@@ -733,7 +733,9 @@ namespace IntellaLendAPI.Models
 
     public class DocumentTypeDupRequest : IntellaLendRequest
     {
+        public Int64 DocumentTypeID { get; set; }
         public string DocumentTypeName { get; set; }
+        public Int64 ParkingSpotID { get; set; }
     }
 
     public class AddDocumentTypeRequest : IntellaLendRequest

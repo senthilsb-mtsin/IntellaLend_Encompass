@@ -829,7 +829,7 @@ namespace IntellaLendAPI.Controllers
             try
             {
                 response.token = new JWTToken().CreateJWTToken();
-                response.data = new JWTToken().CreateJWTToken(new MasterService().CheckDocumentDupForEdit(request.DocumentTypeName));
+                response.data = new JWTToken().CreateJWTToken(new MasterService().CheckDocumentDupForEdit(request.DocumentTypeID, request.DocumentTypeName, request.ParkingSpotID));
             }
             catch (Exception ex)
             {
