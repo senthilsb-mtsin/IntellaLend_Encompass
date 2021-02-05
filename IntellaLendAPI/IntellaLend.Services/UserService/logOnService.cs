@@ -56,7 +56,7 @@ namespace IntellaLend.CommonServices
                                 Logger.WriteTraceLog($"_config != null : {_config != null}");
                                 if (ADService.LogonUser(UserName, Password, _config.ConfigValue))
                                 {
-                                    Logger.WriteTraceLog($"Valid Login"); 
+                                    Logger.WriteTraceLog($"Valid Login");
                                     _config = new CustConfigDataAccess(TableSchema).GetCustomerConfiguraton(ConfigConstant.LDAPURL);
                                     User adUser = new ADService(TableSchema).GetUser(UserName, _config.ConfigValue);
                                     if (user == null)
@@ -158,6 +158,19 @@ namespace IntellaLend.CommonServices
         //    return new logOnDataAccess(TableSchema).GetUserHash(UserID);
         //}
 
+
+        public bool APIUserCheck(string UserName, string Password)
+        {
+            User user = new UserDataAccess(TableSchema).GetUser(UserName);
+
+            Logger.WriteTraceLog($"UserName : {UserName}");
+            Logger.WriteTraceLog($"user != null : {user != null}");
+
+            if (user != null && user.UserType == UserLoginType.CredentialLogin)
+                return userCheck(user, MD5Hashing.Create(Password));
+
+            return false;
+        }
 
         #endregion        
 
