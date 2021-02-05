@@ -81,7 +81,7 @@ namespace IntellaLend.EntityDataHandler
             List<EncompassParkingSpot> EncompassParkingSpot = null;
             using (var db = new DBConnect(SystemSchema))
             {
-                EncompassParkingSpot = db.EncompassParkingSpot.AsNoTracking().ToList();
+                EncompassParkingSpot = db.EncompassParkingSpot.AsNoTracking().OrderBy(x => x.ParkingSpotName).ToList();
             }
             return EncompassParkingSpot;
         }

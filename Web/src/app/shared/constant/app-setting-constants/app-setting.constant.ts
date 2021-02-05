@@ -154,12 +154,14 @@ export class EncompassUploadStagingConstant {
   static UPLOAD_STAGING_WAITING = 0;
   static UPLOAD_STAGING_PROCESSING = 1;
   static UPLOAD_STAGING_COMPLETE = 2;
+  static UPLOAD_RETRY = 3;
   static UPLOAD_STAGING_FAILED = -1;
 
   static ENCOMPASS_UPLOAD_STAGING_STATUS_DESCRIPTION = {
     '0': 'Export  waiting',
     '1': 'Export  Processing',
     '2': 'Export  Success',
+    '3': 'Export Retry',
     '-1': 'Export  Error',
   };
 
@@ -167,12 +169,14 @@ export class EncompassUploadStagingConstant {
     '0': 'label-info',
     '1': 'label-primary',
     '2': 'label-success',
+    '3': 'label-default',
     '-1': 'label-danger',
   };
   static STATUS_LABEL_ICON = {
     '0': 'label label-info',
     '1': ' label label-primary',
     '2': 'label label-success',
+    '3': 'label label-default',
     '-1': 'label label-danger',
   };
 }// tslint:disable-next-line: max-classes-per-file
