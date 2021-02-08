@@ -305,7 +305,7 @@ namespace IL.EncompassUpload
         {
             using (var db = new DBConnect(TenantSchema))
             {
-                List<EUploadStaging> _lsRuleResult = db.EUploadStaging.AsNoTracking().Where(x => x.LoanID == LoanID && x.TypeOfUpload == EncompassLoanAttachmentDownloadConstant.RuleResult).ToList();
+                List<ELoanAttachmentUpload> _lsRuleResult = db.ELoanAttachmentUpload.AsNoTracking().Where(x => x.LoanID == LoanID && x.Status == EncompassUploadConstant.UPLOAD_COMPLETE).ToList();
 
                 return _lsRuleResult.Count;
             }
