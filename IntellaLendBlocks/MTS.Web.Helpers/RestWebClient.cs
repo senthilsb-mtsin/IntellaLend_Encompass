@@ -4,7 +4,6 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MTS.Web.Helpers
@@ -117,8 +116,15 @@ namespace MTS.Web.Helpers
                     restRequest.AddJsonBody(httpRequestObject.Content);
                 else if (httpRequestObject.RequestContentType == "application/x-www-form-urlencoded")
                 {
-                    List<string> param = ((Dictionary<string, string>)httpRequestObject.Content).Select(item => $"{item.Key}={item.Value}").ToList();
-                    restRequest.AddOrUpdateParameter(httpRequestObject.RequestContentType, string.Join("&", param), ParameterType.RequestBody);
+                    Dictionary<string, string> parameters = ((Dictionary<string, string>)httpRequestObject.Content);
+
+                    foreach (var item in parameters.Keys)
+                    {
+                        restRequest.AddParameter(item, parameters[item]);
+                    }
+
+                    //List<string> param = ((Dictionary<string, string>)httpRequestObject.Content).Select(item => $"{item.Key}={item.Value}").ToList();
+                    //restRequest.AddOrUpdateParameter(httpRequestObject.RequestContentType, string.Join("&", param), ParameterType.RequestBody);
                 }
                 else if (httpRequestObject.RequestContentType == "multipart/form-data")
                 {

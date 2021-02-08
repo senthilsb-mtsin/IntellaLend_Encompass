@@ -486,11 +486,6 @@
              Encompass WebHook Callback Releated Activities
             </Summary>
         </member>
-        <member name="M:EncompassConnectorAPI.Controllers.EncompassWebHookController.#ctor">
-            <Summary>
-             To Create Rest Client Instance
-            </Summary>
-        </member>
         <member name="M:EncompassConnectorAPI.Controllers.EncompassWebHookController.GetAllSubscription">
             <Summary>
              Create new Webhook Subscription

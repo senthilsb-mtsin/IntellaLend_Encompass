@@ -9,7 +9,6 @@ using RestSharp;
 using Swagger.Net.Annotations;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Net;
 using System.Web.Http;
 
@@ -22,15 +21,6 @@ namespace EncompassConnectorAPI.Controllers
     {
         #region Constructure 
 
-        private readonly RestWebClient _client;
-
-        ///<Summary>
-        /// To Create Rest Client Instance
-        ///</Summary>
-        public EncompassWebHookController()
-        {
-            _client = new RestWebClient(ConfigurationManager.AppSettings["EncompassURL"]);
-        }
 
         #endregion
 
@@ -101,7 +91,7 @@ namespace EncompassConnectorAPI.Controllers
 
                 responseStream = response.Content; Logger.WriteTraceLog($"response.Content : {response.Content}");
 
-                if (response.StatusCode == HttpStatusCode.OK)
+                if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Created)
                 {
                     return Ok(responseStream);
                 }
@@ -145,9 +135,9 @@ namespace EncompassConnectorAPI.Controllers
 
                 responseStream = response.Content; Logger.WriteTraceLog($"response.Content : {response.Content}");
 
-                if (response.StatusCode == HttpStatusCode.OK)
+                if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NoContent)
                 {
-                    return Ok(responseStream);
+                    return Ok("Deleted Successfully");
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized)
                     return Unauthorized();

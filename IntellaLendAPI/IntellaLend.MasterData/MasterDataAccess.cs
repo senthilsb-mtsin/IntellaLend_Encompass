@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace IntellaLend.EntityDataHandler
 {
@@ -904,15 +905,29 @@ namespace IntellaLend.EntityDataHandler
             }
         }
 
+        private string EncryptSigningKey(string secret, string message)
+        {
+            var encoding = new System.Text.ASCIIEncoding();
+
+            byte[] keyByte = encoding.GetBytes(secret);
+            byte[] messageBytes = encoding.GetBytes(message);
+
+            using (var hmacsha256 = new HMACSHA256(keyByte))
+            {
+                byte[] hashmessage = hmacsha256.ComputeHash(messageBytes);
+                return Convert.ToBase64String(hashmessage);
+            }
+        }
+
         public object CreateWebHookSubscription(int _eventType)
         {
             using (var db = new DBConnect(TenantSchema))
             {
                 EWebhookEventCreation _req = new EWebhookEventCreation()
                 {
-                    events = new List<string>() { "change" },
+                    events = new List<string>() { "update" },
                     resource = "Loan",
-                    signingkey = ConfigurationManager.AppSettings["EWebhookSigningKey"],
+                    signingkey = EncryptSigningKey(ConfigurationManager.AppSettings["EWebhookSigningKey"], "MTS"),
                 };
 
                 if (_eventType == EWebHookEventsLogConstant.DOCUMENT_LOG)
