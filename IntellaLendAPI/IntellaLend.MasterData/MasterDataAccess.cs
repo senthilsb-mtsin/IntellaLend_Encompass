@@ -927,7 +927,7 @@ namespace IntellaLend.EntityDataHandler
                 {
                     events = new List<string>() { "update" },
                     resource = "Loan",
-                    signingkey = EncryptSigningKey(ConfigurationManager.AppSettings["EWebhookSigningKey"], "MTS"),
+                    signingkey = ConfigurationManager.AppSettings["EWebhookSigningKey"],
                 };
 
                 if (_eventType == EWebHookEventsLogConstant.DOCUMENT_LOG)

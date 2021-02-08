@@ -7,7 +7,7 @@ namespace EncompassRequestBody.WrapperReponseModel
         [JsonProperty(PropertyName = "subscriptionId")]
         public string SubscriptionID { get; set; }
 
-        [JsonProperty(PropertyName = "errorendpointCode")]
+        [JsonProperty(PropertyName = "endpoint")]
         public string Endpoint { get; set; }
 
         [JsonProperty(PropertyName = "signingkey")]
