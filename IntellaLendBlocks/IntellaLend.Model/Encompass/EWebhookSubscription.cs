@@ -8,7 +8,7 @@ namespace IntellaLend.Model
         [Key]
         public Int64 ID { get; set; }
 		public Int32 EventType { get; set; }
-		public string SubscriptionID { get; set; }
+		public Guid SubscriptionID { get; set; }
 		public DateTime CreatedOn { get; set; }
     }
 }

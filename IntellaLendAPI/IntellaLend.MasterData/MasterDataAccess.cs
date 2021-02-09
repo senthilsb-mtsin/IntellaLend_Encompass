@@ -971,7 +971,7 @@ namespace IntellaLend.EntityDataHandler
                 if (_event != null)
                 {
                     EncompassWrapperAPI _api = new EncompassWrapperAPI(ConfigurationManager.AppSettings["EncompassConnectorURL"], TenantSchema.ToUpper());
-                    bool result = _api.DeleteWebhookSubscription(_event.SubscriptionID);
+                    bool result = _api.DeleteWebhookSubscription(new EWebHookDeleteEventSubscription() { subscriptionId = _event.SubscriptionID.ToString() });
                     if (result)
                     {
                         db.Entry(_event).State = EntityState.Deleted;

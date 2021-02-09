@@ -16,4 +16,9 @@ namespace EncompassRequestBody.WrapperRequestModel
     {
         public List<string> attributes { get; set; }
     }
+
+    public class WebHookDeleteRequestModel
+    {
+        public string subscriptionId { get; set; }
+    }
 }

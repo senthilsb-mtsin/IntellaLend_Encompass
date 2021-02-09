@@ -1,11 +1,12 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace EncompassRequestBody.WrapperReponseModel
 {
     public class WebHookSubscriptions
     {
         [JsonProperty(PropertyName = "subscriptionId")]
-        public string SubscriptionID { get; set; }
+        public Guid SubscriptionID { get; set; }
 
         [JsonProperty(PropertyName = "endpoint")]
         public string Endpoint { get; set; }

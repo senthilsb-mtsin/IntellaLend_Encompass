@@ -118,18 +118,18 @@ namespace EncompassConnectorAPI.Controllers
         ///<Summary>
         /// Delete Subscribed Webhook
         ///</Summary>
-        [HttpDelete, Route("api/v1/webhook/delete")]
+        [HttpPost, Route("api/v1/webhook/delete")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success")]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request")]
-        public IHttpActionResult DeleteWebHook(string subscriptionId)
+        public IHttpActionResult DeleteWebHook(WebHookDeleteRequestModel req)
         {
-            Logger.WriteTraceLog($"DeleteWebHook req : {subscriptionId}");
+            Logger.WriteTraceLog($"DeleteWebHook req : {req}");
             ErrorResponse _badRequest = new ErrorResponse();
             try
             {
                 string responseStream = string.Empty;
 
-                var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.DELETE_WEBHOOK_SUBSCIPTION, subscriptionId), REQUESTTYPE = HeaderConstant.DELETE };
+                var reqObj = new HttpRequestObject() { URL = string.Format(EncompassURLConstant.DELETE_WEBHOOK_SUBSCIPTION, req.subscriptionId), REQUESTTYPE = HeaderConstant.DELETE };
 
                 IRestResponse response = _client.Execute(reqObj);
 
