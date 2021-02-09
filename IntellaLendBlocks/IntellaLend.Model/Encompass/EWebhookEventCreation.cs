@@ -16,8 +16,4 @@ namespace IntellaLend.Model
     {
         public List<string> attributes { get; set; }
     }
-    public class EWebHookDeleteEventSubscription
-    {
-        public string subscriptionId { get; set; }
-    }
 }

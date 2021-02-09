@@ -951,7 +951,7 @@ namespace IntellaLend.EntityDataHandler
                     WebHookSubscriptions _sub = _subscriptions.Where(x => x.Endpoint == _req.endpoint).FirstOrDefault();
                     if (_sub != null)
                     {
-                        db.EWebhookSubscription.Add(new EWebhookSubscription() { SubscriptionID = _sub.SubscriptionID, EventType = _eventType, CreatedOn = DateTime.Now });
+                        db.EWebhookSubscription.Add(new EWebhookSubscription() { SubscriptionID = Guid.Parse(_sub.SubscriptionID), EventType = _eventType, CreatedOn = DateTime.Now });
                         db.SaveChanges();
                     }
                     else
@@ -971,7 +971,7 @@ namespace IntellaLend.EntityDataHandler
                 if (_event != null)
                 {
                     EncompassWrapperAPI _api = new EncompassWrapperAPI(ConfigurationManager.AppSettings["EncompassConnectorURL"], TenantSchema.ToUpper());
-                    bool result = _api.DeleteWebhookSubscription(new EWebHookDeleteEventSubscription() { subscriptionId = _event.SubscriptionID.ToString() });
+                    bool result = _api.DeleteWebhookSubscription(_event.SubscriptionID.ToString());
                     if (result)
                     {
                         db.Entry(_event).State = EntityState.Deleted;

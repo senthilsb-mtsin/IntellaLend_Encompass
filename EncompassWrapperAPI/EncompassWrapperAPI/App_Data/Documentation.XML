@@ -496,7 +496,7 @@
              Create new Webhook Subscription
             </Summary>
         </member>
-        <member name="M:EncompassConnectorAPI.Controllers.EncompassWebHookController.DeleteWebHook(EncompassRequestBody.WrapperRequestModel.WebHookDeleteRequestModel)">
+        <member name="M:EncompassConnectorAPI.Controllers.EncompassWebHookController.DeleteWebHook(System.String)">
             <Summary>
              Delete Subscribed Webhook
             </Summary>

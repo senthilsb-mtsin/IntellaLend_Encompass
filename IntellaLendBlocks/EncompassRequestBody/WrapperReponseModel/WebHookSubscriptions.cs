@@ -6,7 +6,7 @@ namespace EncompassRequestBody.WrapperReponseModel
     public class WebHookSubscriptions
     {
         [JsonProperty(PropertyName = "subscriptionId")]
-        public Guid SubscriptionID { get; set; }
+        public string SubscriptionID { get; set; }
 
         [JsonProperty(PropertyName = "endpoint")]
         public string Endpoint { get; set; }
