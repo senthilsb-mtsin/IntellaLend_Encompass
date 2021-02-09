@@ -40,7 +40,7 @@
         public const string GET_ALLLOANDOCUMENTS = "/api/v1/documents?loanGuid={0}";
 
         public const string WEBHOOK_CREATE = "api/v1/webhook/create";
-        public const string WEBHOOK_DELETE = "api/v1/webhook/delete";
+        public const string WEBHOOK_DELETE = "api/v1/webhook/delete?subscriptionId={0}";
         public const string WEBHOOK_GETALL_SUBSCRIPTION = "api/v1/webhook";
 
     }
