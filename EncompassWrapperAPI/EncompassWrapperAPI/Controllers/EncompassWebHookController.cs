@@ -118,7 +118,7 @@ namespace EncompassConnectorAPI.Controllers
         ///<Summary>
         /// Delete Subscribed Webhook
         ///</Summary>
-        [HttpDelete, Route("api/v1/webhook/delete/{subscriptionId}")]
+        [HttpGet, Route("api/v1/webhook/delete/{subscriptionId}")]
         [SwaggerResponse((int)HttpStatusCode.OK, "Success")]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request")]
         public IHttpActionResult DeleteWebHook(string subscriptionId)

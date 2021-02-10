@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MTSEntBlocks.LoggerBlock;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using RestSharp;
 using System;
@@ -165,6 +166,8 @@ namespace MTS.Web.Helpers
             var restRequest = InitRestRequest(requestObject);
 
             OnRefreshValidationHeaders(restRequest);
+
+            Logger.WriteTraceLog($"restRequest : {restRequest.Method}");
 
             return Execute(restRequest);
         }
