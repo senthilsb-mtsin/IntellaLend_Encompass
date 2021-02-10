@@ -124,7 +124,7 @@ namespace EncompassAPIHelper
             RequestAgain:
             LogMessage($"DeleteWebhookSubscription ");
 
-            var req = new HttpRequestObject() { REQUESTTYPE = "DELETE", URL = string.Format(EncompassURLConstant.WEBHOOK_DELETE, reqBody) };
+            var req = new HttpRequestObject() { REQUESTTYPE = "PATCH", URL = string.Format(EncompassURLConstant.WEBHOOK_DELETE, reqBody) };
 
             IRestResponse result = client.Execute(req);
 
