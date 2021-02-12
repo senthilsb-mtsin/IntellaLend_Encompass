@@ -396,6 +396,81 @@ namespace MTSEntBlocks.UtilsBlock
             }
         }
 
+        public static bool CheckEmbeddedPDF(byte[] _pDFBytes)
+        {
+            using (var reader = new PdfReader(_pDFBytes))
+            {
+                var root = reader.Catalog;
+                if (root != null)
+                {
+                    bool isEmbeddedPDF = false;
+                    var names = root.GetAsDict(iTextSharp.text.pdf.PdfName.NAMES);
+                    if (names != null)
+                    {
+                        var embeddedFiles = names.GetAsDict(iTextSharp.text.pdf.PdfName.EMBEDDEDFILES);
+                        if (embeddedFiles != null)
+                        {
+                            isEmbeddedPDF = true;
+                            var namesArray = embeddedFiles.GetAsArray(iTextSharp.text.pdf.PdfName.NAMES);
+                            if (namesArray != null) return true;
+                        }
+                    }
+
+                    return isEmbeddedPDF;
+                }
+            }
+
+            return false;
+        }
+
+        public static byte[] GetEmbeddedPDFs(byte[] _pDFBytes)
+        {
+            List<byte[]> _readersBytes = new List<byte[]>();
+            using (var reader = new PdfReader(_pDFBytes))
+            {
+                var root = reader.Catalog;
+                if (root != null)
+                {
+                    var names = root.GetAsDict(iTextSharp.text.pdf.PdfName.NAMES);
+                    if (names != null)
+                    {
+                        var embeddedFiles = names.GetAsDict(iTextSharp.text.pdf.PdfName.EMBEDDEDFILES);
+                        if (embeddedFiles != null)
+                        {
+                            var namesArray = embeddedFiles.GetAsArray(iTextSharp.text.pdf.PdfName.NAMES);
+                            if (namesArray != null)
+                            {
+                                int n = namesArray.Size;
+                                for (int i = 0; i < n; i++)
+                                {
+                                    i++;
+                                    var fileArray = namesArray.GetAsDict(i);
+                                    var file = fileArray.GetAsDict(iTextSharp.text.pdf.PdfName.EF);
+                                    foreach (iTextSharp.text.pdf.PdfName key in file.Keys)
+                                    {
+                                        var stream = (iTextSharp.text.pdf.PRStream)iTextSharp.text.pdf.PdfReader.GetPdfObject(file.GetAsIndirectObject(key));
+                                        _readersBytes.Add(iTextSharp.text.pdf.PdfReader.GetStreamBytes(stream));
+                                    }
+                                }
+
+                                PDFMerger merger = new PDFMerger();
+                                merger.OpenDocument();
+                                foreach (var item in _readersBytes)
+                                {
+                                    merger.AppendPDF(item);
+                                }
+
+                                return merger.SaveDocumentArray();
+                            }
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+
         public static void CreatePdf(List<byte[]> documentsImageByteList, string filePath, string pageSize = "A4")
         {
             if (documentsImageByteList.Count > 0)

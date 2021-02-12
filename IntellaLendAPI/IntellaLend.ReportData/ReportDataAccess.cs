@@ -224,46 +224,9 @@ namespace IntellaLend.ReportData
 
             return _report;
         }
-        public object GetOCRSecondLayerReport(Int64 LoanID)
-        {
-            List<object> _report = new List<object>();
-            using (var db = new DBConnect(TableSchema))
-            {
-                LoanDetail _loanDetail = db.LoanDetail.AsNoTracking().Where(l => l.LoanID == LoanID).FirstOrDefault();
-
-                if (_loanDetail != null)
-                {
-                    Batch _batch = JsonConvert.DeserializeObject<Batch>(_loanDetail.LoanObject);
-
-                    var batchDocs = from docs in _batch.Documents
-                                    group docs by docs.DocumentTypeID into docGroup
-                                    select docGroup.OrderByDescending(p => p.VersionNumber).First();
-
-                    _report = (from b in batchDocs
-                               select new
-                               {
-                                   DocName = b.Type,
-                                   Confidence = b.DocumentExtractionAccuracy
-                               }).AsEnumerable().Select(d => new
-                               {
-                                   DocName = d.DocName,
-                                   Percentage = string.IsNullOrEmpty(d.Confidence) ? "NA" : d.Confidence
-                               }).ToList<object>();
-                }
-            }
-
-            return _report;
-        }
         //public object GetOCRSecondLayerReport(Int64 LoanID)
         //{
         //    List<object> _report = new List<object>();
-        //    List<object> _report1 = new List<object>();
-        //    //string connectIonString= ConfigurationManager.ConnectionStrings["DBConnection"].ConnectionString;
-        //    //DynamicDataAccess.ExecuteSQLDataSet(connectIonString, sqlScript); ;
-        //    //string sql = "select * from MTS_AUTO_VALIDATION_SKIP";
-        //    //using(var db2 = new DataAccess2("EphesoftUtilityConnectionName").ExecuteDataTable(sql)) { }
-        //    //System.Data.DataTable dtable = new DataAccess2("EphesoftUtilityConnectionName").ExecuteDataTable(sql);
-        //    System.Data.DataTable dtable = new DataAccess2("EphesoftUtilityConnectionName").GetDataTable("GET_AUTO_VALIDATION_SKIP_DOCS");
         //    using (var db = new DBConnect(TableSchema))
         //    {
         //        LoanDetail _loanDetail = db.LoanDetail.AsNoTracking().Where(l => l.LoanID == LoanID).FirstOrDefault();
@@ -275,22 +238,87 @@ namespace IntellaLend.ReportData
         //            var batchDocs = from docs in _batch.Documents
         //                            group docs by docs.DocumentTypeID into docGroup
         //                            select docGroup.OrderByDescending(p => p.VersionNumber).First();
-        //            _report = (
-        //                from b in batchDocs
-        //                join System.Data.DataRow d in dtable.Rows on b.Type equals (string)d["DOCUMENT_NAME"]
-        //                select new
-        //                {
-        //                    DocName = b.Type,
-        //                    Confidence = b.DocumentExtractionAccuracy
-        //                }).AsEnumerable().Select(d => new
-        //                {
-        //                    DocName = d.DocName,
-        //                    Percentage = string.IsNullOrEmpty(d.Confidence) ? "NA" : d.Confidence
-        //                }).ToList<object>();
+
+        //            _report = (from b in batchDocs
+        //                       select new
+        //                       {
+        //                           DocName = b.Type,
+        //                           Confidence = b.DocumentExtractionAccuracy
+        //                       }).AsEnumerable().Select(d => new
+        //                       {
+        //                           DocName = d.DocName,
+        //                           Percentage = string.IsNullOrEmpty(d.Confidence) ? "NA" : d.Confidence
+        //                       }).ToList<object>();
         //        }
         //    }
+
         //    return _report;
         //}
+        public object GetOCRSecondLayerReport(Int64 LoanID)
+        {
+            List<object> _report = new List<object>();
+            List<object> _report1 = new List<object>();
+            //string connectIonString= ConfigurationManager.ConnectionStrings["DBConnection"].ConnectionString;
+            //DynamicDataAccess.ExecuteSQLDataSet(connectIonString, sqlScript); ;
+            //string sql = "select * from MTS_AUTO_VALIDATION_SKIP";
+            //using(var db2 = new DataAccess2("EphesoftUtilityConnectionName").ExecuteDataTable(sql)) { }
+            //System.Data.DataTable dtable = new DataAccess2("EphesoftUtilityConnectionName").ExecuteDataTable(sql);
+
+            using (var db = new DBConnect(TableSchema))
+            {
+                AuditIDCFields _audit = db.AuditIDCFields.AsNoTracking().Where(x => x.LoanID == LoanID).OrderByDescending(x => x.AuditID).FirstOrDefault();
+
+                LoanDetail _loanDetail = db.LoanDetail.AsNoTracking().Where(l => l.LoanID == LoanID).FirstOrDefault();
+
+                if (_loanDetail != null)
+                {
+                    Batch _batch = JsonConvert.DeserializeObject<Batch>(_loanDetail.LoanObject);
+
+                    var batchDocs = from docs in _batch.Documents
+                                    group docs by docs.DocumentTypeID into docGroup
+                                    select docGroup.OrderByDescending(p => p.VersionNumber).First();
+
+                    if (_audit != null && !string.IsNullOrEmpty(_audit.IDCBatchClassID))
+                    {
+                        Int64 BatchClassConfigID = 0;
+                        string sql = $"select id from batch_class where identifier = '{_audit.IDCBatchClassID}'";
+                        System.Data.DataTable ephesoftTable = new DataAccess2("EphesoftConnectionName").ExecuteDataTable(sql);
+
+                        if (ephesoftTable != null && ephesoftTable.Rows.Count > 0 && ephesoftTable.Rows[0]["id"] != DBNull.Value)
+                            BatchClassConfigID = Convert.ToInt64(ephesoftTable.Rows[0]["id"]);
+
+                        if (_audit != null && BatchClassConfigID > 0)
+                        {
+                            System.Data.DataTable dtable = new DataAccess2("EphesoftUtilityConnectionName").GetDataTable("GET_AUTO_VALIDATION_SKIP_DOCS", BatchClassConfigID);
+
+                            return (from b in batchDocs
+                                    join System.Data.DataRow d in dtable.Rows on b.Type equals (string)d["DOCUMENT_NAME"]
+                                    select new
+                                    {
+                                        DocName = b.Type,
+                                        Confidence = b.DocumentExtractionAccuracy
+                                    }).AsEnumerable().Select(d => new
+                                    {
+                                        DocName = d.DocName,
+                                        Percentage = string.IsNullOrEmpty(d.Confidence) ? "NA" : d.Confidence
+                                    }).ToList<object>();
+                        }
+                    }
+                    return (from b in batchDocs
+                            select new
+                            {
+                                DocName = b.Type,
+                                Confidence = b.DocumentExtractionAccuracy
+                            }).AsEnumerable().Select(d => new
+                            {
+                                DocName = d.DocName,
+                                Percentage = string.IsNullOrEmpty(d.Confidence) ? "NA" : d.Confidence
+                            }).ToList<object>();
+
+                }
+            }
+            return _report;
+        }
         //Result should be in type List<ReportResultModel>
         public List<ReportResultModel> GetDataEntryWorloadReport(Int64 UserID, DateTime FromDate, DateTime ToDate, Int64 ReviewTypeID)
         {
@@ -495,7 +523,7 @@ namespace IntellaLend.ReportData
                 //                  select l).ToList<Loan>();
                 //}
                 // else if (_reviewtypemster != null && _reviewtypemster.SearchCriteria == "Received_Date")
-                if (_reviewtypemster != null && _reviewtypemster.SearchCriteria == "Received_Date")
+                if (_reviewtypemster != null)
                 {
                     _boxLoanLs = (from l in db.Loan.AsNoTracking()
                                   select l).Where(a => a.CreatedOn > DateFrom && a.CreatedOn < DateTo && a.ReviewTypeID == ReviewTypeID && (CustomerId == 0 || a.CustomerID == CustomerId)).ToList<Loan>();
@@ -636,7 +664,7 @@ namespace IntellaLend.ReportData
                 await Task.Run(() =>
                 {
                     List<Int64> _distLoanIDs = new List<long>();
-                    if (_reviewtypemster != null && _reviewtypemster.SearchCriteria == "Received_Date")
+                    if (_reviewtypemster != null)
                     {
                         _distLoanIDs = (from lr in db.LoanReporting.AsNoTracking()
                                         join a in db.Loan.AsNoTracking() on lr.LoanID equals a.LoanID
@@ -667,7 +695,7 @@ namespace IntellaLend.ReportData
             {
                 ReviewTypeMaster _reviewtypemster = db.ReviewTypeMaster.AsNoTracking().Where(x => x.ReviewTypeID == ReviewTypeID).FirstOrDefault();
                 List<missLoanObject> _loanIDs = new List<missLoanObject>();
-                if (_reviewtypemster != null && _reviewtypemster.SearchCriteria == "Received_Date")
+                if (_reviewtypemster != null)
                 {
                     _loanIDs = (from l in db.Loan.AsNoTracking()
                                 join ld in db.LoanDetail.AsNoTracking() on l.LoanID equals ld.LoanID
@@ -720,7 +748,7 @@ namespace IntellaLend.ReportData
                 ReviewTypeMaster _reviewtypemster = db.ReviewTypeMaster.AsNoTracking().Where(x => x.ReviewTypeID == ReviewTypeID).FirstOrDefault();
                 await Task.Run(() =>
                 {
-                    if (_reviewtypemster != null && _reviewtypemster.SearchCriteria == "Received_Date")
+                    if (_reviewtypemster != null)
                     {
 
                         _loan = (from l in db.Loan.AsNoTracking()
@@ -777,7 +805,7 @@ namespace IntellaLend.ReportData
                 // else if (_reviewtypemster != null && _reviewtypemster.SearchCriteria == "Received_Date")
                 await Task.Run(() =>
                 {
-                    if (_reviewtypemster != null && _reviewtypemster.SearchCriteria == "Received_Date")
+                    if (_reviewtypemster != null)
                     {
                         dataEntryGraphData = (from l in db.Loan.AsNoTracking()
                                               join r in db.UserRoleMapping.AsNoTracking() on l.LastAccessedUserID equals r.UserID
@@ -869,7 +897,7 @@ namespace IntellaLend.ReportData
                 List<missLoanObject> _loanstipulation = new List<missLoanObject>();
                 List<Loan> _investorloan = new List<Loan>();
                 ReviewTypeMaster _reviewtypemster = db.ReviewTypeMaster.AsNoTracking().Where(x => x.ReviewTypeID == ReviewTypeID).FirstOrDefault();
-                if (_reviewtypemster != null && _reviewtypemster.SearchCriteria == "Received_Date")
+                if (_reviewtypemster != null)
                 {
 
                     _loanstipulation = (from ls in db.LoanStipulation.AsNoTracking()
