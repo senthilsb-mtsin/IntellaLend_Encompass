@@ -198,14 +198,14 @@ namespace IL.ExportToEphesoft
 
                             Int32 pdfGenerated = 1;
 
-                            byte[] pdfBytes = File.ReadAllBytes(fileName);
+                            byte[] pdfBytes = File.ReadAllBytes(lockFileName);
                             if (CommonUtils.CheckEmbeddedPDF(pdfBytes))
                             {
                                 pdfBytes = CommonUtils.GetEmbeddedPDFs(pdfBytes);
                                 if (pdfBytes == null)
                                     throw new Exception("Cannot able convert Embedded PDF's to single PDF");
 
-                                File.WriteAllBytes(fileName, pdfBytes);
+                                File.WriteAllBytes(lockFileName, pdfBytes);
                             }
 
                             if (UseGhostScript)
