@@ -194,7 +194,13 @@ namespace EphesoftService
 
             foreach (XPathNavigator table in DataTables.OfType<XPathNavigator>().ToList())
             {
-                destinationDoc.AppendChild(table);
+                string xpathExprTableNode = "./DataTables";
+                string tableName = table.SelectSingleNode(table.Compile("./Name")).Value;
+                string docIdentifier = sourceDoc.SelectSingleNode(sourceDoc.Compile("./Identifier")).Value;
+                XPathNavigator tableNameNode = table.SelectSingleNode(table.Compile("./Name"));
+                tableNameNode.SetValue($"{tableName}_{docIdentifier}");
+                XPathNavigator tableNode = destinationDoc.SelectSingleNode(xpathExprTableNode);
+                tableNode.AppendChild(table);
             }
         }
 
