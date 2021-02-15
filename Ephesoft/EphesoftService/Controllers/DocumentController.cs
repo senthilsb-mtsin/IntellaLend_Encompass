@@ -1,7 +1,10 @@
-﻿using EphesoftService.Models;
+﻿using Ephesoft.Models.TableRow;
+using EphesoftService.Models;
 using MTSEntBlocks.ExceptionBlock;
 using MTSEntBlocks.ExceptionBlock.Handlers;
+using MTSEntBlocks.LoggerBlock;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -86,6 +89,7 @@ namespace EphesoftService.Controllers
                 //}
 
                 List<string> orderOfExecution = ephesoftReq.orderOfExecution.Split('|').Select(x => x).ToList();
+                logger.Debug($"ephesoftReq.orderOfExecution   :{ephesoftReq.orderOfExecution} ,ephesoftReq.ephesoftModule : {ephesoftReq.ephesoftModule} ");
 
                 foreach (string item in orderOfExecution)
                 {
@@ -93,27 +97,32 @@ namespace EphesoftService.Controllers
                     {
                         case "append":
                             {
-                                this.ApplyAppendRules(configId);
+                                logger.Debug($"Executing Append Rule : {ephesoftReq.ephesoftModule}");
+                                this.ApplyAppendRules(configId, ephesoftReq.ephesoftModule);
                                 this.ParentChildMerge(configId);
                                 break;
                             }
                         case "concatenate":
                             {
+                                logger.Debug($"Executing Concatenate Rule : {ephesoftReq.ephesoftModule}");
                                 this.ApplyConcatenateRules(configId, ephesoftReq.ephesoftModule);
                                 break;
                             }
                         case "convert":
                             {
+                                logger.Debug($"Executing Convert Rule : {ephesoftReq.ephesoftModule}");
                                 this.ApplyConversionRules(configId, ephesoftReq.ephesoftModule);
                                 break;
                             }
                         case "pagesequence":
                             {
+                                logger.Debug($"Executing Pagesequence Rule : {ephesoftReq.ephesoftModule}");
                                 this.PageSequenceMerge();
                                 break;
                             }
                         case "advmerge":
                             {
+                                logger.Debug($"Executing Advmerge Rule : {ephesoftReq.ephesoftModule}");
                                 this.ApplyAdvancedRules(configId);
                                 break;
                             }
@@ -189,6 +198,140 @@ namespace EphesoftService.Controllers
             }
         }
 
+        [HttpPut]
+        public HttpResponseMessage FieldValidate()
+        {
+            EphesoftLookupRequest ephesoftReq = new EphesoftLookupRequest();
+            try
+            {
+                // Read the contents of the request
+                string requestJson = this.Request.Content.ReadAsStringAsync().Result;
+                try
+                {
+                    ephesoftReq = JsonConvert.DeserializeObject<EphesoftLookupRequest>(requestJson, new JsonSerializerSettings
+                    {
+                        MissingMemberHandling = MissingMemberHandling.Error
+                    });
+
+                    logger.Debug("RequestJson" + requestJson);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error while parrsing input JSON \nInput JSON:" + requestJson, ex);
+                }
+                bool _isFieldUpdated = false;
+                this.inputXmlNavigator = GetXMLNavigator(ephesoftReq.inputXML);
+                XMLBatch m_XMLBatch = new XMLBatch(this.inputXmlNavigator);
+
+                foreach (var document in m_XMLBatch.Documents.Where(x => x.m_Type == "Credit Report").ToList())
+                {
+                    DocumentLevelField _paymentField = document.DocumentLevelFields.Where(x => x.m_Name == "Mortgage Payments").FirstOrDefault();
+                    DocumentLevelField _balanceField = document.DocumentLevelFields.Where(x => x.m_Name == "Mortgage Balance").FirstOrDefault();
+
+                    if (_paymentField != null && _balanceField != null)
+                    {
+                        foreach (var field in document.DocumentLevelFields)
+                        {
+                            if (field.Name == "Mortgage Loan")
+                            {
+                                field.Value = "No";
+                                if (!string.IsNullOrEmpty(_paymentField.Value.Trim()) || !string.IsNullOrEmpty(_balanceField.Value.Trim()))
+                                {
+                                    field.Value = "Yes";
+                                    _isFieldUpdated = true;
+                                }
+                                break;
+                            }
+                        }
+                    }
+
+                }
+
+                if (!_isFieldUpdated)
+                {
+                    List<XPathNavigator> documentsList = UtilFunctions.GetDocumentOfDocType(inputXmlNavigator, "Credit Report");
+                    if (documentsList.Count > 0)
+                    {
+
+                        foreach (XPathNavigator document in documentsList.ToList())
+                        {
+                            XPathNavigator _mloanField = null;
+                            string expression = "./DocumentLevelFields/DocumentLevelField";
+                            XPathExpression expr = document.Compile(expression);
+                            XPathNodeIterator fields = document.Select(expr);
+
+                            foreach (XPathNavigator field in fields.OfType<XPathNavigator>().ToList())
+                            {
+                                XPathNavigator fieldName = field.SelectSingleNode(field.Compile("./Name"));
+                                if (fieldName != null)
+                                {
+                                    if (fieldName.Value == "Mortgage Loan")
+                                    {
+                                        _mloanField = field;
+                                    }
+
+                                }
+                            }
+
+                            string rowExpression = "./DataTables/DataTable/Rows/Row";
+                            XPathExpression rowExpr = document.Compile(rowExpression);
+                            XPathNodeIterator datatableRows = document.Select(rowExpr);
+
+                            foreach (XPathNavigator row in datatableRows.OfType<XPathNavigator>().ToList())
+                            {
+                                string _accType = string.Empty;
+                                string expressionColm = "./Columns/Column";
+                                XPathExpression exprCol = row.Compile(expressionColm);
+                                XPathNodeIterator columns = row.Select(exprCol);
+                                foreach (XPathNavigator column in columns.OfType<XPathNavigator>().ToList())
+                                {
+                                    XPathNavigator colName = column.SelectSingleNode(column.Compile("./Name"));
+                                    if (colName != null)
+                                    {
+                                        if (colName.Value.Trim().ToUpper() == "ACCOUNT TYPE")
+                                        {
+                                            XPathNavigator colValue = column.SelectSingleNode(column.Compile("./Value"));
+                                            if (colValue != null && !string.IsNullOrEmpty(colValue.Value))
+                                            {
+                                                if (colValue.Value.Trim().ToUpper() == "MORTGAGE")
+                                                {
+                                                    _accType = "MORTGAGE";
+                                                }
+                                            }
+                                        }
+                                        if (colName.Value.Trim().ToUpper() == "ACCOUNTS" && _accType == "MORTGAGE")
+                                        {
+                                            XPathNavigator colValue = column.SelectSingleNode(column.Compile("./Value"));
+                                            if (colValue != null && !string.IsNullOrEmpty(colValue.Value))
+                                            {
+                                                string accVal = colValue.Value.Replace(".", "").Replace("$", "").Replace(",", "").Trim();
+                                                Int64.TryParse(accVal, out long _accountFieldVal);
+                                                if (_accountFieldVal > 0 && _mloanField != null)
+                                                {
+                                                    XPathNavigator fieldValue = _mloanField.SelectSingleNode(_mloanField.Compile("./Value"));
+                                                    if (fieldValue != null)
+                                                    {
+                                                        fieldValue.SetValue("Yes");
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                logger.Info("Mortgage Loan field updated successfully");
+                return this.CreateSuccessResponse();
+            }
+            catch (Exception ex)
+            {
+                MTSExceptionHandler.HandleException(ref ex);
+                return this.CreateExceptionResponse(ex);
+            }
+        }
 
         private void MergeConfigDocuments(int configID)
         {
@@ -501,6 +644,7 @@ namespace EphesoftService.Controllers
         [HttpPut]
         public HttpResponseMessage OrderByStacking()
         {
+            Logger.WriteTraceLog("In OrderByStacking()");
             try
             {
                 string requestJson = this.Request.Content.ReadAsStringAsync().Result;
@@ -516,7 +660,12 @@ namespace EphesoftService.Controllers
 
                 if (configId != 0)
                 {
-                    this.RearrangeMiscellaneousDocument(configId);
+                    XMLBatch xmlBatch = new XMLBatch(this.inputXmlNavigator);
+                    string[] patterns = { @"(?<SCHEMA>[a-zA-Z0-9]+?)_(?<LOAN_ID>\d+)_(?<DOC_ID>\d+)", @"(?<SCHEMA>[a-zA-Z0-9]+?)_(?<LOAN_ID>\d+)_(?<DOC_ID>\d+)-(?<EXT>[^>]*?)-", @"(?<SCHEMA>[a-zA-Z0-9]+?)_(?<LOAN_ID>\d+)", @"(?<SCHEMA>[a-zA-Z0-9]+?)_(?<LOAN_ID>\d+)-(?<EXT>[^>]*?)-" };
+                    Dictionary<string, string> dicObjects = ExtractDataFromString(xmlBatch.BatchName, patterns);
+                    string Schema = dicObjects["SCHEMA"];
+                    Int64 LoanID = Convert.ToInt64(dicObjects["LOAN_ID"]);
+                    this.RearrangeMiscellaneousDocument(configId, Schema, LoanID);
                 }
 
                 return this.CreateSuccessResponse();
@@ -688,6 +837,7 @@ namespace EphesoftService.Controllers
 
             // Retrieve the conversion rules from DB for given config Id and module
             System.Data.DataTable dbResult = dbAccess.GetConversionRules(configId, ephesoftModuleId);
+            logger.Debug($"dbResult.Rows.Count : {dbResult.Rows.Count}");
             if (dbResult.Rows.Count > 0)
             {
                 docRulesProcess.ConvertDocumentTypes(inputXmlNavigator, dbResult, this.currentBatchId);
@@ -729,6 +879,350 @@ namespace EphesoftService.Controllers
 
         }
 
+        [HttpPut]
+        public HttpResponseMessage FormatCommonDocumentFields()
+        {
+            try
+            {
+                logger.Info("Batch Id:" + this.currentBatchId + " - FormatCommonDocumentFields() Started... ");
+                // Read the contents of the request
+                EphesoftLookupRequest ephesoftReq = new EphesoftLookupRequest();
+                string requestJson = this.Request.Content.ReadAsStringAsync().Result;
+                try
+                {
+                    ephesoftReq = JsonConvert.DeserializeObject<EphesoftLookupRequest>(requestJson);
+                    logger.Debug("RequestJson" + requestJson);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error while parrsing input JSON \nInput JSON:" + requestJson, ex);
+                }
+
+                this.inputXmlNavigator = GetXMLNavigator(ephesoftReq.inputXML);
+
+                int configId = this.GetConfigId(this.inputXmlNavigator);
+
+                // Retrieve the DocumentFieldMergingConfigs from DB
+                System.Data.DataTable dbResult = dbAccess.GetFieldFormatConfigData(configId);
+
+                List<XPathNavigator> _xmlDocuments = UtilFunctions.GetAllDocuments(this.inputXmlNavigator);
+
+                if (dbResult.Rows.Count > 0)
+                {
+                    Dictionary<string, string> formatFieldsCollection = dbResult.AsEnumerable().Select(d => new { key = d["FieldName"].ToString().ToLower(), value = d["FormatPattern"].ToString() }).ToDictionary(d => d.key, d => d.value);
+                    foreach (XPathNavigator doc in _xmlDocuments)
+                    {
+                        List<XPathNavigator> _xmlDocFields = UtilFunctions.GetXMLDocumentFields(doc);
+
+                        foreach (XPathNavigator field in _xmlDocFields)
+                        {
+                            string FieldName = field.SelectSingleNode(field.Compile("./Name")).Value;
+
+                            if (formatFieldsCollection.ContainsKey(FieldName.ToLower()))
+                            {
+                                XPathNavigator _fieldXMLPath = field.SelectSingleNode(field.Compile("./Value"));
+
+                                switch (formatFieldsCollection[FieldName.ToLower()].ToLower().Trim())
+                                {
+                                    case "ssn":
+                                        {
+                                            _fieldXMLPath.SetValue(FormatSSN(_fieldXMLPath.Value.Trim()));
+                                            break;
+                                        }
+                                    case "amount":
+                                        {
+                                            _fieldXMLPath.SetValue(FormatAmount(_fieldXMLPath.Value.Trim()));
+                                            break;
+                                        }
+                                    default:
+                                        break;
+                                }
+
+                            }
+                        }
+                    }
+                }
+                //}
+
+                //XMLBatch xmlBatch = new XMLBatch(this.inputXmlNavigator);
+                //int configId = this.GetConfigId(this.inputXmlNavigator);
+
+                //// Retrieve the DocumentFieldMergingConfigs from DB
+                //System.Data.DataTable dbResult = dbAccess.GetFieldFormatConfigData(configId);
+                //logger.Debug($"dbResult.Rows.Count : {dbResult.Rows.Count}");
+                //Dictionary<string, string> formatFieldsCollection = new Dictionary<string, string>();
+                //if (dbResult.Rows.Count > 0)
+                //{
+                // foreach (DataRow row in dbResult.Rows)
+                // {
+                // //preparing dictionary to hold sourceFiledsData
+
+                // string fieldName = Convert.ToString(row["FieldName"]);
+                // string formatPattern = Convert.ToString(row["FormatPattern"]);
+
+                // if (!formatFieldsCollection.ContainsKey(fieldName))
+                // formatFieldsCollection.Add(fieldName, formatPattern);
+                // }
+                //}
+
+                ////formatting stuff
+                //foreach (var document in xmlBatch.Documents)
+                //{
+                // foreach (var formatField in formatFieldsCollection)
+                // {
+                // DocumentLevelField df = document.DocumentLevelFields.Where(x => x.m_Name == formatField.Key).FirstOrDefault();
+                // if (df != null)
+                // {
+                // if (!string.IsNullOrEmpty(df.Value.Trim()))
+                // {
+                // switch (formatField.Value.ToLower().Trim())
+                // {
+                // case "ssn":
+                // {
+                // df.Value = FormatSSN(df.Value);
+                // break;
+                // }
+                // case "amount":
+                // {
+                // df.Value = FormatAmount(df.Value);
+                // break;
+                // }
+                // default:
+                // break;
+                // }
+                // }
+                // }
+                // }
+                //}
+
+                logger.Info("Batch Id:" + this.currentBatchId + " - FormatCommonDocumentFields() Compoleted. ");
+                return this.CreateSuccessResponse();
+
+            }
+            catch (Exception ex)
+            {
+
+                MTSExceptionHandler.HandleException(ref ex);
+                logger.Error("Batch Id:" + this.currentBatchId + " - Error occured in FormatCommonDocumentFields()");
+                return this.CreateExceptionResponse(ex);
+            }
+        }
+
+        public string FormatAmount(string amount)
+        {
+            int decimalPointCount = amount.Count(f => (f == '.'));
+
+            if (decimalPointCount > 0)
+            {
+                if (decimalPointCount == 1)
+                {
+                    int decimalDigits = amount.Substring(amount.IndexOf(".") + 1).Length;
+                    if (decimalDigits > 2)
+                    {
+                        amount = amount.Replace(".", "");
+                        return amount;
+                    }
+
+                }
+                else
+                {
+                    Regex regx = new Regex("\\.(?=.*?\\.)");
+                    amount = regx.Replace(amount, "");
+                    int decimalDigits = amount.Substring(amount.IndexOf(".") + 1).Length;
+                    if (decimalDigits > 2)
+                    {
+                        amount = amount.Replace(".", "");
+                        return amount;
+                    }
+                }
+            }
+            return amount;
+        }
+
+        public string FormatSSN(string SSN)
+        {
+            if (IsValidSsn(SSN))
+            {
+                if (IsValidSsnWithDashes(SSN))
+                {
+                    return SSN;
+                }
+                else if (IsValidSsnWithoutDashes(SSN))
+                {
+                    if (SSN.Length > 3 && SSN.Length <= 5)
+                        SSN = SSN.Insert(3, "-");
+                    else if (SSN.Length > 5)
+                        SSN = SSN.Insert(5, "-").Insert(3, "-");
+
+                    return SSN;
+                }
+            }
+            else
+            {
+                SSN = Regex.Replace(SSN, @"\s+", string.Empty);
+                SSN = SSN.Replace("-", "");
+                SSN = SSN.Replace(".", "");
+                if (SSN.Length == 9)
+                {
+                    SSN = SSN.Insert(5, "-").Insert(3, "-");
+                    return SSN;
+                }
+                else
+                {
+                    if (SSN.Length > 3 && SSN.Length <= 5)
+                        SSN = SSN.Insert(3, "-");
+                    else if (SSN.Length > 5)
+                        SSN = SSN.Insert(5, "-").Insert(3, "-");
+
+                    return SSN;
+                }
+            }
+            return SSN;
+        }
+
+        public bool IsValidSsnWithDashes(string value)
+        {
+            Regex ssnRegex = new Regex(@"^\d{3}-\d{2}-\d{4}$");
+            return ssnRegex.IsMatch(value);
+        }
+
+        public bool IsValidSsnWithoutDashes(string value)
+        {
+            return Regex.IsMatch(value, @"^\d{9}$");
+        }
+
+        public bool IsValidSsn(string value)
+        {
+            Regex ssnRegex = new Regex(@"^(?:\d{9}|\d{3}-\d{2}-\d{4})$");
+            return ssnRegex.IsMatch(value);
+        }
+
+        /// <summary>
+        /// combine the values of configured fieldnames as comma separated string and assign the value to configured(“Loan Purpose”) field
+        /// </summary>
+        [HttpPut]
+        public HttpResponseMessage CombineAndAssignCheckedFields()
+        {
+            logger.Info("Batch Id:" + this.currentBatchId + " - Combine And Assign CheckedFields Started... ");
+            try
+            {
+                //Read the contents of the request
+                string requestJson = this.Request.Content.ReadAsStringAsync().Result;
+                EphesoftRequest ephesoftReq = this.ProcessRequest(requestJson);
+
+                int configId = this.GetConfigId(this.inputXmlNavigator);
+                // Retrieve the DocumentFieldMergingConfigs from DB 
+                System.Data.DataTable dbResult = dbAccess.GetDocumentFieldValueMergeData(configId, ephesoftReq.ephesoftModule);
+                logger.Debug($"dbResult.Rows.Count : {dbResult.Rows.Count}");
+                if (dbResult.Rows.Count > 0)
+                {
+                    foreach (DataRow row in dbResult.Rows)
+                    {
+                        //preparing dictionary to hold sourceFiledsData
+                        Dictionary<string, string> sourceFieldsCollection = new Dictionary<string, string>();
+                        string documentName = Convert.ToString(row["DocumentName"]);
+                        string destinationFieldName = Convert.ToString(row["DestinationField"]);
+                        string sourceFieldsData = Convert.ToString(row["SourceFieldsData"]);
+                        JObject sourceFieldsObj = JObject.Parse(sourceFieldsData);
+                        JArray fieldList = (JArray)sourceFieldsObj["Data"];
+                        List<SourceDocField> sf = fieldList.ToObject<List<SourceDocField>>();
+                        foreach (SourceDocField item in sf)
+                        {
+
+                            if (!sourceFieldsCollection.ContainsKey(item.FieldName.ToLower()))
+                                sourceFieldsCollection.Add(item.FieldName.ToLower(), item.AppendValue);
+                        }
+
+                        //Get the combined string of SourceDocumentField Names 
+                        SetCombinedFieldNames(sourceFieldsCollection, documentName, destinationFieldName);
+                    }
+                }
+                logger.Info("Batch Id:" + this.currentBatchId + " - Combine And Assign CheckedFields Completed. ");
+                return this.CreateSuccessResponse();
+            }
+            catch (Exception ex)
+            {
+                MTSExceptionHandler.HandleException(ref ex);
+                logger.Error("Batch Id:" + this.currentBatchId + " - Error occured in CombineAndAssignCheckedFields");
+                return this.CreateExceptionResponse(ex);
+            }
+
+        }
+
+        private void SetCombinedFieldNames(Dictionary<string, string> sourceFieldsCollection, string documentName, string destinationFieldName)
+        {
+            logger.Info("Batch Id:" + this.currentBatchId + " - SetCombinedFieldNames() Started... ");
+            string combinedFieldValue = "";
+
+            List<XPathNavigator> documentsList = UtilFunctions.GetDocumentOfDocType(inputXmlNavigator, documentName);
+            if (documentsList.Count > 0)
+            {
+                foreach (XPathNavigator document in documentsList.ToList())
+                {
+                    List<string> combinedFieldArray = new List<string>();
+                    string expression = "./DocumentLevelFields/DocumentLevelField";
+                    XPathExpression expr = document.Compile(expression);
+                    XPathNodeIterator fields = document.Select(expr);
+
+                    foreach (XPathNavigator field in fields.OfType<XPathNavigator>().ToList())
+                    {
+                        XPathNavigator fieldName = field.SelectSingleNode(field.Compile("./Name"));
+                        if (fieldName != null)
+                        {
+                            if (sourceFieldsCollection.ContainsKey(fieldName.Value.ToLower()))
+                            {
+                                XPathNavigator fieldValue = field.SelectSingleNode(field.Compile("./Value"));
+                                if (fieldValue != null && !string.IsNullOrEmpty(fieldValue.Value) && fieldValue.Value.ToLower().Equals("yes"))
+                                {
+                                    combinedFieldArray.Add(sourceFieldsCollection[fieldName.Value.ToLower()]);
+                                }
+                            }
+
+                        }
+                    }
+                    combinedFieldArray.Sort();
+                    combinedFieldValue = string.Join(",", combinedFieldArray);
+
+                    //Get Destination DocumentField and Assign combined values to destination field value
+
+                    foreach (XPathNavigator field in fields.OfType<XPathNavigator>().ToList())
+                    {
+                        XPathNavigator fieldName = field.SelectSingleNode(field.Compile("./Name"));
+                        if (fieldName != null)
+                        {
+                            if (fieldName.Value == destinationFieldName)
+                            {
+                                XPathNavigator fieldValue = field.SelectSingleNode(field.Compile("./Value"));
+                                if (fieldValue != null)
+                                {
+                                    fieldValue.SetValue(combinedFieldValue);
+                                }
+                            }
+
+                        }
+                    }
+                }
+                logger.Info("Batch Id:" + this.currentBatchId + " - SetCombinedFieldNames() Completed. ");
+            }
+        }
+
+        /// <summary>
+        /// check if the value of the given documentfield is 'yes' or 'no'
+        /// </summary>
+        /// <param name="df">DocumentField</param>
+        /// <returns></returns>
+        private bool IsFieldChecked(DocumentField df)
+        {
+            bool isChecked = false;
+
+            if (!string.IsNullOrEmpty(df.Value) && df.Value.ToLower().Equals("yes"))
+            {
+                isChecked = true;
+            }
+
+            return isChecked;
+        }
+
         private void ParentChildMerge(int configId)
         {
             logger.Info("Batch Id:" + this.currentBatchId + " - Apply the Parent Child merge rules for the configId - " + configId);
@@ -761,12 +1255,12 @@ namespace EphesoftService.Controllers
         /// This method retrieves the relevant append rules for the config Id of the input XML.
         /// </summary>
         /// <param name="configId">The configId in the database for the batch class of the input XML</param>
-        private void ApplyAppendRules(int configId)
+        private void ApplyAppendRules(int configId, int moduleId)
         {
             logger.Info("Batch Id:" + this.currentBatchId + " - Apply the Append rules for the configId - " + configId);
 
             // Retrieve the append rules from DB for given config Id
-            System.Data.DataTable dbResult = dbAccess.GetAppendRules(configId);
+            System.Data.DataTable dbResult = dbAccess.GetAppendRules(configId, moduleId);
             if (dbResult.Rows.Count > 0)
             {
                 docRulesProcess.ProcessAppendRules(inputXmlNavigator, dbResult, this.currentBatchId);
@@ -838,14 +1332,42 @@ namespace EphesoftService.Controllers
 
 
 
-        private void RearrangeMiscellaneousDocument(int configId)
+        private System.Data.DataTable GetStackingOrderDocuments(int configId, string schema, Int64 loanId)
         {
-            System.Data.DataTable dbResult = dbAccess.GetDocumentStackingOrder(configId);
+            Logger.WriteTraceLog("In GetStackingOrderDocuments()");
+            StackingOrderDocumentsResponse objres = new StackingOrderDocumentsResponse();
+            string baseURL = System.Configuration.ConfigurationManager.AppSettings["IntellaLendInterface"];
+            Logger.WriteTraceLog($"baseURL : {baseURL}");
+            using (var handler = new HttpClientHandler() { })
+            using (var client = new HttpClient(handler))
+            {
+                StackOrderDocumentsRequest request = new StackOrderDocumentsRequest();
+                request.TableSchema = schema;
+                request.LoanID = loanId;
+                request.ConfigID = configId;
+                string cont = JsonConvert.SerializeObject(request);
+                HttpResponseMessage httpres = client.PostAsync(baseURL + "/GetDocumentStackingOrder", new StringContent(cont, Encoding.UTF8, "application/json")).Result;
+                objres = httpres.Content.ReadAsAsync<StackingOrderDocumentsResponse>().Result;
+                Logger.WriteTraceLog($"objres :{JsonConvert.SerializeObject(objres)}");
+                if (objres.ResponseMessage != null && !string.IsNullOrEmpty(objres.ResponseMessage.MessageDesc))
+                    throw new Exception(objres.ResponseMessage.MessageDesc);
+
+                var table = JsonConvert.DeserializeObject<System.Data.DataTable>(objres.stackingOrderDocuments);
+                return table;
+            }
+        }
+
+        private void RearrangeMiscellaneousDocument(int configId, string schema, Int64 loanid)
+        {
+            Logger.WriteTraceLog("In RearrangeMiscellaneousDocument()");
+            System.Data.DataTable dbResult = GetStackingOrderDocuments(configId, schema, loanid);
+            //System.Data.DataTable dbResult = dbAccess.GetDocumentStackingOrder(configId);
             if (dbResult.Rows.Count > 0)
             {
                 List<XPathNavigator> docTypeList = new List<XPathNavigator>();
                 List<string> _configDocs = new List<string>();
                 List<string> _allDocNames = new List<string>();
+                List<string> _autoDocs = new List<string>();
                 foreach (DataRow dr in dbResult.Rows)
                 {
                     string _documentName = dr["DocumentName"].ToString().Trim();
@@ -862,6 +1384,31 @@ namespace EphesoftService.Controllers
                     _allDocNames.Add(UtilFunctions.GetSingleElementByElementName(xdocs, "Type"));
 
                 List<string> _unAvailableDocs = _allDocNames.Distinct().Where(a => !_configDocs.Distinct().Any(c => c == a)).ToList();
+
+                System.Data.DataTable _skipdocs = dbAccess.GetDocumentsToSkip(configId);
+
+                if (_skipdocs.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in _skipdocs.Rows)
+                    {
+                        string _documentName = dr["DOCUMENT_NAME"].ToString().Trim();
+                        _autoDocs.Add(_documentName);
+                    }
+                }
+                List<string> _autovalidatedocs = _autoDocs.Distinct().Where(x => _unAvailableDocs.Distinct().Any(a => a == x)).ToList();
+                if(_autovalidatedocs != null)
+                {
+                    if(_autovalidatedocs.Count > 0)
+                    {
+                        foreach (string _autoDocName in _autovalidatedocs)
+                        {
+                            List<XPathNavigator> dTypeList = UtilFunctions.GetDocumentOfDocType(inputXmlNavigator, _autoDocName);
+                            foreach (XPathNavigator dt in dTypeList)
+                                docTypeList.Add(dt);
+                        }
+                        _unAvailableDocs = _unAvailableDocs.Distinct().Where(x => !_autovalidatedocs.Distinct().Any(a => a == x)).ToList();
+                    }
+                }
 
                 foreach (string _unDocumentName in _unAvailableDocs)
                 {

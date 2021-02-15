@@ -25,11 +25,16 @@ namespace IL.OCRExtractionPercentage
 
         public bool DoTask()
         {
-            bool result = false;
+            try
+            {
+                GetExtractionPercentage();
+            }
+            catch (Exception ex)
+            {
+                MTSExceptionHandler.HandleException(ref ex);
+            }
 
-            result = GetExtractionPercentage();
-
-            return result;
+            return true;
         }
 
         #endregion
@@ -55,10 +60,10 @@ namespace IL.OCRExtractionPercentage
                         //logMessage($"_loan : {_loan.EphesoftBatchInstanceID.ToString()}");
                         string _sql = string.Empty;
                         string _classificationSql = string.Empty;
-                        bool loanUpdated=false;
-                        bool loanDetailUpdated=false;
+                        bool loanUpdated = false;
+                        bool loanDetailUpdated = false;
                         bool classificationLoanUpdated = false;
-                     
+
 
                         try
                         {
@@ -79,27 +84,27 @@ namespace IL.OCRExtractionPercentage
                                 decimal _percentage = 0m;
                                 decimal.TryParse(Convert.ToString(_ds.Tables[0].Rows[0]["BATCH_PERCENTAGE"]), out _percentage);
                                 //logMessage($"_loanID : {_loan.LoanID.ToString()}");
-                                 loanUpdated = _dataAccess.UpdateLoanEphesoftAccuracy(_loan.LoanId, _percentage);
-                                 loanDetailUpdated = false;
+                                loanUpdated = _dataAccess.UpdateLoanEphesoftAccuracy(_loan.LoanId, _percentage);
+                                loanDetailUpdated = false;
                                 if (loanUpdated && _ds.Tables[1] != null)
                                     loanDetailUpdated = _dataAccess.UpdateLoanDocumentAccuracy(_loan.LoanId, _ds.Tables[1]);
 
-                               
+
                                 //logMessage($"(loanUpdated && loanDetailUpdated) : {(loanUpdated && loanDetailUpdated)}");
 
                             }
 
                             DataSet classificationDs = OCRAccuracyDataAccess.GetOCRAccuracy(_classificationSql);
 
-                            if (classificationDs.Tables.Count > 0  && classificationDs.Tables[0].Rows.Count > 0 )
+                            if (classificationDs.Tables.Count > 0 && classificationDs.Tables[0].Rows.Count > 0)
                             {
                                 //logMessage($"(_ds.Tables.Count > 1 && _ds.Tables[0].Rows.Count > 0 && _ds.Tables[1].Rows.Count > 0) : {(_ds.Tables.Count > 1 && _ds.Tables[0].Rows.Count > 0 && _ds.Tables[1].Rows.Count > 0)}");
-                               
+
                                 decimal _percentage = 0m;
                                 decimal.TryParse(Convert.ToString(classificationDs.Tables[0].Rows[0]["BATCH_PERCENTAGE"]), out _percentage);
                                 //logMessage($"_loanID : {_loan.LoanID.ToString()}");
                                 classificationLoanUpdated = _dataAccess.UpdateLoanClassificationAccuracy(_loan.LoanId, _percentage);
-                                 
+
                                 //logMessage($"(loanUpdated && loanDetailUpdated) : {(loanUpdated && loanDetailUpdated)}");
 
                             }
@@ -114,7 +119,7 @@ namespace IL.OCRExtractionPercentage
                         {
                             Exception newException = new Exception($"Loan ID : {_loan.LoanId}.", ex);
                             //throw newException;
-                        }                        
+                        }
                     }
                 }
 
