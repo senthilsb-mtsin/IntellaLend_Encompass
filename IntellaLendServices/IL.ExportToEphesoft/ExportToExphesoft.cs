@@ -105,7 +105,7 @@ namespace IL.ExportToEphesoft
                 //missingDocFiles = (from s in missingDocFiles select s.Split('.')[0]).Distinct().ToList();
 
                 LogMessage($"Missing Documents to be Exported : {missingDocFiles.Count.ToString()}");
-                
+
                 if (missingDocFiles.Count > 0)
                     totalExportedDocument = MoveDocumentToProcessingQueue(dataAccess, tenant.TenantSchema, _batchCountToExport, tenantFolder, missingDocFiles);
 
@@ -156,7 +156,7 @@ namespace IL.ExportToEphesoft
                         return totalExportedDocument;
 
                     LogMessage($"Processing File : {file}");
-                    
+
                     string fileName = file;
                     string _file = Path.GetFileNameWithoutExtension(file);
                     FileInfo fileInfo = new FileInfo(fileName);
@@ -197,6 +197,16 @@ namespace IL.ExportToEphesoft
                                 Directory.CreateDirectory(_processingFolderPath);
 
                             Int32 pdfGenerated = 1;
+
+                            byte[] pdfBytes = File.ReadAllBytes(lockFileName);
+                            if (CommonUtils.CheckEmbeddedPDF(pdfBytes))
+                            {
+                                pdfBytes = CommonUtils.GetEmbeddedPDFs(pdfBytes);
+                                if (pdfBytes == null)
+                                    throw new Exception("Cannot able convert Embedded PDF's to single PDF");
+
+                                File.WriteAllBytes(lockFileName, pdfBytes);
+                            }
 
                             if (UseGhostScript)
                             {
@@ -309,7 +319,7 @@ namespace IL.ExportToEphesoft
             proc.Start();
             proc.WaitForExit(GhostScriptExecutionMilliSeconds);
             bool isRunning = !proc.HasExited;
-            
+
             if (!isRunning && proc.ExitCode == 0)
                 ResizeTiff(ephsoftTempPath);
 

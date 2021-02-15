@@ -10,14 +10,19 @@ namespace MTSEntBlocks.UtilsBlock
     {
         Document document;
         PdfCopy writer;
-        FileStream pdfStrem;
+        Stream pdfStrem;
         int pageCount = 0;
-
+        public PDFMerger()
+        {
+            document = new Document();
+            pdfStrem = new MemoryStream();
+            writer = new PdfCopy(document, pdfStrem);
+        }
         public PDFMerger(string outFileName)
         {
             document = new Document();
             pdfStrem = new FileStream(outFileName, FileMode.Create);
-            writer = new PdfCopy(document, pdfStrem);            
+            writer = new PdfCopy(document, pdfStrem);
         }
 
         public void OpenDocument()
@@ -26,24 +31,45 @@ namespace MTSEntBlocks.UtilsBlock
         }
 
         public void SaveDocument()
-        {            
+        {
             if (pageCount == 0)
             {
-                if(pdfStrem!=null)
+                if (pdfStrem != null)
                     pdfStrem.Close();
             }
             else
             {
-                if(writer!=null)
+                if (writer != null)
                     writer.Close();
-                if(document!=null)
+                if (document != null)
                     document.Close();
             }
         }
 
+        public byte[] SaveDocumentArray()
+        {
+            byte[] fileArray = null;
+            if (pageCount == 0)
+            {
+                if (pdfStrem != null)
+                    pdfStrem.Close();
+            }
+            else
+            {
+                if (writer != null)
+                    writer.Close();
+                if (document != null)
+                    document.Close();
+
+                fileArray = ((MemoryStream)pdfStrem).ToArray();
+            }
+
+            return fileArray;
+        }
+
         public void AppendPDF(byte[] pdf)
-        {   
-			PdfReader.unethicalreading = true;		
+        {
+            PdfReader.unethicalreading = true;
             PdfReader reader = new PdfReader(pdf);
             reader.ConsolidateNamedDestinations();
             for (int i = 1; i <= reader.NumberOfPages; i++)
@@ -55,9 +81,9 @@ namespace MTSEntBlocks.UtilsBlock
             pageCount++;
         }
 
-        public void AppendPDF(byte[] pdf,ref int lastPgNo,  ref List<Int32> pgNos)
+        public void AppendPDF(byte[] pdf, ref int lastPgNo, ref List<Int32> pgNos)
         {
-			PdfReader.unethicalreading = true;
+            PdfReader.unethicalreading = true;
             PdfReader reader = new PdfReader(pdf);
             reader.ConsolidateNamedDestinations();
             for (int i = 1; i <= reader.NumberOfPages; i++)
@@ -65,7 +91,7 @@ namespace MTSEntBlocks.UtilsBlock
                 PdfImportedPage page = writer.GetImportedPage(reader, i);
                 writer.AddPage(page);
                 pgNos.Add(lastPgNo);
-                lastPgNo++;      
+                lastPgNo++;
             }
             reader.Close();
             pageCount++;
