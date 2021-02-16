@@ -526,7 +526,7 @@ namespace IntellaLend.RuleEngine
                         //fieldValue = fieldValue.Replace("%", "").Replace("$", "").Replace(",", "");
                         try
                         {
-                            decimal roundVal = Math.Round(Convert.ToDecimal(fieldValue.Replace("%", "").Replace("$", "").Replace(",", "").Trim()));
+                            decimal roundVal = Convert.ToDecimal(fieldValue.Replace("%", "").Replace("$", "").Replace(",", "").Trim());
                             batchDocFields[fieldName] = roundVal;
                         }
                         catch (Exception ex)

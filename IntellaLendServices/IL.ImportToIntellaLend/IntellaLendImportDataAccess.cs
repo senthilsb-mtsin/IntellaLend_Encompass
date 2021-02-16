@@ -10,8 +10,10 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace IL.ImportToIntellaLend
 {
@@ -863,12 +865,16 @@ namespace IL.ImportToIntellaLend
 
         private Int64 InsertImagesToDB(Batch batchObj, DBConnect db, string EphesoftOutputPath, string ImageMaxHeight, string ImageMaxWidth)
         {
-
+            LogMessage($"Calling Method : InsertImagesToDB()");
             ImageUtilities imgUtil = new ImageUtilities();
             Int64 _pageCount = GetLoanPageCount(db, batchObj.LoanID);
             if (_pageCount == 0)
             {
                 LogMessage($"Total Documents : { batchObj.Documents.Count} : {DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss")}");
+                string iMagickPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "ImageMagick", "magick.exe");
+                string loanFolderPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Temp", Convert.ToString(batchObj.LoanID));
+                if (!Directory.Exists(loanFolderPath))
+                    Directory.CreateDirectory(loanFolderPath);
                 foreach (var doc in batchObj.Documents)
                 {
                     LogMessage($"Start Document Processing : {doc.Type}, LoanID : {batchObj.LoanID.ToString()} : {DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss")}");
@@ -879,27 +885,8 @@ namespace IL.ImportToIntellaLend
                         string tiffFileName = Path.GetFileName(doc.MultiPageTiffFile);
                         doc.MultiPageTiffFile = Path.Combine(EphesoftOutputPath, tiffFileName); //EphesoftOutputPath + doc.MultiPageTiffFile.Substring(doc.MultiPageTiffFile.ToLower().IndexOf(@"\output\"));
                         LogMessage($"doc.MultiPageTiffFile : {doc.MultiPageTiffFile}");
-                        byte[] imageBytes = File.ReadAllBytes(doc.MultiPageTiffFile);
-                        Int64 pageCount = imgUtil.GetByteDataPageCount(imageBytes, "image/tiff");
-                        Int32 _maxWidth = 1654;
-                        Int32 _maxHeight = 2339;
-                        Int32.TryParse(ImageMaxWidth, out _maxWidth);
-                        Int32.TryParse(ImageMaxHeight, out _maxHeight);
-                        LogMessage($"Document : {doc.Type} , PageCount : {pageCount},  {DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss")}");
-                        for (int i = 1; i <= pageCount; i++)
-                        {
-                            LogMessage($"Current Page No : {i} , {DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss")}");
-                            _pageCount = _pageCount + 1;
-                            var img = imgUtil.ConvertTiffToJpegGrayScale(imageBytes, i, _maxWidth, _maxHeight);
-                            //var img = imgUtil.ConvertTiffToJpeg(imageBytes, i, _maxWidth, _maxHeight);
-                            LogMessage($"Start Loan Upload Processing Page No : {i} , LoanID : {batchObj.LoanID.ToString()} : {DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss")}");
-                            InsertDocumentImages(batchObj.LoanID, doc.DocumentTypeID, (i - 1), img.Image, doc.VersionNumber, db);
-                            //LogMessage($"End Loan Upload Processing Page No : {i} , LoanID : {batchObj.LoanID.ToString()} : {DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss")}");
-
-                            UpdateFieldCoordinates(doc, img.OrginalImageWidth, img.OrginalImageWidth, img.CompressedImageWidth, img.CompressedImageHeight, (i - 1).ToString());
-                            LogMessage($"End Coordinate Update  : {batchObj.LoanID.ToString()} : {DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss")}");
-
-                        }
+                        int pagecount = ConvertTiff2JPG(doc, batchObj.LoanID, doc.DocumentTypeID, doc.VersionNumber, doc.MultiPageTiffFile, db, iMagickPath, loanFolderPath, imgUtil);
+                        _pageCount = _pageCount + pagecount;
                     }
                     else
                     {
@@ -918,7 +905,10 @@ namespace IL.ImportToIntellaLend
                     }
                     LogMessage($"End Document Processing : {doc.Type}, LoanID :  {batchObj.LoanID.ToString()} : {DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss")}");
                 }
+                if (Directory.Exists(loanFolderPath))
+                    Directory.Delete(loanFolderPath, true);
             }
+            LogMessage($"Called Method : InsertImagesToDB()");
             return _pageCount;
         }
 
@@ -950,11 +940,55 @@ namespace IL.ImportToIntellaLend
             }
         }
 
+        private int ConvertTiff2JPG(Documents doc, long LoanID, Int64 documentTypeID, int version, string MultiPageTiffFile, DBConnect db, string iMagickPath, string loanFolderPath, ImageUtilities imgUtil)
+        {
+            int pagecount = 0;
+            LogMessage($"Calling Method : ConvertTiff2JPG()");
+            LogMessage($"MultipageTiffFile Path is {MultiPageTiffFile}");
+            string jpegFolderPath = Path.Combine(loanFolderPath, doc.Identifier);
+            LogMessage("jpegFolderPath is :"+ jpegFolderPath);
+            if (!Directory.Exists(jpegFolderPath))
+                Directory.CreateDirectory(jpegFolderPath);
+
+            string output = Path.Combine(jpegFolderPath,"%d.jpeg");
+            string input = MultiPageTiffFile;
+            string ars = $"convert \"{ input }\" \"{output}\"";
+
+            Process proc = new Process();
+            proc.StartInfo.FileName = @iMagickPath;
+            proc.StartInfo.Arguments = ars;
+            LogMessage("proc.StartInfo.Arguments value is :" + proc.StartInfo.Arguments);
+            proc.Start();
+            proc.WaitForExit();
+            string[] sortedFiles = Directory.GetFiles(jpegFolderPath, "*.jpeg?").OrderBy(f => f).ToArray();
+            LogMessage("sortedFiles length is :" +Convert.ToString(sortedFiles.Length));
+            for (int i = 0; i < sortedFiles.Length ; i++)
+            {
+                pagecount = pagecount + 1;
+                LogMessage($"PageNo is: {Convert.ToString(i)}  and ImagePath is: { sortedFiles[i] }" );
+                var img = imgUtil.RezizeImage(sortedFiles[i]);
+                //File.WriteAllBytes(sortedFiles[i], img.Image);
+                //byte[] image = File.ReadAllBytes(sortedFiles[i]);
+                InsertDocumentImages(LoanID, documentTypeID, i, img.Image, version, db);
+                LogMessage($"Image File uploaded to minio...  doctypeid is {documentTypeID} , version is {version}:" );
+                UpdateFieldCoordinates(doc, img.OrginalImageWidth, img.OrginalImageHeight, img.CompressedImageWidth, img.CompressedImageHeight, i.ToString());
+            }
+            
+            if (Directory.Exists(jpegFolderPath))
+                Directory.Delete(jpegFolderPath, true);
+
+            LogMessage($"Called Method : ConvertTiff2JPG()");
+
+            return pagecount;
+        }
         private void MissingDocInsertImagesToDB(Batch batchObj, DBConnect db, string EphesoftOutputPath, string ImageMaxHeight, string ImageMaxWidth)
         {
-
+            LogMessage($"Calling Method : MissingDocInsertImagesToDB()");
             ImageUtilities imgUtil = new ImageUtilities();
-
+            string iMagickPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "ImageMagick", "magick.exe");
+            string loanFolderPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Temp", Convert.ToString(batchObj.LoanID));
+            if (!Directory.Exists(loanFolderPath))
+                Directory.CreateDirectory(loanFolderPath);
             foreach (var doc in batchObj.Documents)
             {
                 string DocType = doc.Type;
@@ -968,24 +1002,7 @@ namespace IL.ImportToIntellaLend
                 {
                     string tiffFileName = Path.GetFileName(doc.MultiPageTiffFile);
                     doc.MultiPageTiffFile = Path.Combine(EphesoftOutputPath, tiffFileName); // + doc.MultiPageTiffFile.Substring(doc.MultiPageTiffFile.IndexOf(@"\Output\"));
-                    byte[] imageBytes = File.ReadAllBytes(doc.MultiPageTiffFile);
-                    Int64 pageCount = imgUtil.GetByteDataPageCount(imageBytes, "image/tiff");
-
-                    Int32 _maxWidth = 1654;
-                    Int32 _maxHeight = 2339;
-                    Int32.TryParse(ImageMaxWidth, out _maxWidth);
-                    Int32.TryParse(ImageMaxHeight, out _maxHeight);
-                    for (int i = 1; i <= pageCount; i++)
-                    {
-
-                        var img = imgUtil.ConvertTiffToJpegGrayScale(imageBytes, i, _maxWidth, _maxHeight);
-                        //var img = imgUtil.ConvertTiffToJpeg(imageBytes, i, _maxWidth, _maxHeight);
-                        InsertDocumentImages(batchObj.LoanID, doc.DocumentTypeID, (i - 1), img.Image, doc.VersionNumber, db);
-
-                        UpdateFieldCoordinates(doc, img.OrginalImageWidth, img.OrginalImageWidth, img.CompressedImageWidth, img.CompressedImageHeight, (i - 1).ToString());
-                    }
-                    //string[] auditDescs = AuditDataAccess.GetAuditDescription(TenantSchema, AuditConfigConstant.MISSING_DOCUMENT_FROM_SYSTEM);
-                    //LoanAudit.InsertLoanMissingDocAudit(db, missingDocAuditInfo, 0, auditDescs[0], auditDescs[1]);
+                    ConvertTiff2JPG(doc, batchObj.LoanID, doc.DocumentTypeID, doc.VersionNumber, doc.MultiPageTiffFile, db, iMagickPath, loanFolderPath, imgUtil);
                 }
                 else
                 {
@@ -1002,7 +1019,10 @@ namespace IL.ImportToIntellaLend
                     //LoanAudit.InsertLoanMissingDocAudit(db, missingDocAuditInfo, 0, auditDescs[0], auditDescs[1]);
                 }
             }
+            if (Directory.Exists(loanFolderPath))
+                Directory.Delete(loanFolderPath, true);
 
+            LogMessage($"Called Method : MissingDocInsertImagesToDB()");
         }
 
         private List<DocumentTypeMaster> GetCustLoanDocTypes(DBConnect db, Int64 CustomerID, Int64 LoanTypeID)
