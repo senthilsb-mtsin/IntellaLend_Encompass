@@ -72,6 +72,11 @@ namespace EphesoftService.Models
         public string LoanDetailsJson { get; set; }
     }
 
+    public class StackingOrderDocumentsResponse : IntellaLendResponse
+    {
+        public string stackingOrderDocuments { get; set; }
+    }
+
     public class EphesoftLoanPageCountRequest
     {
         public string TableSchema { get; set; }
@@ -158,6 +163,13 @@ namespace EphesoftService.Models
         public string BatchClassID { get; set; }
         public string BCName { get; set; }
         public List<MASDocument> MASDocumentList { get; set; }
+    }
+
+    public class StackOrderDocumentsRequest
+    {
+        public string TableSchema { get; set; }
+        public Int64 LoanID { get; set; }
+        public Int64 ConfigID { get; set; }
     }
 
     public class MASDocument

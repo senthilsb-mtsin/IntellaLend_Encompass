@@ -56,4 +56,10 @@ namespace Ephesoft.Models.TableRow
         public int y1 { get; set; }
     }
 
+    public class SourceDocField
+    {
+        public string FieldName { get; set; }
+        public string AppendValue { get; set; }
+    }
+
 }

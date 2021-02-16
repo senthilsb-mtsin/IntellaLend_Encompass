@@ -82,23 +82,41 @@ namespace EphesoftService.Controllers
                             masDocList.Add(masDoc);
                         }
                     }
-                    using (var handler = new HttpClientHandler() { })
-                    using (var client = new HttpClient(handler))
+                    bool triggerMASFile = true;
+                    if (ephesoftReq.ephesoftModule == 3)
                     {
-                        EphsoftLOSExportFileStagingRequest request = new EphsoftLOSExportFileStagingRequest();
-                        request.LoanID = LoanID;
-                        request.FileType = fileType[ephesoftReq.ephesoftModule];
-                        request.TableSchema = Schema;
-                        request.MASDocumentList = masDocList;
-                        request.BatchID = xmlBatch.BatchInstanceIdentifier;
-                        request.BatchName = xmlBatch.BatchName;
-                        request.BCName = xmlBatch.BatchClassName;
-                        string cont = JsonConvert.SerializeObject(request);
-                        HttpResponseMessage httpres = client.PostAsync(baseURL + "/UpdateLOSExportFileStaging", new StringContent(cont, Encoding.UTF8, "application/json")).Result;
-                        objres = httpres.Content.ReadAsAsync<IntellaLendResponse>().Result;
-                        Logger.WriteTraceLog($"objres :{JsonConvert.SerializeObject(objres)}");
-                        if (objres.ResponseMessage != null && !string.IsNullOrEmpty(objres.ResponseMessage.MessageDesc))
-                            throw new Exception(objres.ResponseMessage.MessageDesc);
+                        //List<Document> doc = xmlBatch.Documents.FindAll(d => d.Reviewed == false);
+                        //triggerMASFile = doc.Count > 0;
+                        triggerMASFile = false;
+
+                    }
+                    if (ephesoftReq.ephesoftModule == 6)
+                    {
+                        //List<Document> doc = xmlBatch.Documents.FindAll(d => d.Valid == false);
+                        //triggerMASFile = doc.Count > 0;
+                        triggerMASFile = false;
+                    }
+
+                    if (triggerMASFile)
+                    {
+                        using (var handler = new HttpClientHandler() { })
+                        using (var client = new HttpClient(handler))
+                        {
+                            EphsoftLOSExportFileStagingRequest request = new EphsoftLOSExportFileStagingRequest();
+                            request.LoanID = LoanID;
+                            request.FileType = fileType[ephesoftReq.ephesoftModule];
+                            request.TableSchema = Schema;
+                            request.MASDocumentList = masDocList;
+                            request.BatchID = xmlBatch.BatchInstanceIdentifier;
+                            request.BatchName = xmlBatch.BatchName;
+                            request.BCName = xmlBatch.BatchClassName;
+                            string cont = JsonConvert.SerializeObject(request);
+                            HttpResponseMessage httpres = client.PostAsync(baseURL + "/UpdateLOSExportFileStaging", new StringContent(cont, Encoding.UTF8, "application/json")).Result;
+                            objres = httpres.Content.ReadAsAsync<IntellaLendResponse>().Result;
+                            Logger.WriteTraceLog($"objres :{JsonConvert.SerializeObject(objres)}");
+                            if (objres.ResponseMessage != null && !string.IsNullOrEmpty(objres.ResponseMessage.MessageDesc))
+                                throw new Exception(objres.ResponseMessage.MessageDesc);
+                        }
                     }
                 }
                 catch (Exception ex)

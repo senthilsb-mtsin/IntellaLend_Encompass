@@ -49,8 +49,9 @@ namespace EphesoftService.Controllers
 
                 XMLBatch m_XMLBatch = new XMLBatch(_inputXmlNavigator);
 
+                int configId = this.GetConfigId(_inputXmlNavigator);
 
-                System.Data.DataTable skipDocuments = dataAccess.GetDocumentsToSkip();
+                System.Data.DataTable skipDocuments = dataAccess.GetDocumentsToSkip(configId);
 
                 int documentOrder = 0;
                 foreach (var document in m_XMLBatch.Documents)
@@ -85,6 +86,62 @@ namespace EphesoftService.Controllers
                     m_XMLBatch.Documents[0].Reviewed = false;
                 }
 
+                return this.CreateSuccessResponse(GetXMLString(_inputXmlNavigator));
+            }
+            catch (Exception ex)
+            {
+                MTSExceptionHandler.HandleException(ref ex);
+                return this.CreateExceptionResponse(ex, ephesoftReq.inputXML);
+            }
+        }
+
+        
+       
+
+        [HttpPut]
+        public HttpResponseMessage FieldValidate()
+        {
+            EphesoftLookupRequest ephesoftReq = new EphesoftLookupRequest();
+            try
+            {
+                // Read the contents of the request
+                string requestJson = this.Request.Content.ReadAsStringAsync().Result;
+                try
+                {
+
+                    ephesoftReq = JsonConvert.DeserializeObject<EphesoftLookupRequest>(requestJson, new JsonSerializerSettings
+                    {
+                        MissingMemberHandling = MissingMemberHandling.Error
+                    });
+
+                    logger.Debug("RequestJson" + requestJson);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error while parrsing input JSON \nInput JSON:" + requestJson, ex);
+                }
+                XPathNavigator _inputXmlNavigator = this.GetXMLNavigator(ephesoftReq.inputXML);
+
+                XMLBatch m_XMLBatch = new XMLBatch(_inputXmlNavigator);
+
+                foreach (var document in m_XMLBatch.Documents.Where(x => x.m_Type == "Credit Report").ToList())
+                {
+                    DocumentLevelField _borrowerField = document.DocumentLevelFields.Where(x => x.m_Name == "Co-Borrower SSN").FirstOrDefault();
+                    if(_borrowerField != null)
+                    {
+                        if (string.IsNullOrEmpty(_borrowerField.Value.Trim()))
+                        {
+                            foreach (var field in document.DocumentLevelFields)
+                            {
+                                if (field.Name == "EFX Score Co" || field.Name == "TU Score Co" || field.Name == "XPN Score Co")
+                                {
+                                    field.Value = string.Empty;
+                                }
+                            }
+                        }
+                    }
+
+                }
                 return this.CreateSuccessResponse(GetXMLString(_inputXmlNavigator));
             }
             catch (Exception ex)
@@ -212,6 +269,35 @@ namespace EphesoftService.Controllers
                 throw customEx;
             }
             return inputXmlNavigator;
+        }
+
+
+        /// <summary>
+        /// This method gets the batch class identifier for the input batch XML and retrieves the configId 
+        /// for the batch class Id from the MTS.IDC_RULE_CONFIG table. 
+        /// </summary>
+        /// <param name="inputXmlNavigator">The XPathNavigator instance of the input Ephesoft batch XML</param>
+        /// <returns></returns>
+        private int GetConfigId(XPathNavigator inputXmlNavigator)
+        {
+            logger.Debug("Batch Id:" + this.currentBatchId + " - Get ConfigId from the DB the batch class of the input XML.");
+
+            int configId = 0;
+            // Get the batch class identifier for the input batch XML.
+            string xmlBatchClasssId = UtilFunctions.GetBatchClassIdForEphesoftXML(inputXmlNavigator);
+            if (String.IsNullOrEmpty(xmlBatchClasssId))
+            {
+                logger.Error("BatchClassID not retrieved from input XML.");
+                throw new MTSPassThruException("BatchClassId not retrieved from input XML");
+            }
+            else
+            {
+                // Get the configId from the database for the batch class Id
+                configId = dataAccess.GetCongidId(xmlBatchClasssId);
+            }
+
+            logger.Info("Batch Id:" + this.currentBatchId + " - Retrieved configId from DB for the input XML - " + configId);
+            return configId;
         }
 
     }
