@@ -311,6 +311,13 @@ namespace MTSEntBlocks.UtilsBlock
             }
         }
 
+        public CompressedImage RezizeImage(string filename, int maxWidth = 1654, int maxHeight = 2339)
+        {
+            using (SDI.Bitmap bmp = new SDI.Bitmap(filename))
+            {
+                return ResizeTiffGrayScale(bmp, maxWidth, maxHeight);
+            }
+        }
         public CompressedImage ConvertTiffToJpegGrayScale(byte[] fileContent, int pageNumber, int maxWidth = 1654, int maxHeight = 2339)
         {
             using (MemoryStream ms = new MemoryStream(fileContent))
