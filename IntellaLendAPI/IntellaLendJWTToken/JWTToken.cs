@@ -17,51 +17,30 @@ namespace IntellaLendJWTToken
         public static string _secretKey { get; set; }
         public static Int32 _tokenTimeOut { get; set; }
 
-        public static JWTTokenHash HashToken = null;
+        //public static JWTTokenHash HashToken = null;
 
-        public string CreateJWTToken()
-        {
-            byte[] secretKey = Base64UrlDecode(_secretKey);
-            DateTime issued = DateTime.Now;
-            DateTime expire = DateTime.Now.AddMinutes(_tokenTimeOut);
+        //public string CreateJWTToken()
+        //{
+        //    byte[] secretKey = Base64UrlDecode(_secretKey);
+        //    DateTime issued = DateTime.Now;
+        //    DateTime expire = DateTime.Now.AddMinutes(_tokenTimeOut);
 
-            var payload = new Dictionary<string, object>()
-            {
-                {"iss", _domain},
-                {"aud", _clientID},
-                {"sub", "IntellaLendAPIResponse"},
-                {"iat", ToUnixTime(issued).ToString()},
-                {"exp", ToUnixTime(expire).ToString()},
-                {"expMin",_tokenTimeOut.ToString()},
-                {"data", HashToken }
-            };
-
-            return JWT.Encode(payload, secretKey, JwsAlgorithm.HS256);
-        }
-
-        public string CreateJWTToken(DateTime issueTime, int expireMin)
-        {
-            byte[] secretKey = Base64UrlDecode(_secretKey);
-            DateTime issued = issueTime;
-            DateTime expire = issueTime.AddMinutes(expireMin);
-
-            var payload = new Dictionary<string, object>()
-            {
-                {"iss", _domain},
-                {"aud", _clientID},
-                {"sub", "IntellaLendAPIResponse"},
-                {"iat", ToUnixTime(issued).ToString()},
-                {"exp", ToUnixTime(expire).ToString()},
-                {"expMin",expireMin.ToString()},
-                {"data", "" }
-            };
-
-            return JWT.Encode(payload, secretKey, JwsAlgorithm.HS256);
-        }
-
+        //    var payload = new Dictionary<string, object>()
+        //    {
+        //        {"iss", _domain},
+        //        {"aud", _clientID},
+        //        {"sub", "APIResponse"},
+        //        {"iat", ToUnixTime(issued).ToString()},
+        //        {"exp", ToUnixTime(expire).ToString()},
+        //        {"expMin",_tokenTimeOut.ToString()},
+        //        {"data", HashToken }
+        //    };
+            
+        //    return JWT.Encode(payload, secretKey, JwsAlgorithm.HS256);
+        //}
         public string CreateJWTToken(string hashValue, string schema)
         {
-            HashToken = new JWTTokenHash() { HashSet = hashValue, Schema = schema };
+            JWTTokenHash HashToken = new JWTTokenHash() { HashSet = hashValue, Schema = schema };
             byte[] secretKey = Base64UrlDecode(_secretKey);
             DateTime issued = DateTime.Now;
             DateTime expire = DateTime.Now.AddMinutes(_tokenTimeOut);
@@ -70,7 +49,7 @@ namespace IntellaLendJWTToken
             {
                 {"iss", _domain},
                 {"aud", _clientID},
-                {"sub", "IntellaLendAPIResponse"},
+                {"sub", "APIResponse"},
                 {"iat", ToUnixTime(issued).ToString()},
                 {"exp", ToUnixTime(expire).ToString()},
                 {"expMin",_tokenTimeOut.ToString()},

@@ -5,6 +5,7 @@ using MTSEntBlocks.ExceptionBlock.Handlers;
 using MTSEntBlocks.LoggerBlock;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
@@ -27,7 +28,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(roleMaster.TableSchema).GetRoleMaster());
             }
             catch (Exception ex)
@@ -49,7 +50,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(_master.TableSchema).SyncDocType(_master.TableSchema));
             }
             catch (Exception ex)
@@ -72,7 +73,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(roleMaster.TableSchema).GetAllRoleMasterList());
             }
             catch (Exception ex)
@@ -95,7 +96,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(roleMaster.TableSchema).GetAllADGroupMasterList());
             }
             catch (Exception ex)
@@ -116,7 +117,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).AddRoleDetails(request.roletype, request.menus));
             }
             catch (Exception ex)
@@ -137,7 +138,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).SyncRetainUpdateStagings(request.LoanTypeID));
             }
             catch (Exception ex)
@@ -158,7 +159,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).UpdateRoleDetails(request.roletype, request.menus));
             }
             catch (Exception ex)
@@ -180,7 +181,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).ChecUserRoleDetails(request.RoleID));
             }
             catch (Exception ex)
@@ -205,7 +206,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(customerMaster.TableSchema).GetCustomerList());
             }
             catch (Exception ex)
@@ -231,7 +232,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(QuestionTable.TableSchema).GetSecurityQuestionList());
             }
             catch (Exception ex)
@@ -256,7 +257,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(loanTypeMaster.TableSchema).GetLoanTypeMaster(true));
             }
             catch (Exception ex)
@@ -278,7 +279,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(loanTypeMaster.TableSchema).GetLoanTypeMaster(false));
             }
             catch (Exception ex)
@@ -302,7 +303,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(reuest.TableSchema).GetLoanType(reuest.LoanTypeID));
             }
             catch (Exception ex)
@@ -324,7 +325,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).AddLoanType(request.LoanType));
             }
             catch (Exception ex)
@@ -346,7 +347,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).UpdateLoanType(request.LoanType));
             }
             catch (Exception ex)
@@ -373,7 +374,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(CheckListMaster.TableSchema).GetCheckListMaster(true));
             }
             catch (Exception ex)
@@ -395,7 +396,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(CheckListMaster.TableSchema).GetCheckListMaster(false));
             }
             catch (Exception ex)
@@ -419,7 +420,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(reuest.TableSchema).GetCheckList(reuest.CheckListID));
             }
             catch (Exception ex)
@@ -441,7 +442,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).AddCheckList(request.CheckList));
             }
             catch (Exception ex)
@@ -463,7 +464,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).UpdateCheckList(request.CheckList));
             }
             catch (Exception ex)
@@ -488,7 +489,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(reviewTypeMaster.TableSchema).GetReviewTypeMaster(true));
             }
             catch (Exception ex)
@@ -510,7 +511,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(TableSchema).GetReviewTypeMaster(true));
             }
             catch (Exception ex)
@@ -532,7 +533,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(ReviewTypeMaster.TableSchema).GetReviewTypeMaster(false));
             }
             catch (Exception ex)
@@ -556,7 +557,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(reuest.TableSchema).GetReviewType(reuest.ReviewTypeID));
             }
             catch (Exception ex)
@@ -578,7 +579,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).AddReviewType(request.ReviewType));
             }
             catch (Exception ex)
@@ -600,7 +601,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).UpdateReviewType(request.ReviewType));
             }
             catch (Exception ex)
@@ -626,7 +627,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(StackingOrderMaster.TableSchema).GetStackingOrderMaster(true));
             }
             catch (Exception ex)
@@ -648,7 +649,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(StackingOrderMaster.TableSchema).GetStackingOrderMaster(false));
             }
             catch (Exception ex)
@@ -657,7 +658,7 @@ namespace IntellaLendAPI.Controllers
                 response.ResponseMessage.MessageDesc = ex.Message;
                 MTSExceptionHandler.HandleException(ref ex);
             }
-            Logger.WriteTraceLog($"End GetAllStackingOrderMaster()");
+            Logger.WriteTraceLog($"End GetStackingOrderMaster()");
             return response;
         }
 
@@ -672,7 +673,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(reuest.TableSchema).GetStackingOrder(reuest.StackingOrderID));
             }
             catch (Exception ex)
@@ -694,7 +695,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).AddStackingOrder(request.StackingOrder));
             }
             catch (Exception ex)
@@ -716,7 +717,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).UpdateStackingOrder(request.StackingOrder));
             }
             catch (Exception ex)
@@ -740,7 +741,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService().GetWorkFlowMaster());
             }
             catch (Exception ex)
@@ -761,7 +762,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService().GetSearchWorkFlowSatus());
             }
             catch (Exception ex)
@@ -782,7 +783,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService().GetRetentionWorkFlowStatus());
             }
             catch (Exception ex)
@@ -807,7 +808,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(docTypeMaster.TableSchema).GetDocumentTypeMaster(false));
             }
             catch (Exception ex)
@@ -828,7 +829,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService().CheckDocumentDupForEdit(request.DocumentTypeID, request.DocumentTypeName, request.ParkingSpotID));
             }
             catch (Exception ex)
@@ -849,7 +850,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService().CheckDocumentDup(request.DocumentTypeName));
             }
             catch (Exception ex)
@@ -871,7 +872,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new StackingOrderService().GetSystemDocumentTypes());
             }
             catch (Exception ex)
@@ -892,7 +893,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService().CheckManagerDocumentDupForEdit(request.DocumentTypeName));
             }
             catch (Exception ex)
@@ -913,7 +914,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(docTypeMaster.TableSchema).GetActiveDocumentTypeMaster());
             }
             catch (Exception ex)
@@ -935,7 +936,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(docTypeMaster.TableSchema).GetActiveDocumentTypeMasterWithCustandLoan(docTypeMaster.CustomerID, docTypeMaster.LoanTypeID));
             }
             catch (Exception ex)
@@ -958,7 +959,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).AddDocumentType(request.documentType));
             }
             catch (Exception ex)
@@ -980,7 +981,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService().GetEncompassParkingSpot());
             }
             catch (Exception ex)
@@ -1004,7 +1005,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService().AddDocumentType(request.DocumentTypeName, request.DocumentDisplayName, Convert.ToInt32(request.DocumentLevel), Convert.ToInt32(request.ParkingSpotID)));
             }
             catch (Exception ex)
@@ -1026,7 +1027,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).UpdateDocumentType(request.documentType, request.ParkingSpotID));
             }
             catch (Exception ex)
@@ -1048,7 +1049,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).UpdateManagerDocumentType(request.documentType, request.CustomerID, request.LoanTypeID));
             }
             catch (Exception ex)
@@ -1070,7 +1071,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).AddManagerDocumentType(request.documentType, request.CustomerID, request.LoanTypeID));
             }
             catch (Exception ex)
@@ -1094,7 +1095,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(customerMaster.TableSchema).GetReviewPriorityMaster());
             }
             catch (Exception ex)
@@ -1121,7 +1122,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(req.TableSchema).UpdateDocumentField(req.Field, req.AssignedFieldID));
             }
             catch (Exception ex)
@@ -1144,7 +1145,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(clr.TableSchema).GetUserMasters());
             }
             catch (Exception ex)
@@ -1166,7 +1167,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new StackingOrderService().GetSystemDocumentFields());
             }
             catch (Exception ex)
@@ -1192,7 +1193,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).GetUserRoleList(request.RoleID));
             }
             catch (Exception ex)
@@ -1213,7 +1214,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).SaveKpiConfigurationDetails(request.KpiUserGroupConfig, request.KpiGoalConfig, request.IsExistNewUserGrp));
             }
             catch (Exception ex)
@@ -1234,7 +1235,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).SaveKpiConfigurationDetails(request.GroupID, request.ConfigType, request.Goal));
             }
             catch (Exception ex)
@@ -1255,7 +1256,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).UpdateKPIConfigStagingData(request.ID, request.GroupID, request.ConfigType, request.Goal, request.Status));
             }
             catch (Exception ex)
@@ -1276,7 +1277,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).GetKPIGoalConfigStagingDetails(request.GroupID, request.ConfigType));
             }
             catch (Exception ex)
@@ -1302,7 +1303,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(requset.TableSchema).AddParkingSpot(requset.ParkingSpotName, requset.Active));
             }
             catch (Exception ex)
@@ -1323,7 +1324,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(requset.TableSchema).UpdateParkingSpot(requset.ParkingSpotName, requset.Active, requset.ParkingSpotID));
             }
             catch (Exception ex)
@@ -1349,7 +1350,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).CreateWebHookSubscription(request.WebHookType));
             }
             catch (Exception ex)
@@ -1371,7 +1372,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new MasterService(request.TableSchema).DeleteWebhookSubscription(request.WebHookType));
             }
             catch (Exception ex)

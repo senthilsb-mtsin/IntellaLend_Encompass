@@ -5,6 +5,7 @@ using MTSEntBlocks.ExceptionBlock.Handlers;
 using MTSEntBlocks.LoggerBlock;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
@@ -23,7 +24,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CustomerService(customerDetails.TableSchema).GetCustomerList(false));
             }
             catch (Exception exc)
@@ -45,7 +46,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CustomerService(customerMasterDetails.TableSchema).AddCustomer(customerMasterDetails.customerMaster));
             }
             catch (Exception exc)
@@ -67,7 +68,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CustomerService(customerMasterDetials.TableSchema).EditCustomer(customerMasterDetials.customerMaster));
             }
 
@@ -90,7 +91,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CustomerService(table.TableSchema).GetCustomerList(true));
             }
             catch (Exception exc)
@@ -113,7 +114,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CustomerService(reqretpurge.TableSchema).RetentionPurge(reqretpurge.LoanIDs, reqretpurge.UserID, reqretpurge.UserName));
             }
             catch (Exception exc)
@@ -135,7 +136,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CustomerService(req.TableSchema).GetCustomerImportStaging(req.Status, req.ImportDateFrom, req.ImportDateTo,req.AssignType));
             }
             catch (Exception exc)
@@ -157,7 +158,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CustomerService(req.TableSchema).GetCustomerImportStagingDetails(req.CustomerImportStagingID));
             }
             catch (Exception exc)

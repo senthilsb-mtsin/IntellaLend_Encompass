@@ -5,6 +5,7 @@ using MTSEntBlocks.ExceptionBlock.Handlers;
 using MTSEntBlocks.LoggerBlock;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
@@ -23,7 +24,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService(addchecklistdetails.TableSchema).CheckListDetails(addchecklistdetails.CheckListDetailMaster, addchecklistdetails.rulemasters));
             }
             catch (Exception ex)
@@ -45,7 +46,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService(reqchecklistsitem.TableSchema).SearchCheckListItem(reqchecklistsitem.CheckListDetailID));
 
             }
@@ -68,7 +69,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService(updateCheckListDetails.TableSchema).UpdateCheckListDetails(updateCheckListDetails.CheckListDetailMaster, updateCheckListDetails.rulemasters));
             }
             catch (Exception ex)
@@ -90,7 +91,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService(deletechecklistitem.TableSchema).DeleteCheckListItem(deletechecklistitem.CheckListDetailsID));
             }
             catch (Exception exc)
@@ -112,7 +113,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService(clonechecklistitem.TableSchema).CloneCheckListItem(clonechecklistitem.CheckListDetailsID, clonechecklistitem.ModifiedCheckListName));
             }
             catch (Exception exc)
@@ -134,7 +135,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService().CloneSysCheckListItem(clonechecklistitem.CheckListDetailsID, clonechecklistitem.ModifiedCheckListName,clonechecklistitem.LoanTypeID));
             }
             catch (Exception exc)
@@ -156,7 +157,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService().TestCheckListItemValues(testvalues.CheckListItemValues, testvalues.RuleFormula));
             }
             catch(Exception exc)
@@ -179,7 +180,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService().GetAllSysCheckListDetails());
             }
             catch (Exception ex)
@@ -201,7 +202,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService().AddSysCheckList(reqSysChkListMaster.checkListMaster));
             }
             catch(Exception ex)
@@ -222,7 +223,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService().GetAllSysDocTypeMasters());
             }
             catch (Exception ex)
@@ -245,7 +246,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService().GetSysDocumentFieldMasters(reqSysFieldMasters.DocumentTypeID));
             }
             catch(Exception ex)
@@ -267,7 +268,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService().SaveSysCheckListDetails(addSysCheckListDetails.CheckListDetailMaster, addSysCheckListDetails.rulemasters, addSysCheckListDetails.LoanTypeID));
             }
             catch(Exception ex)
@@ -289,7 +290,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService().SaveSysEditCheckListDetails(addSysCheckListDetails.CheckListDetailMaster, addSysCheckListDetails.rulemasters,addSysCheckListDetails.LoanTypeID));
             }
             catch (Exception ex)
@@ -311,7 +312,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService().GetEditSysDocTypeMasters(reqCheckListItemDoc.CheckListDetailID, reqCheckListItemDoc.LoanTypeID));
             }
             catch (Exception ex)
@@ -334,7 +335,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService().UpdateSysCheckListDetails(updateCheckListDetails.CheckListDetailMaster, updateCheckListDetails.rulemasters,updateCheckListDetails.LoanTypeID));
             }
             catch (Exception ex)
@@ -357,7 +358,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService().GetAllCheckListItems(checklistReq.CheckListID));
             }
             catch (Exception ex)
@@ -378,7 +379,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService().DeleteSysCheckListItem(deletechecklistitem.CheckListDetailsID,deletechecklistitem.LoanTypeID));
             }
             catch (Exception exc)
@@ -400,7 +401,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService().SaveSysCheckListName(addSysCheckList.CheckListName, addSysCheckList.CheckListID, addSysCheckList.Active,addSysCheckList.Sync));
             }
             catch (Exception exc)
@@ -423,7 +424,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService().AssignChecklist(req.LoanTypeID, req.CheckListName, req.CheckListID));
             }
             catch (Exception exc)
@@ -445,7 +446,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService().AssignStackingOrder(req.LoanTypeID, req.StackingOrderName, req.StackingOrderID));
             }
             catch (Exception exc)
@@ -467,7 +468,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService().GetChecklistCategories());
             }
             catch (Exception exc)
@@ -489,7 +490,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new CheckListItemService().SaveTenantCheckListDetails(request.CheckListID, request.LoanTypeID));
             }
             catch (Exception exc)

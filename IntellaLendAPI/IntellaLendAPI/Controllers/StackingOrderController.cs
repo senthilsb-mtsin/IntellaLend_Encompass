@@ -5,6 +5,7 @@ using MTSEntBlocks.ExceptionBlock.Handlers;
 using MTSEntBlocks.LoggerBlock;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
@@ -24,7 +25,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new StackingOrderService(reqsearchstackorder.TableSchema).SearchStackingOrder(reqsearchstackorder.StackingOrderID));
             }
             catch (Exception exc)
@@ -46,7 +47,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new StackingOrderService(savestackingorder.TableSchema).SaveStackingOrderDetails(savestackingorder.StackOrderID, savestackingorder.StackOrder));
             }
             catch (Exception exc)
@@ -67,7 +68,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new StackingOrderService().GetAllSystemStackingOrderDetails());
             }
             catch (Exception ex)
@@ -91,7 +92,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new StackingOrderService().GetSystemDocumentTypesWithDocFields(reqSysDocTypes.LoanTypeID));
             }
             catch (Exception ex)
@@ -115,7 +116,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new StackingOrderService().GetStackSystemDocumentTypes());
             }
             catch (Exception ex)
@@ -137,7 +138,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new StackingOrderService().GetLoanStackDocs(req.LoanTypeID));
             }
             catch (Exception ex)
@@ -158,7 +159,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new StackingOrderService().SetOrderByField(req.DocumentTypeID, req.FieldID));
             }
             catch (Exception ex)
@@ -180,7 +181,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new StackingOrderService(req.TableSchema).SetDocFieldValue(req.DocumentTypeID, req.FieldID));
             }
             catch (Exception ex)
@@ -201,7 +202,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new StackingOrderService(req.TableSchema).SetTenantOrderByField(req.DocumentTypeID, req.FieldID));
             }
             catch (Exception ex)
@@ -223,7 +224,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new StackingOrderService(req.TableSchema).SetTenantDocFielValue(req.DocumentTypeID, req.FieldID));
             }
             catch (Exception ex)
@@ -245,7 +246,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new StackingOrderService().GetSystemStackingOrderDetailMaster(reqSysStackingOrder.stackingOrderID));
             }
             catch (Exception ex)
@@ -267,7 +268,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new StackingOrderService().SaveSystemStackingOrderDetails(savestackingorder.StackOrderID, savestackingorder.StackOrderName, savestackingorder.IsActive, savestackingorder.StackOrder));
             }
             catch (Exception exc)
@@ -289,7 +290,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new StackingOrderService(request.TableSchema).SetDocGroupFieldValue(request.StackOrder, request.StackingOrderDetails));
             }
             catch (Exception exc)
@@ -310,7 +311,7 @@ namespace IntellaLendAPI.Controllers
             response.ResponseMessage = new ResponseMessage();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new StackingOrderService(request.TableSchema).SetTenantDocGroupFieldValue(request.StackOrder, request.StackingOrderDetails));
             }
             catch (Exception exc)

@@ -19,7 +19,7 @@ namespace IntellaLendAPI
             });
 
             // Web API routes
-            config.MapHttpAttributeRoutes();
+            //config.MapHttpAttributeRoutes();
 
             //config.Routes.MapHttpRoute(
             //    name: "CustomApi",

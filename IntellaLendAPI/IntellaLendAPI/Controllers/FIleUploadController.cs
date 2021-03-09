@@ -41,7 +41,7 @@ namespace IntellaLendAPI.Controllers
                 Dictionary<string, string> paramsValues = GetHeaderValue(Request.Headers);
                 if (paramsValues.Count.Equals(9))
                 {
-                    response.token = new JWTToken().CreateJWTToken();
+                    response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                     response.data = new JWTToken().CreateJWTToken(new FileUploadService(paramsValues["TableSchema"]).FileUpload(paramsValues, filePath, provider));
                 }
                 else
@@ -72,7 +72,7 @@ namespace IntellaLendAPI.Controllers
                 Dictionary<string, string> paramsValues = GetHeaderValue(Request.Headers);
                 if (paramsValues.Count.Equals(5))
                 {
-                    response.token = new JWTToken().CreateJWTToken();
+                    response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                     response.data = new JWTToken().CreateJWTToken(new FileUploadService(paramsValues["TableSchema"]).MissingDocFileUploader(paramsValues, filePath, provider));
                 }
                 else
@@ -102,7 +102,7 @@ namespace IntellaLendAPI.Controllers
                 Dictionary<string, string> paramsValues = GetHeaderValue(Request.Headers);
                 if (paramsValues.Count.Equals(5))
                 {
-                    response.token = new JWTToken().CreateJWTToken();
+                    response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                     response.data = new JWTToken().CreateJWTToken(new FileUploadService(paramsValues["TableSchema"]).MissingDocGlobalFileUploader(paramsValues, filePath, provider));
                 }
                 else
@@ -130,7 +130,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new BoxAPIWrapper(request.TableSchema, request.UserID).CheckUserBoxToken());
             }
             catch (Exception ex)
@@ -154,7 +154,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new BoxAPIWrapper(request.TableSchema, request.UserID).GenrateToken(request.AuthCode));
             }
             catch (Exception ex)
@@ -178,7 +178,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new BoxAPIWrapper(request.TableSchema, request.UserID).GetFolderDetails(request.FolderID, request.limit, request.offSet, request.FileFilter));
             }
             catch (Exception ex)
@@ -202,7 +202,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 Loan loan = new Loan();
                 //Hard Coding Till QCIQ access is given
                 //loan.ReviewTypeID = 2; // 2 = Post-Closing Audit
@@ -252,7 +252,7 @@ namespace IntellaLendAPI.Controllers
             List<BoxItemsCountsWithDuplicateFileLists> _boxDatas = new List<BoxItemsCountsWithDuplicateFileLists>();
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 int itemCount = 0;
                 int boxItemActualCount = 0;
                 boxItemActualCount = request.BoxItems.Count;
@@ -316,7 +316,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new FileUploadService(request.TableSchema).GetBoxUploadedItems(request.FromDate, request.ToDate, request.UserID, request.UploadStatus, request.CustomerID));
             }
             catch (Exception ex)
@@ -341,7 +341,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new FileUploadService(request.TableSchema).BoxFileUploadRetry(request.LoanID));
             }
             catch (Exception ex)
@@ -365,7 +365,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new FileUploadService(batchInstance.TableSchema).GetEphesoftURL(batchInstance.EphesoftBatchInstanceID, batchInstance.EphesoftURL, batchInstance.CustomerID));
             }
             catch (Exception ex)
@@ -395,7 +395,7 @@ namespace IntellaLendAPI.Controllers
                 Dictionary<string, string> paramsValues = GetHeaderValue(Request.Headers);
                 if (paramsValues.Count.Equals(2))
                 {
-                    response.token = new JWTToken().CreateJWTToken();
+                    response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                     response.data = new JWTToken().CreateJWTToken(new FileUploadService().UploadCustomerImportFile(paramsValues, CustomerImportFilePath, provider));
                 }
                 else

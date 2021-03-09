@@ -4,16 +4,17 @@ import {
   MTSAPIExceptionResponse,
 } from '@mts-api-response-model';
 import { environment } from './../../../environments/environment';
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Injector, NgZone } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { BlackListApiUrlConstant } from '@mts-api-url';
+import { BlackListApiUrlConstant, LoginApiUrlConstant } from '@mts-api-url';
 import { isTruthy } from '@mts-functions/is-truthy.function';
 import { ToastrService } from 'ngx-toastr';
 import { AppSettings } from '../constant/app-setting-constants/app-setting.constant';
+import { SessionHelper } from '@mts-app-session';
 
 const jwtHelper = new JwtHelperService();
 const headers = new HttpHeaders().set('Content-Type', 'application/json');
@@ -76,6 +77,10 @@ export class APIService {
       this._route.navigate(['']);
       AppSettings.SessionErrorMsg = false;
     } else {
+      const browserBaseUrl = window.location.href;
+      const inputReq = this.AppendUserDetails(input);
+      const inputReqWithUser = { Error: { message: 'Request Logging'+', BrowserUrl : '+browserBaseUrl, stack: JSON.stringify(inputReq) } };
+      this.Post(BlackListApiUrlConstant.ERROR_HANDLER, inputReqWithUser).subscribe();
       return this.http
         .post<MTSAPIResponse>(environment.apiURL + URL, input, { headers, observe: 'response' })
         .pipe(
@@ -118,6 +123,51 @@ export class APIService {
             this.handleAuthentication(resData);
           })
         );
+    }
+  }
+  private AppendUserDetails(input: any) {
+    if (localStorage.getItem('userDetails') === null) {
+      const routerService = this.injector.get(Router);
+      const ngZone = this.injector.get(NgZone);
+      ngZone.run(() => {
+        routerService.navigate(['']);
+      });
+    }
+    else
+      SessionHelper.setUserSessionVariables();
+
+    if (isTruthy(SessionHelper.UserDetails)) {
+      let requestObj = input;
+      if (this.GetObjectType(input) === 'String') {
+        requestObj = JSON.parse(input);
+      }
+      const RequestUserInfo = {
+        RequestUserID: SessionHelper.UserDetails.UserID,
+        RequestUserTableSchema: AppSettings.TenantSchema,
+      };
+      requestObj['RequestUserInfo'] = RequestUserInfo;
+      input = JSON.stringify(requestObj);
+    }
+
+    return input;
+  }
+  private GetObjectType(object) {
+    const stringConstructor = 'test'.constructor;
+    const arrayConstructor = [].constructor;
+    const objectConstructor = {}.constructor;
+
+    if (object === null) {
+      return 'null';
+    } else if (object === undefined) {
+      return 'undefined';
+    } else if (object.constructor === stringConstructor) {
+      return 'String';
+    } else if (object.constructor === arrayConstructor) {
+      return 'Array';
+    } else if (object.constructor === objectConstructor) {
+      return 'Object';
+    } else {
+      return 'Unknown';
     }
   }
 
@@ -205,12 +255,22 @@ export class APIService {
   }
 
   logout() {
-    this._route.navigate(['']);
-    AppSettings.SessionErrorMsg = false;
-    if (this.tokenExpirationTimer) {
-      clearTimeout(this.tokenExpirationTimer);
-    }
-    this.tokenExpirationTimer = null;
+    const reqBody = { TableSchema: AppSettings.TenantSchema, UserID: SessionHelper.UserDetails.UserID, Lock: false };
+    this.http
+    .post<MTSAPIResponse>(environment.apiURL + LoginApiUrlConstant.UNLOCK_USER, reqBody, { headers, observe: 'response' })
+    .pipe(
+      map((response) => {
+          if(response.body['data'] == 'True'){
+            this._route.navigate(['']);
+            AppSettings.SessionErrorMsg = false;
+            if (this.tokenExpirationTimer) {
+              clearTimeout(this.tokenExpirationTimer);
+            }
+            this.tokenExpirationTimer = null;
+          }
+      })
+    ).subscribe(() => {this._route.navigate(['']);});
+    //this._commonService.UnLock();
   }
 
   sendOffLineError() {

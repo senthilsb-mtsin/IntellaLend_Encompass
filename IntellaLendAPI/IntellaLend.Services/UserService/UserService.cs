@@ -179,6 +179,11 @@ namespace IntellaLend.CommonServices
             userData.AddUserSession(userID, isActive);
         }
 
+        public void CreateAuditUserSession(Int64 userID,bool isActive,string hash, string requestPath, string ipAddress,string device, string browser, string userHostName)
+        {
+            UserDataAccess userData = new UserDataAccess(TableSchema);
+            userData.CreateAuditUserSession(userID,isActive,hash, requestPath, ipAddress, device,browser,userHostName);
+        }
 
         #endregion
 

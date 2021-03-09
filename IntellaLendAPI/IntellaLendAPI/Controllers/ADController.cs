@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using System.Linq;
 
 namespace IntellaLendAPI.Controllers
 {
@@ -24,7 +25,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new ADService(request.TableSchema).GetADGroups(request.LDAPUrl));
             }
             catch (Exception ex)
@@ -46,7 +47,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new ADService(req.TableSchema).GetADConfig());
             }
             catch (Exception ex)
@@ -69,7 +70,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new ADService(req.TableSchema).SaveADConfig(req.ADDOMAIN,req.LDAPURL));
             }
             catch (Exception ex)
@@ -91,7 +92,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new ADService(req.TableSchema).CheckADGroupAssignedForRole(req.ADGroupID, req.RoleID));
             }
             catch (Exception ex)

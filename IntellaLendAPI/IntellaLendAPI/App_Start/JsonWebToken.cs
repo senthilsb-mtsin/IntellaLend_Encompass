@@ -1,10 +1,10 @@
 namespace IntellaLendAPI.App_Start
 {
-    using IntellaLendJWTToken;
     using Newtonsoft.Json.Linq;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Http;
     using System.Security.Claims;
     using System.Text;
 
@@ -22,7 +22,7 @@ namespace IntellaLendAPI.App_Start
 
         private static DateTime unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-        public static ClaimsPrincipal ValidateToken(string token, string secretKey, string audience = null, bool checkExpiration = false, string issuer = null, bool isSecretBase64Encoded = true)
+        public static ClaimsPrincipal ValidateToken(string token, string secretKey, HttpRequestMessage request, string audience = null, bool checkExpiration = false, string issuer = null, bool isSecretBase64Encoded = true)
         {
             byte[] secret;
             if (isSecretBase64Encoded)
@@ -73,16 +73,18 @@ namespace IntellaLendAPI.App_Start
                 }
             }
 
-            JWTToken.HashToken = null;
+            //JWTToken.HashToken = null;
             if (payloadData.ContainsKey("data") && payloadData["data"] != null)
             {
                 try
                 {
-                    JWTToken.HashToken = JObject.FromObject(payloadData["data"]).ToObject<JWTTokenHash>();
+                    JWTTokenHashTemp hashValue = JObject.FromObject(payloadData["data"]).ToObject<JWTTokenHashTemp>();
+                    request.Headers.Add("HashValue", hashValue.HashSet);
+                    request.Headers.Add("TenantDBSchema", hashValue.Schema);
                 }
                 catch (Exception ex)
                 {
-                    JWTToken.HashToken = null;
+                    //JWTToken.HashToken = null;
                 }
             }
 
@@ -168,6 +170,11 @@ namespace IntellaLendAPI.App_Start
             return Convert.FromBase64String(s); // Standard base64 decoder
         }
 
+        public class JWTTokenHashTemp
+        {
+            public string HashSet { get; set; }
+            public string Schema { get; set; }
+        }
 
         public class TokenValidationException : Exception
         {

@@ -7,7 +7,9 @@ using IntellaLend.Model;
 using MTSEntBlocks.LoggerBlock;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Web;
 
 namespace IntellaLend.CommonServices
 {
@@ -33,6 +35,21 @@ namespace IntellaLend.CommonServices
         {
             CheckLicense _license = new CheckLicense(TableSchema);
             Hash = string.Empty;
+            string requestPath = HttpContext.Current.Request.Url.AbsolutePath;
+            string ipAddress = HttpContext.Current.Request.UserHostAddress;
+            string browser = HttpContext.Current.Request.Browser.Browser;
+            string userHostName = HttpContext.Current.Request.UserHostName;
+
+            string device;
+
+            if (HttpContext.Current.Request.Browser.IsMobileDevice)
+            {
+                device = HttpContext.Current.Request.UserAgent;
+            }
+            else
+            {
+                device = HttpContext.Current.Request.Browser.Platform;
+            }
             if (_license.IsLicenseValid)
             {
                 if (!_license.IsLicenseExpired)
@@ -40,6 +57,10 @@ namespace IntellaLend.CommonServices
                     if (!_license.IsCuncurrentExceeded)
                     {
                         bool userResult = false;
+                        if (!UserName.Contains("@"))
+                        {
+                            UserName = UserName + "@" + ConfigurationManager.AppSettings["ADUserDomainName"].ToString(); // _config.ConfigValue;
+                        }
                         User user = new UserDataAccess(TableSchema).GetUser(UserName);
                         Logger.WriteTraceLog($"UserName : {UserName}");
                         if (user != null && user.UserType == UserLoginType.CredentialLogin)
@@ -53,11 +74,12 @@ namespace IntellaLend.CommonServices
                             CustomerConfig _config = new CustConfigDataAccess(TableSchema).GetCustomerConfiguraton(ConfigConstant.ADDOMAIN);
                             if (_config != null)
                             {
-                                Logger.WriteTraceLog($"_config != null : {_config != null}");
+                                Logger.WriteTraceLog($" _config.ConfigValue  : { _config.ConfigValue}");
                                 if (ADService.LogonUser(UserName, Password, _config.ConfigValue))
                                 {
                                     Logger.WriteTraceLog($"Valid Login");
                                     _config = new CustConfigDataAccess(TableSchema).GetCustomerConfiguraton(ConfigConstant.LDAPURL);
+                                    Logger.WriteTraceLog($" _config.ConfigValue  : { _config.ConfigValue}");
                                     User adUser = new ADService(TableSchema).GetUser(UserName, _config.ConfigValue);
                                     if (user == null)
                                     {
@@ -89,7 +111,7 @@ namespace IntellaLend.CommonServices
                         {
                             user.Password = null;
                             Hash = SessionHashing.Create(user.UserID);
-                            new logOnDataAccess(TableSchema).CreateDBSession(user.UserID, Hash);
+                            new logOnDataAccess(TableSchema).CreateDBSession(user.UserID, Hash,requestPath,ipAddress, device,browser, userHostName);
                             bool ExpiryDays = new UserDataAccess().PasswordExpiryCheck(user);
                             return new { User = user, Success = true, ExpiryDays = ExpiryDays };
                         }
@@ -114,7 +136,7 @@ namespace IntellaLend.CommonServices
                             {
                                 user.Password = null;
                                 Hash = SessionHashing.Create(user.UserID);
-                                new logOnDataAccess(TableSchema).CreateDBSession(user.UserID, Hash);
+                                new logOnDataAccess(TableSchema).CreateDBSession(user.UserID, Hash, requestPath, ipAddress, device, browser, userHostName);
                                 return new { User = user, Success = true };
                             }
                         }
@@ -157,6 +179,10 @@ namespace IntellaLend.CommonServices
         //{
         //    return new logOnDataAccess(TableSchema).GetUserHash(UserID);
         //}
+        public Int64 GetAuditUserHash(string Hash)
+        {
+            return new logOnDataAccess(TableSchema).GetAuditUserHash(Hash);
+        }
 
 
         public bool APIUserCheck(string UserName, string Password)
