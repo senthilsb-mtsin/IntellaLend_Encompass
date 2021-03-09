@@ -35,9 +35,29 @@ namespace IntellaLendJWTToken
         //        {"expMin",_tokenTimeOut.ToString()},
         //        {"data", HashToken }
         //    };
-            
         //    return JWT.Encode(payload, secretKey, JwsAlgorithm.HS256);
         //}
+
+        public string CreateJWTToken(DateTime issueTime, int expireMin)
+        {
+            byte[] secretKey = Base64UrlDecode(_secretKey);
+            DateTime issued = issueTime;
+            DateTime expire = issueTime.AddMinutes(expireMin);
+
+            var payload = new Dictionary<string, object>()
+            {
+                {"iss", _domain},
+                {"aud", _clientID},
+                {"sub", "APIResponse"},
+                {"iat", ToUnixTime(issued).ToString()},
+                {"exp", ToUnixTime(expire).ToString()},
+                {"expMin",expireMin.ToString()},
+                {"data", "" }
+            };
+
+            return JWT.Encode(payload, secretKey, JwsAlgorithm.HS256);
+        }
+
         public string CreateJWTToken(string hashValue, string schema)
         {
             JWTTokenHash HashToken = new JWTTokenHash() { HashSet = hashValue, Schema = schema };
