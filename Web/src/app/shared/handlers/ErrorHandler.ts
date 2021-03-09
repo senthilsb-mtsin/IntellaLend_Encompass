@@ -19,20 +19,20 @@ export class CustomExceptionHandler implements ErrorHandler {
     // }
 
     // this._toastService.error('Error Contact Administrator', null, { onActivateTick: true });
-     console.log(_error);    
-
-    // if (isTruthy(_error)) {
-    //   if (_error.message.toString().includes("Cannot match any routes")) {
-    //     const routerService = this.injector.get(Router);
-    //     const ngZone = this.injector.get(NgZone);
-    //     ngZone.run(() => {
-    //       routerService.navigate(['']);
-    //     });
-    //     console.clear();
-    //   }
-    //   const _log = { Error: { message: _error.message, stack: isTruthy(_error.stack) ? _error.stack : '' } };
-    //   this._commonSerivce.postError(_log);
-    // }
-    // console.clear();
+     //console.log(_error);    
+     const browserBaseUrl = window.location.href;
+    if (isTruthy(_error)) {
+      if (_error.message.toString().includes("Cannot match any routes")) {
+        const routerService = this.injector.get(Router);
+        const ngZone = this.injector.get(NgZone);
+        ngZone.run(() => {
+          routerService.navigate(['']);
+        });
+        console.clear();
+      }
+      const _log = { Error: { message: _error.message+', BrowserUrl : '+browserBaseUrl, stack: isTruthy(_error.stack) ? _error.stack : '' } };
+      this._commonSerivce.postError(_log);
+    }
+    console.clear();
   }
 }

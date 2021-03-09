@@ -84,10 +84,10 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <select id="bu_drpCustomer" [(ngModel)]="edata.AddCustomer" (ngModelChange)="setCustomer(edata.AddCustomer)">
-                                <option [ngValue]="0">--Select Customer--</option>
+                                <option [ngValue]="0">--Select {{AuthorityLabelSingular}}--</option>
                                 <option *ngFor="let cust of edata.commonActiveCustomerItems" [ngValue]="cust">{{cust.text}}</option>
                             </select>
-                            <label class="control-label" for="input">Customer</label>
+                            <label class="control-label" for="input">{{AuthorityLabelSingular}}</label>
                             <i class="bar"></i>
                         </div>
                     </div>

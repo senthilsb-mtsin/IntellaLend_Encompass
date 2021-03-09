@@ -301,6 +301,7 @@ namespace MTSEntityDataAccess
         public DbSet<CustomAddressDetail> CustomAddressDetail { get { return this.Set<CustomAddressDetail>(); } }
         public DbSet<UserSecurityQuestion> UserSecurityQuestion { get { return this.Set<UserSecurityQuestion>(); } }
         public DbSet<UserSession> UserSession { get { return this.Set<UserSession>(); } }
+        public DbSet<AuditUserSession> AuditUserSession { get { return this.Set<AuditUserSession>(); } }
         public DbSet<KPIGoalConfig> KPIGoalConfig { get { return this.Set<KPIGoalConfig>(); } }
         public DbSet<AuditUserRequest> AuditUserRequest { get { return this.Set<AuditUserRequest>(); } }
         public DbSet<KpiUserGroupConfig> KpiUserGroupConfig { get { return this.Set<KpiUserGroupConfig>(); } }
@@ -500,6 +501,8 @@ namespace MTSEntityDataAccess
 
                 modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<UserSession>()
                    .ToTable("UserSession");
+                modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<AuditUserSession>()
+                    .ToTable("AuditUserSession");
 
                 modelBuilder.HasDefaultSchema(this.TenantSchema).Entity<AuditUserRequest>()
                    .ToTable("AuditUserRequest");

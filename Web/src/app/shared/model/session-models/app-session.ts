@@ -22,6 +22,12 @@ export class SessionHelper {
     }
   }
 
+  static setUserSessionVariables() {
+    if (!isTruthy(this.UserDetails) && localStorage.getItem('userDetails') !== null) {
+      this.UserDetails = jwtHelper.decodeToken(localStorage.getItem('userDetails'))['data'].User;
+      AppSettings.SessionErrorMsg = true;
+    }
+  }
   static cleanSessionVariables() {
     localStorage.removeItem('id_token');
     localStorage.removeItem('roleDetails');

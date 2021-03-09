@@ -128,11 +128,23 @@ namespace IntellaLend.EntityDataHandler
             return 0;
         }
 
+        public Int64 GetAuditUserHash(string Hash)
+        {
+            using (var db = new DBConnect(TableSchema))
+            {
+                AuditUserSession auditUserSession = db.AuditUserSession.AsNoTracking().Where(u => u.HashValidator == Hash).FirstOrDefault();
+                if (auditUserSession != null)
+                {
+                    return auditUserSession.UserID;
+                }
+            }
+            return 0;
+        }
         #endregion
 
         #region Private Methods
 
-        public void CreateDBSession(Int64 UserID, string Hashing)
+        public void CreateDBSession(Int64 UserID, string Hashing, string requestPath, string ipAddress,string device, string browser, string userHostName)
         {
             using (var db = new DBConnect(TableSchema))
             {
@@ -143,6 +155,8 @@ namespace IntellaLend.EntityDataHandler
                     userSession.HashValidator = Hashing;
                     userSession.LastAccessedTime = DateTime.Now;
                     db.Entry(userSession).State = EntityState.Modified;
+                    db.SaveChanges();
+                    CreateAuditUserSession(userSession, requestPath, ipAddress,device, browser, userHostName);
                 }
                 else
                 {
@@ -155,6 +169,8 @@ namespace IntellaLend.EntityDataHandler
                         LastAccessedTime = DateTime.Now
                     };
                     db.UserSession.Add(newUser);
+                    db.SaveChanges();
+                    CreateAuditUserSession(newUser, requestPath, ipAddress,device, browser, userHostName);
                 }
 
                 User _loggedUser = db.Users.AsNoTracking().Where(u => u.UserID == UserID).FirstOrDefault();
@@ -167,6 +183,32 @@ namespace IntellaLend.EntityDataHandler
                 }
 
                 db.SaveChanges();
+            }
+        }
+        public void CreateAuditUserSession(UserSession userSession, string requestPath, string ipAddress, string device, string browser, string userHostName)
+        {
+            using (var db = new DBConnect(TableSchema))
+            {
+                if (userSession != null && userSession.UserID != 0)
+                {
+                    AuditUserSession auditUser = new AuditUserSession()
+                    {
+                        UserSessionID = userSession.ID,
+                        UserID = userSession.UserID,
+                        HashValidator = userSession.HashValidator,
+                        LastAccessedTime = userSession.LastAccessedTime,
+                        Active = userSession.Active,
+                        CreatedOn = DateTime.Now,
+                        SessionCreatedTime = userSession.CreatedOn,
+                        IPAddress = ipAddress,
+                        Device = device,
+                        HostName = userHostName,
+                        AgentType = browser,
+                        AccessedURL = requestPath
+                    };
+                    db.AuditUserSession.Add(auditUser);
+                    db.SaveChanges();
+                }
             }
         }
 

@@ -117,6 +117,35 @@ namespace IntellaLend.EntityDataHandler
             }
         }
 
+        public void CreateAuditUserSession(Int64 userID, bool isActive,string hash, string requestPath, string ipAddress, string device, string browser, string userHostName)
+        {
+            using (var db = new DBConnect(TableSchema))
+            {
+                var userSession = db.UserSession.AsNoTracking().Where(u => u.UserID == userID).FirstOrDefault();
+                if (userSession != null && userSession.UserID != 0)
+                {
+                    AuditUserSession auditUser = new AuditUserSession()
+                    {
+                        UserSessionID = userSession.ID,
+                        UserID = userID,
+                        HashValidator = hash,
+                        LastAccessedTime = userSession.LastAccessedTime,
+                        Active = isActive ,
+                        CreatedOn = DateTime.Now,
+                        SessionCreatedTime = userSession.CreatedOn,
+                        IPAddress = ipAddress,
+                        Device = device,
+                        HostName = userHostName,
+                        AgentType = browser,
+                        AccessedURL = requestPath
+
+
+                    };
+                    db.AuditUserSession.Add(auditUser);
+                    db.SaveChanges();
+                }
+            }
+        }
         public bool PasswordExpiryCheck(User user)
         {
             using (var db = new DBConnect(SystemSchema))

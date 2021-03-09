@@ -5,6 +5,7 @@ using MTSEntBlocks.ExceptionBlock.Handlers;
 using MTSEntBlocks.LoggerBlock;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
@@ -26,7 +27,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new DashboardService(req.TableSchema).GetNeedsAttention(req.UserID));
             }
             catch (Exception ex)
@@ -49,7 +50,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new DashboardService(req.TableSchema).GetAuditStatus(req.RoleID, req.UserID, req.CustomerID, req.FromDate, req.ToDate));
             }
             catch (Exception ex)
@@ -72,7 +73,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new DashboardService(req.TableSchema).GetAuditStatusDrill(req.RoleID, req.UserID, req.CustomerID, req.FromDate, req.ToDate, req.Type, req.DrillStatusID, req.DrillCustomerID, req.DrillLoanTypeID));
             }
             catch (Exception ex)
@@ -95,7 +96,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new DashboardService(req.TableSchema).GetByAuditorChart(req.RoleID, req.UserID, req.CustomerID, req.FromDate, req.ToDate));
             }
             catch (Exception ex)
@@ -118,7 +119,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new DashboardService(req.TableSchema).GetByAuditorDrillChart(req.RoleID, req.UserID, req.CustomerID, req.FromDate, req.ToDate, req.Type, req.DrillCustomerID, req.DrillAuditorID));
             }
             catch (Exception ex)
@@ -141,7 +142,7 @@ namespace IntellaLendAPI.Controllers
 
             try
             {
-                response.token = new JWTToken().CreateJWTToken();
+                response.token = new JWTToken().CreateJWTToken(Request.Headers.GetValues("HashValue").FirstOrDefault().ToString(), Request.Headers.GetValues("TenantDBSchema").FirstOrDefault().ToString());
                 response.data = new JWTToken().CreateJWTToken(new DashboardService(request.TableSchema).GetAuditKpiGoalConfigDetails(request.RoleID,request.UserGroupID,request.FromDate,request.ToDate,request.Flag,request.AuditGoalID));
             }
             catch (Exception ex)
